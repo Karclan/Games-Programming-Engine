@@ -1,0 +1,28 @@
+#ifndef SHADERS_H
+#define SHADERS_H
+
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+class Shaders
+{
+public:
+	enum Type { DIFFUSE, SPECULAR, NUM_SHADERS };
+
+	void loadShaders();
+	int getShader(Type type);
+
+
+private:
+	int _shaders[NUM_SHADERS]; //!< Handles to each shader program
+
+	int loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
+	
+
+};
+
+#endif

@@ -1,0 +1,25 @@
+#ifndef MATERIAL_H
+#define MATERIAL_H
+
+#include <glew\GL\glew.h>
+
+//! \brief Material
+class Material
+{
+public:
+	Material(); // temp but probably should REQUIRE shader idk
+	Material(int shaderHandle);
+
+	void setShader(int shaderHandle);
+	void bind(GLfloat* m, GLfloat* v, GLfloat* p);
+
+
+private:
+	int _shaderHandle;
+	int _modelMatrixID;
+	int _viewMatrixID;
+	int _projectionMatrixID;
+
+};
+
+#endif

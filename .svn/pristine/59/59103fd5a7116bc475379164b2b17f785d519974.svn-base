@@ -1,0 +1,235 @@
+// 3DGameEngine.cpp : Defines the entry point for the application.
+#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
+#define EDITOR_MODE                     // Define to run in editor mode, remove for "stand alone"
+
+#include <windows.h> // main windows header file
+#include <tchar.h> // needed for generic text mappings
+
+#include <glew\GL\glew.h>
+#include <SFML\Graphics.hpp>
+#include <SFML\OpenGL.hpp>
+
+#include "resource.h"
+#include "core\engine.h"
+
+#define MAX_LOADSTRING 100
+
+TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
+TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+TCHAR szGOMenuClass[MAX_LOADSTRING];			// the game object menu class name
+
+#ifdef EDITOR_MODE
+// Only needed in editor mode
+#include "editor\editor.h"
+Editor editor;
+
+// Forward declarations of functions included in this code module:
+void regWindowsClasses(HINSTANCE hInstance);
+LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM); // main meu commands
+LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // game object menu commands
+INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+#else
+void InitGameMode(); // fwd declaration
+#endif
+
+// Main engine - needed in both editor and game mode
+Engine engine;
+
+
+// MAIN!!!------------
+// _tWinMain is the entry point for the program
+int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance, _In_ LPTSTR lpCmdLine, _In_ int nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
+#ifdef EDITOR_MODE
+	// THIS IS ALL EDITOR SETUP STUFF
+	HACCEL hAccelTable; // not sure what this is. Something to do with hardware acceleration?
+	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MY3DGAMEENGINE));
+	
+	// Register our windows classes (function below main)
+	regWindowsClasses(hInstance);
+
+	// Create the main window
+	HWND windowHandle = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+	if (!windowHandle) return FALSE;	
+	sf::RenderWindow* mainWindow = engine.startEditorMode(windowHandle, nCmdShow); // Link window with SFML RenderWindow in engine
+	
+
+	// Create inspector window
+	HWND goMenuHandle = CreateWindow(szGOMenuClass, L"Game Objects", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 200, 720, NULL, NULL, hInstance, NULL);
+	if(!goMenuHandle) return false;	
+
+	// Show game object menu window
+	ShowWindow(goMenuHandle, nCmdShow);
+	UpdateWindow(goMenuHandle);
+
+	// INIT CONSOLE
+	editor.initConsole();
+
+#else // Game mode window startup
+
+	sf::RenderWindow* mainWindow = engine.startGameMode();
+
+#endif
+
+	// INIT ENGINE
+	engine.startup();
+
+	// To capture and dispatch windows message
+	MSG msg;
+
+	// Whilst not quit
+	bool quit = false;
+	while(!quit)
+	{
+#ifdef EDITOR_MODE
+		// If a message was waiting in the message queue, process it
+		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		{
+			// Perhaps we're ignoring hardware msgs so SFML can process them??
+			if(!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) // .. unless it's something to do with hardware accel?
+			{
+				TranslateMessage(&msg);
+				DispatchMessage(&msg);
+			}
+		}  
+		else
+#endif
+		{
+			//Handle SFML events here
+			sf::Event e;
+			while (mainWindow->pollEvent(e))
+			{
+				if (e.type == sf::Event::Closed)
+				{
+					quit = true;
+				}
+
+				if(e.type == sf::Event::KeyPressed)
+				{
+					engine.onKeyEvent(e.key.code, KeyEvent::PRESSED); 
+
+					if(e.key.code == sf::Keyboard::Escape)
+					{
+						//Quit
+						quit = true;
+					}
+				}
+				if(e.type == sf::Event::KeyReleased)
+				{
+					engine.onKeyEvent(e.key.code, KeyEvent::RELEASED); 
+				}
+				if(e.type == sf::Event::Resized)
+				{
+					glViewport(0,0,e.size.width,e.size.height);
+				}
+			}
+			engine.mainLoop();
+			
+		}
+#ifdef EDITOR_MODE
+		if(msg.message == WM_QUIT) quit = true;
+#endif
+	}
+
+	engine.shutDown();
+
+#ifdef EDITOR_MODE
+	DestroyWindow(windowHandle);
+	DestroyWindow(goMenuHandle);
+
+	// Don't forget to unregister the window class
+	UnregisterClass(szWindowClass, hInstance);
+	UnregisterClass(szGOMenuClass, hInstance);
+#endif
+	
+	// Pause for a sec so I can read console
+	float end;
+	std::cin >> end;
+
+#ifdef EDITOR_MODE
+	return (int) msg.wParam;
+#endif
+	return 0;
+}
+
+
+
+#ifdef EDITOR_MODE
+void regWindowsClasses(HINSTANCE hInstance)
+{
+	// Initialize global strings
+	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+	LoadString(hInstance, IDC_MY3DGAMEENGINE, szWindowClass, MAX_LOADSTRING);
+	LoadString(hInstance, IDC_GAMEOBJECTMENU, szGOMenuClass, MAX_LOADSTRING);
+	
+	// Define a class for our main window
+	WNDCLASSEX windowClass;
+	windowClass.cbSize = sizeof(WNDCLASSEX);
+	windowClass.style         = 0;                      // = CS_HREDRAW | CS_VREDRAW;
+	windowClass.lpfnWndProc   = WndProc;
+	windowClass.cbClsExtra    = 0;
+	windowClass.cbWndExtra    = 0;
+	windowClass.hInstance     = hInstance;
+	windowClass.hIcon         = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_MY3DGAMEENGINE));
+	windowClass.hCursor       = LoadCursor(NULL, IDC_ARROW);
+	windowClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND); // = (HBRUSH)(COLOR_WINDOW+1);
+	windowClass.lpszMenuName  = MAKEINTRESOURCE(IDC_MY3DGAMEENGINE);
+	windowClass.lpszClassName = szWindowClass;
+	windowClass.hIconSm = LoadIcon(windowClass.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+	RegisterClassEx(&windowClass);
+
+	//--------------------------------------------------
+	// Define a class for game window (SFML)
+	WNDCLASS sfmlClass;
+	sfmlClass.style         = 0;
+	sfmlClass.lpfnWndProc   = GameObjectProc;
+	sfmlClass.cbClsExtra    = 0;
+	sfmlClass.cbWndExtra    = 0;
+	sfmlClass.hInstance     = hInstance;
+	sfmlClass.hIcon         = NULL;
+	sfmlClass.hCursor       = 0;
+	sfmlClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
+	sfmlClass.lpszMenuName  = NULL;
+	sfmlClass.lpszClassName = szGOMenuClass;
+	RegisterClass(&sfmlClass);
+	//--------------------------------------------------------------
+}
+
+// Call back functions. Forward params to editor for processing
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	return editor.mainMenuProc(hWnd, message, wParam, lParam);
+}
+
+LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	return editor.gameObjectProc(hWnd, message, wParam, lParam);
+}
+
+
+// Message handler for about box.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
+
+
+
+#endif

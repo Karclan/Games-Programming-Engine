@@ -1,0 +1,33 @@
+#include "core\assetLoader.h"
+
+
+AssetLoader::AssetLoader()
+{
+}
+
+// This is for debug / testing
+void AssetLoader::loadBasicAssets()
+{
+	// Load the primitive shapes
+	_primitives.loadShapes();
+
+	// Load shader
+	_shaders.loadShaders();
+
+	// Create a test material
+	_testMat.setShader(_shaders.getShader(Shaders::DIFFUSE));
+
+}
+
+
+Mesh* AssetLoader::getPrimitiveMesh(PrimitiveShapes::Type type)
+{
+	return _primitives.getMesh(type);
+}
+
+
+
+Material* AssetLoader::getTestMaterial()
+{
+	return &_testMat;
+}

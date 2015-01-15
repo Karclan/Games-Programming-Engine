@@ -1,0 +1,26 @@
+#ifndef MATERIAL_H
+#define MATERIAL_H
+
+#include <glew\GL\glew.h>
+#include <SFML\Graphics.hpp>
+
+#include "rendering\shader.h"
+
+//! \brief Material
+class Material
+{
+public:
+	Material(); // temp but probably should REQUIRE shader idk
+	//Material(int shaderHandle);
+
+	void setShader(Shader* shader);
+	void setTexture(sf::Texture* texture);
+	void bind(GLfloat* m, GLfloat* v, GLfloat* p);
+
+
+private:
+	Shader* _shader;
+	sf::Texture* _texture;
+};
+
+#endif

@@ -1,0 +1,34 @@
+#ifndef OBJECT_CREATOR_H
+#define OBJECT_CREATOR_H
+
+#include <unordered_map>
+
+#include "core\gameObject.h"
+#include "rendering\renderSystem.h"
+#include "behaviour\behaviourSystem.h"
+
+
+class ObjectManager
+{
+public:
+	ObjectManager();
+	~ObjectManager();
+
+	void initialize(RenderSystem &rendSys, BehaviourSystem &behvrSys); //!< Currently not ideal. There must be a more elegant way of setting up link with all sub systems
+	unsigned int createGameObject(); //!< Create object and return its unique ID
+	bool addComponent(unsigned int ObjectID, SPtr_Component component); //!< Find object by id and add component to it if exists. Return true on success, false on fail
+	bool addBehaviour(unsigned int ObjectID, SPtr_Behaviour behaviour); //!< Find object by id and add behaviour to it if exists. Return true on success, false on fail
+	void destroyAll(); //!< Clear all objects
+
+private:
+	unsigned int _nextId; //!< Starts at 0 and assigned as unique ID when object created, then incremented by one, allowing 'uint's max limit' objects per scene. Reset to zero when all objects cleared from map
+	std::unordered_map<unsigned int, SPtr_GameObject> _gameObjects; //!< All gameObjects, stored next to its unique ID
+
+	// Sub systems Obj Manager should add any components they need on creation
+	// e.g. rendering components sent to rendering system, rigidbodies sent to physics etc
+	RenderSystem* _rendSys;
+	BehaviourSystem* _behvrSys;
+
+};
+
+#endif

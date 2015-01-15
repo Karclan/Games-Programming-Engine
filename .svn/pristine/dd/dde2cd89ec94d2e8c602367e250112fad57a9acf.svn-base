@@ -1,0 +1,37 @@
+#ifndef RENDER_SYSTEM_H
+#define RENDER_SYSTEM_H
+
+#include <vector>
+
+#include "rendering\camera.h"
+#include "rendering\modelRenderer.h"
+
+/*! \brief Render Sub-System
+
+	System for managing and rendering all rendable objects
+
+*/
+
+class RenderSystem
+{
+public:
+	RenderSystem(){};
+	~RenderSystem(){};
+
+	void render();
+	void addCamera(std::shared_ptr<Camera> camera);
+	void addRenderObject(std::shared_ptr<ModelRenderer> model);
+	void clear();
+
+	void setShadersMap(const std::map<std::string, Shader*>* shadersMap) { _loadedShaders = shadersMap; }
+
+private:
+	std::vector<std::shared_ptr<Camera>> _cameras;
+	std::vector<std::shared_ptr<ModelRenderer>> _models;
+	glm::vec3 _lightDirection; //!< Currently only one single directional light, but this should be a good starting point for a more complex lighting system
+
+	// NOTE: Having a pointer to the map of assets isn't that elegant but it'll do for the moment. It's relatively safe as the map exists for the duration of the program (no null pointers) and quicker than cycling throgh materials (which may have the same shader - why update uniforms in the same shader more than once??)
+	const std::map<std::string, Shader*>* _loadedShaders; //!< Pointer to map of shaders in assets. Rendering system needs to be able to update uniforms in all shaders (e.g. for lighting).
+};
+
+#endif

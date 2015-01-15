@@ -1,0 +1,33 @@
+#ifndef RENDER_SYSTEM_H
+#define RENDER_SYSTEM_H
+
+#include <vector>
+
+#include "rendering\camera.h"
+#include "rendering\modelRenderer.h"
+
+/*! \brief Render Sub-System
+
+	System for managing and rendering all rendable objects
+
+*/
+
+class RenderSystem
+{
+public:
+	RenderSystem(){};
+	~RenderSystem(){};
+
+	void render();
+	void addCamera(std::shared_ptr<Camera> camera);
+	void addRenderObject(std::shared_ptr<ModelRenderer> model);
+	void clear();
+
+private:
+	std::vector<std::shared_ptr<Camera>> _cameras;
+	std::vector<std::shared_ptr<ModelRenderer>> _models;
+
+
+};
+
+#endif

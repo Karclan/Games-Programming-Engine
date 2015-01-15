@@ -1,0 +1,18 @@
+#ifndef GO_INIT_DATA_H
+#define GO_INIT_DATA_H
+
+
+struct GOData
+{
+
+};
+
+struct CompData
+{
+
+};
+
+
+
+
+#endif

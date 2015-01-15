@@ -1,0 +1,82 @@
+#include "core\engine.h"
+
+void Engine::startup(sf::RenderWindow *window)
+{
+	// Clear colour
+	_window = window;
+    glClearColor(0.5f, 0.8f, 1.0f, 0.0f);
+
+	//=================================================
+	//=================================================
+	// OpenGL is good to go!!
+	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
+	_assetLoader.loadTestAssets(); // this is temporary, loading will be done by scene loader later
+	_sceneMngr.initialize(_objMngr); // init and pass reference to object manager
+	_objMngr.initialize(_rendSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
+
+	_sceneMngr.setupExampleScene(_assetLoader);
+
+	// Setup input
+	_input = Input::startUp();
+
+	// Set screen vars
+	_screenSize = sf::Vector2u(1280, 720);
+	_window->setSize(_screenSize);
+
+	// init time
+	_refreshRate = 1.0f/60.0f;
+	_dt = 0; //delta time
+	_fdt = 0; //fixed delta time
+	_clock.restart();
+}
+
+void Engine::onKeyEvent(int key, KeyEvent::State action)
+{
+	switch(action)
+	{
+	case KeyEvent::PRESSED: _input->keyDown(KeyEvent(KeyEvent::PRESSED, key)); break;
+	case KeyEvent::RELEASED: _input->keyUp(key); break;
+	}
+}
+
+
+
+void Engine::mainLoop()
+{
+	// Time
+	_dt = _clock.getElapsedTime().asSeconds();
+	_clock.restart();
+	_fdt += _dt;
+
+	// Update
+	_behvrSys.update(_dt);
+
+	// Fixed update
+	if(_fdt >= _refreshRate)
+	{
+		// fixed update here
+		_behvrSys.fixedUpdate(_fdt); // should be fixed update
+		_fdt = 0;
+	}
+
+	// Render
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
+	_rendSys.render(); // render everything to back buffer
+	_window->display(); // switch buffers
+	//_window->resetGLStates(); // think you have to reset GL states before drawing any
+
+	// Input
+	_input->update(); // update just before polling, this will set previously pressed heys to "held"
+	
+}
+
+
+
+
+
+void Engine::shutDown()
+{
+	_behvrSys.clear();
+	_rendSys.clear();
+	_objMngr.destroyAll();
+}

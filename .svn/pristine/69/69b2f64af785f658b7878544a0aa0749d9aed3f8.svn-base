@@ -1,0 +1,46 @@
+#ifndef ASSET_LOADER_H
+#define ASSET_LOADER_H
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include "rendering\primitiveShapes.h"
+#include "rendering\material.h"
+#include "rendering\shaders.h"
+/*! \brief Asset Loader
+
+	At the moment all this does is load a basic shader and a hard-coded triangle
+	just for testing. Later it will allow you to load assets whenever you want from
+	filepaths etc.
+
+*/
+class AssetLoader
+{
+public:
+	AssetLoader();
+	~AssetLoader();
+
+	void loadBasicAssets();
+	Mesh* getPrimitiveMesh(PrimitiveShapes::Type type);
+	//Shader* getShader(Shaders::Type type);
+	Shader* getShader(std::string name); // returns shader if loaded, loads and returns if not loaded or null if can't load
+	
+	// Functions for deleting assets
+	void unloadAllAssets(); // calls all unload functions
+	void unloadShaders(); // delete all shaders and clear map out
+
+private:
+	PrimitiveShapes _primitives;
+	//Shaders _shaders;
+	std::map<std::string, Shader*> _shaders;
+	
+	
+	
+};
+
+#endif

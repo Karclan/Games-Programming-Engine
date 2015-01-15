@@ -1,0 +1,79 @@
+#include "rendering\camera.h"
+
+Camera::Camera(SPtr_Transform transform)
+{
+	_transform = transform;
+
+	// A temporary test VP matrix
+	// ----View Matrix
+	//glm::vec3 cameraPos(0, 0, 5); // where the camera is
+	//glm::vec3 targetPos(0, 0, 0); // where the camera is looking at
+	//_viewMatrix = glm::lookAt(cameraPos, targetPos, glm::vec3(0, 1, 0));
+
+	// ----Perspective Matrix
+	_projectionMatrix = glm::perspective(glm::radians(35.0f), 1.0f, 0.1f, 100.0f); //fov, aspect, zNear, ZFar
+
+}
+
+ComponentType::Type Camera::getType()
+{
+	return ComponentType::CAMERA;
+}
+
+bool Camera::isOnePerObject()
+{
+	return false;
+}
+
+void Camera::preRender()
+{
+	glm::vec3 pos = -_transform->getPosition();
+	glm::vec3 rot = -_transform->getEulerAngles();
+	glm::vec3 scale = _transform->getScale();
+
+	// translation matrix
+	glm::mat4 t( 1       , 0       , 0       , 0       ,
+				 0       , 1       , 0       , 0       ,
+				 0       , 0       , 1       , 0       ,
+				 pos.x, pos.y, pos.z, 1);
+	
+	
+
+	// rotation matrices
+	float cosX = glm::cos(glm::radians(rot.x));
+	float cosY = glm::cos(glm::radians(rot.y));
+	float cosZ = glm::cos(glm::radians(rot.z));
+
+	float sinX = glm::sin(glm::radians(rot.x));
+	float sinY = glm::sin(glm::radians(rot.y));
+	float sinZ = glm::sin(glm::radians(rot.z));
+
+	glm::mat4 rx(1     , 0    , 0     , 0     ,
+				 0     , cosX , sinX  , 0     ,
+				 0     , -sinX, cosX  , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	glm::mat4 ry(cosY  , 0    , sinY  , 0     ,
+				 0     , 1    , 0     , 0     ,
+				 -sinY , 0    , cosY  , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	glm::mat4 rz(cosZ , sinZ  , 0     , 0     ,
+				 -sinZ, cosZ  , 0     , 0     ,
+				 0     , 0    , 1     , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	// scale matrix
+	glm::mat4 s(scale.x, 0        , 0        , 0       ,
+				 0       , scale.y, 0       , 0       ,
+				 0       , 0       , scale.z, 0       ,
+				 0       , 0       , 0       , 1);
+
+	// finally, set matrix
+	_viewMatrix = s * rz * ry * rx * t;
+}
+
+void Camera::render(ModelRenderer &renderer)
+{
+	renderer.render(glm::value_ptr(_viewMatrix), glm::value_ptr(_projectionMatrix));
+}

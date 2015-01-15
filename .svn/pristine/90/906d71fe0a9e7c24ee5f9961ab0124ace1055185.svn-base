@@ -1,0 +1,169 @@
+#include "core\transform.h"
+#include <iostream>
+
+Transform::Transform()
+{
+	_position = glm::vec3(0, 0, 0);
+	_rotation = glm::vec3(0, 0, 0);
+	_scale = glm::vec3(1, 1, 1);
+}
+
+
+// Overridden pure virtuals in component
+ComponentType::Type Transform::getType()
+{
+	return ComponentType::TRANSFORM;
+}
+
+bool Transform::isOnePerObject()
+{
+	return true;
+}
+//--------------------------------------
+
+
+// Data access functions
+glm::mat4 Transform::getMatrix()
+{
+	return _matrix;
+}
+
+GLfloat* Transform::getFloatPointer()
+{
+	return glm::value_ptr(_matrix);
+}
+//--------------------------------------
+
+
+
+// Transform functions
+void Transform::setPosition(glm::vec3 pos)
+{
+	_position = pos;
+	recalculateMatrix();
+}
+
+void Transform::setEulerAngles(glm::vec3 ang)
+{
+	_rotation = ang;
+	recalculateMatrix();
+}
+
+void Transform::setScale(glm::vec3 scale)
+{
+	_scale = scale;
+	recalculateMatrix();
+}
+
+glm::vec3 Transform::getPosition()
+{
+	return _position;
+}
+
+glm::vec3 Transform::getEulerAngles()
+{
+	return _rotation;
+}
+
+glm::vec3 Transform::getScale()
+{
+	return _scale;
+}
+
+void Transform::translate(glm::vec3 translation)
+{
+	_position += translation;
+	recalculateMatrix();
+}
+
+void Transform::rotate(glm::vec3 eulerAngles)
+{
+	_rotation += eulerAngles;
+	recalculateMatrix();
+}
+
+void Transform::lookAt(glm::vec3 target)
+{
+	_matrix = glm::lookAt(_position, target, glm::vec3(0, 1, 0));
+	// note you need to somehow extract rotation from this
+	// think we need to quaternion soon!!
+}
+//--------------------------------------
+
+
+
+
+// Direction functions
+glm::vec3 Transform::getForward()
+{
+	glm::vec4 fwd(Direction::FORWARD, 1.0f);
+	return glm::vec3(getRotationMatrix() * fwd);
+}
+glm::vec3 Transform::getRight()
+{
+	glm::vec4 right(Direction::RIGHT, 1.0f);
+	return glm::vec3(getRotationMatrix() * right);
+}
+
+glm::vec3 Transform::getLeft()
+{
+	glm::vec4 up(Direction::UP, 1.0f);
+	return glm::vec3(getRotationMatrix() * up);
+}
+
+
+
+
+
+// Private functions
+glm::mat4 Transform::getRotationMatrix()
+{
+	// rotation matrices
+	float cosX = glm::cos(glm::radians(_rotation.x));
+	float cosY = glm::cos(glm::radians(_rotation.y));
+	float cosZ = glm::cos(glm::radians(_rotation.z));
+
+	float sinX = glm::sin(glm::radians(_rotation.x));
+	float sinY = glm::sin(glm::radians(_rotation.y));
+	float sinZ = glm::sin(glm::radians(_rotation.z));
+
+	glm::mat4 rx(1     , 0    , 0     , 0     ,
+				 0     , cosX , sinX  , 0     ,
+				 0     , -sinX, cosX  , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	glm::mat4 ry(cosY  , 0    , sinY  , 0     ,
+				 0     , 1    , 0     , 0     ,
+				 -sinY , 0    , cosY  , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	glm::mat4 rz(cosZ , sinZ  , 0     , 0     ,
+				 -sinZ, cosZ  , 0     , 0     ,
+				 0     , 0    , 1     , 0     ,
+				 0     , 0    , 0     , 1     );
+
+	return rz * ry * rx;
+}
+
+
+void Transform::recalculateMatrix()
+{
+	// translation matrix
+	glm::mat4 t( 1       , 0       , 0       , 0       ,
+				 0       , 1       , 0       , 0       ,
+				 0       , 0       , 1       , 0       ,
+				 _position.x, _position.y, _position.z, 1);
+	
+	
+
+	
+
+	// scale matrix
+	glm::mat4 s(_scale.x, 0        , 0        , 0       ,
+				 0       , _scale.y, 0       , 0       ,
+				 0       , 0       , _scale.z, 0       ,
+				 0       , 0       , 0       , 1);
+
+	// finally, set matrix
+	_matrix = t * getRotationMatrix() * s;
+}

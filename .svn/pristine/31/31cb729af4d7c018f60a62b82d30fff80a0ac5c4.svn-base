@@ -1,0 +1,44 @@
+#ifndef SCENE_MANAGER_H
+#define SCENE_MANAGER_H
+
+#include <string>
+
+#include "tinyXML\tinystr.h"
+#include "tinyXML\tinyxml.h"
+
+#include "core\objectManager.h"
+#include "core\assetLoader.h"
+
+#define DEMO_SCENE_PATH "demo.xml"
+
+class SceneManager
+{
+public:
+	SceneManager(){};
+	~SceneManager(){};
+
+	void initialize(ObjectManager &objMngr, AssetLoader &loader);
+	
+	void writeDemoXML();
+	void loadFromXML(std::string filePath);
+
+private:
+	ObjectManager* _objMngr;
+	AssetLoader* _assets;
+
+
+	// functions to do with writing different types of info to file
+	TiXmlElement* xmlAddGo(TiXmlDocument* doc, std::string name);
+	void xmlAddTransform(TiXmlElement* go, glm::vec3 t, glm::vec3 r, glm::vec3 s);
+	void xmlAddCamera(TiXmlElement* go);
+	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader);
+	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture);
+	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
+
+	// functions to do with reading from xml and generating new objects based on that
+	SPtr_Transform newTransform(TiXmlElement* compElmnt);
+	SPtr_Component newModelRend(TiXmlElement* compElmnt, SPtr_Transform trans); // Creates and returns new model renderer component. It will initinalize from xml element pointer if valid
+
+};
+
+#endif

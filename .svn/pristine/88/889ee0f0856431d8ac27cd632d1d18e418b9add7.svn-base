@@ -1,0 +1,40 @@
+#ifndef CAMERA_CONTROLLER_H
+#define CAMERA_CONTROLLER_H
+
+#include <SFML\Window.hpp>
+#include "behaviour\behaviour.h"
+#include "core\input.h"
+
+/*! \brief Temporary behaviour class
+
+	Hard-code behaviour for controlling the camera. In final version
+	this would be a script file.
+
+*/
+
+class CameraController : public Behaviour
+{
+public:
+	CameraController();
+	~CameraController();
+
+protected:
+	void initialize();
+	void update(float t); //!< Update function
+	void fixedUpdate(float t); //!< Update function
+
+private:
+	std::shared_ptr<Transform> _transform;
+	float _speed;
+	glm::vec3 _velocity;
+	float _turn;
+
+};
+
+
+
+
+
+
+
+#endif

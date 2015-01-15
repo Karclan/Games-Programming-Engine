@@ -1,0 +1,123 @@
+#include "core\assetLoader.h"
+
+
+AssetLoader::AssetLoader()
+{
+}
+
+AssetLoader::~AssetLoader()
+{
+	unloadAllAssets();
+}
+
+
+
+void AssetLoader::loadBasicAssets()
+{
+	// Load the primitive shapes
+	_primitives.loadShapes();
+}
+
+
+
+//-------------------------GET ASSET----------------------
+// Functions for requesting (and loading if needed) assets
+//--------------------------------------------------------
+Mesh* AssetLoader::getPrimitiveMesh(PrimitiveShapes::Type type)
+{
+	return _primitives.getMesh(type);
+}
+
+Shader* AssetLoader::getShader(std::string name)
+{
+	std::map<std::string, Shader*>::iterator it;
+	it = _shaders.find(name);
+	
+	if(it != _shaders.end()) // then it found it!
+	{
+		return it->second;
+	}
+	else // try to load it!
+	{
+		Shader* newShader = new Shader();
+		if(!newShader->loadFromFile(name))
+		{
+			std::cout << "Failed to load " << name << " shader\n";
+			delete newShader;
+			return nullptr;
+		}
+		
+		// Add shader to map and return
+		_shaders.emplace(name, newShader);
+		return newShader;
+	}
+}
+
+Texture2D* AssetLoader::getTexture(std::string fileName)
+{
+	
+
+	std::map<std::string, Texture2D*>::iterator it;
+	it = _textures.find(fileName);
+	
+	if(it != _textures.end()) // then it found it!
+	{
+		return it->second;
+	}
+	else // try to load it!
+	{
+		Texture2D* newTexture = new Texture2D();
+		std::string filePath = "assets/textures/" + fileName;
+		if(!newTexture->loadFromFile(filePath))
+		{
+			std::cout << "Failed to load " << fileName << " texture\n";
+			delete newTexture;
+			return nullptr;
+		}
+		
+		// Add texture to map and return
+		_textures.emplace(fileName, newTexture);
+		return newTexture;
+	}
+}
+
+
+
+
+
+
+
+
+
+//-------------------UNLOAD--------------
+// Functions for deleting assets
+//---------------------------------------
+void AssetLoader::unloadAllAssets()
+{
+	unloadShaders();
+	unloadTextures();
+}
+
+void AssetLoader::unloadShaders()
+{
+	std::map<std::string, Shader*>::iterator it;
+	for(it = _shaders.begin(); it != _shaders.end(); ++it)
+	{
+		Shader* shader = it->second;
+		delete shader;
+	}
+
+	_shaders.clear();
+}
+
+void AssetLoader::unloadTextures()
+{
+	std::map<std::string, Texture2D*>::iterator it;
+	for(it = _textures.begin(); it != _textures.end(); ++it)
+	{
+		Texture2D* texture = it->second;
+		delete texture;
+	}
+
+	_textures.clear();
+}

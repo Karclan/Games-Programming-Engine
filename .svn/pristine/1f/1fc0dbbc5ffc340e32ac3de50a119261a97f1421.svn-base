@@ -1,0 +1,52 @@
+#ifndef ASSET_LOADER_H
+#define ASSET_LOADER_H
+
+#include <iostream>
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include "rendering\primitiveShapes.h"
+#include "rendering\material.h"
+#include "rendering\texture2D.h"
+/*! \brief Asset Loader
+
+	Provides functions for retreiving pointers to assets such as meshes, textures and shaders.
+	Assets are requested by file name. The loader will load these assets the first time they are
+	requested and store them in a map with their filename as a key. Then when the same asset is
+	requested again it is retreived by this key (so it doesn't get loaded multiple times)
+
+*/
+class AssetLoader
+{
+public:
+	AssetLoader();
+	~AssetLoader();
+
+	void loadBasicAssets(); //!< Load assets that come as part of the engine, just the primitive shapes at the moment
+	Mesh* getPrimitiveMesh(PrimitiveShapes::Type type); //!< Get one of the hard-coded primitive shapes
+	Shader* getShader(std::string name); //!< Returns shader if loaded, loads and returns if not loaded or null if can't load. Request by name (no need for .frag or .vert suffix). Both .vert and .frag files must be in shaders folder
+	Texture2D* getTexture(std::string fileName); //!< Loads (if not loaded) and returns texture. Request by filename with extension, e.g. img.png. Texture must be stored in textures folder
+
+	// Functions for deleting assets
+	void unloadAllAssets(); //!< Calls all unload functions
+	void unloadShaders(); //!< Delete all shaders and clear map out
+	void unloadTextures(); //!< Delete all textures and clear map out
+
+	// Get pointer to map of shaders so all can be cycled through and have global uniforms set
+	const std::map<std::string, Shader*>* getShadersMap() { return &_shaders; }
+
+
+private:
+	PrimitiveShapes _primitives;
+	std::map<std::string, Shader*> _shaders;
+	std::map<std::string, Texture2D*> _textures;
+	
+	
+	
+};
+
+#endif

@@ -1,0 +1,24 @@
+#ifndef SCENE_MANAGER_H
+#define SCENE_MANAGER_H
+
+#include "core\objectManager.h"
+#include "core\assetLoader.h"
+
+
+
+class SceneManager
+{
+public:
+	SceneManager(){};
+	~SceneManager(){};
+
+	void initialize(ObjectManager &objMngr);
+	void setupExampleScene(AssetLoader &loader); //!< Sets up a simple scene with primitive objects and a camera
+
+private:
+	ObjectManager* _objMngr;
+	
+
+};
+
+#endif

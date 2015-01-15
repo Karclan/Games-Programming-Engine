@@ -1,0 +1,26 @@
+#include "rendering\material.h"
+
+
+Material::Material()
+{
+	_shader = nullptr;
+	_texture = nullptr;
+}
+
+
+void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
+{
+	if(_shader == nullptr) return;
+	_shader->useProgram();
+	_shader->setMVP(m, v, p);
+}
+
+void Material::setShader(Shader* shader)
+{
+	_shader = shader;
+}
+
+void Material::setTexture(sf::Texture* texture)
+{
+	_texture = texture;
+}

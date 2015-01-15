@@ -1,0 +1,91 @@
+#include "editor\menuBar.h"
+#include <iostream> // just for debugging, cam remove later
+
+void MenuBar::initialize(HINSTANCE hInstance, GoMenu &goMenu, SceneManager* sceneMngr)
+{
+	_hInstance = hInstance;
+	_sceneMngr = sceneMngr;
+	_goMenu = &goMenu;
+	_gamePlaying = false;
+}
+
+LRESULT MenuBar::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	int wmId, wmEvent;
+
+	switch (message)
+	{
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam); // the low word of wparam is the ID of the command
+		wmEvent = HIWORD(wParam);
+		
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case IDM_ABOUT:
+			DialogBox(_hInstance, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			break;
+		case IDM_EXIT:
+			DestroyWindow(hWnd);
+			break;
+		case ID_VIEW_GOMENU:
+			_goMenu->show();
+			break;
+		case ID_CONTROL_PLAY:
+			playStop();
+			break;
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+
+
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+// Getter for finding out if cuyrrently in "play mode" or not
+bool MenuBar::gamePlaying()
+{
+	return _gamePlaying;
+}
+
+// Message handler for about box.
+INT_PTR CALLBACK MenuBar::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
+
+// Control menu
+void MenuBar::playStop()
+{
+	if(_gamePlaying)
+	{
+		std::cout << "STOPPED!\n";
+		_sceneMngr->initFromInitTable();
+	}
+	else
+	{
+		std::cout << "PLAY NOW!\n";
+	}
+	_gamePlaying = !_gamePlaying;
+}

@@ -1,0 +1,40 @@
+#ifndef EDITOR_H
+#define EDITOR_H
+
+// Required for I/O of console
+#include <stdio.h>
+#include <fcntl.h>
+#include <io.h>
+#include <iostream>
+#include <fstream>
+
+
+#include <windows.h>
+
+#include "..\resource.h"
+
+const int ID_STATIC = 1000; // id of the static text thing created in func
+const int ID_BUTTON = 1001;
+
+
+class Editor
+{
+public:
+	HWND myCreateStatic(HWND hwnd, int id, LPCWSTR s, int x, int y, int width, int height);
+	HWND createButton(HWND parentHandle);
+	void initConsole();
+
+	// Call backs
+	LRESULT mainMenuProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	LRESULT gameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+
+};
+
+
+
+
+
+
+
+
+#endif

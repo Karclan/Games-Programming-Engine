@@ -1,0 +1,112 @@
+#include "rendering\shaders.h"
+
+void Shaders::loadShaders()
+{
+	_shaders[DIFFUSE] = loadShader("shaders/diffuse.vert", "shaders/diffuse.frag");
+	_shaders[SPECULAR] = loadShader("shaders/specular.vert", "shaders/specular.frag");
+}
+
+int Shaders::getShader(Type type)
+{
+	return _shaders[type];
+}
+
+
+int Shaders::loadShader(std::string vFilePath, std::string fFilePath)
+{
+	// LOAD SHADERS VIA STRING STREAMING
+
+	//////////////////////////////////////////////////////
+    /////////// Vertex shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+    // Load contents of file
+    std::ifstream inFile(vFilePath);
+    if (!inFile) // if file bad then error
+	{
+        fprintf(stderr, "Error opening file: shader/basic.vert\n" );
+        exit(1);
+    }
+
+	// Pull data from shader prog to string stream then store in string
+    std::stringstream code;
+    code << inFile.rdbuf();
+	inFile.close();
+	std::string codeStr(code.str()); // code is stored in this string
+
+    // Create the shader object
+    GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
+    if (0 == vertShader) 
+	{
+      fprintf(stderr, "Error creating vertex shader.\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // Load the source code into the shader object
+    const GLchar* codeArray[] = {codeStr.c_str()};
+    glShaderSource(vertShader, 1, codeArray, NULL); // attach source code from string to shader with ID vertShader
+
+    // Compile the shader
+    glCompileShader( vertShader );
+
+    
+    //////////////////////////////////////////////////////
+    /////////// Fragment shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+    // Load contents of file into shaderCode here
+    std::ifstream fragFile(fFilePath);
+    if (!fragFile)
+	{
+        fprintf(stderr, "Error opening file: shader/basic.frag\n" );
+        exit(1);
+    }
+
+    std::stringstream fragCode;
+    fragCode << fragFile.rdbuf();
+	fragFile.close();
+	codeStr = fragCode.str();
+
+    // Create the shader object
+    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+    if (0 == fragShader) 
+	{
+      fprintf(stderr, "Error creating fragment shader.\n");
+      exit(1);
+    }
+
+    // Load the source code into the shader object
+    codeArray[0] = codeStr.c_str();
+    glShaderSource( fragShader, 1, codeArray, NULL );
+
+    // Compile the shader
+    glCompileShader( fragShader );
+
+
+
+
+
+	//----------------------------------------------------------
+	// NOW LINK SHADER
+	// Create the program object
+    int programHandle = glCreateProgram();
+    if(0 == programHandle) 
+	{
+        fprintf(stderr, "Error creating program object.\n");
+        exit(1);
+    }
+
+
+    // Attach the shaders to the program object
+    glAttachShader( programHandle, vertShader );
+    glAttachShader( programHandle, fragShader );
+
+    // Link the program
+    glLinkProgram( programHandle );
+
+    // Check for successful linking
+    GLint status;
+    glGetProgramiv( programHandle, GL_LINK_STATUS, &status );
+
+	return programHandle;
+}

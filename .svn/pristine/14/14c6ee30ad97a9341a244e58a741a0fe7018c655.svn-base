@@ -1,0 +1,33 @@
+#ifndef GO_MENU_H
+#define GO_MENU_H
+
+#include <windows.h>
+
+#include "..\resource.h"
+
+
+const int ID_STATIC = 1000; // id of the static text thing created in func
+const int ID_BUTTON = 1001;
+
+class GoMenu
+{
+public:
+	void initialize(HINSTANCE hInstance, HWND handle);
+	LRESULT processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //!< Call back passed from main through editor to this class
+	void show(); //!< Reopens menu if it had been closed
+
+	// Test functions
+	HWND myCreateStatic(HWND hwnd, int id, LPCWSTR s, int x, int y, int width, int height);
+	HWND createButton(HWND parentHandle);
+
+
+private:
+	// Private member variables
+	HINSTANCE _hInstance; // might not need this but may as well leave for now
+	HWND _menuHandle; //!< The handle for the go menu
+
+};
+
+
+
+#endif

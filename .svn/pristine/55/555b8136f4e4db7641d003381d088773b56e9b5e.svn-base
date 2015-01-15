@@ -1,0 +1,29 @@
+#ifndef SHADER_H
+#define SHADER_H
+
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+class Shader
+{
+public:
+	bool loadFromFile(std::string shaderName); //!< load from file. Must have a .vert and .frag file called shaderName in the shaders folder
+	void useProgram(); //!< use this shader for drawing
+	void setMVP(GLfloat* m, GLfloat* v, GLfloat* p); //!< set the mvp matrices in the shader
+
+private:
+	int _shaderHandle; //!< Handle to shader program
+	int _modelMatrixID;
+	int _viewMatrixID;
+	int _projectionMatrixID;
+
+	bool loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
+	
+
+};
+
+#endif

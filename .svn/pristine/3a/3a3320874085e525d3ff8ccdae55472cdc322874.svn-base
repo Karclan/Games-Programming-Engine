@@ -1,0 +1,139 @@
+#include "core\engine.h"
+
+sf::RenderWindow* Engine::startEditorMode(HWND windowHandle)
+{
+	_window.create(windowHandle);
+	_window.setFramerateLimit(60);
+	_window.resetGLStates();
+
+	// Init GLEW
+	glewExperimental = GL_TRUE; // glew is useless and freaks out at core stuff if you don't set this to true
+    GLenum res = glewInit();
+    if (res != GLEW_OK) fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+
+	// OpenGL render settings
+	glDepthMask(GL_TRUE); // ensure depth buffer is ok to read and write to
+	glEnable(GL_DEPTH_TEST); // ensure depth testing on so stuff draws in right order
+	glEnable(GL_CULL_FACE); // backface culling for better performance
+	
+	// Show main window
+	ShowWindow(windowHandle, SW_SHOWNORMAL);
+	UpdateWindow(windowHandle);
+
+	return &_window;
+}
+
+sf::RenderWindow* Engine::startGameMode()
+{
+	// TIME TO MAKE SFML LOL
+	_window.create(sf::VideoMode(1280, 720), "Game Engine");
+	_window.setFramerateLimit(60);
+	_window.resetGLStates();
+
+
+	// Init GLEW - I think it goes here 
+	glewExperimental = GL_TRUE; // glew is useless and freaks out at core stuff if you don't set this to true
+    GLenum res = glewInit();
+    if (res != GLEW_OK) 
+	{
+      fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+    }
+
+	// Not sure if I need this or want it here exactly or if it's correct------
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+	glViewport(0, 0, (GLsizei)1280, (GLsizei)720);
+
+	// Enable Z-buffer read and write
+	glEnable(GL_DEPTH_TEST);
+	glDepthMask(GL_TRUE);
+
+	return &_window;
+}
+
+
+
+void Engine::startup()
+{
+	// Clear colour
+	//_window = window;
+    glClearColor(0.5f, 0.8f, 1.0f, 0.0f);
+
+	//=================================================
+	//=================================================
+	// OpenGL is good to go!!
+	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
+	_assetLoader.loadBasicAssets(); // this is temporary, loading will be done by scene loader later
+	_sceneMngr.initialize(_objMngr, _assetLoader); // init and pass reference to object manager
+	_objMngr.initialize(_rendSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
+
+	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
+
+	// Setup input
+	_input = Input::startUp();
+
+	// Set screen vars
+	_screenSize = sf::Vector2u(1280, 720);
+	_window.setSize(_screenSize);
+
+	// init time
+	_refreshRate = 1.0f/60.0f;
+	_dt = 0; //delta time
+	_fdt = 0; //fixed delta time
+	_clock.restart();
+}
+
+void Engine::onKeyEvent(int key, KeyEvent::State action)
+{
+	switch(action)
+	{
+	case KeyEvent::PRESSED: _input->keyDown(KeyEvent(KeyEvent::PRESSED, key)); break;
+	case KeyEvent::RELEASED: _input->keyUp(key); break;
+	}
+}
+
+void Engine::update()
+{
+	// Time
+	_dt = _clock.getElapsedTime().asSeconds();
+	_clock.restart();
+	_fdt += _dt;
+
+	// Update
+	_behvrSys.update(_dt);
+
+	// Fixed update
+	if(_fdt >= _refreshRate)
+	{
+		// fixed update here
+		_behvrSys.fixedUpdate(_fdt); // should be fixed update
+		_fdt = 0;
+	}
+}
+void Engine::render()
+{
+	// Render
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
+	_rendSys.render(); // render everything to back buffer
+	_window.display(); // switch buffers
+	_window.pushGLStates();
+	//_window.resetGLStates(); // think you have to reset GL states before drawing any SFML
+	//draw sfml
+	_window.resetGLStates();
+	_window.popGLStates();
+}
+void Engine::processInput()
+{
+	_input->update(); // update just before polling, this will set previously pressed heys to "held"
+}
+
+
+
+
+
+void Engine::shutDown()
+{
+	_behvrSys.clear();
+	_rendSys.clear();
+	_objMngr.destroyAll();
+}

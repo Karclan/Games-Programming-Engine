@@ -1,0 +1,84 @@
+#ifndef INIT_TABLE_H
+#define INIT_TABLE_H
+
+#include <list>
+#include <vector>
+#include <string>
+
+#include "core\assets.h"
+#include "core\component.h"
+#include "behaviour\behaviour.h"
+#include "core\transform.h"
+#include "rendering\modelRenderer.h"
+#include "rendering\primitiveShapes.h"
+
+// TO DO!!!!!!!!!!!!!!
+// Change AttribData* to SPtr_AttribData???
+// Because I think when it is copied about it calls destructor (as it is copied and destroyed)
+// So it deletes all the attibs!! The  crashes when it tries to delete them again
+// Need a way round this, shard pointer might be the way forward
+
+
+
+
+/*! \brief Data object for attributes
+*/
+struct AttribData{};
+struct AttribDatai:AttribData { int data; };
+struct AttribDataf:AttribData { float data; };
+struct AttribDatas:AttribData { std::string data; };
+
+typedef std::shared_ptr<AttribData> SPtr_AttribData;
+
+/*! \brief Data object for components
+*/
+class CompData
+{
+public:
+	CompData(SPtr_Component comp);
+	~CompData();
+	void addAttribi(int data);
+	void addAttribf(float data);
+	void addAttribs(std::string data);
+
+	// Dont forget to put this lot in the CPP!!!!!
+	//const AttribData* getAttrib(int index) { return _attribs[index]; }
+	int getIntAttrib(int index) { return std::static_pointer_cast<AttribDatai>(_attribs[index])->data; }
+	float getFloatAttrib(int index) { return std::static_pointer_cast<AttribDataf>(_attribs[index])->data; }
+	std::string getStringAttrib(int index) { return std::static_pointer_cast<AttribDatas>(_attribs[index])->data; }
+	int attribCount() { return _attribs.size(); }
+
+	SPtr_Component getComp() { return _comp; }
+
+	// operator overload
+	bool operator <(const CompData& other){ return _priority < other._priority; }
+
+private:
+	unsigned int _priority; //!< Some components may need to be created first, e.g. transforms which a lot of other components rely on. Lower number = higher priority
+	SPtr_Component _comp; //!< Pointer to the actual component object
+	std::vector<SPtr_AttribData> _attribs; //!< Attributes used as args in initialization. Bools and enums etc are stored as ints
+};
+
+struct GOData
+{
+	std::list<CompData> components;
+	std::vector<SPtr_Behaviour> behaviours;
+};
+
+
+/*! \brief Info on how to initialize a scene
+
+	The init table is a representation of a scene XML file in local memory.
+	It can be used to create and initalize a new scene or it can be used to
+	reset a scene back to its initial state without having to reload from XML.
+	The latter use is especially needed for editor mode, when constant testing
+	from the init state is needed. The init table to implemented as a vector of
+	Game Object datas, each with a list of components and behavaiours and their innit
+	values
+
+*/
+typedef std::vector<GOData> InitTable;
+typedef std::vector<GOData>::iterator InitTableIterator;
+
+
+#endif

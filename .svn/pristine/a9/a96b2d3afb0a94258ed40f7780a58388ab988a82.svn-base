@@ -1,0 +1,37 @@
+#ifndef MODEL_RENDERER_H
+#define MODEL_RENDERER_H
+
+#include "rendering\renderer.h"
+#include "rendering\mesh.h"
+#include "rendering\material.h"
+
+/*! \brief Wrapper for rendering model
+
+	Wraps index of VBO, index of shader, pointer to texture and model matrix
+	for a single 3D model in the environment
+*/
+class ModelRenderer : public Renderer
+{
+public:
+	ModelRenderer();
+	ComponentType::Type getType();
+	bool isOnePerObject();
+
+	void render(GLfloat* viewMatrix, GLfloat* projMatrix); //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
+	void setMesh(Mesh* mesh);
+	void setMaterial(Shader* shader);
+	void setMaterial(Shader* shader, Texture2D* texture);
+
+private:
+	Mesh* _mesh; //!< Pointer to mesh used for rendering
+	Material _material; //!< Material used for this object. Not a pointer as pretty lightweight, just a pointer to a shader and a pointer to a texture
+
+
+};
+
+//! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)
+typedef std::shared_ptr<ModelRenderer> SPtr_ModelRend;
+
+
+
+#endif

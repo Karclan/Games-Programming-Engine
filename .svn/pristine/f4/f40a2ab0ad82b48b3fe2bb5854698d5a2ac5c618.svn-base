@@ -1,0 +1,136 @@
+#include "rendering\shader.h"
+
+bool Shader::loadFromFile(std::string shaderName)
+{
+	std::string vFilePath = "assets/shaders/" + shaderName + ".vert";
+	std::string fFilePath = "assets/shaders/" + shaderName + ".frag";
+
+
+	bool success = loadShader(vFilePath, fFilePath);
+
+	if(success)
+	{
+		// This is how to get reference to information from the shader
+		_modelMatrixID = glGetUniformLocation(_shaderHandle, "mModel");
+		_viewMatrixID = glGetUniformLocation(_shaderHandle, "mView");
+		_projectionMatrixID = glGetUniformLocation(_shaderHandle, "mProjection");
+	}
+
+	return success;
+}
+
+
+void Shader::useProgram()
+{
+	glUseProgram(_shaderHandle); // use the shader for current rendering
+}
+
+void Shader::setMVP(GLfloat* m, GLfloat* v, GLfloat* p)
+{
+	// This is how to pass uniform values to the shader!
+	glUniformMatrix4fv(_modelMatrixID, 1, false, m);
+	glUniformMatrix4fv(_viewMatrixID, 1, false, v);
+	glUniformMatrix4fv(_projectionMatrixID, 1, false, p);
+}
+
+
+bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
+{
+	// LOAD SHADERS VIA STRING STREAMING
+
+	//////////////////////////////////////////////////////
+    /////////// Vertex shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+	
+
+    // Load contents of file
+    std::ifstream inFile(vFilePath);
+    if (!inFile) // if file bad then error
+	{
+        fprintf(stderr, "Error opening file: shader/basic.vert\n" );
+        return false;
+    }
+
+	// Pull data from shader prog to string stream then store in string
+    std::stringstream code;
+    code << inFile.rdbuf();
+	inFile.close();
+	std::string codeStr(code.str()); // code is stored in this string
+
+    // Create the shader object
+    GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
+    if (0 == vertShader) 
+	{
+      fprintf(stderr, "Error creating vertex shader.\n");
+      return false;
+    }
+
+    // Load the source code into the shader object
+    const GLchar* codeArray[] = {codeStr.c_str()};
+    glShaderSource(vertShader, 1, codeArray, NULL); // attach source code from string to shader with ID vertShader
+
+    // Compile the shader
+    glCompileShader( vertShader );
+
+    
+    //////////////////////////////////////////////////////
+    /////////// Fragment shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+    // Load contents of file into shaderCode here
+    std::ifstream fragFile(fFilePath);
+    if (!fragFile)
+	{
+        fprintf(stderr, "Error opening file: shader/basic.frag\n" );
+        return false;
+    }
+
+    std::stringstream fragCode;
+    fragCode << fragFile.rdbuf();
+	fragFile.close();
+	codeStr = fragCode.str();
+
+    // Create the shader object
+    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+    if (0 == fragShader) 
+	{
+      fprintf(stderr, "Error creating fragment shader.\n");
+      return false;
+    }
+
+    // Load the source code into the shader object
+    codeArray[0] = codeStr.c_str();
+    glShaderSource( fragShader, 1, codeArray, NULL );
+
+    // Compile the shader
+    glCompileShader( fragShader );
+
+
+
+
+
+	//----------------------------------------------------------
+	// NOW LINK SHADER
+	// Create the program object
+    _shaderHandle = glCreateProgram();
+    if(0 == _shaderHandle) 
+	{
+        fprintf(stderr, "Error creating program object.\n");
+        return false;
+    }
+
+
+    // Attach the shaders to the program object
+    glAttachShader( _shaderHandle, vertShader );
+    glAttachShader( _shaderHandle, fragShader );
+
+    // Link the program
+    glLinkProgram( _shaderHandle );
+
+    // Check for successful linking
+    GLint status;
+    glGetProgramiv( _shaderHandle, GL_LINK_STATUS, &status );
+
+	return true;
+}

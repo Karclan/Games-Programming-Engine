@@ -1,0 +1,27 @@
+#ifndef MENU_BAR_H
+#define MENU_BAR_H
+
+#include <windows.h>
+
+#include "..\resource.h"
+
+
+class MenuBar
+{
+public:
+	void initialize(HINSTANCE hInstance);
+	LRESULT processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //!< Call back passed from main through editor to this class
+
+	
+
+private:
+	// Private callbacks. These must be static (can't have member functions as callback functions)
+	static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+	
+	// Private member variables
+	HINSTANCE _hInstance;
+};
+
+
+
+#endif

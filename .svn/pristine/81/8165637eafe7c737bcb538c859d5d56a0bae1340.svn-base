@@ -1,0 +1,128 @@
+#include "core\engine.h"
+
+void Engine::startup(sf::RenderWindow *window)
+{
+	// Initialize GLFW
+	//if( !glfwInit() ) exit( EXIT_FAILURE );
+
+	// Select OpenGL 4.3 with a forward compatible core profile.
+	/*
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 );
+	glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, GL_TRUE);
+	*/
+
+	// Open the window
+	/*
+	std::string title = "Best Game Ever!" ;
+	_window = glfwCreateWindow( 1024, 768, title.c_str(), NULL, NULL );
+	if( ! _window ) 
+	{
+		glfwTerminate();
+		exit( EXIT_FAILURE );
+	}
+	glfwMakeContextCurrent(_window);
+	
+
+
+	// Must be done after glut is initialized!
+	glewExperimental = GL_TRUE; // glew is useless and freaks out at core stuff if you don't set this to true
+    GLenum res = glewInit();
+    if (res != GLEW_OK) 
+	{
+      fprintf(stderr, "Error: '%s'\n", glewGetErrorString(res));
+	  glfwTerminate();
+    }
+	printf("GL version: %s\n", glGetString(GL_VERSION));
+	*/
+	// Clear colour
+	_window = window;
+    glClearColor(0.5f, 0.8f, 1.0f, 0.0f);
+
+
+
+	//=================================================
+	//=================================================
+	// OpenGL is good to go!!
+	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
+	_assetLoader.loadTestAssets(); // this is temporary, loading will be done by scene loader later
+	_sceneMngr.initialize(_objMngr); // init and pass reference to object manager
+	_objMngr.initialize(_rendSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
+
+	_sceneMngr.setupExampleScene(_assetLoader);
+
+	// Setup input
+	_input = Input::startUp();
+
+
+	// return window
+	//return _window;
+}
+
+void Engine::onKeyEvent(int key, KeyEvent::State action)
+{
+	switch(action)
+	{
+	case KeyEvent::PRESSED: _input->keyDown(KeyEvent(KeyEvent::PRESSED, key)); break;
+	case KeyEvent::RELEASED: _input->keyUp(key); break;
+	}
+}
+
+
+
+void Engine::mainLoop()
+{
+	float refreshRate = 1.0f/60.0f;
+	float dt = 0; //delta time
+	float fdt = 0; //fixed delta time
+
+	//while( ! glfwWindowShouldClose(_window) && !glfwGetKey(_window, GLFW_KEY_ESCAPE) ) 
+	//{
+		// time
+		//dt += glfwGetTime();
+		//fdt += glfwGetTime();
+		//glfwSetTime(0);
+
+		// update here
+		_behvrSys.update(dt);
+		dt = 0;
+		
+		//GLUtils::checkForOpenGLError(__FILE__,__LINE__);
+		//if(fdt >= refreshRate)
+		//{
+			// fixed update here
+			_behvrSys.fixedUpdate(fdt); // should be fixed update
+			fdt = 0;
+		//}
+		render(); // render everything to back buffer
+		//glfwSwapBuffers(_window); // swap buffers
+		_input->update(); // update just before polling, this will set previously pressed heys to "held"
+		//glfwPollEvents(); // poll events. I guess this is where callbacks are made
+	//}
+}
+
+
+
+
+
+void Engine::shutDown()
+{
+	_behvrSys.clear();
+	_rendSys.clear();
+	_objMngr.destroyAll();
+
+	// Close window and terminate GLFW
+	//glfwTerminate();
+}
+
+
+
+void Engine::render()
+{
+	//glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	_rendSys.render();
+}

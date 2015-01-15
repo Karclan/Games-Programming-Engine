@@ -1,0 +1,38 @@
+#include "core\sceneManager.h"
+
+void SceneManager::initialize(ObjectManager &objMngr)
+{
+	_objMngr = &objMngr;
+}
+
+
+void SceneManager::setupExampleScene(AssetLoader &loader)
+{
+	// Create camera
+	int camera = _objMngr->createGameObject(); // new object, store id
+	SPtr_Transform camTrans(new Transform); // create transform
+	_objMngr->addComponent(camera, camTrans); // add transform to camera
+	_objMngr->addComponent(camera, SPtr_Component(new Camera(camTrans))); // add camera component to object
+	_objMngr->addBehaviour(camera, SPtr_Behaviour(new CameraController())); // IMPORTANT!!!! - Always add behaviours last as they may cache other components when constructed
+
+
+	// Create triangle
+	int triangle01 = _objMngr->createGameObject(); // new object, store id
+	SPtr_Transform tri01Trans(new Transform); // create transform
+	_objMngr->addComponent(triangle01, tri01Trans); // add transform to triangle
+	std::shared_ptr<ModelRenderer> model(new ModelRenderer(tri01Trans)); // create model renderer for triangle
+	model->setMesh(loader.getTestMesh()); // set mesh
+	model->setMaterial(loader.getTestMaterial()); // set material
+	_objMngr->addComponent(triangle01, model); // add model renderer component to object
+	_objMngr->addBehaviour(triangle01, SPtr_Behaviour(new RotatingObject())); // IMPORTANT!!!! - Always add behaviours last as they may cache other components when constructed
+
+	// Create triangle 02
+	int triangle02 = _objMngr->createGameObject(); // new object, store id
+	SPtr_Transform tri02Trans(new Transform); // create transform
+	_objMngr->addComponent(triangle02, tri02Trans); // add transform to triangle
+	std::shared_ptr<ModelRenderer> model02(new ModelRenderer(tri02Trans)); // create model renderer for triangle
+	model02->setMesh(loader.getTestMesh()); // set mesh
+	model02->setMaterial(loader.getTestMaterial()); // set material
+	_objMngr->addComponent(triangle02, model02); // add model renderer component to object
+	
+}

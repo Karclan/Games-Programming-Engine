@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Header Files\behaviour">
+      <UniqueIdentifier>{ef503613-b7f4-4500-85a7-3b65704d9f7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\core">
+      <UniqueIdentifier>{a21e9a89-443c-4e9f-b3ee-1fcbf67a23a1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering">
+      <UniqueIdentifier>{e5a6a4a9-1668-468c-9d21-60a1bbd4714d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\physics">
+      <UniqueIdentifier>{ac8882ce-139e-40f2-be75-ffa892368260}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\behaviour">
+      <UniqueIdentifier>{0caebf40-2a8b-4da0-86f8-76289acb05bd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\core">
+      <UniqueIdentifier>{16f97c02-23b3-44f1-8544-fa432b3394d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\physics">
+      <UniqueIdentifier>{78d8eeb7-9b3f-4cf5-9fbd-a2fa22a5f971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\rendering">
+      <UniqueIdentifier>{53b4f328-bfff-4b33-b749-f271b2891574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\editor">
+      <UniqueIdentifier>{5fbab0e6-eb76-4d9e-9676-316ce267ae8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\editor">
+      <UniqueIdentifier>{e23ab65b-64ab-49aa-a257-2052ad9bcf3c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3DGameEngine.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="small.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="3DGameEngine.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\behaviour\behaviour.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour\behaviourSystem.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour\cameraController.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour\rotatingObject.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\assetLoader.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\component.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\engine.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\gameObject.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\input.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\objectManager.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\sceneManager.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\transform.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\camera.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\material.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\modelRenderer.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\renderSystem.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\editor\editor.h">
+      <Filter>Header Files\editor</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\behaviour\behaviour.cpp">
+      <Filter>Source Files\behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour\behaviourSystem.cpp">
+      <Filter>Source Files\behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour\cameraController.cpp">
+      <Filter>Source Files\behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour\rotatingObject.cpp">
+      <Filter>Source Files\behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\assetLoader.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\component.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\engine.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\gameObject.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\input.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\objectManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\sceneManager.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\transform.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\camera.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\material.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\modelRenderer.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\renderSystem.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\editor\editor.cpp">
+      <Filter>Source Files\editor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

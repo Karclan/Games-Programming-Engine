@@ -1,0 +1,231 @@
+#include "core\sceneManager.h"
+
+void SceneManager::initialize(ObjectManager &objMngr, AssetLoader &loader)
+{
+	_objMngr = &objMngr;
+	_assets = &loader;
+	writeDemoXML(); // This writes data to the example XML file
+}
+
+
+// Loads a scene from XML
+void SceneManager::loadFromXML(std::string filePath)
+{
+	TiXmlDocument doc(filePath);
+	if(!doc.LoadFile())
+	{
+		std::cout << "Failed to load XML!\n\n\n";
+		return;
+	}
+
+	TiXmlHandle handle(&doc);
+	
+	TiXmlElement* goElmnt;
+	goElmnt = handle.FirstChildElement("GO").ToElement();
+	for(goElmnt; goElmnt != NULL; goElmnt=goElmnt->NextSiblingElement())
+	{
+		// NOTE: Currently we just assume transform is first. In final version error checking might be in order, otherwise any component that requires transform and innits before it will fail
+		unsigned int goID = _objMngr->createGameObject(); // Create GO
+		SPtr_Transform trans(nullptr); // this will store the transform if found (for components that requqire it
+			
+		// Find components
+		TiXmlElement* compElmnt = goElmnt->FirstChildElement("COMP");
+
+		for(compElmnt; compElmnt != NULL; compElmnt=compElmnt->NextSiblingElement("COMP"))
+		{
+			
+			// Check type and add component based on it
+			if(compElmnt->Attribute("type"))
+			{
+				int cType; // component type
+				compElmnt->Attribute("type", &cType);
+				switch (cType)
+				{
+					case ComponentType::TRANSFORM:
+						trans = newTransform(compElmnt);
+						_objMngr->addComponent(goID, trans);
+						break;
+					case ComponentType::CAMERA:
+						_objMngr->addComponent(goID, SPtr_Component(new Camera(trans)));
+						break;
+					case ComponentType::MODL_REND:
+						_objMngr->addComponent(goID, newModelRend(compElmnt, trans)); // add model renderer component to object
+						break;
+				}
+			}
+		}
+
+		// Find behaviours
+		TiXmlElement* behvrElmnt = goElmnt->FirstChildElement("BHVR");
+		for(behvrElmnt; behvrElmnt != NULL; behvrElmnt=behvrElmnt->NextSiblingElement("BHVR"))
+		{
+			// Output type
+			if(behvrElmnt->Attribute("type"))
+			{
+				int bType;
+				behvrElmnt->Attribute("type", &bType);
+				switch (bType)
+				{
+				case BehaviourTypes::CAMERA_CON:
+					_objMngr->addBehaviour(goID, SPtr_Behaviour(new CameraController()));
+					break;
+				case BehaviourTypes::ROT_OBJ:
+					_objMngr->addBehaviour(goID, SPtr_Behaviour(new RotatingObject()));
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+// LOADING FUNCTIONS -----------------------------------------------------------------------
+// The following functions are to do with reading from XML and converting the info read into
+// new components etc. All called from loadFromXML
+//------------------------------------------------------------------------------------------
+
+SPtr_Transform SceneManager::newTransform(TiXmlElement* compElmnt)
+{
+	SPtr_Transform trans(new Transform); // create model renderer linked to transform
+	double tx, ty, tz;
+	double rx, ry, rz;
+	double sx, sy, sz;
+
+	compElmnt->Attribute("tx", &tx);
+	compElmnt->Attribute("ty", &ty);
+	compElmnt->Attribute("tz", &tz);
+	compElmnt->Attribute("rx", &rx);
+	compElmnt->Attribute("ry", &ry);
+	compElmnt->Attribute("rz", &rz);
+	compElmnt->Attribute("sx", &sx);
+	compElmnt->Attribute("sy", &sy);
+	compElmnt->Attribute("sz", &sz);
+
+	trans->setPosition(glm::vec3(tx, ty, tz));
+	trans->setEulerAngles(glm::vec3(rx, ry, rz));
+	trans->setScale(glm::vec3(sx, sy, sz));
+	
+
+	return trans;
+}
+
+SPtr_Component SceneManager::newModelRend(TiXmlElement* compElmnt, SPtr_Transform trans)
+{
+	std::shared_ptr<ModelRenderer> newModel(new ModelRenderer(trans)); // create model renderer linked to transform
+
+	// Figure out if the mesh is primitive or if it needs to be loaded in
+	if(!compElmnt->Attribute("primitive")) return newModel; // return if can't find attrib, something went wrong!
+	int isPrimitive;
+	compElmnt->Attribute("primitive", &isPrimitive);
+
+	if((bool)isPrimitive)
+	{
+		int shape;
+		compElmnt->Attribute("mesh", &shape);
+		newModel->setMesh(_assets->getPrimitiveMesh((PrimitiveShapes::Type)shape)); // set mesh
+	}
+	else
+	{
+		// TO DO...
+		// Load model from file once mesh loader implemented
+	}
+
+	// Get Material Info
+	std::string shader = compElmnt->Attribute("shader");
+	newModel->setMaterial(_assets->getShader(shader)); // set material
+	return newModel;
+}
+
+// END LOADING FUNCTIONS------------------------------------------------------------------
+
+
+
+
+// Writes an example scene to XML
+void SceneManager::writeDemoXML()
+{
+	// Ref to demo file
+	TiXmlDocument doc(DEMO_SCENE_PATH); // xml file
+
+	// Declaration at start of xml file
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
+	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
+
+	// Camera Object
+	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
+	xmlAddTransform(cameraGo, glm::vec3(), glm::vec3(), glm::vec3(1, 1, 1));
+	xmlAddCamera(cameraGo);
+	xmlAddBehaviour(cameraGo, BehaviourTypes::CAMERA_CON);
+
+	// Triangle 01
+	TiXmlElement * triGo01 = xmlAddGo(&doc, "Tri01");
+	xmlAddTransform(triGo01, glm::vec3(), glm::vec3(), glm::vec3(1, 1, 1));
+	xmlAddModelRend(triGo01, PrimitiveShapes::TRIANGLE, "specular");
+	xmlAddBehaviour(triGo01, BehaviourTypes::ROT_OBJ);
+
+	// Block 02
+	TiXmlElement * cubeGo01 = xmlAddGo(&doc, "Cube01");
+	xmlAddTransform(cubeGo01, glm::vec3(0, -1, 0), glm::vec3(), glm::vec3(1, 1, 1));
+	xmlAddModelRend(cubeGo01, PrimitiveShapes::CUBE, "diffuse");
+	
+	// Save doc
+	doc.SaveFile();
+}
+
+
+
+// SAVING FUNCTIONS -----------------------------------------------------------------------
+// The following functions are to do with writing to XML and converting params given
+// to correct text in XML file. Currentlt only called from writeDemoXML() but will be 
+// part of dynamic file saving system later
+//------------------------------------------------------------------------------------------
+
+TiXmlElement* SceneManager::xmlAddGo(TiXmlDocument* doc, std::string name)
+{
+	TiXmlElement* goElement = new TiXmlElement("GO"); // Game Object Element
+	goElement->SetAttribute("name", name); // Set GO name attrib
+	doc->LinkEndChild( goElement ); // Add element to file, this auto cleans up pointer as well
+	return goElement;
+}
+
+void SceneManager::xmlAddTransform(TiXmlElement* go, glm::vec3 t, glm::vec3 r, glm::vec3 s)
+{
+	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
+	transElmnt->SetAttribute("type", ComponentType::TRANSFORM); // Set type attrib
+	transElmnt->SetAttribute("tx", t.x); // Set translateX attrib
+	transElmnt->SetAttribute("ty", t.y); // Set translateY attrib
+	transElmnt->SetAttribute("tz", t.z); // Set translateZ attrib
+	transElmnt->SetAttribute("rx", r.x); // Set rotateX attrib
+	transElmnt->SetAttribute("ry", r.y); // Set rotateY attrib
+	transElmnt->SetAttribute("rz", r.z); // Set rotateZ attrib
+	transElmnt->SetAttribute("sx", s.x); // Set scaleX attrib
+	transElmnt->SetAttribute("sy", s.y); // Set scaleY attrib
+	transElmnt->SetAttribute("sz", s.z); // Set scaleZ attrib
+	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddCamera(TiXmlElement* go)
+{
+	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
+	transElmnt->SetAttribute("type", ComponentType::CAMERA); // Set type attrib
+	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader)
+{
+	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
+	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
+	transElmnt->SetAttribute("primitive", (int)true); // It is a primitive mesh, not one loaded from file
+	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
+	transElmnt->SetAttribute("shader", shader); // Set material attrib
+	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type)
+{
+	TiXmlElement* behavElmnt = new TiXmlElement("BHVR"); // behaviour element
+	behavElmnt->SetAttribute("type", type);
+	go->LinkEndChild(behavElmnt);
+}
+
+// END SAVING FUNCTIONS------------------------------------------------------------------

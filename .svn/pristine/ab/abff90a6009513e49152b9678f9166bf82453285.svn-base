@@ -1,0 +1,183 @@
+#include "core\assetLoader.h"
+
+
+AssetLoader::AssetLoader()
+{
+}
+
+// This is for debug / testing
+void AssetLoader::loadTestAssets()
+{
+	// Make test triangle and store in vbo
+	glm::vec3 vertices[3];
+    vertices[0] = glm::vec3(0.0f, 0.5f, 0.0f);
+	vertices[1] = glm::vec3(0.5f, -0.5f, 0.0f);
+	vertices[2] = glm::vec3(-0.5f, -0.5f, 0.0f);
+
+	glm::vec3 colours[3];
+    colours[0] = glm::vec3(1.0f, 0.0f, 0.0f);
+	colours[1] = glm::vec3(0.0f, 1.0f, 0.0f);
+	colours[2] = glm::vec3(0.0f, 0.0f, 1.0f);
+    
+	// Create vbo and populate with data
+	glGenBuffers(2, _testVbo); //create
+	GLuint posBuf = _testVbo[0]; // 1st buffer is positions
+	GLuint colBuf = _testVbo[1]; // 2nd buffer is colours
+	
+	glBindBuffer(GL_ARRAY_BUFFER, posBuf);//bind
+	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), glm::value_ptr(vertices[0]), GL_STATIC_DRAW);//populate
+	glBindBuffer(GL_ARRAY_BUFFER, colBuf);//bind
+	glBufferData(GL_ARRAY_BUFFER, sizeof(colours), glm::value_ptr(colours[0]), GL_STATIC_DRAW);//populate
+
+	  // Create and set-up the vertex array object
+    glGenVertexArrays( 1, &_testVao );
+    glBindVertexArray(_testVao);
+
+	// THIS IS IMPORTANT!!!
+	// How you set this up affects what data is associated with what vars in shader
+	// I've forced locations in shader (location =0) etc
+	// But remember, this will HAVE to be uniform!!
+	// This is where we link to the shader program
+    glEnableVertexAttribArray(0);  // Vertex position
+	glEnableVertexAttribArray(1);  // Vertex colour
+
+	// Bind attib 0 to position array
+    glBindBuffer(GL_ARRAY_BUFFER, posBuf);
+    glVertexAttribPointer( 0, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL );
+	// Bind attib 1 to colour array
+	glBindBuffer(GL_ARRAY_BUFFER, colBuf);
+    glVertexAttribPointer( 1, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte *)NULL );
+
+	// Load shader
+	_testShader = loadShader("shader/basic.vert", "shader/basic.frag");
+
+	// Create a test material
+	_testMat.setShader(_testShader);
+}
+
+
+GLuint AssetLoader::getTestMesh()
+{
+	return _testVao;
+}
+
+
+
+Material* AssetLoader::getTestMaterial()
+{
+	return &_testMat;
+}
+
+
+
+
+
+
+
+// This function is pretty horrible right now but will decompose properly later
+int AssetLoader::loadShader(std::string vFilePath, std::string fFilePath)
+{
+	// LOAD SHADERS VIA STRING STREAMING
+
+	//////////////////////////////////////////////////////
+    /////////// Vertex shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+    // Load contents of file
+    std::ifstream inFile(vFilePath);
+    if (!inFile) // if file bad then error
+	{
+        fprintf(stderr, "Error opening file: shader/basic.vert\n" );
+        exit(1);
+    }
+
+	// Pull data from shader prog to string stream then store in string
+    std::stringstream code;
+    code << inFile.rdbuf();
+	inFile.close();
+	std::string codeStr(code.str()); // code is stored in this string
+
+    // Create the shader object
+    GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
+    if (0 == vertShader) 
+	{
+      fprintf(stderr, "Error creating vertex shader.\n");
+      exit(EXIT_FAILURE);
+    }
+
+    // Load the source code into the shader object
+    const GLchar* codeArray[] = {codeStr.c_str()};
+    glShaderSource(vertShader, 1, codeArray, NULL); // attach source code from string to shader with ID vertShader
+
+    // Compile the shader
+    glCompileShader( vertShader );
+
+    
+    //////////////////////////////////////////////////////
+    /////////// Fragment shader //////////////////////////
+    //////////////////////////////////////////////////////
+
+    // Load contents of file into shaderCode here
+    std::ifstream fragFile(fFilePath);
+    if (!fragFile)
+	{
+        fprintf(stderr, "Error opening file: shader/basic.frag\n" );
+        exit(1);
+    }
+
+    std::stringstream fragCode;
+    fragCode << fragFile.rdbuf();
+	fragFile.close();
+	codeStr = fragCode.str();
+
+    // Create the shader object
+    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+    if (0 == fragShader) 
+	{
+      fprintf(stderr, "Error creating fragment shader.\n");
+      exit(1);
+    }
+
+    // Load the source code into the shader object
+    codeArray[0] = codeStr.c_str();
+    glShaderSource( fragShader, 1, codeArray, NULL );
+
+    // Compile the shader
+    glCompileShader( fragShader );
+
+
+
+
+
+	//----------------------------------------------------------
+	// NOW LINK SHADER
+	// Create the program object
+    int programHandle = glCreateProgram();
+    if(0 == programHandle) 
+	{
+        fprintf(stderr, "Error creating program object.\n");
+        exit(1);
+    }
+
+
+    // Attach the shaders to the program object
+    glAttachShader( programHandle, vertShader );
+    glAttachShader( programHandle, fragShader );
+
+    // Link the program
+    glLinkProgram( programHandle );
+
+    // Check for successful linking
+    GLint status;
+    glGetProgramiv( programHandle, GL_LINK_STATUS, &status );
+
+
+	/*
+    if (status == TRUE)
+	{
+        glUseProgram(programHandle); // use the shader for current rendering
+    }
+	*/
+
+	return programHandle;
+}

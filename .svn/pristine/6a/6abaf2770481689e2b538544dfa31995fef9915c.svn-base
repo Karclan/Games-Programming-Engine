@@ -1,0 +1,44 @@
+#include "behaviour\cameraController.h"
+#include <iostream>
+
+CameraController::CameraController()
+{
+}
+
+CameraController::~CameraController()
+{
+}
+
+void CameraController::initialize()
+{
+	addEventListener(EventType::UPDATE);
+	addEventListener(EventType::FIXED_UPDATE);
+
+	SPtr_Component comp = getComponent(ComponentType::TRANSFORM);
+	_transform = std::static_pointer_cast<Transform>(comp); // cache transform so it can be manipulated in update
+
+	_speed = 2;
+	_turn = 0;
+}
+
+void CameraController::update(float t)
+{
+	float axisH = 0;
+	if(Input::getKeyHeld(sf::Keyboard::Left)) axisH = -1;
+	else if(Input::getKeyHeld(sf::Keyboard::Right)) axisH = 1;
+
+	float axisV = 0;
+	if(Input::getKeyHeld(sf::Keyboard::Up)) axisV = 1;
+	else if(Input::getKeyHeld(sf::Keyboard::Down)) axisV = -1;
+
+
+	_velocity = _transform->getForward() * axisV * _speed;
+	_turn = axisH * _speed;
+
+}
+
+void CameraController::fixedUpdate(float t)
+{
+	_transform->translate(_velocity * t);
+	_transform->rotate(glm::vec3(0, _turn, 0));
+}

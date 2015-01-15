@@ -1,0 +1,34 @@
+#ifndef ROTATING_OBJECT_h
+#define ROTATING_OBJECT_h
+
+#include "behaviour\behaviour.h"
+
+/*! \brief Temporary behaviour class
+
+	Hard-code behaviour for controlling an object and making it rotate around the
+	y axis. In final version this would be a script file.
+
+*/
+
+class RotatingObject : public Behaviour
+{
+public:
+	RotatingObject();
+	~RotatingObject();
+
+protected:
+	void initialize();
+	void fixedUpdate(float t); //!< Update function
+
+private:
+	std::shared_ptr<Transform> _transform;
+
+};
+
+
+
+
+
+
+
+#endif

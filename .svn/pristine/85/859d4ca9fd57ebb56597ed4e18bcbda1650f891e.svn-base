@@ -1,0 +1,38 @@
+#include "rendering\modelRenderer.h"
+
+ModelRenderer::ModelRenderer(SPtr_Transform transform)
+{
+	_transform = transform;
+}
+
+void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
+{
+	// If it's possible to have a mesh renderer with no mesh or no material
+	// then you need to check for null_ptr before attempting to draw
+	// This may mean wrapping _vao in a class so can check for null
+
+	_material->bind(_transform->getFloatPointer(), viewMatrix, projMatrix);
+	glBindVertexArray(_vao);
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+}
+
+ComponentType::Type ModelRenderer::getType()
+{
+	return ComponentType::MODL_REND;
+}
+
+bool ModelRenderer::isOnePerObject()
+{
+	return false;
+}
+
+void ModelRenderer::setMesh(GLuint vao)
+{
+	_vao = vao;
+}
+
+
+void ModelRenderer::setMaterial(Material *material)
+{
+	_material = material;
+}

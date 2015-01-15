@@ -1,0 +1,42 @@
+#ifndef MODEL_RENDERER_H
+#define MODEL_RENDERER_H
+
+#include <glew\GL\glew.h>
+//#include <glfw\glfw3.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include "core\component.h"
+#include "rendering\material.h"
+#include "core\transform.h"
+#include "core\assetLoader.h"
+/*! \brief Wrapper for rendering model
+
+	Wraps index of VBO, index of shader, pointer to texture and model matrix
+	for a single 3D model in the environment
+*/
+class ModelRenderer : public Component
+{
+public:
+	ModelRenderer(SPtr_Transform transform); //Requires transform
+	ComponentType::Type getType();
+	bool isOnePerObject();
+
+	void render(GLfloat* viewMatrix, GLfloat* projMatrix); //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
+	void setMesh(GLuint vao);
+	void setMaterial(Material *material);
+
+private:
+	GLuint _vao; //!< Index of the VAO for this mesh
+	Material* _material; //!< Pointer to material used for this object
+	//glm::mat4 _modelMatrix; //!< Transform matrix for this model
+	SPtr_Transform _transform;
+
+
+};
+
+
+
+
+
+#endif

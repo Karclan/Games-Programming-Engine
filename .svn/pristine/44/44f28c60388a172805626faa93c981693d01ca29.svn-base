@@ -1,0 +1,25 @@
+#include "behaviour\rotatingObject.h"
+#include <iostream>
+
+RotatingObject::RotatingObject()
+{
+}
+
+RotatingObject::~RotatingObject()
+{
+}
+
+void RotatingObject::initialize()
+{
+	// Add event listeners
+	addEventListener(EventType::FIXED_UPDATE);
+
+	// Cache transform and set up an inital scale and rotation
+	SPtr_Component comp = getComponent(ComponentType::TRANSFORM);
+	_transform = std::static_pointer_cast<Transform>(comp); // cache transform so it can be manipulated in update
+}
+
+void RotatingObject::fixedUpdate(float t)
+{
+	_transform->rotate(glm::vec3(0, 0, 5));
+}

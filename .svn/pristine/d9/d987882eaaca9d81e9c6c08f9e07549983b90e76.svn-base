@@ -1,0 +1,28 @@
+#include "rendering\material.h"
+
+
+Material::Material(){}
+Material::Material(int shaderHandle)
+{
+	_shaderHandle = shaderHandle;
+}
+
+void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
+{
+	glUseProgram(_shaderHandle); // use the shader for current rendering
+
+	// This is how to pass information to the shader
+	glUniformMatrix4fv(_modelMatrixID, 1, false, m);
+	glUniformMatrix4fv(_viewMatrixID, 1, false, v);
+	glUniformMatrix4fv(_projectionMatrixID, 1, false, p);
+}
+
+void Material::setShader(int shaderHandle)
+{
+	_shaderHandle = shaderHandle;
+
+	// This is how to get reference to information from the shader
+	_modelMatrixID = glGetUniformLocation(_shaderHandle, "mModel");
+	_viewMatrixID = glGetUniformLocation(_shaderHandle, "mView");
+	_projectionMatrixID = glGetUniformLocation(_shaderHandle, "mProjection");
+}

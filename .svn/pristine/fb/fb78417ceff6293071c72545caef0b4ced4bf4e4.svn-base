@@ -1,0 +1,85 @@
+#include "core\input.h"
+
+Input* Input::startUp()
+{
+	return Input::get();
+}
+
+Input* Input::get()
+{
+	static Input input;
+	return &input;
+}
+
+// Static functions designed to be called by anything in game
+bool Input::getKeyPressed(int key)
+{
+	Input* ins = Input::get();
+	for(EvntIt it = ins->_events.begin(); it != ins->_events.end(); ++it)
+	{
+		if(it->_key == key && it->_state == KeyEvent::PRESSED) return true;
+	}
+	return false;
+}
+
+bool Input::getKeyHeld(int key)
+{
+	Input* ins = Input::get();
+	for(EvntIt it = ins->_events.begin(); it != ins->_events.end(); ++it)
+	{
+		if(it->_key == key && it->_state == KeyEvent::HELD) return true;
+	}
+	return false;
+}
+
+bool Input::getKeyReleased(int key)
+{
+	Input* ins = Input::get();
+	for(EvntIt it = ins->_events.begin(); it != ins->_events.end(); ++it)
+	{
+		if(it->_key == key && it->_state == KeyEvent::RELEASED) return true;
+	}
+	return false;
+}
+
+
+
+
+
+// non-static functions (that can only be called by engine)
+void Input::keyDown(KeyEvent keyEvent)
+{
+	_events.push_back(keyEvent);
+}
+
+void Input::keyUp(int key)
+{
+	for(EvntIt it = _events.begin(); it != _events.end(); ++it)
+	{
+		if(it->_key == key) it->_state = KeyEvent::RELEASED;
+	}
+}
+
+void Input::update()
+{
+	EvntIt it = _events.begin();
+	while (it != _events.end())
+	{
+		switch(it->_state)
+		{
+		case KeyEvent::PRESSED:
+			it->_state = KeyEvent::HELD;
+		case KeyEvent::HELD:
+			++it; // fall through, advance it if state is pressed or held
+			break;
+
+		case KeyEvent::RELEASED:
+			it = _events.erase(it);
+			break;
+
+		default:
+			++it;
+			break;
+		}
+	}
+}

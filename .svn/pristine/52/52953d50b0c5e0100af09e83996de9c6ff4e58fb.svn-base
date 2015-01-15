@@ -1,0 +1,60 @@
+#include "rendering\renderSystem.h"
+
+void RenderSystem::render()
+{
+	// Here are some things to think about in the future, for optimization.
+	// Performance overheads are binding and draw calls. So if you have multiple
+	// instances of the same game object you ideally want to draw them together, 
+	// with one binding. Ditto for materials.
+	// e.g.
+	// - bind material
+	// - bind 1st mesh that uses it
+	// - draw all instances of mesh
+	// - bind 2nd mesh that uses it etc etc
+
+	// Draw calls would be harder to manage, needs more research
+
+
+	if(_cameras.size() <= 0) return;
+	Camera* camera = _cameras[0].get();
+	camera->preRender();
+
+	for(unsigned int i = 0; i < _models.size(); ++i)
+	{
+		// this is where you should check for if it's state is inactive or destroyed
+		camera->render(*_models[i]);
+	}
+}
+
+
+
+void RenderSystem::addCamera(std::shared_ptr<Camera> camera )
+{
+	if(!camera)return;
+	_cameras.push_back(camera);
+}
+
+void RenderSystem::addRenderObject(std::shared_ptr<ModelRenderer> model)
+{
+	if(!model)return;
+	_models.push_back(model);
+}
+
+void RenderSystem::clear()
+{
+	_cameras.clear();
+	_models.clear(); 
+}
+
+void RenderSystem::setLight(glm::vec3 direction, glm::vec3 intensity)
+{
+	direction = glm::normalize(direction);
+
+	std::map<std::string, Shader*>::const_iterator it;
+	it = _loadedShaders->begin();
+
+	for(it; it != _loadedShaders->end(); ++it)
+	{
+		it->second->setDirectionalLight(&direction.x, &intensity.x);
+	}
+}

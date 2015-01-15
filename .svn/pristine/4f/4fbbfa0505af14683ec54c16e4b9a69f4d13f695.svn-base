@@ -1,0 +1,49 @@
+#ifndef INPUT_H
+#define INPUT_H
+
+#include <string>
+#include <list>
+
+struct KeyEvent
+{
+	enum State { PRESSED, HELD, RELEASED };
+	State _state;
+	int _key;
+	int _mods;
+
+	KeyEvent(State state, int key)
+	{
+		_state = state;
+		_key = key;
+	}
+};
+
+
+
+class Input
+{
+public:
+	static Input* startUp();
+
+	static bool getKeyPressed(int key);
+	static bool getKeyHeld(int key);
+	static bool getKeyReleased(int key);
+
+	// non-static functions
+	void keyDown(KeyEvent keyEvent);
+	void keyUp(int key);
+	void update();
+
+private:
+	Input(){};
+	~Input(){};
+
+	Input* _this;
+	std::list<KeyEvent> _events;
+
+	static Input* get();
+
+	typedef std::list<KeyEvent>::iterator EvntIt;
+};
+
+#endif

@@ -1,0 +1,23 @@
+#ifndef TEXTURE_2D_H
+#define TEXTURE_2D_H
+
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include <SFML\Graphics.hpp>
+
+#include "rendering\shader.h"
+
+class Texture2D
+{
+public:
+	bool loadFromFile(std::string filePath); //!< load from file
+	void bind(Shader* shader, int textureNumber);
+
+private:
+	GLuint _texHandle; //!< Handle to texture on grpahics card
+
+};
+
+#endif

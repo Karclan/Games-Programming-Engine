@@ -1,0 +1,155 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FF83C532-F5FE-452C-AACC-FF4492D7370C}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>My3DGameEngine</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v110</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/;$(ProjectDir)/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/;$(ProjectDir)/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;sfml-audio.lib;sfml-graphics.lib;sfml-system.lib;sfml-main.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="3DGameEngine.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="3DGameEngine.ico" />
+    <Image Include="small.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\core\goInitData.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\editor\editor.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\editor\goMenu.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\editor\menuBar.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\rendering\mesh.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\rendering\primitiveShapes.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\tinyXML\tinystr.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\include\tinyXML\tinyxml.h" />
+    <ClInclude Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\resource.h" />
+    <ClInclude Include="include\behaviour\behaviour.h" />
+    <ClInclude Include="include\behaviour\behaviourSystem.h" />
+    <ClInclude Include="include\behaviour\cameraController.h" />
+    <ClInclude Include="include\behaviour\rotatingObject.h" />
+    <ClInclude Include="include\core\assetLoader.h" />
+    <ClInclude Include="include\core\component.h" />
+    <ClInclude Include="include\core\engine.h" />
+    <ClInclude Include="include\core\gameObject.h" />
+    <ClInclude Include="include\core\input.h" />
+    <ClInclude Include="include\core\objectManager.h" />
+    <ClInclude Include="include\core\sceneManager.h" />
+    <ClInclude Include="include\core\transform.h" />
+    <ClInclude Include="include\rendering\camera.h" />
+    <ClInclude Include="include\rendering\material.h" />
+    <ClInclude Include="include\rendering\modelRenderer.h" />
+    <ClInclude Include="include\rendering\renderSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\main.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\core\goInitData.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\editor\editor.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\editor\goMenu.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\editor\menuBar.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\rendering\mesh.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\rendering\primitiveShapes.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\tinyXML\tinystr.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\tinyXML\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\tinyXML\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\..\Moley%27s Docs\Uni\3DGameEngine\3DGameEngine\src\tinyXML\tinyxmlparser.cpp" />
+    <ClCompile Include="src\behaviour\behaviour.cpp" />
+    <ClCompile Include="src\behaviour\behaviourSystem.cpp" />
+    <ClCompile Include="src\behaviour\cameraController.cpp" />
+    <ClCompile Include="src\behaviour\rotatingObject.cpp" />
+    <ClCompile Include="src\core\assetLoader.cpp" />
+    <ClCompile Include="src\core\component.cpp" />
+    <ClCompile Include="src\core\engine.cpp" />
+    <ClCompile Include="src\core\gameObject.cpp" />
+    <ClCompile Include="src\core\input.cpp" />
+    <ClCompile Include="src\core\objectManager.cpp" />
+    <ClCompile Include="src\core\sceneManager.cpp" />
+    <ClCompile Include="src\core\transform.cpp" />
+    <ClCompile Include="src\rendering\camera.cpp" />
+    <ClCompile Include="src\rendering\material.cpp" />
+    <ClCompile Include="src\rendering\modelRenderer.cpp" />
+    <ClCompile Include="src\rendering\renderSystem.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

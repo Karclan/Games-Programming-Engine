@@ -1,0 +1,41 @@
+#ifndef ASSET_LOADER_H
+#define ASSET_LOADER_H
+
+#include <fstream>
+#include <string>
+#include <sstream>
+#include <glew\GL\glew.h>
+#include <glm\glm.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include "rendering\material.h"
+/*! \brief Asset Loader
+
+	At the moment all this does is load a basic shader and a hard-coded triangle
+	just for testing. Later it will allow you to load assets whenever you want from
+	filepaths etc.
+
+*/
+class AssetLoader
+{
+public:
+	AssetLoader();
+
+	void loadTestAssets();
+	GLuint getTestMesh();
+	Material* getTestMaterial();
+
+
+private:
+	GLuint _testVbo[2]; //!< Test mesh
+	GLuint _testVao;
+	int _testShader; //!< Test shader
+	Material _testMat; //!< Test mat
+	
+	
+	
+	int loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
+	
+};
+
+#endif

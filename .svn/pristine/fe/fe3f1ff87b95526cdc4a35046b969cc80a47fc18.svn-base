@@ -1,0 +1,204 @@
+#include "editor\editor.h"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+HWND Editor::myCreateStatic(HWND hwnd, int id, LPCWSTR s, int x, int y, int width, int height)
+// Creates a static text box.
+// hwnd is the window within which the box appears,
+// id is a user-provided ID number,
+// x,y = position on screen,
+// width, height = width and height of the box.
+{  
+	HWND h;
+
+	h = CreateWindowEx(WS_EX_STATICEDGE, L"STATIC", 
+		s,
+		WS_CHILDWINDOW | WS_VISIBLE | SS_LEFT | SS_NOPREFIX,
+		x,y,width,height,
+		hwnd, 
+		(HMENU) id, 
+		GetModuleHandle(NULL), NULL);
+
+	if (h) // successful creation
+	{  HFONT hfDefault;
+		hfDefault = (HFONT) GetStockObject(DEFAULT_GUI_FONT);
+		SendMessage(h, WM_SETFONT, (WPARAM)hfDefault, MAKELPARAM(FALSE, 0));
+	}
+	else
+		MessageBox(hwnd, L"MyCreateStatic could not create static text.", 
+					L"Error", MB_OK | MB_ICONERROR);
+
+	return h;
+}
+
+
+HWND Editor::createButton(HWND parentHandle)
+{
+	HWND hWndButton=CreateWindowEx(NULL, 
+		L"BUTTON",
+		L"OK",
+		WS_TABSTOP|WS_VISIBLE|WS_CHILD|BS_DEFPUSHBUTTON,
+		2,
+		60,
+		80,
+		30,
+		parentHandle,
+		(HMENU)ID_BUTTON,
+		GetModuleHandle(NULL),
+		NULL);
+
+	return hWndButton;
+}
+
+LRESULT Editor::mainMenuProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	int wmId, wmEvent;
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	switch (message)
+	{
+	case WM_CREATE:
+		//editor.myCreateStatic(hWnd, ID_STATIC, L"Fancy a bum?", 2, 20, 80, 30);
+		//editor.createButton(hWnd);
+		break;
+
+	
+
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam); // the low word of wparam is the ID of the command
+		wmEvent = HIWORD(wParam);
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case IDM_ABOUT:
+			//DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			break;
+		case IDM_EXIT:
+			DestroyWindow(hWnd);
+			break;
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+	case WM_PAINT:
+		hdc = BeginPaint(hWnd, &ps);
+		// TODO: Add any drawing code here...
+		EndPaint(hWnd, &ps);
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+
+LRESULT Editor::gameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	int wmId, wmEvent;
+	PAINTSTRUCT ps;
+	HDC hdc;
+
+	switch (message)
+	{
+	case WM_CREATE:
+		myCreateStatic(hWnd, ID_STATIC, L"Fancy a bum?", 2, 20, 80, 30);
+		createButton(hWnd);
+		break;
+
+
+		case WM_COMMAND:
+		wmId    = LOWORD(wParam); // the low word of wparam is the ID of the command
+		wmEvent = HIWORD(wParam);
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case ID_BUTTON:
+			std::cout << "Hello!\n";
+			break;
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+
+	}
+	/*
+	switch (message)
+    {
+        // Quit when we close the main window
+        case WM_CLOSE :
+        {
+            PostQuitMessage(0);
+            return 0;
+        }
+    }
+	*/
+    
+    return DefWindowProc(hWnd, message, wParam, lParam);
+}
+
+
+
+
+
+
+void Editor::initConsole()
+{
+	 int hConHandle;
+    long lStdHandle;
+    FILE *fp;
+
+	// Create console
+    AllocConsole();
+
+	// Send STDOUT to the console
+    lStdHandle = (long)GetStdHandle(STD_OUTPUT_HANDLE); // get stdo handle
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT); // get file handle using stdo handle 
+    fp = _fdopen( hConHandle, "w" ); // pointer to file handle writes to
+
+    *stdout = *fp;
+
+    setvbuf( stdout, NULL, _IONBF, 0 );
+
+// redirect unbuffered STDIN to the console
+
+    lStdHandle = (long)GetStdHandle(STD_INPUT_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+
+    fp = _fdopen( hConHandle, "r" );
+    *stdin = *fp;
+    setvbuf( stdin, NULL, _IONBF, 0 );
+
+// redirect unbuffered STDERR to the console
+    lStdHandle = (long)GetStdHandle(STD_ERROR_HANDLE);
+    hConHandle = _open_osfhandle(lStdHandle, _O_TEXT);
+
+    fp = _fdopen( hConHandle, "w" );
+
+    *stderr = *fp;
+
+    setvbuf( stderr, NULL, _IONBF, 0 );
+
+// make cout, wcout, cin, wcin, wcerr, cerr, wclog and clog
+// point to console as well
+    std::ios::sync_with_stdio();
+}

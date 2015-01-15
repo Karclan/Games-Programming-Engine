@@ -1,0 +1,76 @@
+#include "core\assetLoader.h"
+
+
+AssetLoader::AssetLoader()
+{
+}
+
+AssetLoader::~AssetLoader()
+{
+	unloadAllAssets();
+}
+
+void AssetLoader::unloadAllAssets()
+{
+	unloadShaders();
+}
+
+void AssetLoader::unloadShaders()
+{
+	std::map<std::string, Shader*>::iterator it;
+	for(it = _shaders.begin(); it != _shaders.end(); ++it)
+	{
+		Shader* shader = it->second;
+		delete shader;
+		std::cout << "Deleted Shader\n";
+	}
+
+	_shaders.clear();
+}
+
+// This is for debug / testing
+void AssetLoader::loadBasicAssets()
+{
+	// Load the primitive shapes
+	_primitives.loadShapes();
+
+	// Load shader
+	//_shaders.loadShaders();
+}
+
+/*
+Shader* AssetLoader::getShader(Shaders::Type type)
+{
+	return _shaders.getShader(type);
+}
+*/
+
+Shader* AssetLoader::getShader(std::string name)
+{
+	std::map<std::string, Shader*>::iterator it;
+	it = _shaders.find(name);
+	
+	if(it != _shaders.end()) // then it found it!
+	{
+		return it->second;
+	}
+	else // try to load it!
+	{
+		Shader* newShader = new Shader();
+		if(!newShader->loadFromFile(name))
+		{
+			std::cout << "Failed to load " << name << " shader\n";
+			delete newShader;
+			return nullptr;
+		}
+		
+		// Add shader to map and return
+		_shaders.emplace(name, newShader);
+		return newShader;
+	}
+}
+
+Mesh* AssetLoader::getPrimitiveMesh(PrimitiveShapes::Type type)
+{
+	return _primitives.getMesh(type);
+}

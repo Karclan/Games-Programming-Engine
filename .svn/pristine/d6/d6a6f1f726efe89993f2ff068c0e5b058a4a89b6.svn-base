@@ -1,0 +1,46 @@
+#ifndef BEHAVIOUR_SYSTEM_H
+#define BEHAVIOUR_SYSTEM_H
+
+#include <vector>
+#include <memory>
+#include <algorithm>
+
+#include "behaviour\behaviour.h"
+#include "behaviour\cameraController.h" // this is temporary, as no real scripts yet it needs to know EVERY hard-coded behaviour
+#include "behaviour\rotatingObject.h" // this is temporary, as no real scripts yet it needs to know EVERY hard-coded behaviour
+
+/*! \brief Behaviour Sub-System
+
+	System for managing and updating all behaviours. When true scripting is implemented
+	this whole system may need to be rewritten but that's the advantage of separting
+	different aspects of the engine into "sub systems" like this.
+
+*/
+
+class BehaviourSystem
+{
+public:
+	BehaviourSystem();
+	~BehaviourSystem();
+
+	void addBehaviour(SPtr_Behaviour behaviour);
+	void clear();
+	void update(float t); //!< Call update on all in update list and intialize on new behaviours. t = deltat time
+	void fixedUpdate(float t); // t = fixed delta time
+
+private:
+	//std::vector<std::shared_ptr<Behaviour>> _behaviours;
+
+	std::vector<SPtr_Behaviour> _initializeList; //!< List of behaviours to initialize
+	std::vector<SPtr_Behaviour> _updateList; //!< List of behaviours that want update event
+	std::vector<SPtr_Behaviour> _fixedUpdateList; //!< List of behaviours that want fixed update event
+
+};
+
+
+
+
+
+
+
+#endif

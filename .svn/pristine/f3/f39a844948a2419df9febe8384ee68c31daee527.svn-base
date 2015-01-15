@@ -1,0 +1,29 @@
+#ifndef MENU_BAR_H
+#define MENU_BAR_H
+
+#include <windows.h>
+
+#include "..\resource.h"
+#include "editor\goMenu.h"
+
+
+class MenuBar
+{
+public:
+	void initialize(HINSTANCE hInstance, GoMenu &goMenu);
+	LRESULT processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //!< Call back passed from main through editor to this class
+
+	
+
+private:
+	// Private callbacks. These must be static (can't have member functions as callback functions)
+	static INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam);
+	
+	// Private member variables
+	HINSTANCE _hInstance;
+	GoMenu* _goMenu; //!< Pointer to go menu as some commands from main menu may alter things in go menu
+};
+
+
+
+#endif

@@ -1,0 +1,18 @@
+#include "editor\editorCamera.h"
+
+EditorCamera::EditorCamera()
+{
+
+}
+
+void EditorCamera::init()
+{
+	_transform = SPtr_Transform(new Transform());
+	_transform->setPosition(glm::vec3(0, 0, 10));
+	_camera = SPtr_Camera(new Camera());
+	_camera->setTransform(_transform);
+}
+
+void EditorCamera::update(float t)
+{
+}
