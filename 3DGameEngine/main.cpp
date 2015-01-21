@@ -223,3 +223,5 @@ LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 
 #endif
+
+//HELLO! :D

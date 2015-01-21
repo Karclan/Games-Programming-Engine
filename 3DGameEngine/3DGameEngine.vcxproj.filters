@@ -154,7 +154,7 @@
     <ClInclude Include="include\tinyXML\tinyxml.h">
       <Filter>Header Files\tinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\resource.h">
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
