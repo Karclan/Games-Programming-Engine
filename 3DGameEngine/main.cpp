@@ -224,5 +224,6 @@ LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
 #endif
 
-//HELLO! :D
-//Hello hello!
+//Animation - guy waving arms
+
+//     \o\   /o/   \o\   /o/
