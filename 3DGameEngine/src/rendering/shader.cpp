@@ -25,9 +25,10 @@ bool Shader::loadFromFile(std::string shaderName)
 		_texTileHandle = glGetUniformLocation(_shaderHandle, "uvTile"); // texture fraction multiplier
 
 		// For subroutines. Currently relies on fact that only 1 subroutine as setting multiple is confusing as hell!
-		_noTexHandle = glGetSubroutineIndex(_shaderHandle, GL_FRAGMENT_SHADER, "noTex");
-		_sampleTexHandle = glGetSubroutineIndex(_shaderHandle, GL_FRAGMENT_SHADER, "sampleTex");
+		//_noTexHandle = glGetSubroutineIndex(_shaderHandle, GL_FRAGMENT_SHADER, "noTex");
+		//_sampleTexHandle = glGetSubroutineIndex(_shaderHandle, GL_FRAGMENT_SHADER, "sampleTex");
 		//GLuint v1 = glGetSubroutineUniformLocation(_shaderHandle, GL_FRAGMENT_SHADER, "texColour"); // this would query sub location if we were to need to set multiple subroutines
+		_hasTexHandler = glGetUniformLocation(_shaderHandle, "hasTex");
 
 	}
 
@@ -38,9 +39,13 @@ bool Shader::loadFromFile(std::string shaderName)
 void Shader::useProgram(bool useTex)
 {
 	glUseProgram(_shaderHandle); // use the shader for current rendering
+
+	/*
 	if(useTex) glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &_sampleTexHandle);
 	else glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &_noTexHandle);
+	*/
 
+	glUniform1i(_hasTexHandler, useTex); // set whether has tex or not without subroutines
 }
 
 void Shader::setMVP(GLfloat* m, GLfloat* v, GLfloat* p)

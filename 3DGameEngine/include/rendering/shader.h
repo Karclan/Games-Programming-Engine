@@ -36,8 +36,9 @@ private:
 
 	GLint _texHandle; //!< Handle to texture uniform location
 	GLuint _texTileHandle; //!< Handle to uniform controlling tex coord tiling
-	GLuint _noTexHandle; //!< Handle to subroutine to turn textures off
-	GLuint _sampleTexHandle; //!< Handle to subroutine to turn textures on 
+	//GLuint _noTexHandle; //!< Handle to subroutine to turn textures off
+	//GLuint _sampleTexHandle; //!< Handle to subroutine to turn textures on 
+	GLuint _hasTexHandler; //!< Note - for setting if use texture without subroutines
 
 	bool loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
 	
