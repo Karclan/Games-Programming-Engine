@@ -64,14 +64,15 @@ void Engine::startup()
 	// OpenGL is good to go!!
 	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
 	_rendSys.setShadersMap(Assets::getShadersMap()); // link map of shaders to rendering system
-	_objMngr = ObjectManager::startUp(_rendSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
+	_objMngr = ObjectManager::startUp(_rendSys, _physicsSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
 	_sceneMngr.initialize(*_objMngr, _behvrSys); // init and pass reference to object manager
 	
 	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 	_sceneMngr.createFromInitTable();
 	_sceneMngr.initFromInitTable();
 	_rendSys.setLight(glm::vec3(-0.3f, -0.1f, -1), glm::vec3(0.61, 0.63, 0.56)); // once scene loaded (and therefore all shaders) we can set light up
-	//_rendSys.setLight(glm::vec3(0.0f, 0.0f, -1.0f), glm::vec3(0.55, 0.57, 0.49)); // once scene loaded (and therefore all shaders) we can set light up
+	
+
 
 	// Setup input
 	_input = Input::startUp(&_window);
@@ -111,6 +112,7 @@ void Engine::update(float t)
 	{
 		// fixed update here
 		_behvrSys.fixedUpdate(_fixedTime);
+		_physicsSys.fixedUpdate(_fixedTime);
 		_fixedTime = 0;
 	}
 

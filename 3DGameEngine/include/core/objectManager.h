@@ -6,6 +6,7 @@
 
 #include "core\gameObject.h"
 #include "rendering\renderSystem.h"
+#include "physics\physicsSystem.h"
 
 
 
@@ -24,7 +25,7 @@
 class ObjectManager
 {
 public:
-	static ObjectManager* startUp(RenderSystem &rendSys/*, BehaviourSystem &behvrSys*/);
+	static ObjectManager* startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys);
 	
 	// Static interface fucntions for behaviours. Could also be used for sending messages between game objects
 	static SPtr_GameObject getGameObject(unsigned int objectID); //!< Returns an object by unique ID number
@@ -42,6 +43,7 @@ private:
 	// Sub systems Obj Manager should add any components they need on creation
 	// e.g. rendering components sent to rendering system, rigidbodies sent to physics etc
 	RenderSystem* _rendSys;
+	PhysicsSystem* _physicsSys;
 
 
 	// Private functions

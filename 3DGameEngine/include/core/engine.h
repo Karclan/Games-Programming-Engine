@@ -14,6 +14,7 @@
 #include "core\sceneManager.h"
 #include "core\objectManager.h"
 #include "rendering\renderSystem.h"
+#include "physics\physicsSystem.h"
 
 #include "core\input.h"
 #include "rendering\camera.h"
@@ -57,6 +58,7 @@ private:
 	// Sub Systems
 	RenderSystem _rendSys;
 	BehaviourSystem _behvrSys;
+	PhysicsSystem _physicsSys;
 
 	// Engine Vars
 	sf::Vector2u _screenSize;

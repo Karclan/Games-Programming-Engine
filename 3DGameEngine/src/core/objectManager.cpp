@@ -6,10 +6,11 @@ ObjectManager::ObjectManager()
 }
 
 
-ObjectManager* ObjectManager::startUp(RenderSystem &rendSys)
+ObjectManager* ObjectManager::startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys)
 {
 	ObjectManager* inst = ObjectManager::get();
 	inst->_rendSys = &rendSys;
+	inst->_physicsSys = &physicsSys;
 	return inst;
 }
 
