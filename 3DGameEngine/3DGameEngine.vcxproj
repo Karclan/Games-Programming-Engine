@@ -94,8 +94,6 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\physics\physicsBody.h" />
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\physics\physicsSystem.h" />
     <ClInclude Include="include\core\initTable.h" />
     <ClInclude Include="include\behaviour\behaviour.h" />
     <ClInclude Include="include\behaviour\behaviourSystem.h" />
@@ -113,6 +111,8 @@
     <ClInclude Include="include\editor\editorCamera.h" />
     <ClInclude Include="include\editor\goMenu.h" />
     <ClInclude Include="include\editor\menuBar.h" />
+    <ClInclude Include="include\physics\physicsBody.h" />
+    <ClInclude Include="include\physics\physicsSystem.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
@@ -128,8 +128,6 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\physics\physicsBody.cpp" />
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\physics\physicsSystem.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
@@ -148,6 +146,8 @@
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
     <ClCompile Include="src\editor\menuBar.cpp" />
+    <ClCompile Include="src\physics\physicsBody.cpp" />
+    <ClCompile Include="src\physics\physicsSystem.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
