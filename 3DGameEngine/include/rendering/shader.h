@@ -1,6 +1,8 @@
 #ifndef SHADER_H
 #define SHADER_H
 
+
+#include <map>
 #include <fstream>
 #include <string>
 #include <sstream>
@@ -16,7 +18,7 @@ class Shader
 {
 public:
 	bool loadFromFile(std::string shaderName); //!< load from file. Must have a .vert and .frag file called shaderName in the shaders folder
-	void useProgram(bool useTex); //!< use this shader for drawing
+	void useProgram(); //!< use this shader for drawing
 	
 	// I think these set functions will only work if program is current program? So should useProgram be called in these functions?
 	void setMVP(GLfloat* m, GLfloat* v, GLfloat* p); //!< set the mvp matrices in the shader
@@ -25,6 +27,18 @@ public:
 	
 	void setDirectionalLight(GLfloat*, GLfloat*); //!< Setup lighting like this for now as I'm unsure exactly how lighting will be handled - need a few more shader lectures!
 
+	void setUniform(const char *name, float x, float y, float z);
+    void setUniform(const char *name, const glm::vec2	&v);
+    void setUniform(const char *name, const glm::vec3	&v);
+    void setUniform(const char *name, const glm::vec4	&v);
+    void setUniform(const char *name, const glm::mat4	&m);
+    void setUniform(const char *name, const glm::mat3	&m);
+    void setUniform(const char *name, float  val );
+    void setUniform(const char *name, int	 val );
+    void setUniform(const char *name, bool	 val );
+    void setUniform(const char *name, GLuint val );
+	void setUniform(const char *name, GLfloat *mat);
+	
 
 private:
 	int _shaderHandle; //!< Handle to shader program
@@ -40,9 +54,10 @@ private:
 	//GLuint _sampleTexHandle; //!< Handle to subroutine to turn textures on 
 	GLuint _hasTexHandler; //!< Note - for setting if use texture without subroutines
 
-	bool loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
+	std::map<std::string, int> _uniformLocations;//<! All the active uniform locations
 	
-
+	bool	loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
+	GLint   getUniformLocation(const char * name );//!< Returns uniform location if active, or finds it if not
 };
 
 #endif

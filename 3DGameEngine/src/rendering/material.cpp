@@ -17,7 +17,9 @@ void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
 	if(_texture == nullptr)
 	{
 		// Unbind texture and draw without
-		_shader->useProgram(false);
+
+		_shader->useProgram();
+		_shader->setUniform("hasTex",false);
 		_shader->setMVP(m, v, p);
 		glBindTexture(GL_TEXTURE_2D, NULL); // unbind texture?? This bugs out, not sure why
 		return;
@@ -25,7 +27,8 @@ void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
 	else
 	{
 		// Bind and draw with texture
-		_shader->useProgram(true);
+		_shader->useProgram();
+		_shader->setUniform("hasTex",true);
 		_shader->setMVP(m, v, p);
 		_shader->setTexTile(_uvFraction);
 		_texture->bind(_shader, 0);

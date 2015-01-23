@@ -49,6 +49,15 @@
     <Filter Include="Source Files\tinyXML">
       <UniqueIdentifier>{e2dac66a-ee65-4191-a1ca-3af39d42be6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource Files\ShaderFiles">
+      <UniqueIdentifier>{6704a22f-0398-4bce-a384-cdd5837fa667}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\light">
+      <UniqueIdentifier>{0a455db0-38c6-488d-a089-c366af9114c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\light">
+      <UniqueIdentifier>{6e8faad9-01fa-4e2c-98fd-875f1d0d1f1c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -163,6 +172,9 @@
     <ClInclude Include="include\physics\physicsSystem.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\light\light.h">
+      <Filter>Header Files\light</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -267,8 +279,29 @@
     <ClCompile Include="src\physics\physicsSystem.cpp">
       <Filter>Source Files\physics</Filter>
     </ClCompile>
+    <ClCompile Include="src\light\light.cpp">
+      <Filter>Source Files\light</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
+    <None Include="assets\shaders\basic.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\basic.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\diffuse.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\diffuse.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\specular.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\specular.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

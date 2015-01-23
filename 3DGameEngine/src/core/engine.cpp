@@ -70,9 +70,11 @@ void Engine::startup()
 	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 	_sceneMngr.createFromInitTable();
 	_sceneMngr.initFromInitTable();
-	_rendSys.setLight(glm::vec3(-0.3f, -0.1f, -1), glm::vec3(0.61, 0.63, 0.56)); // once scene loaded (and therefore all shaders) we can set light up
-	
 
+
+	//remove this call. change it to the ambient
+	_rendSys.setAmbLight(glm::vec3(0.61, 0.63, 0.56)); // once scene loaded (and therefore all shaders) we can set light up
+	
 
 	// Setup input
 	_input = Input::startUp(&_window);

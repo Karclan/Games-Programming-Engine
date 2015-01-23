@@ -36,7 +36,7 @@ bool Shader::loadFromFile(std::string shaderName)
 }
 
 
-void Shader::useProgram(bool useTex)
+void Shader::useProgram()
 {
 	glUseProgram(_shaderHandle); // use the shader for current rendering
 
@@ -44,21 +44,19 @@ void Shader::useProgram(bool useTex)
 	if(useTex) glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &_sampleTexHandle);
 	else glUniformSubroutinesuiv(GL_FRAGMENT_SHADER, 1, &_noTexHandle);
 	*/
-
-	glUniform1i(_hasTexHandler, useTex); // set whether has tex or not without subroutines
 }
 
 void Shader::setMVP(GLfloat* m, GLfloat* v, GLfloat* p)
 {
 	// This is how to pass uniform values to the shader!
-	glUniformMatrix4fv(_modelMatrixID, 1, false, m);
-	glUniformMatrix4fv(_viewMatrixID, 1, false, v);
-	glUniformMatrix4fv(_projectionMatrixID, 1, false, p);
+	setUniform("mModel",m);
+	setUniform("mView",v);
+	setUniform("mProjection",p);
 }
 
 void Shader::setTexTile(glm::vec2 tile)
 {
-	glUniform2fv(_texTileHandle, 1, glm::value_ptr(tile));
+	setUniform("uvTile",tile);
 }
 
 void Shader::setDirectionalLight(GLfloat* lightDir, GLfloat* intensity)
@@ -70,173 +68,247 @@ void Shader::setDirectionalLight(GLfloat* lightDir, GLfloat* intensity)
 	glUseProgram(_shaderHandle); // use the shader for current rendering
 	glUniform3fv(dirID, 1, lightDir);
 	glUniform3fv(intenseID, 1, intensity);
+	setUniform("lightDir",lightDir);
+	setUniform("lightIntens",intensity);
 }
 
+void Shader::setUniform(const char *name, float x, float y, float z)
+{
+	GLint loc = getUniformLocation(name);
+	glUniform3f(loc,x,y,z);
+}
+
+void Shader::setUniform(const char *name, const glm::vec3 &v)
+{
+	this->setUniform(name,v.x,v.y,v.z);
+}
+
+void Shader::setUniform(const char *name, const glm::vec4 &v)
+{
+	GLint loc = getUniformLocation(name);
+	glUniform4f(loc,v.x,v.y,v.z,v.w);
+}
+
+void Shader::setUniform(const char *name, const glm::vec2 &v)
+{
+	GLint loc = getUniformLocation(name);
+	glUniform2f(loc,v.x,v.y);
+}
+void Shader::setUniform(const char *name, const glm::mat4 & m)
+{
+	GLint loc = getUniformLocation(name);
+	glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
+}
+
+void Shader::setUniform(const char *name, const glm::mat3 & m)
+{
+	GLint loc = getUniformLocation(name);
+	glUniformMatrix3fv(loc, 1, GL_FALSE, &m[0][0]);
+}
+
+void Shader::setUniform(const char *name, float val )
+{
+	GLint loc = getUniformLocation(name);
+	glUniform1f(loc, val);
+}
+
+void Shader::setUniform(const char *name, int val )
+{
+	GLint loc = getUniformLocation(name);
+	glUniform1i(loc, val);
+}
+
+void Shader::setUniform(const char *name, GLuint val )
+{
+	GLint loc = getUniformLocation(name);
+	glUniform1ui(loc, val);
+}
+void Shader::setUniform(const char *name, GLfloat *val)
+{
+	GLint loc = getUniformLocation(name);
+	glUniformMatrix4fv(loc, 1, false, val);
+}
+void Shader::setUniform(const char *name, bool val )
+{
+	int loc = getUniformLocation(name);
+	glUniform1i(loc, val);
+}
 
 bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 {
 	// LOAD SHADERS VIA STRING STREAMING
 
 	//////////////////////////////////////////////////////
-    /////////// Vertex shader //////////////////////////
-    //////////////////////////////////////////////////////
+	/////////// Vertex shader //////////////////////////
+	//////////////////////////////////////////////////////
 
-	
 
-    // Load contents of file
-    std::ifstream inFile(vFilePath);
-    if (!inFile) // if file bad then error
+	// Load contents of file
+	std::ifstream inFile(vFilePath);
+	if (!inFile) // if file bad then error
 	{
-        fprintf(stderr, "Error opening file: shader/basic.vert\n" );
-        return false;
-    }
+		fprintf(stderr, "Error opening file: shader/basic.vert\n" );
+		return false;
+	}
 
 	// Pull data from shader prog to string stream then store in string
-    std::stringstream code;
-    code << inFile.rdbuf();
+	std::stringstream code;
+	code << inFile.rdbuf();
 	inFile.close();
 	std::string codeStr(code.str()); // code is stored in this string
 
-    // Create the shader object
-    GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
-    if (0 == vertShader) 
+	// Create the shader object
+	GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
+	if (0 == vertShader) 
 	{
-      fprintf(stderr, "Error creating vertex shader.\n");
-      return false;
-    }
+		fprintf(stderr, "Error creating vertex shader.\n");
+		return false;
+	}
 
-    // Load the source code into the shader object
-    const GLchar* codeArray[] = {codeStr.c_str()};
+	// Load the source code into the shader object
+	const GLchar* codeArray[] = {codeStr.c_str()};
 	glShaderSource(vertShader, 1, codeArray, NULL); // attach source code from string to shader with ID vertShader
 	//const GLchar *codeArray = reinterpret_cast<const GLchar*>(codeStr.c_str());
-    //glShaderSource(vertShader, 1, &codeArray, NULL); // attach source code from string to shader with ID vertShader
+	//glShaderSource(vertShader, 1, &codeArray, NULL); // attach source code from string to shader with ID vertShader
 
-    // Compile the shader
-    glCompileShader( vertShader );
+	// Compile the shader
+	glCompileShader( vertShader );
 
 	// Check compilation status
-    GLint result;
-    glGetShaderiv( vertShader, GL_COMPILE_STATUS, &result );
-    if( GL_FALSE == result ) 
+	GLint result;
+	glGetShaderiv( vertShader, GL_COMPILE_STATUS, &result );
+	if( GL_FALSE == result ) 
 	{
-       fprintf( stderr, "Vertex shader compilation failed!\n" );
+		fprintf( stderr, "Vertex shader compilation failed!\n" );
 
-       GLint logLen;
-       glGetShaderiv( vertShader, GL_INFO_LOG_LENGTH, &logLen );
+		GLint logLen;
+		glGetShaderiv( vertShader, GL_INFO_LOG_LENGTH, &logLen );
 
-       if (logLen > 0)
-	   {
-           char * log = (char *)malloc(logLen);
+		if (logLen > 0)
+		{
+			char * log = (char *)malloc(logLen);
 
-           GLsizei written;
-           glGetShaderInfoLog(vertShader, logLen, &written, log);
+			GLsizei written;
+			glGetShaderInfoLog(vertShader, logLen, &written, log);
 
-           fprintf(stderr, "Shader log: \n%s", log);
+			fprintf(stderr, "Shader log: \n%s", log);
 
-           free(log);
-       }
-    }
+			free(log);
+		}
+	}
 
-    
-    //////////////////////////////////////////////////////
-    /////////// Fragment shader //////////////////////////
-    //////////////////////////////////////////////////////
 
-    // Load contents of file into shaderCode here
-    std::ifstream fragFile(fFilePath);
-    if (!fragFile)
+	//////////////////////////////////////////////////////
+	/////////// Fragment shader //////////////////////////
+	//////////////////////////////////////////////////////
+
+	// Load contents of file into shaderCode here
+	std::ifstream fragFile(fFilePath);
+	if (!fragFile)
 	{
-        fprintf(stderr, "Error opening file: shader/basic.frag\n" );
-        return false;
-    }
+		fprintf(stderr, "Error opening file: shader/basic.frag\n" );
+		return false;
+	}
 
-    std::stringstream fragCode;
-    fragCode << fragFile.rdbuf();
+	std::stringstream fragCode;
+	fragCode << fragFile.rdbuf();
 	fragFile.close();
 	codeStr = fragCode.str();
 
-    // Create the shader object
-    GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
-    if (0 == fragShader) 
+	// Create the shader object
+	GLuint fragShader = glCreateShader(GL_FRAGMENT_SHADER);
+	if (0 == fragShader) 
 	{
-      fprintf(stderr, "Error creating fragment shader.\n");
-      return false;
-    }
+		fprintf(stderr, "Error creating fragment shader.\n");
+		return false;
+	}
 
-    // Load the source code into the shader object
-    codeArray[0] = codeStr.c_str();
+	// Load the source code into the shader object
+	codeArray[0] = codeStr.c_str();
 	glShaderSource( fragShader, 1, codeArray, NULL );
 	//codeArray = reinterpret_cast<const GLchar*>(codeStr.c_str());
-    //glShaderSource(fragShader, 1, &codeArray, NULL); // attach source code from string to shader with ID vertShader
+	//glShaderSource(fragShader, 1, &codeArray, NULL); // attach source code from string to shader with ID vertShader
 
-    // Compile the shader
-    glCompileShader( fragShader );
+	// Compile the shader
+	glCompileShader( fragShader );
 
 	// Check compilation status
-    glGetShaderiv( fragShader, GL_COMPILE_STATUS, &result );
-    if (GL_FALSE == result) 
+	glGetShaderiv( fragShader, GL_COMPILE_STATUS, &result );
+	if (GL_FALSE == result) 
 	{
-       fprintf( stderr, "Fragment shader compilation failed!\n" );
+		fprintf( stderr, "Fragment shader compilation failed!\n" );
 
-       GLint logLen;
-       glGetShaderiv( fragShader, GL_INFO_LOG_LENGTH, &logLen );
+		GLint logLen;
+		glGetShaderiv( fragShader, GL_INFO_LOG_LENGTH, &logLen );
 
-       if (logLen > 0) {
-           char * log = (char *)malloc(logLen);
+		if (logLen > 0) {
+			char * log = (char *)malloc(logLen);
 
-           GLsizei written;
-           glGetShaderInfoLog(fragShader, logLen, &written, log);
+			GLsizei written;
+			glGetShaderInfoLog(fragShader, logLen, &written, log);
 
-           fprintf(stderr, "Shader log: \n%s", log);
+			fprintf(stderr, "Shader log: \n%s", log);
 
-           free(log);
-       }
-    }
+			free(log);
+		}
+	}
 
 
 
 	//----------------------------------------------------------
 	// NOW LINK SHADER
 	// Create the program object
-    _shaderHandle = glCreateProgram();
-    if(0 == _shaderHandle) 
+	_shaderHandle = glCreateProgram();
+	if(0 == _shaderHandle) 
 	{
-        fprintf(stderr, "Error creating program object.\n");
-        return false;
-    }
+		fprintf(stderr, "Error creating program object.\n");
+		return false;
+	}
 
 
-    // Attach the shaders to the program object
-    glAttachShader( _shaderHandle, vertShader );
-    glAttachShader( _shaderHandle, fragShader );
+	// Attach the shaders to the program object
+	glAttachShader( _shaderHandle, vertShader );
+	glAttachShader( _shaderHandle, fragShader );
 
-    // Link the program
-    glLinkProgram( _shaderHandle );
+	// Link the program
+	glLinkProgram( _shaderHandle );
 
-    // Check for successful linking
-    GLint status;
-    glGetProgramiv( _shaderHandle, GL_LINK_STATUS, &status );
+	// Check for successful linking
+	GLint status;
+	glGetProgramiv( _shaderHandle, GL_LINK_STATUS, &status );
 
 	if (GL_FALSE == status)
 	{
 
-        fprintf( stderr, "Failed to link shader program!\n" );
+		fprintf( stderr, "Failed to link shader program!\n" );
 
-        GLint logLen;
-        glGetProgramiv( _shaderHandle, GL_INFO_LOG_LENGTH, &logLen );
+		GLint logLen;
+		glGetProgramiv( _shaderHandle, GL_INFO_LOG_LENGTH, &logLen );
 
-        if (logLen > 0)
+		if (logLen > 0)
 		{
-            char * log = (char *)malloc(logLen);
+			char * log = (char *)malloc(logLen);
 
-            GLsizei written;
-            glGetProgramInfoLog(_shaderHandle, logLen, &written, log);
+			GLsizei written;
+			glGetProgramInfoLog(_shaderHandle, logLen, &written, log);
 
-            fprintf(stderr, "Program log: \n%s", log);
+			fprintf(stderr, "Program log: \n%s", log);
 
-            free(log);
-        }
-    }
+			free(log);
+		}
+	}
 
 	return true;
+}
+
+GLint Shader::getUniformLocation(const char *name)
+{
+	std::map<std::string, int>::iterator pos;
+	pos = _uniformLocations.find(name);
+
+	if( pos == _uniformLocations.end() ) {
+		_uniformLocations[name] = glGetUniformLocation(_shaderHandle, name);
+	}
+
+	return _uniformLocations[name];
 }

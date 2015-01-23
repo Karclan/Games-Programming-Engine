@@ -111,6 +111,7 @@
     <ClInclude Include="include\editor\editorCamera.h" />
     <ClInclude Include="include\editor\goMenu.h" />
     <ClInclude Include="include\editor\menuBar.h" />
+    <ClInclude Include="include\light\light.h" />
     <ClInclude Include="include\physics\physicsBody.h" />
     <ClInclude Include="include\physics\physicsSystem.h" />
     <ClInclude Include="include\rendering\camera.h" />
@@ -146,6 +147,7 @@
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
     <ClCompile Include="src\editor\menuBar.cpp" />
+    <ClCompile Include="src\light\light.cpp" />
     <ClCompile Include="src\physics\physicsBody.cpp" />
     <ClCompile Include="src\physics\physicsSystem.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
@@ -165,6 +167,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
+    <None Include="assets\shaders\basic.frag" />
+    <None Include="assets\shaders\basic.vert" />
+    <None Include="assets\shaders\diffuse.frag" />
+    <None Include="assets\shaders\diffuse.vert" />
+    <None Include="assets\shaders\specular.frag" />
+    <None Include="assets\shaders\specular.vert" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

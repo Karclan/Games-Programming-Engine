@@ -20,8 +20,8 @@ void RenderSystem::render(Camera* camera)
 	// - bind 2nd mesh that uses it etc etc
 
 	// Draw calls would be harder to manage, needs more research
-	
-	
+
+
 	camera->preRender();
 
 	for(unsigned int i = 0; i < _models.size(); ++i)
@@ -70,15 +70,13 @@ void RenderSystem::clear()
 	_animations.clear();
 }
 
-void RenderSystem::setLight(glm::vec3 direction, glm::vec3 intensity)
+void RenderSystem::setAmbLight(glm::vec3 intensity)
 {
-	direction = glm::normalize(direction);
-
 	std::map<std::string, Shader*>::const_iterator it;
 	it = _loadedShaders->begin();
-
+	glm::vec3 direction(-0.3f, -0.1f, -1);
 	for(it; it != _loadedShaders->end(); ++it)
 	{
-		it->second->setDirectionalLight(&direction.x, &intensity.x);
+		it->second->setDirectionalLight(&direction.x, &intensity.x);//want to change this function
 	}
 }

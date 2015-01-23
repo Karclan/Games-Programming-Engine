@@ -8,6 +8,7 @@
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
 
+
 /*! \brief Render Sub-System
 
 	System for managing and rendering all rendable objects
@@ -26,12 +27,13 @@ public:
 	void addCamera(SPtr_Camera camera); //!< Add a new camera to the system
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
+	
 	void clear();
 
 	// To do with light. SetShaderMap allows access to all loaded shaders. Not sure I like this design too much but ok for now
 	// Note we would want a system that will set current global uniforms to any new shaders loaded in as well. perhaps we need a "shader manager" class?
 	void setShadersMap(const std::map<std::string, Shader*>* shadersMap) { _loadedShaders = shadersMap; }
-	void setLight(glm::vec3 direction, glm::vec3 intensity);
+	void setAmbLight(glm::vec3 intensity);
 
 private:
 	std::vector<SPtr_Camera> _cameras; //!< All cameras in scene. Currently set to simply render through camera at index 0.
