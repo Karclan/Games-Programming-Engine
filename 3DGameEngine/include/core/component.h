@@ -7,7 +7,7 @@
 //! Different types of component
 namespace ComponentType
 {
-	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND };
+	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY };
 }
 
 //! Different state the component can be in

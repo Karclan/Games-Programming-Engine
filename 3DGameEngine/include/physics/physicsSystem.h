@@ -3,6 +3,8 @@
 
 #include <vector>
 
+#include "physics\physicsBody.h"
+
 /*! \brief Physics Sub-System
 
 	System for managing physics objects
@@ -17,9 +19,10 @@ public:
 
 	void fixedUpdate(float t); //!< Physics uses a fixed timestep
 	void clear();
+	void addPhysBody(SPtr_PhysBody physBody);
 
 private:
-
+	std::vector<SPtr_PhysBody> _physBodys;
 
 };
 

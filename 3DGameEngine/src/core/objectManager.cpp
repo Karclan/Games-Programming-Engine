@@ -86,6 +86,11 @@ bool ObjectManager::addComponent(unsigned int ObjectID, SPtr_Component component
 		_rendSys->addRenderObject(std::static_pointer_cast<ModelRenderer>(addedComponent));
 		_rendSys->addAnimatedObject(std::static_pointer_cast<ModelRenderer>(addedComponent));
 		break;
+
+	case ComponentType::PHY_BODY:
+		_physicsSys->addPhysBody(std::static_pointer_cast<PhysicsBody>(addedComponent));
+		break;
+
 	}
 
 	return true;

@@ -12,6 +12,7 @@
 #include "behaviour\behaviourSystem.h"
 #include "core\assets.h"
 #include "rendering\robotRenderer.h"
+#include "physics\physicsBody.h"
 
 #define DEMO_SCENE_PATH "demo.xml"
 
@@ -48,6 +49,7 @@ private:
 	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture);
 	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV);
 	void xmlAddRobot(TiXmlElement* go);
+	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
 
 	// Functions that create component data
@@ -55,12 +57,14 @@ private:
 	CompData newCameraData(TiXmlElement* compElmnt); //!< Creates camera data from xml element
 	CompData newModelRendData(TiXmlElement* compElmnt); //!< Creates model renderer data from xml element
 	CompData newRobotData(TiXmlElement* compElmnt);
+	CompData newPhysBodyData(TiXmlElement* compElmnt);
 
 	// Functions that init a component
 	void initTransform(CompData &comp);
 	void initCamera(CompData &comp);
 	void initModelRend(CompData &comp);
 	void initRobot(CompData &comp);
+	void initPhysBody(CompData &comp);
 
 };
 

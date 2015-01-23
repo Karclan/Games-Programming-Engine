@@ -67,7 +67,8 @@ void SceneManager::initFromInitTable()
 				case ComponentType::TRANSFORM:	initTransform(*comp);	break;
 				case ComponentType::CAMERA:		initCamera(*comp);		break;
 				case ComponentType::MODL_REND:	initModelRend(*comp);	break;
-				case ComponentType::ROB_REND:	initRobot(*comp);	break;
+				case ComponentType::ROB_REND:	initRobot(*comp);		break;
+				case ComponentType::PHY_BODY:	initPhysBody(*comp);	break;
 			}
 		}
 
@@ -147,6 +148,15 @@ void SceneManager::initRobot(CompData &comp)
 	robot->reset();
 }
 
+void SceneManager::initPhysBody(CompData &comp)
+{
+}
+
+
+//------------------------------------------------------------------
+//------------------------------------------------------------------
+
+
 
 
 
@@ -190,7 +200,8 @@ void SceneManager::loadFromXML(std::string filePath)
 					case ComponentType::TRANSFORM:	 goData->components.push_back(newTransformData(compElmnt));		break;
 					case ComponentType::CAMERA:		 goData->components.push_back(newCameraData(compElmnt));		break;
 					case ComponentType::MODL_REND:	 goData->components.push_back(newModelRendData(compElmnt));		break;
-					case ComponentType::ROB_REND:	 goData->components.push_back(newRobotData(compElmnt));		break;
+					case ComponentType::ROB_REND:	 goData->components.push_back(newRobotData(compElmnt));			break;
+					case ComponentType::PHY_BODY:	 goData->components.push_back(newPhysBodyData(compElmnt));		break;
 				}
 			}
 		}
@@ -286,6 +297,16 @@ CompData SceneManager::newRobotData(TiXmlElement* compElmnt)
 	return robotData;
 }
 
+CompData SceneManager::newPhysBodyData(TiXmlElement* compElmnt)
+{
+	CompData physData(SPtr_PhysBody(new PhysicsBody())); // new component and data
+	return physData;
+}
+
+
+//------------------------------------------------------------------
+//------------------------------------------------------------------
+
 
 
 
@@ -324,6 +345,7 @@ void SceneManager::writeDemoXML()
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
+	xmlAddPhysBody(robot);
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
 	xmlAddRobot(robot);
 
@@ -442,6 +464,13 @@ void SceneManager::xmlAddRobot(TiXmlElement* go)
 	TiXmlElement* robotElmnt = new TiXmlElement("COMP"); // Component Element
 	robotElmnt->SetAttribute("type", ComponentType::ROB_REND); // Set type attrib
 	go->LinkEndChild(robotElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddPhysBody(TiXmlElement* go)
+{
+	TiXmlElement* physBodyElmnt = new TiXmlElement("COMP"); // Component Element
+	physBodyElmnt->SetAttribute("type", ComponentType::PHY_BODY); // Set type attrib
+	go->LinkEndChild(physBodyElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------
