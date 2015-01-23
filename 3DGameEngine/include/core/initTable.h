@@ -5,9 +5,6 @@
 #include <vector>
 #include <string>
 
-#include "tinyXML\tinystr.h"
-#include "tinyXML\tinyxml.h"
-
 #include "core\assets.h"
 #include "core\component.h"
 #include "behaviour\behaviour.h"
@@ -25,10 +22,6 @@ struct AttribDatas:AttribData { std::string data; }; //!< String attrib data
 
 typedef std::shared_ptr<AttribData> SPtr_AttribData;
 
-
-
-
-
 /*! \brief Data object for components
 */
 class CompData
@@ -39,7 +32,6 @@ public:
 	void addAttribi(int data); //!< Add an int attribute
 	void addAttribf(float data); //!< Add a float attribute
 	void addAttribs(std::string data); //!< Add a string attribute
-	void setAttribsFromXML(TiXmlElement* compElmnt); //!< Set all of the attibs based on a tiny xml element
 
 	int getIntAttrib(int index); //!< Get an int attribute by index
 	float getFloatAttrib(int index); //!< Get a float attribute by index
@@ -54,17 +46,7 @@ private:
 	unsigned int _priority; //!< Some components may need to be created first, e.g. transforms which a lot of other components rely on. Lower number = higher priority
 	SPtr_Component _comp; //!< Pointer to the actual component object
 	std::vector<SPtr_AttribData> _attribs; //!< Attributes used as args in initialization. Bools and enums etc are stored as ints
-
-	// Helper functions for getting tinyxml data more easily
-	int to_int(TiXmlElement* elmnt, std::string attribute);
-	float to_float(TiXmlElement* elmnt, std::string attribute);
-
 };
-
-
-
-
-
 
 /*! \brief Data object for game objects
 */
@@ -74,11 +56,6 @@ struct GOData
 	std::list<CompData> components;
 	std::vector<SPtr_Behaviour> behaviours;
 };
-
-
-
-
-
 
 
 /*! \brief Info on how to initialize a scene

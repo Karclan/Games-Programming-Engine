@@ -190,8 +190,20 @@ void SceneManager::loadFromXML(std::string filePath)
 
 		for(compElmnt; compElmnt != NULL; compElmnt=compElmnt->NextSiblingElement("COMP"))
 		{
+			// Check type and add component based on it
 			if(compElmnt->Attribute("type"))
-				goData->components.push_back(newCompData(compElmnt));
+			{
+				int cType; // component type
+				compElmnt->Attribute("type", &cType);
+				switch (cType)
+				{
+					case ComponentType::TRANSFORM:	 goData->components.push_back(newTransformData(compElmnt));		break;
+					case ComponentType::CAMERA:		 goData->components.push_back(newCameraData(compElmnt));		break;
+					case ComponentType::MODL_REND:	 goData->components.push_back(newModelRendData(compElmnt));		break;
+					case ComponentType::ROB_REND:	 goData->components.push_back(newRobotData(compElmnt));			break;
+					case ComponentType::PHY_BODY:	 goData->components.push_back(newPhysBodyData(compElmnt));		break;
+				}
+			}
 		}
 
 		// Find behaviours
@@ -215,27 +227,82 @@ void SceneManager::loadFromXML(std::string filePath)
 }
 
 
-
-CompData SceneManager::newCompData(TiXmlElement* compElmnt)
+CompData SceneManager::newTransformData(TiXmlElement* compElmnt)
 {
-	SPtr_Component newComponent;
+	CompData transformData(SPtr_Transform(new Transform())); // new component and data
+	double params[9]; // 9 float params for translate, rotation and scale (in that order)
+	
+	// Read in attributes to array in correct order
+	compElmnt->Attribute("tx", &params[0]);
+	compElmnt->Attribute("ty", &params[1]);
+	compElmnt->Attribute("tz", &params[2]);
+	compElmnt->Attribute("rx", &params[3]);
+	compElmnt->Attribute("ry", &params[4]);
+	compElmnt->Attribute("rz", &params[5]);
+	compElmnt->Attribute("sx", &params[6]);
+	compElmnt->Attribute("sy", &params[7]);
+	compElmnt->Attribute("sz", &params[8]);
 
-	int cType; // component type
-	compElmnt->Attribute("type", &cType);
-
-	switch (cType)
+	for(int i = 0; i < 9; ++i)
 	{
-	case ComponentType::TRANSFORM:	newComponent.reset(new Transform());		break;
-	case ComponentType::MODL_REND:	newComponent.reset(new ModelRenderer());	break;
-	case ComponentType::CAMERA:		newComponent.reset(new Camera());			break;
-	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
-	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
+		transformData.addAttribf(params[i]);
 	}
 
-	CompData newData(newComponent);
-	newData.setAttribsFromXML(compElmnt);
-	return newData;
+	return transformData;
 }
+
+CompData SceneManager::newCameraData(TiXmlElement* compElmnt)
+{
+	CompData cameraData(SPtr_Camera(new Camera())); // new component and data
+	return cameraData;
+}
+
+CompData SceneManager::newModelRendData(TiXmlElement* compElmnt)
+{
+	CompData modelData(SPtr_ModelRend(new ModelRenderer())); // new component and data
+
+	// Figure out if the mesh is primitive or if it needs to be loaded in
+	if(!compElmnt->Attribute("primitive")) return modelData; // return if can't find attrib, something went wrong!
+	int isPrimitive;
+	compElmnt->Attribute("primitive", &isPrimitive);
+	modelData.addAttribi(isPrimitive); // attrib 0 is primitive as int
+
+	if((bool)isPrimitive)
+	{
+		int shape;
+		compElmnt->Attribute("mesh", &shape);
+		modelData.addAttribi(shape); // if primitive, attrib 1 is shape as int
+	}
+	else
+	{
+		modelData.addAttribs(compElmnt->Attribute("mesh")); // if not primitive, attrib 1 is mesh file path as string
+	}
+
+	// Get Material Info
+	modelData.addAttribs(compElmnt->Attribute("shader")); // attrib 2 is shader
+	modelData.addAttribs(compElmnt->Attribute("texture")); // attrib 3 is texture file path as string
+	
+	double tileU, tileV;
+	compElmnt->Attribute("tileU", &tileU);
+	compElmnt->Attribute("tileV", &tileV);
+	modelData.addAttribf(tileU); // attrib 4 is tile u
+	modelData.addAttribf(tileV); // attrib 5 is tile v
+	
+	return modelData;
+}
+
+CompData SceneManager::newRobotData(TiXmlElement* compElmnt)
+{
+	CompData robotData(std::shared_ptr<RobotRenderer>(new RobotRenderer())); // new component and data
+	return robotData;
+}
+
+CompData SceneManager::newPhysBodyData(TiXmlElement* compElmnt)
+{
+	CompData physData(SPtr_PhysBody(new PhysicsBody())); // new component and data
+	return physData;
+}
+
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
