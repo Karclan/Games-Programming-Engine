@@ -53,11 +53,8 @@ private:
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
 
 	// Functions that create component data
-	CompData newTransformData(TiXmlElement* compElmnt); //!< Creates transform data from xml element
-	CompData newCameraData(TiXmlElement* compElmnt); //!< Creates camera data from xml element
-	CompData newModelRendData(TiXmlElement* compElmnt); //!< Creates model renderer data from xml element
-	CompData newRobotData(TiXmlElement* compElmnt);
-	CompData newPhysBodyData(TiXmlElement* compElmnt);
+	CompData newCompData(TiXmlElement* compElmnt);
+
 
 	// Functions that init a component
 	void initTransform(CompData &comp);
