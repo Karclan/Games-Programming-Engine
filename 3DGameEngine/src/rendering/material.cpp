@@ -10,7 +10,7 @@ Material::Material()
 }
 
 
-void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
+void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 {
 	if(_shader == nullptr) return;
 		
@@ -19,8 +19,9 @@ void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
 		// Unbind texture and draw without
 
 		_shader->useProgram();
-		_shader->setUniform("hasTex",false);
-		_shader->setMVP(m, v, p);
+		_shader->setUniform("hasTex",0);
+		_shader->setMVP(glm::value_ptr(m), v, p);
+		_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));
 		glBindTexture(GL_TEXTURE_2D, NULL); // unbind texture?? This bugs out, not sure why
 		return;
 	}
@@ -28,8 +29,9 @@ void Material::bind(GLfloat* m, GLfloat* v, GLfloat* p)
 	{
 		// Bind and draw with texture
 		_shader->useProgram();
-		_shader->setUniform("hasTex",true);
-		_shader->setMVP(m, v, p);
+		_shader->setUniform("hasTex",1);
+		_shader->setMVP(glm::value_ptr(m), v, p);
+		_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));
 		_shader->setTexTile(_uvFraction);
 		_texture->bind(_shader, 0);
 	}

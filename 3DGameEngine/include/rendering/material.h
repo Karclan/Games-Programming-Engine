@@ -15,7 +15,7 @@ public:
 
 	void setShader(Shader* shader);
 	void setTexture(Texture2D* texture);
-	void bind(GLfloat* m, GLfloat* v, GLfloat* p);
+	void bind(glm::mat4 m, GLfloat* v, GLfloat* p);
 	void setUVTiling(glm::vec2 tile); //!< Set how many times image should tile
 
 

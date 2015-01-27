@@ -26,19 +26,19 @@ void RobotRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 	glBindVertexArray(_mesh.getVao());
 
 	// Draw different parts of vertex array object with different matrices
-	_material.bind(_transform->getFloatPointer(), viewMatrix, projMatrix);
+	_material.bind(_transform->getMatrix(), viewMatrix, projMatrix);
 	glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, (void*)(0 * sizeof(GLuint))); // Draw Head and torso
 
-	_material.bind(glm::value_ptr(_leftArmBone), viewMatrix, projMatrix);
+	_material.bind(_leftArmBone, viewMatrix, projMatrix);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)(72 * sizeof(GLuint))); // Draw left Arm
 
-	_material.bind(glm::value_ptr(_rightArmBone), viewMatrix, projMatrix);
+	_material.bind(_rightArmBone, viewMatrix, projMatrix);
 	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, (void*)(108 * sizeof(GLuint))); // Draw right Arm
 
-	_material.bind(glm::value_ptr(_leftLegBone), viewMatrix, projMatrix);
+	_material.bind(_leftLegBone, viewMatrix, projMatrix);
 	glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, (void*)(144 * sizeof(GLuint))); // Draw left leg and left foot
 
-	_material.bind(glm::value_ptr(_rightLegBone), viewMatrix, projMatrix);
+	_material.bind(_rightLegBone, viewMatrix, projMatrix);
 	glDrawElements(GL_TRIANGLES, 72, GL_UNSIGNED_INT, (void*)(216 * sizeof(GLuint))); // Draw right leg and right foot
 }
 

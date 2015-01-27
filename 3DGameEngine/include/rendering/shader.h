@@ -58,6 +58,8 @@ private:
 	
 	bool	loadShader(std::string vFilePath, std::string fFilePath); //!< load, compile and link shader using file paths specified and return handle to shader prog
 	GLint   getUniformLocation(const char * name );//!< Returns uniform location if active, or finds it if not
+
+	glm::vec3 lightPos[3];
 };
 
 #endif

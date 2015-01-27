@@ -175,6 +175,9 @@
     <ClInclude Include="include\light\light.h">
       <Filter>Header Files\light</Filter>
     </ClInclude>
+    <ClInclude Include="include\rendering\FTInterface.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -281,6 +284,9 @@
     </ClCompile>
     <ClCompile Include="src\light\light.cpp">
       <Filter>Source Files\light</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\FTInterface.cpp">
+      <Filter>Source Files\rendering</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

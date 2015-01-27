@@ -29,6 +29,7 @@ void RenderSystem::render(Camera* camera)
 		// this is where you should check for if it's state is inactive or destroyed
 		camera->render(*_models[i]);
 	}
+	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 }
 
 
@@ -78,5 +79,48 @@ void RenderSystem::setAmbLight(glm::vec3 intensity)
 	for(it; it != _loadedShaders->end(); ++it)
 	{
 		it->second->setDirectionalLight(&direction.x, &intensity.x);//want to change this function
+
+		glm::vec3 lightPos = glm::vec3(1.f,5.f,0.f);
+		it->second->setUniform("numOfSpotLights",2);
+		it->second->setUniform("spotLight[0].position", lightPos);
+		it->second->setUniform("spotLight[0].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
+		it->second->setUniform("spotLight[0].spotOutCut",glm::cos(glm::radians(28.f)));
+		it->second->setUniform("spotLight[0].spotInCut",glm::cos(glm::radians(14.f)));
+		it->second->setUniform("spotLight[0].constant",1.f);
+		it->second->setUniform("spotLight[0].linear",0.014f);
+		it->second->setUniform("spotLight[0].quadratic",0.0007f);
+		it->second->setUniform("spotLight[0].amb",  0.2f, 0.2f, 0.2f);
+		it->second->setUniform("spotLight[0].diff", 1.f, 0.0f, 0.0f);
+		it->second->setUniform("spotLight[0].spec", 1.f, 0.0f, 0.0f);
+
+		//SpotLight2
+		lightPos = glm::vec3(-1.f,5.f,0.f);
+		it->second->setUniform("spotLight[1].position", lightPos);
+		it->second->setUniform("spotLight[1].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
+		it->second->setUniform("spotLight[1].spotOutCut",glm::cos(glm::radians(28.f)));
+		it->second->setUniform("spotLight[1].spotInCut",glm::cos(glm::radians(14.f)));
+		it->second->setUniform("spotLight[1].constant",1.f);
+		it->second->setUniform("spotLight[1].linear",0.014f);
+		it->second->setUniform("spotLight[1].quadratic",0.0007f);
+		it->second->setUniform("spotLight[1].amb",  0.2f, 0.2f, 0.2f);
+		it->second->setUniform("spotLight[1].diff", 0.0f, 1.0f, 0.0f);
+		it->second->setUniform("spotLight[1].spec", 0.f,  1.f,  0.f);
+
+		//PointLight1
+		lightPos = glm::vec3(0.f,5.f,10.f);
+		it->second->setUniform("numOfPointLights",1);
+		it->second->setUniform("pointLight[0].position", lightPos);
+		it->second->setUniform("pointLight[0].constant",1.f);
+		it->second->setUniform("pointLight[0].linear",0.014f);
+		it->second->setUniform("pointLight[0].quadratic",0.0007f);
+		it->second->setUniform("pointLight[0].amb",  0.2f, 0.2f, 0.2f);
+		it->second->setUniform("pointLight[0].diff", 0.5f, 0.5f, 0.5f);
+		it->second->setUniform("pointLight[0].spec", 0.f,  1.f,  0.f);	
+
+		it->second->setUniform("material.diff",glm::vec3(0.5f,0.5f,0.5f));
+		it->second->setUniform("material.spec",glm::vec3(1.f,1.f,1.f));
+		it->second->setUniform("material.specEx",64.f);
 	}
+
+
 }

@@ -5,6 +5,8 @@
 #include "rendering\mesh.h"
 #include "rendering\material.h"
 
+#include "rendering\FTInterface.h"
+
 /*! \brief Wrapper for rendering model
 
 	Wraps index of VBO, index of shader, pointer to texture and model matrix

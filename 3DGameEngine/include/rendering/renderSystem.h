@@ -8,6 +8,8 @@
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
 
+#include "rendering\FTInterface.h"
+
 
 /*! \brief Render Sub-System
 

@@ -54,13 +54,13 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>$(SolutionDir)/include/;$(ProjectDir)/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)/include/freetype/;$(SolutionDir)/include/freetype/freetype2;$(SolutionDir)/include/;$(ProjectDir)/include/;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/freetype;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -115,6 +115,7 @@
     <ClInclude Include="include\physics\physicsBody.h" />
     <ClInclude Include="include\physics\physicsSystem.h" />
     <ClInclude Include="include\rendering\camera.h" />
+    <ClInclude Include="include\rendering\FTInterface.h" />
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
     <ClInclude Include="include\rendering\modelRenderer.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="src\physics\physicsBody.cpp" />
     <ClCompile Include="src\physics\physicsSystem.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
+    <ClCompile Include="src\rendering\FTInterface.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />

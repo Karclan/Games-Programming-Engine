@@ -8,8 +8,7 @@ ModelRenderer::ModelRenderer()
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {
 	if(_mesh == nullptr) return; // Can't render without mesh
-
-	_material.bind(_transform->getFloatPointer(), viewMatrix, projMatrix);
+	_material.bind(_transform->getMatrix(), viewMatrix, projMatrix);
 	glBindVertexArray(_mesh->getVao());
 	glDrawElements(GL_TRIANGLES, _mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 }

@@ -6,7 +6,6 @@ bool Shader::loadFromFile(std::string shaderName)
 	std::string vFilePath = "assets/shaders/" + shaderName + ".vert";
 	std::string fFilePath = "assets/shaders/" + shaderName + ".frag";
 
-
 	bool success = loadShader(vFilePath, fFilePath);
 
 	if(success)
@@ -61,15 +60,15 @@ void Shader::setTexTile(glm::vec2 tile)
 
 void Shader::setDirectionalLight(GLfloat* lightDir, GLfloat* intensity)
 {
-	GLint dirID = glGetUniformLocation(_shaderHandle, "lightDir");
-	GLint intenseID = glGetUniformLocation(_shaderHandle, "lightIntens");
-	if(dirID == -1 || intenseID == -1) return;
-
+	//GLint dirID = glGetUniformLocation(_shaderHandle, "lightDir");
+	//GLint intenseID = glGetUniformLocation(_shaderHandle, "lightIntens");
+	//if(dirID == -1 || intenseID == -1) return;
 	glUseProgram(_shaderHandle); // use the shader for current rendering
-	glUniform3fv(dirID, 1, lightDir);
-	glUniform3fv(intenseID, 1, intensity);
-	setUniform("lightDir",lightDir);
-	setUniform("lightIntens",intensity);
+	//glUniform3fv(dirID, 1, lightDir);
+	//glUniform3fv(intenseID, 1, intensity);
+	//setUniform("lightDir",lightDir);
+	//setUniform("lightIntens",intensity);
+
 }
 
 void Shader::setUniform(const char *name, float x, float y, float z)
@@ -134,6 +133,18 @@ void Shader::setUniform(const char *name, bool val )
 	glUniform1i(loc, val);
 }
 
+GLint Shader::getUniformLocation(const char *name)
+{
+	std::map<std::string, int>::iterator pos;
+	pos = _uniformLocations.find(name);
+
+	if( pos == _uniformLocations.end() ) {
+		_uniformLocations[name] = glGetUniformLocation(_shaderHandle, name);
+	}
+
+	return _uniformLocations[name];
+}
+
 bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 {
 	// LOAD SHADERS VIA STRING STREAMING
@@ -147,7 +158,7 @@ bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 	std::ifstream inFile(vFilePath);
 	if (!inFile) // if file bad then error
 	{
-		fprintf(stderr, "Error opening file: shader/basic.vert\n" );
+		std::cout<<"Error opening file: "+vFilePath+" \n";
 		return false;
 	}
 
@@ -161,7 +172,7 @@ bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 	GLuint vertShader = glCreateShader( GL_VERTEX_SHADER );
 	if (0 == vertShader) 
 	{
-		fprintf(stderr, "Error creating vertex shader.\n");
+		std::cout<<"Error creating file: "+vFilePath+" \n";
 		return false;
 	}
 
@@ -206,7 +217,7 @@ bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 	std::ifstream fragFile(fFilePath);
 	if (!fragFile)
 	{
-		fprintf(stderr, "Error opening file: shader/basic.frag\n" );
+		std::cout<<"Error creating file: "+fFilePath+" \n";
 		return false;
 	}
 
@@ -252,8 +263,6 @@ bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 			free(log);
 		}
 	}
-
-
 
 	//----------------------------------------------------------
 	// NOW LINK SHADER
@@ -301,14 +310,3 @@ bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 	return true;
 }
 
-GLint Shader::getUniformLocation(const char *name)
-{
-	std::map<std::string, int>::iterator pos;
-	pos = _uniformLocations.find(name);
-
-	if( pos == _uniformLocations.end() ) {
-		_uniformLocations[name] = glGetUniformLocation(_shaderHandle, name);
-	}
-
-	return _uniformLocations[name];
-}
