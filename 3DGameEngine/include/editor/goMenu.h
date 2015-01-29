@@ -6,7 +6,9 @@
 
 #include "..\resource.h"
 
-#include "core\sceneManager.h"
+#include "core\input.h"
+#include "core\initTable.h"
+#include "core\objectManager.h"
 
 
 const int ID_STATIC = 1000; // id of the static text thing created in func
@@ -29,10 +31,15 @@ struct GoData
 class GoMenu
 {
 public:
-	void initialize(HINSTANCE hInstance, HWND handle);
+	void initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr, InitTable* init);
 	LRESULT processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //!< Call back passed from main through editor to this class
 	void show(); //!<Brings menu to front
 	void update();
+	void setGamePlaying(bool playing); 
+
+	
+
+
 
 
 	// Test functions
@@ -48,6 +55,7 @@ public:
 
 private:
 	// Private member variables
+	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
 	HINSTANCE _hInstance; // might not need this but may as well leave for now
 	HWND _menuHandle; //!< The handle for the go menu
 	HWND _goListHandle; //!< Handle for the drop down menu containing all GOs
@@ -57,6 +65,19 @@ private:
 
 
 	std::wstring stringToWString(std::string string); //!< Function for converting from std::string to wstring
+
+
+
+	InitTable* _initTable; //!< Pointer to the init table
+	ObjectManager* _objectMngr; //!< Pointer to the object manager
+
+	// My test interface functiona!! ^_^
+	int _selectedObjectID;
+
+	void createGameObject();
+	void createComponent();
+	void deleteGameObject();
+	void deleteComponent();
 };
 
 

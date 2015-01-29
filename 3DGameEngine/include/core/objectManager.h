@@ -32,6 +32,7 @@ public:
 	static SPtr_GameObject getGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found
 
 	// Public functions, non-static so only called by Engine and SceneManager
+	// At the moment we're saying you can only create and destroy objects in "Editor Mode" - you will need different functions for dynamic object instatiation (for scripts to interface with)
 	unsigned int createGameObject(std::string name); //!< Create object and return its unique ID
 	bool addComponent(unsigned int ObjectID, SPtr_Component component); //!< Find object by id and add component to it if exists. Return true on success, false on fail
 	void destroyAll(); //!< Clear all objects

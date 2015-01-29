@@ -61,7 +61,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	if(!goMenuHandle) return false;
 
 	// Startup editor and engine
-	editor.startup(hInstance, goMenuHandle, engine.getSceneManager());
+	editor.startup(hInstance, goMenuHandle, engine.getObjectManager(), engine.getSceneManager());
 	engine.startup();
 	BringWindowToTop(goMenuHandle);
 	editorCamera.init();

@@ -68,7 +68,6 @@ void Engine::startup()
 	_sceneMngr.initialize(*_objMngr, _behvrSys); // init and pass reference to object manager
 	
 	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
-	_sceneMngr.createFromInitTable();
 	_sceneMngr.initFromInitTable();
 	_rendSys.setLight(glm::vec3(-0.3f, -0.1f, -1), glm::vec3(0.61, 0.63, 0.56)); // once scene loaded (and therefore all shaders) we can set light up
 	
@@ -169,4 +168,9 @@ void Engine::shutDown()
 SceneManager* Engine::getSceneManager()
 {
 	return &_sceneMngr;
+}
+
+ObjectManager* Engine::getObjectManager()
+{
+	return _objMngr;
 }

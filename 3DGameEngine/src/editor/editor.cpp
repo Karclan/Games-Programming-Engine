@@ -1,10 +1,10 @@
 #include "editor\editor.h"
 
-void Editor::startup(HINSTANCE hInstance, HWND goMenuHandle, SceneManager* sceneMngr)
+void Editor::startup(HINSTANCE hInstance, HWND goMenuHandle, ObjectManager* objectMngr, SceneManager* sceneMngr)
 {
 	_hInstance = hInstance;
 	_menuBar.initialize(hInstance, _goMenu, sceneMngr);
-	_goMenu.initialize(hInstance, goMenuHandle);
+	_goMenu.initialize(hInstance, goMenuHandle, objectMngr, sceneMngr->getInitTable());
 	initConsole();
 }
 

@@ -33,9 +33,9 @@ public:
 	
 	void writeDemoXML(); //!< Write a basic scene to XML, mainly used for testing purposes.
 	void loadFromXML(std::string filePath); //!< Load init table from xml file
-	void createFromInitTable(); //!< Create scene from init table
 	void initFromInitTable(); //!< Initialize all components to their starting values
 	void clearInitTable() { _initTable.clear(); }
+	InitTable* getInitTable() { return &_initTable; }
 
 private:
 	ObjectManager* _objMngr;

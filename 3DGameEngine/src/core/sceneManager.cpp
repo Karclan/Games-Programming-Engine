@@ -8,51 +8,7 @@ void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 }
 
 
-// Goes through init table and creates all the game objects from the data (and adds to object manager)
-void SceneManager::createFromInitTable()
-{
-	InitTableIterator go;
-	for(go = _initTable.begin(); go != _initTable.end(); ++go)
-	{
-		unsigned int goID = _objMngr->createGameObject(go->name); // Create GO
-		SPtr_Transform trans(nullptr); // this will store the transform if found (for components that require it)
-		go->components.sort(); // sorts components so transform will be first and cached for later objects that require it
-		
-		// Iterate through every component and add it to the game object
-		for(std::list<CompData>::iterator comp = go->components.begin(); comp != go->components.end(); ++comp)
-		{
-			// Set up dependancies - e.g. anything that needs transform
-			switch (comp->getComp()->getType())
-			{
-				case ComponentType::TRANSFORM:
-					trans = std::static_pointer_cast<Transform>(comp->getComp()); // at the moment this is how we cache transform. There are other ways - a search at the start for instance.
-					break;
 
-				// The below components require a transform. Currently no error checking - it would be nice if trans is currently null then it could create a transfrom and update init table.
-				case ComponentType::CAMERA:
-					std::static_pointer_cast<Camera>(comp->getComp())->setTransform(trans);
-					break;
-				case ComponentType::MODL_REND:
-					std::static_pointer_cast<ModelRenderer>(comp->getComp())->setTransform(trans);
-					break;
-
-				case ComponentType::ROB_REND:
-					std::static_pointer_cast<RobotRenderer>(comp->getComp())->setTransform(trans);
-					break;
-			}
-
-
-			// add the component to game object
-			_objMngr->addComponent(goID, comp->getComp()); 
-		}
-
-		// Iterate through behaviours and add to go
-		for(int i = 0 ; i < go->behaviours.size(); ++i)
-		{
-			_behvrSys->addBehaviour(goID, go->behaviours[i]);
-		}
-	}
-}
 
 void SceneManager::initFromInitTable()
 {
@@ -60,7 +16,7 @@ void SceneManager::initFromInitTable()
 	for(go = _initTable.begin(); go != _initTable.end(); ++go)
 	{
 		// Iterate through every component and init it
-		for(std::list<CompData>::iterator comp = go->components.begin(); comp != go->components.end(); ++comp)
+		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
 		{
 			switch(comp->getComp()->getType())
 			{
@@ -73,9 +29,9 @@ void SceneManager::initFromInitTable()
 		}
 
 		// Iterate through behaviours and init them
-		for(int i = 0 ; i < go->behaviours.size(); ++i)
+		for(int i = 0 ; i < go->second.behaviours.size(); ++i)
 		{
-			go->behaviours[i]->reset();
+			go->second.behaviours[i]->reset();
 		}
 	}
 }
@@ -157,10 +113,7 @@ void SceneManager::initPhysBody(CompData &comp)
 //------------------------------------------------------------------
 
 
-
-
-
-// load from XML into init table
+// load from XML into init table and object manager - it might be better to make obj mngr own init table and handle adding to it
 void SceneManager::loadFromXML(std::string filePath)
 {
 	TiXmlDocument doc(filePath);
@@ -176,15 +129,19 @@ void SceneManager::loadFromXML(std::string filePath)
 	goElmnt = handle.FirstChildElement("GO").ToElement();
 	for(goElmnt; goElmnt != NULL; goElmnt=goElmnt->NextSiblingElement()) // foreach game object element in xml
 	{
-		_initTable.push_back(GOData()); // extend vector by one, creating a new data object
-		GOData* goData = &_initTable.back(); // pointer to go data just created
-
 		// Get Name
+		std::string goName;
 		if(goElmnt->Attribute("name"))
-			goData->name = goElmnt->Attribute("name");
+			goName = goElmnt->Attribute("name");
 		else
-			goData->name = goElmnt->Attribute("gameObject");
+			goName = goElmnt->Attribute("gameObject");
 
+		// Create the game object and add to init table
+		unsigned int goID = _objMngr->createGameObject(goName); // Create GO
+		_initTable.emplace(goID, GOData()); // Add table entry to init table
+		GOData* goData = &_initTable.find(goID)->second; // store a reference to GoData object in table entry
+
+		//### 01)------Add all components and behaviours to GoData-------###
 		// Find components
 		TiXmlElement* compElmnt = goElmnt->FirstChildElement("COMP");
 
@@ -211,7 +168,49 @@ void SceneManager::loadFromXML(std::string filePath)
 				}
 			}
 		}
-	}
+
+
+		//### 02)------Now components are all in init table, sort so in right order and add to game object-------###
+		
+		SPtr_Transform trans(nullptr); // this will store the transform if found (for components that require it)
+		goData->components.sort(); // sorts components so transform will be first and cached for later objects that require it
+		
+		// Iterate through every component and add it to the game object
+		for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
+		{
+			// Set up dependancies - e.g. anything that needs transform
+			switch (comp->getComp()->getType())
+			{
+				case ComponentType::TRANSFORM:
+					trans = std::static_pointer_cast<Transform>(comp->getComp()); // at the moment this is how we cache transform. There are other ways - a search at the start for instance.
+					break;
+
+				// The below components require a transform. Currently no error checking - it would be nice if trans is currently null then it could create a transfrom and update init table.
+				case ComponentType::CAMERA:
+					std::static_pointer_cast<Camera>(comp->getComp())->setTransform(trans);
+					break;
+				case ComponentType::MODL_REND:
+					std::static_pointer_cast<ModelRenderer>(comp->getComp())->setTransform(trans);
+					break;
+
+				case ComponentType::ROB_REND:
+					std::static_pointer_cast<RobotRenderer>(comp->getComp())->setTransform(trans);
+					break;
+			}
+
+
+			// add the component to game object
+			_objMngr->addComponent(goID, comp->getComp()); 
+		}
+
+		// Iterate through behaviours and add to go
+		for(int i = 0 ; i < goData->behaviours.size(); ++i)
+		{
+			_behvrSys->addBehaviour(goID, goData->behaviours[i]);
+		}
+		
+
+	}//end for every game object element
 }
 
 
@@ -258,21 +257,6 @@ void SceneManager::writeDemoXML()
 	// Declaration at start of xml file
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
 	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
-
-	/*
-	// Triangle 01
-	TiXmlElement * triGo01 = xmlAddGo(&doc, "Tri01");
-	xmlAddTransform(triGo01, glm::vec3(-3, 0, 0), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddModelRend(triGo01, PrimitiveShapes::TRIANGLE, "diffuse", "sign.png");
-	xmlAddBehaviour(triGo01, BehaviourTypes::ROT_OBJ);
-
-	// Block 01
-	TiXmlElement * cubeGo01 = xmlAddGo(&doc, "Cube01");
-	xmlAddTransform(cubeGo01, glm::vec3(3, 0, 0), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddModelRend(cubeGo01, PrimitiveShapes::CUBE, "specular", "flag.png");
-	xmlAddBehaviour(cubeGo01, BehaviourTypes::MAN_ROT);
-	*/
-
 
 	//------------------- For platform game demo
 	// Robot

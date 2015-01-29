@@ -47,6 +47,7 @@ public:
 
 	
 	SceneManager* getSceneManager(); //!< The editor requires a reference to this and can use this getter to obtain it
+	ObjectManager* Engine::getObjectManager();
 
 private:
 	// Core Engine

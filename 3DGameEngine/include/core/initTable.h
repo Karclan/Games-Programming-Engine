@@ -3,6 +3,7 @@
 
 #include <list>
 #include <vector>
+#include <map>
 #include <string>
 
 #include "tinyXML\tinystr.h"
@@ -92,8 +93,8 @@ struct GOData
 	values (used a typedef to make it easy to change to full class if more functiaonality needed)
 
 */
-typedef std::vector<GOData> InitTable;
-typedef std::vector<GOData>::iterator InitTableIterator;
+typedef std::unordered_map<unsigned int, GOData> InitTable;
+typedef std::unordered_map<unsigned int, GOData>::iterator InitTableIterator;
 
 
 #endif
