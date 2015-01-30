@@ -3,7 +3,6 @@
 void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 {
 	_objMngr = &objMngr;
-	_behvrSys = &behvrSys;
 	writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
 }
 
@@ -12,8 +11,9 @@ void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 
 void SceneManager::initFromInitTable()
 {
+	InitTable* initTable = _objMngr->getInitTable();
 	InitTableIterator go;
-	for(go = _initTable.begin(); go != _initTable.end(); ++go)
+	for(go = initTable->begin(); go != initTable->end(); ++go)
 	{
 		// Iterate through every component and init it
 		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
@@ -81,17 +81,20 @@ void SceneManager::initModelRend(CompData &comp)
 	}
 	else
 	{
-		// TO DO...
-		// Load model from file once mesh loader implemented
+		if(comp.getStringAttrib(1) != "")
+		{
+			// TO DO...
+			// Load model from file once mesh loader implemented
+		}
 	}
 
 	// Set Material
-	if(comp.getStringAttrib(3) != "") // then it has a texture
+	if(comp.getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
 	{
-		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5));
+		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5)); // get tile values as vec2
 		model->setMaterial(Assets::getShader(comp.getStringAttrib(2)), Assets::getTexture(comp.getStringAttrib(3)), tile); // set material with shader and texture
 	}
-	else
+	else if(comp.getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
 	{
 		model->setMaterial(Assets::getShader(comp.getStringAttrib(2))); // set material with just shader
 	}
@@ -113,7 +116,7 @@ void SceneManager::initPhysBody(CompData &comp)
 //------------------------------------------------------------------
 
 
-// load from XML into init table and object manager - it might be better to make obj mngr own init table and handle adding to it
+// load from XML
 void SceneManager::loadFromXML(std::string filePath)
 {
 	TiXmlDocument doc(filePath);
@@ -122,6 +125,10 @@ void SceneManager::loadFromXML(std::string filePath)
 		std::cout << "Failed to load XML!\n\n\n";
 		return;
 	}
+
+	// Clear out old scene
+	_objMngr->clearInitTable();
+	_objMngr->destroyAll();
 
 	TiXmlHandle handle(&doc);
 	
@@ -138,103 +145,14 @@ void SceneManager::loadFromXML(std::string filePath)
 
 		// Create the game object and add to init table
 		unsigned int goID = _objMngr->createGameObject(goName); // Create GO
-		_initTable.emplace(goID, GOData()); // Add table entry to init table
-		GOData* goData = &_initTable.find(goID)->second; // store a reference to GoData object in table entry
-
-		//### 01)------Add all components and behaviours to GoData-------###
-		// Find components
-		TiXmlElement* compElmnt = goElmnt->FirstChildElement("COMP");
-
-		for(compElmnt; compElmnt != NULL; compElmnt=compElmnt->NextSiblingElement("COMP"))
-		{
-			if(compElmnt->Attribute("type"))
-				goData->components.push_back(newCompData(compElmnt));
-		}
-
-		// Find behaviours
-		TiXmlElement* behvrElmnt = goElmnt->FirstChildElement("BHVR");
-		for(behvrElmnt; behvrElmnt != NULL; behvrElmnt=behvrElmnt->NextSiblingElement("BHVR"))
-		{
-			// Output type
-			if(behvrElmnt->Attribute("type"))
-			{
-				int bType;
-				behvrElmnt->Attribute("type", &bType);
-				switch (bType)
-				{
-					case BehaviourTypes::PLAYER_CON:	 goData->behaviours.push_back(SPtr_Behaviour(new PlayerController()));	break;
-					case BehaviourTypes::ROT_OBJ:		 goData->behaviours.push_back(SPtr_Behaviour(new RotatingObject()));	break;
-					case BehaviourTypes::MAN_ROT:		 goData->behaviours.push_back(SPtr_Behaviour(new ManualRotater()));		break;
-				}
-			}
-		}
-
-
-		//### 02)------Now components are all in init table, sort so in right order and add to game object-------###
-		
-		SPtr_Transform trans(nullptr); // this will store the transform if found (for components that require it)
-		goData->components.sort(); // sorts components so transform will be first and cached for later objects that require it
-		
-		// Iterate through every component and add it to the game object
-		for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
-		{
-			// Set up dependancies - e.g. anything that needs transform
-			switch (comp->getComp()->getType())
-			{
-				case ComponentType::TRANSFORM:
-					trans = std::static_pointer_cast<Transform>(comp->getComp()); // at the moment this is how we cache transform. There are other ways - a search at the start for instance.
-					break;
-
-				// The below components require a transform. Currently no error checking - it would be nice if trans is currently null then it could create a transfrom and update init table.
-				case ComponentType::CAMERA:
-					std::static_pointer_cast<Camera>(comp->getComp())->setTransform(trans);
-					break;
-				case ComponentType::MODL_REND:
-					std::static_pointer_cast<ModelRenderer>(comp->getComp())->setTransform(trans);
-					break;
-
-				case ComponentType::ROB_REND:
-					std::static_pointer_cast<RobotRenderer>(comp->getComp())->setTransform(trans);
-					break;
-			}
-
-
-			// add the component to game object
-			_objMngr->addComponent(goID, comp->getComp()); 
-		}
-
-		// Iterate through behaviours and add to go
-		for(int i = 0 ; i < goData->behaviours.size(); ++i)
-		{
-			_behvrSys->addBehaviour(goID, goData->behaviours[i]);
-		}
-		
-
-	}//end for every game object element
-}
-
-
-
-CompData SceneManager::newCompData(TiXmlElement* compElmnt)
-{
-	SPtr_Component newComponent;
-
-	int cType; // component type
-	compElmnt->Attribute("type", &cType);
-
-	switch (cType)
-	{
-	case ComponentType::TRANSFORM:	newComponent.reset(new Transform());		break;
-	case ComponentType::MODL_REND:	newComponent.reset(new ModelRenderer());	break;
-	case ComponentType::CAMERA:		newComponent.reset(new Camera());			break;
-	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
-	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
+		_objMngr->addComponentsFromXML(goID, goElmnt); // Add all componets via xml
+		_objMngr->addBehavioursFromXML(goID, goElmnt);
 	}
-
-	CompData newData(newComponent);
-	newData.setAttribsFromXML(compElmnt);
-	return newData;
 }
+
+
+
+
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------

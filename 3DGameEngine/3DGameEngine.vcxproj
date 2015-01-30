@@ -94,6 +94,8 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\core\asset.h" />
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\core\objectFinder.h" />
     <ClInclude Include="include\core\initTable.h" />
     <ClInclude Include="include\behaviour\behaviour.h" />
     <ClInclude Include="include\behaviour\behaviourSystem.h" />
@@ -128,6 +130,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\core\objectFinder.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />

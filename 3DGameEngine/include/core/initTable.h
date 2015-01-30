@@ -3,7 +3,7 @@
 
 #include <list>
 #include <vector>
-#include <map>
+#include <unordered_map>
 #include <string>
 
 #include "tinyXML\tinystr.h"
@@ -15,6 +15,7 @@
 #include "core\transform.h"
 #include "rendering\modelRenderer.h"
 #include "rendering\primitiveShapes.h"
+#include "physics\physicsBody.h"
 
 
 /*! \brief Data object for attributes
@@ -40,7 +41,9 @@ public:
 	void addAttribi(int data); //!< Add an int attribute
 	void addAttribf(float data); //!< Add a float attribute
 	void addAttribs(std::string data); //!< Add a string attribute
+	void setAttribsToComponents(); //!< Set all of the attibs to whatever values the actual component currently has
 	void setAttribsFromXML(TiXmlElement* compElmnt); //!< Set all of the attibs based on a tiny xml element
+	
 
 	int getIntAttrib(int index); //!< Get an int attribute by index
 	float getFloatAttrib(int index); //!< Get a float attribute by index

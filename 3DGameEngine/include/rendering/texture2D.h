@@ -7,13 +7,14 @@
 
 #include <SFML\Graphics.hpp>
 
+#include "core\asset.h"
 #include "rendering\shader.h"
 
 
 /*! \brief Wrapper for loading and managing a 2D texture
 
 */
-class Texture2D
+class Texture2D : public Asset
 {
 public:
 	bool loadFromFile(std::string filePath); //!< load from file

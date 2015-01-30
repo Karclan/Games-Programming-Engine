@@ -31,7 +31,7 @@ struct GoData
 class GoMenu
 {
 public:
-	void initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr, InitTable* init);
+	void initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr);
 	LRESULT processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); //!< Call back passed from main through editor to this class
 	void show(); //!<Brings menu to front
 	void update();
@@ -68,7 +68,6 @@ private:
 
 
 
-	InitTable* _initTable; //!< Pointer to the init table
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 
 	// My test interface functiona!! ^_^

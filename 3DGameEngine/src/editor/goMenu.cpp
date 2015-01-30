@@ -1,12 +1,11 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
-void GoMenu::initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr, InitTable* init)
+void GoMenu::initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr)
 {
 	_hInstance = hInstance;
 	_menuHandle = handle;
 	_objectMngr = mngr;
-	_initTable = init;
 
 	ShowWindow(_menuHandle, SW_SHOWNORMAL);
 	UpdateWindow(_menuHandle);

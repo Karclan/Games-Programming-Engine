@@ -60,6 +60,7 @@ Shader* Assets::getShader(std::string name)
 		
 		// Add shader to map and return
 		ins->_shaders.emplace(name, newShader);
+		newShader->setFilePath(name);
 		return newShader;
 	}
 }
@@ -88,6 +89,7 @@ Texture2D* Assets::getTexture(std::string fileName)
 		
 		// Add texture to map and return
 		ins->_textures.emplace(fileName, newTexture);
+		newTexture->setFilePath(fileName);
 		return newTexture;
 	}
 }

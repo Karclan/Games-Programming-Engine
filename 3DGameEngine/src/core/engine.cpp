@@ -64,8 +64,8 @@ void Engine::startup()
 	// OpenGL is good to go!!
 	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
 	_rendSys.setShadersMap(Assets::getShadersMap()); // link map of shaders to rendering system
-	_objMngr = ObjectManager::startUp(_rendSys, _physicsSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
-	_sceneMngr.initialize(*_objMngr, _behvrSys); // init and pass reference to object manager
+	_objMngr.startUp(_rendSys, _physicsSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
+	_sceneMngr.initialize(_objMngr, _behvrSys); // init and pass reference to object manager
 	
 	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 	_sceneMngr.initFromInitTable();
@@ -158,8 +158,8 @@ void Engine::shutDown()
 {
 	_behvrSys.clear();
 	_rendSys.clear();
-	_objMngr->destroyAll();
-	_sceneMngr.clearInitTable();
+	_objMngr.destroyAll();
+	_objMngr.clearInitTable();
 	Assets::unloadAllAssets();
 }
 
@@ -172,5 +172,5 @@ SceneManager* Engine::getSceneManager()
 
 ObjectManager* Engine::getObjectManager()
 {
-	return _objMngr;
+	return &_objMngr;
 }

@@ -22,11 +22,14 @@ public:
 	void setMaterial(Shader* shader);
 	void setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile);
 
+	// Getters for info needed to write to XML / init data
+	Mesh * getMesh() { return _mesh; }
+	Material * getMaterial() { return &_material; }
+
 private:
 	Mesh* _mesh; //!< Pointer to mesh used for rendering
 	Material _material; //!< Material used for this object. Not a pointer as pretty lightweight, just a pointer to a shader and a pointer to a texture
-
-
+	
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

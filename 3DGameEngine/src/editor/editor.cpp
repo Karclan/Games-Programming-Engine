@@ -4,7 +4,7 @@ void Editor::startup(HINSTANCE hInstance, HWND goMenuHandle, ObjectManager* obje
 {
 	_hInstance = hInstance;
 	_menuBar.initialize(hInstance, _goMenu, sceneMngr);
-	_goMenu.initialize(hInstance, goMenuHandle, objectMngr, sceneMngr->getInitTable());
+	_goMenu.initialize(hInstance, goMenuHandle, objectMngr);
 	initConsole();
 }
 

@@ -53,7 +53,7 @@ private:
 	// Core Engine
 	sf::RenderWindow _window;
 	SceneManager _sceneMngr;
-	ObjectManager* _objMngr;
+	ObjectManager _objMngr;
 	Input* _input;
 	
 	// Sub Systems

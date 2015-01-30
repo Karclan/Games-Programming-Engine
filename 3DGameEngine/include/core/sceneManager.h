@@ -34,13 +34,10 @@ public:
 	void writeDemoXML(); //!< Write a basic scene to XML, mainly used for testing purposes.
 	void loadFromXML(std::string filePath); //!< Load init table from xml file
 	void initFromInitTable(); //!< Initialize all components to their starting values
-	void clearInitTable() { _initTable.clear(); }
-	InitTable* getInitTable() { return &_initTable; }
+	
 
 private:
 	ObjectManager* _objMngr;
-	BehaviourSystem* _behvrSys;
-	InitTable _initTable;
 
 	// functions to do with writing different types of info to file
 	TiXmlElement* xmlAddGo(TiXmlDocument* doc, std::string name);
@@ -51,9 +48,6 @@ private:
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
-
-	// Functions that create component data
-	CompData newCompData(TiXmlElement* compElmnt);
 
 
 	// Functions that init a component
