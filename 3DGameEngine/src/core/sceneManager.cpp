@@ -6,9 +6,6 @@ void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 	writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
 }
 
-
-
-
 void SceneManager::initFromInitTable()
 {
 	InitTable* initTable = _objMngr->getInitTable();
@@ -35,10 +32,6 @@ void SceneManager::initFromInitTable()
 		}
 	}
 }
-
-
-
-
 
 void SceneManager::initTransform(CompData &comp)
 {
@@ -179,9 +172,9 @@ void SceneManager::writeDemoXML()
 	//------------------- For platform game demo
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
-	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddPhysBody(robot);
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
+	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddRobot(robot);
 
 	// Camera Object

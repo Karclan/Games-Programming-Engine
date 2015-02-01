@@ -51,11 +51,7 @@ public:
 	int attribCount(); //!< Total Number of attributes
 	SPtr_Component getComp(); //!< Get pointer to actual component object
 
-	// operator overload
-	bool operator <(const CompData& other){ return _priority < other._priority; } //!< For comparison, to determine order (priority)
-
 private:
-	unsigned int _priority; //!< Some components may need to be created first, e.g. transforms which a lot of other components rely on. Lower number = higher priority
 	SPtr_Component _comp; //!< Pointer to the actual component object
 	std::vector<SPtr_AttribData> _attribs; //!< Attributes used as args in initialization. Bools and enums etc are stored as ints
 

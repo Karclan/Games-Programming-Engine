@@ -150,11 +150,45 @@ void ObjectManager::destroyAll()
 }
 
 
+// Setup any dependencies between components (e.g. a model renderer requires a reference to the transform component)
+void ObjectManager::linkComponents(unsigned int goID)
+{
+	// For now using init table as easier to access list of components. This function could be done using _gameObjects or even actually in the GameObject class itself
+	GOData* goData = &_initTable.find(goID)->second;
+
+	// Iterate through every component and add it to the game object
+	for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
+	{
+		// New dependency what not
+		BITMASK dependencies = comp->getComp()->getDepFlags();
+		SPtr_GameObject gameObject = getGameObject(goID);
+
+		// For each bit in the bitmask
+		for(int i = 0; i < BITMASK_SIZE; ++i)
+		{
+			if((dependencies & 1<<i) != 0) // if bit 'i' is set
+			{
+				SPtr_Component desiredComponent = gameObject->getComponent((ComponentType::Type)i);
+				if(!desiredComponent)
+				{
+					addComponent(goID, (ComponentType::Type)i);
+					return; // coz addComponent will link again we can just return after this
+				}
+				else
+				{
+					comp->getComp()->linkDependency(desiredComponent);
+				}
+			}
+		}
+	}
+}
+
+
 
 
 
 //####################################################################################
-//~~~~~~~~~~~~~~ FUNCTIONS TO EDIT WHEN MAKING NEW TYPES OF COMPONENT! ~~~~~~~~~~~~~~~
+//~~~~~~~~~~~~~~ FUNCTION TO EDIT WHEN MAKING NEW TYPES OF COMPONENT! ~~~~~~~~~~~~~~~
 //####################################################################################
 
 
@@ -166,6 +200,8 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	if(!gameObject) return false;
 	SPtr_Component newComponent;
 
+
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add creation of component to this switch statement-!
 	// Here is where you set creation of component based on enum
 	switch(type)
 	{
@@ -181,6 +217,8 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	// Add component to game object
 	if(!gameObject->addComponent(newComponent)) return false; // this will happen if, for example, can only have one of them and object already has one
 
+
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add sending your component to subsystems in this switch statement-!
 	// Add to subsystems based on type
 	switch(newComponent->getType())
 	{
@@ -223,40 +261,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 }
 
 
-// Setup any dependencies between components (e.g. a model renderer requires a reference to the transform component)
-void ObjectManager::linkComponents(unsigned int goID)
-{
-	// For now using init table as easier to access list of components. This function could be done using _gameObjects or even actually in the GameObject class itself
-	GOData* goData = &_initTable.find(goID)->second;
 
-	// Using transform cache and sort method now but will change later to be more general and to auto-add missing components
-	SPtr_Transform trans(nullptr); // this will store the transform if found (for components that require it)
-	goData->components.sort(); // sorts components so transform will be first and cached for later objects that require it
-
-	// Iterate through every component and add it to the game object
-	for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
-	{
-		// Set up dependancies - e.g. anything that needs transform
-		switch (comp->getComp()->getType())
-		{
-			case ComponentType::TRANSFORM:
-				trans = std::static_pointer_cast<Transform>(comp->getComp()); // at the moment this is how we cache transform. There are other ways - a search at the start for instance.
-				break;
-
-			// The below components require a transform. Currently no error checking - it would be nice if trans is currently null then it could create a transfrom and update init table.
-			case ComponentType::CAMERA:
-				std::static_pointer_cast<Camera>(comp->getComp())->setTransform(trans);
-				break;
-			case ComponentType::MODL_REND:
-				std::static_pointer_cast<ModelRenderer>(comp->getComp())->setTransform(trans);
-				break;
-
-			case ComponentType::ROB_REND:
-				std::static_pointer_cast<RobotRenderer>(comp->getComp())->setTransform(trans);
-				break;
-		}
-	}
-}
 
 
 

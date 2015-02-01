@@ -1,6 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+// Includes
 #include <iostream>
 #include <string>
 
@@ -19,6 +20,7 @@
 #include "core\input.h"
 #include "rendering\camera.h"
 #include "rendering\modelRenderer.h"
+
 
 /*! \brief The main game engine
 

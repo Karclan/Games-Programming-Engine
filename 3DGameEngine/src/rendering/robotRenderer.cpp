@@ -2,6 +2,9 @@
 
 RobotRenderer::RobotRenderer()
 {
+	// Set dependency flags so linkDependency is called with requested component
+	setDepFlag(ComponentType::TRANSFORM); // requires a transform
+
 	_material.setShader(Assets::getShader("diffuse"));
 	_material.setTexture(nullptr);
 	generateMesh();
@@ -20,6 +23,16 @@ bool RobotRenderer::isOnePerObject()
 	return true;
 }
 
+void RobotRenderer::linkDependency(SPtr_Component component)
+{
+	// Switch through type and cast then cache the component
+	switch(component->getType())
+	{
+	case ComponentType::TRANSFORM:
+		_transform = std::static_pointer_cast<Transform>(component);
+		break;
+	}
+}
 
 void RobotRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {

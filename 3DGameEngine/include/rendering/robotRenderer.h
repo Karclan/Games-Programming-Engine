@@ -18,6 +18,8 @@ public:
 	ComponentType::Type getType();
 	bool isOnePerObject();
 
+	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
+	
 	void reset();
 	void render(GLfloat* viewMatrix, GLfloat* projMatrix); //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
 	void animate(float t);

@@ -11,7 +11,7 @@ void EditorCamera::init()
 	_transform->setPosition(glm::vec3(0, 3, 10));
 	_transform->setEulerAngles(glm::vec3(-15, 0, 0));
 	_camera = SPtr_Camera(new Camera());
-	_camera->setTransform(_transform);
+	_camera->linkDependency(_transform);
 	_targetDist = 10.0f;
 }
 

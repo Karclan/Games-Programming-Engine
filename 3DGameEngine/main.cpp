@@ -1,6 +1,6 @@
-// 3DGameEngine.cpp : Defines the entry point for the application.
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-#define EDITOR_MODE                     // Define to run in editor mode, remove for "stand alone"
+// Defines
+#define WIN32_LEAN_AND_MEAN					     // Exclude rarely-used stuff from Windows headers
+#define EDITOR_MODE							     // Define to run in editor mode, remove for "stand alone"
 
 #include <windows.h> // main windows header file
 #include <tchar.h> // needed for generic text mappings

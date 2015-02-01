@@ -6,12 +6,6 @@
 CompData::CompData(SPtr_Component comp)
 {
 	_comp = comp;
-
-	switch(comp->getType())
-	{
-	case ComponentType::TRANSFORM: _priority = 0; break; // transform highest priority
-	default: _priority = 100;
-	}
 }
 
 CompData::~CompData()
@@ -124,7 +118,6 @@ void CompData::setAttribsToComponents()
 			Mesh* mesh = modelRend->getMesh();
 			int prim = -1; // if primitive mesh will be something other than -1
 			
-			
 			if(mesh != nullptr)
 			{
 				prim = modelRend->getMesh()->getPrimID();
@@ -145,7 +138,6 @@ void CompData::setAttribsToComponents()
 				addAttribs(""); // attrib 1 is prim ID if prim
 			}
 			
-
 			Material* mat = modelRend->getMaterial();
 			addAttribs(mat->getShaderFilePath()); // attrib 2 is shader
 			addAttribs(mat->getTextureFilePath()); // attrib 3 is texture file path as string

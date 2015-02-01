@@ -38,6 +38,7 @@ public:
 	SPtr_GameObject getGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found	
 	bool addComponentsFromXML(unsigned int objectID, TiXmlElement* goElmnt); //!< Add all components from a tiny xml elemnet (tagged GO)
 	bool addBehavioursFromXML(unsigned int objectID, TiXmlElement* goElmnt); //!< Add all behaviours from a tiny xml elemnet (tagged GO)
+	void linkComponents(unsigned int goID); //!< Ensures all components in an object are linked. If one requires a component that isn't there is creates and adds it
 	void destroyAll(); //!< Clear all objects
 	
 	// Init table management
@@ -58,10 +59,10 @@ private:
 	BehaviourSystem* _behvrSys;
 
 	
-	// These are the funtions you'll want to edit when you make new types of component
+	// This is the funtion you'll want to edit when you make new types of component
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type); //!< Add a component to an object, but don't link its dependencies. Only use when adding lots of compnents and linking immediately after.
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type, TiXmlElement* compElmnt); //!< Overload allows you to pass XML object to read init values from XML
-	void linkComponents(unsigned int goID); //!< Ensures all components in an object are linked. If one requires a component that isn't there is creates and adds it
+	
 };
 
 #endif
