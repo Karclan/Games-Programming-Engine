@@ -3,6 +3,7 @@
 
 #include <windows.h>
 #include <vector>
+#include <antTweakBar\AntTweakBar.h>
 
 #include "..\resource.h"
 
@@ -38,7 +39,7 @@ public:
 	void setGamePlaying(bool playing); 
 
 	
-
+	void initTweakBars();
 
 
 
@@ -66,7 +67,8 @@ private:
 
 	std::wstring stringToWString(std::string string); //!< Function for converting from std::string to wstring
 
-
+	TwBar* _myBar; //!< My first ant tweak bar!
+	float _myFloat; // My first ant tweak bar variable
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 
@@ -77,6 +79,9 @@ private:
 	void createComponent();
 	void deleteGameObject();
 	void deleteComponent();
+
+	bool mousePressed; //temp var for testing
+	int _fixedTime;
 };
 
 

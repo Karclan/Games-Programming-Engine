@@ -36,6 +36,7 @@ void RobotRenderer::linkDependency(SPtr_Component component)
 
 void RobotRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {
+	// Bind array
 	glBindVertexArray(_mesh.getVao());
 
 	// Draw different parts of vertex array object with different matrices

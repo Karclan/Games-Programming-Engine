@@ -134,17 +134,19 @@ void Engine::render()
 }
 
 
-void Engine::render(Camera* camera)
+void Engine::renderEditorMode(Camera* camera)
 {
 	// Render
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
-	_rendSys.render(camera); // render everything to back buffer
-	_window.display(); // switch buffers
+	
 	//_window.pushGLStates();
-	//_window.resetGLStates(); // think you have to reset GL states before drawing any SFML
-	//draw sfml
-	//_window.resetGLStates();
+	_rendSys.render(camera); // render everything to back buffer
 	//_window.popGLStates();
+
+
+	TwDraw();  // draw the tweak bar(s)
+	_window.display(); // switch buffers
+
 }
 
 
@@ -173,4 +175,14 @@ SceneManager* Engine::getSceneManager()
 ObjectManager* Engine::getObjectManager()
 {
 	return &_objMngr;
+}
+
+int Engine::getWidth()
+{
+	return _window.getSize().x;
+}
+
+int Engine::getHeight() 
+{ 
+	return _window.getSize().y;
 }

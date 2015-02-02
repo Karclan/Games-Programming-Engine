@@ -11,6 +11,17 @@ void GoMenu::initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr)
 	UpdateWindow(_menuHandle);
 }
 
+
+
+void GoMenu::initTweakBars()
+{
+	_myBar = TwNewBar("Babby's First");
+	TwAddVarRW(_myBar, "NameOfMyVariable", TW_TYPE_FLOAT, &_myFloat, NULL);
+	mousePressed = false;
+	_fixedTime = 0;
+}
+
+
 LRESULT GoMenu::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	int wmId, wmEvent;
@@ -30,6 +41,8 @@ LRESULT GoMenu::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 		case ID_NEWGO_BUTTON:
 			newGameObject();
 			break;
+
+		
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
