@@ -1,14 +1,6 @@
 #include "behaviour\rotatingObject.h"
 #include <iostream>
 
-RotatingObject::RotatingObject()
-{
-}
-
-RotatingObject::~RotatingObject()
-{
-}
-
 void RotatingObject::initialize()
 {
 	// Add event listeners
@@ -30,14 +22,6 @@ void RotatingObject::fixedUpdate(float t)
 
 
 // MANUAL ROTATER
-
-ManualRotater::ManualRotater()
-{
-}
-
-ManualRotater::~ManualRotater()
-{
-}
 
 void ManualRotater::initialize()
 {

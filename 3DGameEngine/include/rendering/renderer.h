@@ -19,7 +19,6 @@ public:
 	ComponentType::Type getType() = 0;
 	bool isOnePerObject() = 0;
 
-	void setTransform(SPtr_Transform transform); //!< Requires transform
 	virtual void render(GLfloat* viewMatrix, GLfloat* projMatrix) = 0; //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
 	virtual void animate(float t){} //!< Empty rather than pure virtual as not every model requires implementation. Unanimatables just need blank functions for polymorphism.
 

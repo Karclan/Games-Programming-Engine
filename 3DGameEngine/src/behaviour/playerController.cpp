@@ -1,14 +1,6 @@
 #include "behaviour\playerController.h"
 #include <iostream>
 
-PlayerController::PlayerController()
-{
-}
-
-PlayerController::~PlayerController()
-{
-}
-
 void PlayerController::initialize()
 {
 	addEventListener(EventType::UPDATE);
@@ -19,7 +11,7 @@ void PlayerController::initialize()
 	_transform = std::static_pointer_cast<Transform>(comp); // cache transform so it can be manipulated in update
 
 	// Get Camera's Transform
-	SPtr_GameObject camera = ObjectManager::getGameObject("Camera");
+	SPtr_GameObject camera = findGameObject("Camera");
 	if(camera == nullptr) std::cout << "\n\n*********************\nCouldn't find camera!\n\n";
 	else
 	{
@@ -69,7 +61,6 @@ void PlayerController::update(float t)
 	// Animation
 	if(axisV == 0) _robotAnim->stop();
 	else _robotAnim->play();
-
 }
 
 void PlayerController::fixedUpdate(float t)

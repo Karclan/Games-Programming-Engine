@@ -1,6 +1,6 @@
-// 3DGameEngine.cpp : Defines the entry point for the application.
-#define WIN32_LEAN_AND_MEAN             // Exclude rarely-used stuff from Windows headers
-#define EDITOR_MODE                     // Define to run in editor mode, remove for "stand alone"
+// Defines
+#define WIN32_LEAN_AND_MEAN					     // Exclude rarely-used stuff from Windows headers
+#define EDITOR_MODE							     // Define to run in editor mode, remove for "stand alone"
 
 #include <windows.h> // main windows header file
 #include <tchar.h> // needed for generic text mappings
@@ -9,10 +9,12 @@
 #include <SFML\Graphics.hpp>
 #include <SFML\OpenGL.hpp>
 
+
 #include "resource.h"
 #include "core\engine.h"
 
 #ifdef EDITOR_MODE //--------------------DECLARATIONS FOR EDITOR ONLY-----------------
+#include <antTweakBar\AntTweakBar.h>
 #include "editor\editor.h"
 #include "editor\editorCamera.h"
 #define MAX_LOADSTRING 100
@@ -33,7 +35,6 @@ LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 // Main engine - needed in both editor and game mode
 sf::Clock updateClock; // clock for update times
 Engine engine;
-
 
 // MAIN!!!------------
 // _tWinMain is the entry point for the program
@@ -61,8 +62,12 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	if(!goMenuHandle) return false;
 
 	// Startup editor and engine
-	editor.startup(hInstance, goMenuHandle, engine.getSceneManager());
+	editor.startup(hInstance, goMenuHandle, engine.getObjectManager(), engine.getSceneManager());
 	engine.startup();
+	TwInit(TW_OPENGL, NULL); // startup ant tweak bar
+	TwWindowSize(engine.getWidth(), engine.getHeight());
+	editor.initTweakBars();
+
 	BringWindowToTop(goMenuHandle);
 	editorCamera.init();
 
@@ -92,6 +97,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 				DispatchMessage(&msg);
 			}
 			if(msg.message == WM_QUIT) quit = true;
+
+			
+
 		}  
 		else
 #endif //---------------------END EDITOR MODULE MSG HANDLING---------//
@@ -99,8 +107,15 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 		// SFML Event polling
 		{
 			sf::Event e;
+
 			while (mainWindow->pollEvent(e))
 			{
+
+#ifdef EDITOR_MODE //---------------ONLY PROCESS ANT TWEAK EVENTS IN EDITOR MODE
+				if(editor.processTweakBarEvents(&e))
+					continue;
+#endif
+
 				// Quit
 				if (e.type == sf::Event::Closed) quit = true;
 
@@ -136,7 +151,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 			else
 			{
 				editorCamera.update(deltaTime);
-				engine.render(editorCamera.getCamera());
+				engine.renderEditorMode(editorCamera.getCamera());
 			}
 
 			engine.resetInput();
@@ -147,6 +162,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	engine.shutDown();
 
 #ifdef EDITOR_MODE
+	TwTerminate(); // shut down ant tweak bar
 	DestroyWindow(windowHandle);
 	DestroyWindow(goMenuHandle);
 

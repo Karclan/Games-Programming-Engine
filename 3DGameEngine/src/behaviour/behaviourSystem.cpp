@@ -10,16 +10,9 @@ BehaviourSystem::~BehaviourSystem()
 }
 
 
-bool BehaviourSystem::addBehaviour(unsigned int ObjectID, SPtr_Behaviour behaviour)
+bool BehaviourSystem::addBehaviour(SPtr_Behaviour behaviour)
 {
 	if(!behaviour) return false;
-
-	// Find object by ID
-	SPtr_GameObject obj = ObjectManager::getGameObject(ObjectID);
-	if(!obj) return false; // Failed! Return false
-	
-	// Link object to script and add to behaviour system
-	behaviour->linkToObject(obj);
 	_initializeList.push_back(behaviour);
 	return true;
 }

@@ -3,64 +3,17 @@
 void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 {
 	_objMngr = &objMngr;
-	_behvrSys = &behvrSys;
 	writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
-}
-
-
-// Goes through init table and creates all the game objects from the data (and adds to object manager)
-void SceneManager::createFromInitTable()
-{
-	InitTableIterator go;
-	for(go = _initTable.begin(); go != _initTable.end(); ++go)
-	{
-		unsigned int goID = _objMngr->createGameObject(go->name); // Create GO
-		SPtr_Transform trans(nullptr); // this will store the transform if found (for components that require it)
-		go->components.sort(); // sorts components so transform will be first and cached for later objects that require it
-		
-		// Iterate through every component and add it to the game object
-		for(std::list<CompData>::iterator comp = go->components.begin(); comp != go->components.end(); ++comp)
-		{
-			// Set up dependancies - e.g. anything that needs transform
-			switch (comp->getComp()->getType())
-			{
-				case ComponentType::TRANSFORM:
-					trans = std::static_pointer_cast<Transform>(comp->getComp()); // at the moment this is how we cache transform. There are other ways - a search at the start for instance.
-					break;
-
-				// The below components require a transform. Currently no error checking - it would be nice if trans is currently null then it could create a transfrom and update init table.
-				case ComponentType::CAMERA:
-					std::static_pointer_cast<Camera>(comp->getComp())->setTransform(trans);
-					break;
-				case ComponentType::MODL_REND:
-					std::static_pointer_cast<ModelRenderer>(comp->getComp())->setTransform(trans);
-					break;
-
-				case ComponentType::ROB_REND:
-					std::static_pointer_cast<RobotRenderer>(comp->getComp())->setTransform(trans);
-					break;
-			}
-
-
-			// add the component to game object
-			_objMngr->addComponent(goID, comp->getComp()); 
-		}
-
-		// Iterate through behaviours and add to go
-		for(int i = 0 ; i < go->behaviours.size(); ++i)
-		{
-			_behvrSys->addBehaviour(goID, go->behaviours[i]);
-		}
-	}
 }
 
 void SceneManager::initFromInitTable()
 {
+	InitTable* initTable = _objMngr->getInitTable();
 	InitTableIterator go;
-	for(go = _initTable.begin(); go != _initTable.end(); ++go)
+	for(go = initTable->begin(); go != initTable->end(); ++go)
 	{
 		// Iterate through every component and init it
-		for(std::list<CompData>::iterator comp = go->components.begin(); comp != go->components.end(); ++comp)
+		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
 		{
 			switch(comp->getComp()->getType())
 			{
@@ -73,16 +26,12 @@ void SceneManager::initFromInitTable()
 		}
 
 		// Iterate through behaviours and init them
-		for(int i = 0 ; i < go->behaviours.size(); ++i)
+		for(int i = 0 ; i < go->second.behaviours.size(); ++i)
 		{
-			go->behaviours[i]->reset();
+			go->second.behaviours[i]->reset();
 		}
 	}
 }
-
-
-
-
 
 void SceneManager::initTransform(CompData &comp)
 {
@@ -125,17 +74,20 @@ void SceneManager::initModelRend(CompData &comp)
 	}
 	else
 	{
-		// TO DO...
-		// Load model from file once mesh loader implemented
+		if(comp.getStringAttrib(1) != "")
+		{
+			// TO DO...
+			// Load model from file once mesh loader implemented
+		}
 	}
 
 	// Set Material
-	if(comp.getStringAttrib(3) != "") // then it has a texture
+	if(comp.getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
 	{
-		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5));
+		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5)); // get tile values as vec2
 		model->setMaterial(Assets::getShader(comp.getStringAttrib(2)), Assets::getTexture(comp.getStringAttrib(3)), tile); // set material with shader and texture
 	}
-	else
+	else if(comp.getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
 	{
 		model->setMaterial(Assets::getShader(comp.getStringAttrib(2))); // set material with just shader
 	}
@@ -157,10 +109,7 @@ void SceneManager::initPhysBody(CompData &comp)
 //------------------------------------------------------------------
 
 
-
-
-
-// load from XML into init table
+// load from XML
 void SceneManager::loadFromXML(std::string filePath)
 {
 	TiXmlDocument doc(filePath);
@@ -170,138 +119,32 @@ void SceneManager::loadFromXML(std::string filePath)
 		return;
 	}
 
+	// Clear out old scene
+	_objMngr->clearInitTable();
+	_objMngr->destroyAll();
+
 	TiXmlHandle handle(&doc);
 	
 	TiXmlElement* goElmnt;
 	goElmnt = handle.FirstChildElement("GO").ToElement();
 	for(goElmnt; goElmnt != NULL; goElmnt=goElmnt->NextSiblingElement()) // foreach game object element in xml
 	{
-		_initTable.push_back(GOData()); // extend vector by one, creating a new data object
-		GOData* goData = &_initTable.back(); // pointer to go data just created
-
 		// Get Name
+		std::string goName;
 		if(goElmnt->Attribute("name"))
-			goData->name = goElmnt->Attribute("name");
+			goName = goElmnt->Attribute("name");
 		else
-			goData->name = goElmnt->Attribute("gameObject");
+			goName = goElmnt->Attribute("gameObject");
 
-		// Find components
-		TiXmlElement* compElmnt = goElmnt->FirstChildElement("COMP");
-
-		for(compElmnt; compElmnt != NULL; compElmnt=compElmnt->NextSiblingElement("COMP"))
-		{
-			// Check type and add component based on it
-			if(compElmnt->Attribute("type"))
-			{
-				int cType; // component type
-				compElmnt->Attribute("type", &cType);
-				switch (cType)
-				{
-					case ComponentType::TRANSFORM:	 goData->components.push_back(newTransformData(compElmnt));		break;
-					case ComponentType::CAMERA:		 goData->components.push_back(newCameraData(compElmnt));		break;
-					case ComponentType::MODL_REND:	 goData->components.push_back(newModelRendData(compElmnt));		break;
-					case ComponentType::ROB_REND:	 goData->components.push_back(newRobotData(compElmnt));			break;
-					case ComponentType::PHY_BODY:	 goData->components.push_back(newPhysBodyData(compElmnt));		break;
-				}
-			}
-		}
-
-		// Find behaviours
-		TiXmlElement* behvrElmnt = goElmnt->FirstChildElement("BHVR");
-		for(behvrElmnt; behvrElmnt != NULL; behvrElmnt=behvrElmnt->NextSiblingElement("BHVR"))
-		{
-			// Output type
-			if(behvrElmnt->Attribute("type"))
-			{
-				int bType;
-				behvrElmnt->Attribute("type", &bType);
-				switch (bType)
-				{
-					case BehaviourTypes::PLAYER_CON:	 goData->behaviours.push_back(SPtr_Behaviour(new PlayerController()));	break;
-					case BehaviourTypes::ROT_OBJ:		 goData->behaviours.push_back(SPtr_Behaviour(new RotatingObject()));	break;
-					case BehaviourTypes::MAN_ROT:		 goData->behaviours.push_back(SPtr_Behaviour(new ManualRotater()));		break;
-				}
-			}
-		}
+		// Create the game object and add to init table
+		unsigned int goID = _objMngr->createGameObject(goName); // Create GO
+		_objMngr->addComponentsFromXML(goID, goElmnt); // Add all componets via xml
+		_objMngr->addBehavioursFromXML(goID, goElmnt);
 	}
 }
 
 
-CompData SceneManager::newTransformData(TiXmlElement* compElmnt)
-{
-	CompData transformData(SPtr_Transform(new Transform())); // new component and data
-	double params[9]; // 9 float params for translate, rotation and scale (in that order)
-	
-	// Read in attributes to array in correct order
-	compElmnt->Attribute("tx", &params[0]);
-	compElmnt->Attribute("ty", &params[1]);
-	compElmnt->Attribute("tz", &params[2]);
-	compElmnt->Attribute("rx", &params[3]);
-	compElmnt->Attribute("ry", &params[4]);
-	compElmnt->Attribute("rz", &params[5]);
-	compElmnt->Attribute("sx", &params[6]);
-	compElmnt->Attribute("sy", &params[7]);
-	compElmnt->Attribute("sz", &params[8]);
 
-	for(int i = 0; i < 9; ++i)
-	{
-		transformData.addAttribf(params[i]);
-	}
-
-	return transformData;
-}
-
-CompData SceneManager::newCameraData(TiXmlElement* compElmnt)
-{
-	CompData cameraData(SPtr_Camera(new Camera())); // new component and data
-	return cameraData;
-}
-
-CompData SceneManager::newModelRendData(TiXmlElement* compElmnt)
-{
-	CompData modelData(SPtr_ModelRend(new ModelRenderer())); // new component and data
-
-	// Figure out if the mesh is primitive or if it needs to be loaded in
-	if(!compElmnt->Attribute("primitive")) return modelData; // return if can't find attrib, something went wrong!
-	int isPrimitive;
-	compElmnt->Attribute("primitive", &isPrimitive);
-	modelData.addAttribi(isPrimitive); // attrib 0 is primitive as int
-
-	if((bool)isPrimitive)
-	{
-		int shape;
-		compElmnt->Attribute("mesh", &shape);
-		modelData.addAttribi(shape); // if primitive, attrib 1 is shape as int
-	}
-	else
-	{
-		modelData.addAttribs(compElmnt->Attribute("mesh")); // if not primitive, attrib 1 is mesh file path as string
-	}
-
-	// Get Material Info
-	modelData.addAttribs(compElmnt->Attribute("shader")); // attrib 2 is shader
-	modelData.addAttribs(compElmnt->Attribute("texture")); // attrib 3 is texture file path as string
-	
-	double tileU, tileV;
-	compElmnt->Attribute("tileU", &tileU);
-	compElmnt->Attribute("tileV", &tileV);
-	modelData.addAttribf(tileU); // attrib 4 is tile u
-	modelData.addAttribf(tileV); // attrib 5 is tile v
-	
-	return modelData;
-}
-
-CompData SceneManager::newRobotData(TiXmlElement* compElmnt)
-{
-	CompData robotData(std::shared_ptr<RobotRenderer>(new RobotRenderer())); // new component and data
-	return robotData;
-}
-
-CompData SceneManager::newPhysBodyData(TiXmlElement* compElmnt)
-{
-	CompData physData(SPtr_PhysBody(new PhysicsBody())); // new component and data
-	return physData;
-}
 
 
 //------------------------------------------------------------------
@@ -326,27 +169,12 @@ void SceneManager::writeDemoXML()
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
 	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
 
-	/*
-	// Triangle 01
-	TiXmlElement * triGo01 = xmlAddGo(&doc, "Tri01");
-	xmlAddTransform(triGo01, glm::vec3(-3, 0, 0), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddModelRend(triGo01, PrimitiveShapes::TRIANGLE, "diffuse", "sign.png");
-	xmlAddBehaviour(triGo01, BehaviourTypes::ROT_OBJ);
-
-	// Block 01
-	TiXmlElement * cubeGo01 = xmlAddGo(&doc, "Cube01");
-	xmlAddTransform(cubeGo01, glm::vec3(3, 0, 0), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddModelRend(cubeGo01, PrimitiveShapes::CUBE, "specular", "flag.png");
-	xmlAddBehaviour(cubeGo01, BehaviourTypes::MAN_ROT);
-	*/
-
-
 	//------------------- For platform game demo
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
-	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddPhysBody(robot);
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
+	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddRobot(robot);
 
 	// Camera Object

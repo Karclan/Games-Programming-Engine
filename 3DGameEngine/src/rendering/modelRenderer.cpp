@@ -2,6 +2,9 @@
 
 ModelRenderer::ModelRenderer()
 {
+	// Set dependency flags so linkDependency is called with requested component
+	setDepFlag(ComponentType::TRANSFORM); // requires a transform
+
 	_mesh = nullptr;
 }
 
@@ -21,6 +24,17 @@ ComponentType::Type ModelRenderer::getType()
 bool ModelRenderer::isOnePerObject()
 {
 	return false;
+}
+
+void ModelRenderer::linkDependency(SPtr_Component component)
+{
+	// Switch through type and cast then cache the component
+	switch(component->getType())
+	{
+	case ComponentType::TRANSFORM:
+		_transform = std::static_pointer_cast<Transform>(component);
+		break;
+	}
 }
 
 void ModelRenderer::setMesh(Mesh* mesh)

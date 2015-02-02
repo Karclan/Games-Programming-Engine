@@ -1,24 +1,12 @@
 #include "rendering\camera.h"
+#include <iostream>
 
-/*
-Camera::Camera(SPtr_Transform transform)
-{
-	_transform = transform;
-
-	// A temporary test VP matrix
-	// ----View Matrix
-	//glm::vec3 cameraPos(0, 0, 5); // where the camera is
-	//glm::vec3 targetPos(0, 0, 0); // where the camera is looking at
-	//_viewMatrix = glm::lookAt(cameraPos, targetPos, glm::vec3(0, 1, 0));
-
-	// ----Perspective Matrix
-	_projectionMatrix = glm::perspective(glm::radians(35.0f), 1.0f, 0.1f, 100.0f); //fov, aspect, zNear, ZFar
-
-}
-*/
 
 Camera::Camera()
 {
+	// Set dependency flags so linkDependency is called with requested component
+	setDepFlag(ComponentType::TRANSFORM); // requires a transform
+
 	_transform = nullptr;
 	_projectionMatrix = glm::perspective(glm::radians(35.0f), 1280.0f / 720.0f, 0.1f, 100.0f); //fov, aspect, zNear, ZFar
 }
@@ -31,6 +19,17 @@ ComponentType::Type Camera::getType()
 bool Camera::isOnePerObject()
 {
 	return false;
+}
+
+void Camera::linkDependency(SPtr_Component component)
+{
+	// Switch through type and cast then cache the component
+	switch(component->getType())
+	{
+	case ComponentType::TRANSFORM:
+		_transform = std::static_pointer_cast<Transform>(component);
+		break;
+	}
 }
 
 void Camera::preRender()

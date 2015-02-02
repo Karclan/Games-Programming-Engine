@@ -6,7 +6,7 @@ Material::Material()
 	glEnable(GL_TEXTURE_2D);
 	_shader = nullptr;
 	_texture = nullptr;
-	_uvFraction = glm::vec2(1, 1);
+	_uvTile = glm::vec2(1, 1);
 }
 
 
@@ -51,5 +51,24 @@ void Material::setTexture(Texture2D* texture)
 
 void Material::setUVTiling(glm::vec2 tile)
 {
-	_uvFraction = tile;
+	_uvTile = tile;
+}
+
+
+
+std::string Material::getShaderFilePath()
+{
+	if(_shader == nullptr) return "";
+	return _shader->getFilePath();
+}
+
+std::string Material::getTextureFilePath()
+{
+	if(_texture == nullptr) return "";
+	return _texture->getFilePath();
+}
+
+glm::vec2 Material::getUvTile()
+{
+	return _uvTile;
 }

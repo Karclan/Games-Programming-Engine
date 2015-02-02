@@ -26,7 +26,7 @@ public:
 	void setTransform(SPtr_Transform transform) { _transform = transform; }//!< Requires transform
 
 
-	void test() { std::cout << "PHysics me!\n"; }
+	void test() { /*std::cout << "PHysics me!\n";*/ }
 	
 
 private:

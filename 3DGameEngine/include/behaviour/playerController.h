@@ -16,8 +16,8 @@
 class PlayerController : public Behaviour
 {
 public:
-	PlayerController();
-	~PlayerController();
+	PlayerController(){};
+	~PlayerController(){};
 
 protected:
 	void initialize();
