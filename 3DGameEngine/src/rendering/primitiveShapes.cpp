@@ -8,6 +8,12 @@ void PrimitiveShapes::loadShapes()
 {
 	loadTriangle();
 	loadCube();
+
+	for(int i = 0; i < NUM_SHAPES; ++i)
+	{
+		_meshes[i].setFilePath("");
+		_meshes[i].setPrimID(i);
+	}
 }
 
 Mesh* PrimitiveShapes::getMesh(Type type)

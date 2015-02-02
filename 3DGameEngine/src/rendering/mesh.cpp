@@ -1,6 +1,9 @@
 #include "rendering\mesh.h"
 
-Mesh::Mesh(){}
+Mesh::Mesh()
+{
+	_primID = -1;
+}
 Mesh::~Mesh(){}
 
 

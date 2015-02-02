@@ -14,8 +14,8 @@
 class RotatingObject : public Behaviour
 {
 public:
-	RotatingObject();
-	~RotatingObject();
+	RotatingObject(){};
+	~RotatingObject(){};
 
 protected:
 	void initialize();
@@ -36,8 +36,8 @@ private:
 class ManualRotater : public Behaviour
 {
 public:
-	ManualRotater();
-	~ManualRotater();
+	ManualRotater(){};
+	~ManualRotater(){};
 
 protected:
 	void initialize();

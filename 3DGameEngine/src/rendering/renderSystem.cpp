@@ -29,6 +29,9 @@ void RenderSystem::render(Camera* camera)
 		// this is where you should check for if it's state is inactive or destroyed
 		camera->render(*_models[i]);
 	}
+
+	// Unbind vertex array - ensure nothing is left bound to opengl
+	glBindVertexArray(0);
 }
 
 

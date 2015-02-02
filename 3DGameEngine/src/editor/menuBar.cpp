@@ -7,6 +7,7 @@ void MenuBar::initialize(HINSTANCE hInstance, GoMenu &goMenu, SceneManager* scen
 	_sceneMngr = sceneMngr;
 	_goMenu = &goMenu;
 	_gamePlaying = false;
+	_goMenu->setGamePlaying(_gamePlaying);
 }
 
 LRESULT MenuBar::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -82,14 +83,13 @@ INT_PTR CALLBACK MenuBar::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 // Control menu
 void MenuBar::playStop()
 {
+	// If game is playing then we called stop, so set everthing back to its initial state
 	if(_gamePlaying)
 	{
-		std::cout << "STOPPED!\n";
 		_sceneMngr->initFromInitTable();
 	}
-	else
-	{
-		std::cout << "PLAY NOW!\n";
-	}
+
+	// Toggle Game Playing
 	_gamePlaying = !_gamePlaying;
+	_goMenu->setGamePlaying(_gamePlaying);
 }

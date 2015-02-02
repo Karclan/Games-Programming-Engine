@@ -1,14 +1,26 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
-void GoMenu::initialize(HINSTANCE hInstance, HWND handle)
+void GoMenu::initialize(HINSTANCE hInstance, HWND handle, ObjectManager* mngr)
 {
 	_hInstance = hInstance;
 	_menuHandle = handle;
+	_objectMngr = mngr;
 
 	ShowWindow(_menuHandle, SW_SHOWNORMAL);
 	UpdateWindow(_menuHandle);
 }
+
+
+
+void GoMenu::initTweakBars()
+{
+	_myBar = TwNewBar("Babby's First");
+	TwAddVarRW(_myBar, "NameOfMyVariable", TW_TYPE_FLOAT, &_myFloat, NULL);
+	mousePressed = false;
+	_fixedTime = 0;
+}
+
 
 LRESULT GoMenu::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -29,6 +41,8 @@ LRESULT GoMenu::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam
 		case ID_NEWGO_BUTTON:
 			newGameObject();
 			break;
+
+		
 		default:
 			return DefWindowProc(hWnd, message, wParam, lParam);
 		}
@@ -53,9 +67,16 @@ void GoMenu::show()
 
 void GoMenu::update()
 {
+	if(Input::getKeyPressed(sf::Keyboard::C)) createGameObject();
+	if(Input::getKeyPressed(sf::Keyboard::D)) deleteGameObject();
+	if(Input::getKeyPressed(sf::Keyboard::A)) createComponent();
+	if(Input::getKeyPressed(sf::Keyboard::U)) deleteComponent();
 }
 
-
+void GoMenu::setGamePlaying(bool playing)
+{
+	_gamePlaying = playing;
+}
 
 
 
@@ -136,4 +157,28 @@ std::wstring GoMenu::stringToWString(std::string string)
 	//std::wstring ws(L"wstring");
 	//std::string s;
 	//s.assign(ws.begin(), ws.end());
+}
+
+
+
+
+void GoMenu::createGameObject()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+	_selectedObjectID = _objectMngr->createGameObject("Bobby McCormack");
+}
+void GoMenu::createComponent()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+	std::cout << "New Component Created!\n";
+}
+void GoMenu::deleteGameObject()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+	std::cout << "Deleted Game Object!\n";
+}
+void GoMenu::deleteComponent()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+	std::cout << "Deleted Component!\n";
 }

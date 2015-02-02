@@ -1,8 +1,8 @@
 #ifndef BEHAVIOUR_H
 #define BEHAVIOUR_H
 
-//#include "core\gameObject.h"
-#include "core\objectManager.h"
+#include "core\gameObject.h"
+#include "core\objectFinder.h"
 
 //! Event types
 enum EventType
@@ -36,6 +36,7 @@ public:
 	~Behaviour();
 
 	void linkToObject(SPtr_GameObject gameObject);
+	void linkToObjectFinder(ObjectFinder &finder);
 	void reset(); //!< Recalls initialize without having to go through the inital process of adding to init list etc
 	
 protected:
@@ -46,8 +47,14 @@ protected:
 	SPtr_Component getComponent(ComponentType::Type type);
 	int getGameObjectId();
 
+	// Interface functions allow access to object finder
+	SPtr_GameObject findGameObject(unsigned int objectID); //!< Returns an object by unique ID number
+	SPtr_GameObject findGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found
+
+
 private:
 	SPtr_GameObject _gameObject;
+	ObjectFinder* _objFinder;
 	bool _initialized;
 	std::vector<EventType> _requestedEvents;
 

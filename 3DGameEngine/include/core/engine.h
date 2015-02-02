@@ -1,6 +1,7 @@
 #ifndef ENGINE_H
 #define ENGINE_H
 
+// Includes
 #include <iostream>
 #include <string>
 
@@ -9,6 +10,7 @@
 #include <SFML\OpenGL.hpp>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <antTweakBar\AntTweakBar.h>
 
 #include "core\assets.h"
 #include "core\sceneManager.h"
@@ -19,6 +21,7 @@
 #include "core\input.h"
 #include "rendering\camera.h"
 #include "rendering\modelRenderer.h"
+
 
 /*! \brief The main game engine
 
@@ -41,18 +44,23 @@ public:
 	void updateInput(float t); //!< Calls update in the Input singleton class. Call straight after event poll
 	void update(float t); //!< Update all sub systems here!
 	void render();
-	void render(Camera* camera); //!< Render through a given camera. Only used by editor to render through special editor camera
+	void renderEditorMode(Camera* camera); //!< Render through a given camera. Only used by editor to render through special editor camera
 	void resetInput(); //!< Must be called at end of frame to reset key states
 	void shutDown(); //!< Anything that needs to be stopped elegantly or in certain order, put here
 
 	
 	SceneManager* getSceneManager(); //!< The editor requires a reference to this and can use this getter to obtain it
+	ObjectManager* Engine::getObjectManager();
+
+	// Getters, for main to get properties for Editor for example
+	int getWidth();
+	int getHeight();
 
 private:
 	// Core Engine
 	sf::RenderWindow _window;
 	SceneManager _sceneMngr;
-	ObjectManager* _objMngr;
+	ObjectManager _objMngr;
 	Input* _input;
 	
 	// Sub Systems

@@ -8,11 +8,12 @@
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
 
+#include "core\asset.h"
 
 /*! \brief Wrapper to load and manage a shader program
 
 */
-class Shader
+class Shader : public Asset
 {
 public:
 	bool loadFromFile(std::string shaderName); //!< load from file. Must have a .vert and .frag file called shaderName in the shaders folder

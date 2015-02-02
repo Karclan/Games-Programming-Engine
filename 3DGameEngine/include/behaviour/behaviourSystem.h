@@ -5,7 +5,7 @@
 #include <memory>
 #include <algorithm>
 
-#include "core\objectManager.h"
+//#include "core\objectManager.h"
 #include "behaviour\behaviour.h"
 #include "behaviour\playerController.h" // this is temporary, as no real scripts yet it needs to know EVERY hard-coded behaviour
 #include "behaviour\rotatingObject.h" // this is temporary, as no real scripts yet it needs to know EVERY hard-coded behaviour
@@ -31,7 +31,7 @@ public:
 	BehaviourSystem();
 	~BehaviourSystem();
 
-	bool addBehaviour(unsigned int ObjectID, SPtr_Behaviour behaviour);
+	bool addBehaviour(SPtr_Behaviour behaviour);
 	void clear();
 	void update(float t); //!< Call update on all in update list and intialize on new behaviours. t = deltat time
 	void fixedUpdate(float t); // t = fixed delta time
