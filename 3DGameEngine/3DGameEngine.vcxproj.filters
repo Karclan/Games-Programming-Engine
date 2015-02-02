@@ -163,9 +163,6 @@
     <ClInclude Include="include\tinyXML\tinyxml.h">
       <Filter>Header Files\tinyXML</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\physics\physicsBody.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
@@ -177,6 +174,18 @@
     </ClInclude>
     <ClInclude Include="include\rendering\FTInterface.h">
       <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\asset.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\globals.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\core\objectFinder.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -287,6 +296,9 @@
     </ClCompile>
     <ClCompile Include="src\rendering\FTInterface.cpp">
       <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\core\objectFinder.cpp">
+      <Filter>Source Files\core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
