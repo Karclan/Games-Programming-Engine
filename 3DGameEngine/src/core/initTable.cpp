@@ -13,6 +13,22 @@ CompData::~CompData()
 	_attribs.clear();
 }
 
+// Get pointers to attribs so they can be linked with editor
+int* CompData::attribPtrInt(int index)
+{
+	return &std::static_pointer_cast<AttribDatai>(_attribs[index])->data;
+}
+
+float* CompData::attribPtrFloat(int index)
+{
+	return &std::static_pointer_cast<AttribDataf>(_attribs[index])->data;
+}
+
+std::string* CompData::attribPtrString(int index)
+{
+	return &std::static_pointer_cast<AttribDatas>(_attribs[index])->data;
+}
+
 
 void CompData::addAttribi(int data)
 {
@@ -82,6 +98,11 @@ float CompData::to_float(TiXmlElement* elmnt, std::string attribute)
 //####################################################################################
 //~~~~~~~~~~~~~~ FUNCTIONS TO EDIT WHEN MAKING NEW TYPES OF COMPONENT! ~~~~~~~~~~~~~~~
 //####################################################################################
+// Basically we need to know 3 things
+// 1) - How to set attribs in this data class to the corresponding variable values in actual component
+// 2) - How to convert attribs from XML to corresponding attribs in this data class
+// 3) - How to initialize the component, in other words how to set the variables in actual component to the values stored in this data class
+// These 3 things are defined in switch statements (with a case for each component type) in the 3 functions below
 
 // The default attribs - please ensure correct number and type for this component's initialization
 void CompData::setAttribsToComponents()
@@ -228,5 +249,93 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 
+	}
+}
+
+
+// Initialize component's values to values stored in comp data
+void CompData::initializeComponent()
+{
+	switch(_comp->getType())
+	{
+	case ComponentType::TRANSFORM:
+		{
+			float tx = getFloatAttrib(0);
+			float ty = getFloatAttrib(1);
+			float tz = getFloatAttrib(2);
+
+			float rx = getFloatAttrib(3);
+			float ry = getFloatAttrib(4);
+			float rz = getFloatAttrib(5);
+
+			float sx = getFloatAttrib(6);
+			float sy = getFloatAttrib(7);
+			float sz = getFloatAttrib(8);
+
+			SPtr_Transform transform = std::static_pointer_cast<Transform>(getComp());
+			transform->setPosition(glm::vec3(tx, ty, tz));
+			transform->setEulerAngles(glm::vec3(rx, ry, rz));
+			transform->setScale(glm::vec3(sx, sy, sz));
+		}
+		break;
+
+	case ComponentType::MODL_REND:
+		{
+			SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(getComp());
+			
+			// Figure out if the mesh is primitive or if it needs to be loaded in
+			bool isPrimitive = (bool)getIntAttrib(0);
+
+			if(isPrimitive)
+			{
+				int shape = getIntAttrib(1);
+				model->setMesh(Assets::getPrimitiveMesh((PrimitiveShapes::Type)shape)); // set mesh
+			}
+			else
+			{
+				if(getStringAttrib(1) != "")
+				{
+					// TO DO...
+					// Load model from file once mesh loader implemented
+				}
+			}
+
+			// Set Material
+			if(getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
+			{
+				glm::vec2 tile = glm::vec2(getFloatAttrib(4), getFloatAttrib(5)); // get tile values as vec2
+				model->setMaterial(Assets::getShader(getStringAttrib(2)), Assets::getTexture(getStringAttrib(3)), tile); // set material with shader and texture
+			}
+			else if(getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
+			{
+				model->setMaterial(Assets::getShader(getStringAttrib(2))); // set material with just shader
+			}
+		}
+		break;
+
+	case ComponentType::CAMERA:
+		{
+		
+		}
+		break;
+
+	case ComponentType::ROB_REND:
+		{
+			std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(getComp());
+			robot->reset();
+		}
+		break;
+
+	case ComponentType::PHY_BODY:
+		{
+			
+		}
+		break;
+
+	case ComponentType::LIGHT:
+		{
+			
+		}
+		break;
 	}
 }
