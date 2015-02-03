@@ -49,6 +49,12 @@
     <Filter Include="Source Files\tinyXML">
       <UniqueIdentifier>{e2dac66a-ee65-4191-a1ca-3af39d42be6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\animation">
+      <UniqueIdentifier>{ac56fdf0-0c18-41dd-a6ab-e15a44395923}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\animation">
+      <UniqueIdentifier>{6e25816e-17ec-4f62-b627-c89313622655}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -163,6 +169,15 @@
     <ClInclude Include="include\physics\physicsSystem.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
+    <ClInclude Include="include\animation\md5Model.h">
+      <Filter>Header Files\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="include\animation\md5Anim.h">
+      <Filter>Header Files\animation</Filter>
+    </ClInclude>
+    <ClInclude Include="include\animation\Helpers.h">
+      <Filter>Header Files\animation</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -266,6 +281,15 @@
     </ClCompile>
     <ClCompile Include="src\physics\physicsSystem.cpp">
       <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\animation\md5Model.cpp">
+      <Filter>Source Files\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\animation\md5Anim.cpp">
+      <Filter>Source Files\animation</Filter>
+    </ClCompile>
+    <ClCompile Include="src\animation\Helpers.cpp">
+      <Filter>Source Files\animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

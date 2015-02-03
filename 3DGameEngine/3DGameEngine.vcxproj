@@ -59,7 +59,7 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;$(SolutionDir)lib/boost/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -79,7 +79,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/sfml;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;$(SolutionDir)lib/boost/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;sfml-audio.lib;sfml-graphics.lib;sfml-system.lib;sfml-main.lib;sfml-window.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -94,6 +94,9 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\animation\Helpers.h" />
+    <ClInclude Include="include\animation\md5Anim.h" />
+    <ClInclude Include="include\animation\md5Model.h" />
     <ClInclude Include="include\core\initTable.h" />
     <ClInclude Include="include\behaviour\behaviour.h" />
     <ClInclude Include="include\behaviour\behaviourSystem.h" />
@@ -129,6 +132,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\animation\Helpers.cpp" />
+    <ClCompile Include="src\animation\md5Anim.cpp" />
+    <ClCompile Include="src\animation\md5Model.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
     <ClCompile Include="src\behaviour\behaviourSystem.cpp" />
