@@ -28,7 +28,8 @@ public:
 
 	// Commands
 	void newGameObject(); // create new game object
-
+	void refreshGameObjects(); //!< Refreshes all game objects to match init data
+	
 	
 
 
@@ -50,7 +51,6 @@ private:
 	int _selectedObjectID;
 
 	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
-	void setParamsFromTweakBar(); //!< Update params to mathc those in tweak bar
 
 	void createGameObject();
 	void createComponent();

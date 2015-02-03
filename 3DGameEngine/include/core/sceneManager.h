@@ -49,14 +49,6 @@ private:
 	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
 
-
-	// Functions that init a component
-	void initTransform(CompData &comp);
-	void initCamera(CompData &comp);
-	void initModelRend(CompData &comp);
-	void initRobot(CompData &comp);
-	void initPhysBody(CompData &comp);
-
 };
 
 #endif

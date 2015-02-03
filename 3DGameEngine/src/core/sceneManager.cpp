@@ -15,14 +15,7 @@ void SceneManager::initFromInitTable()
 		// Iterate through every component and init it
 		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
 		{
-			switch(comp->getComp()->getType())
-			{
-				case ComponentType::TRANSFORM:	initTransform(*comp);	break;
-				case ComponentType::CAMERA:		initCamera(*comp);		break;
-				case ComponentType::MODL_REND:	initModelRend(*comp);	break;
-				case ComponentType::ROB_REND:	initRobot(*comp);		break;
-				case ComponentType::PHY_BODY:	initPhysBody(*comp);	break;
-			}
+			comp->initializeComponent();
 		}
 
 		// Iterate through behaviours and init them
@@ -31,77 +24,6 @@ void SceneManager::initFromInitTable()
 			go->second.behaviours[i]->reset();
 		}
 	}
-}
-
-void SceneManager::initTransform(CompData &comp)
-{
-	float tx = comp.getFloatAttrib(0);
-	float ty = comp.getFloatAttrib(1);
-	float tz = comp.getFloatAttrib(2);
-
-	float rx = comp.getFloatAttrib(3);
-	float ry = comp.getFloatAttrib(4);
-	float rz = comp.getFloatAttrib(5);
-
-	float sx = comp.getFloatAttrib(6);
-	float sy = comp.getFloatAttrib(7);
-	float sz = comp.getFloatAttrib(8);
-
-	SPtr_Transform transform = std::static_pointer_cast<Transform>(comp.getComp());
-	transform->setPosition(glm::vec3(tx, ty, tz));
-	transform->setEulerAngles(glm::vec3(rx, ry, rz));
-	transform->setScale(glm::vec3(sx, sy, sz));
-}
-
-
-void SceneManager::initCamera(CompData &comp)
-{
-
-}
-
-
-void SceneManager::initModelRend(CompData &comp)
-{
-	SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(comp.getComp());
-			
-	// Figure out if the mesh is primitive or if it needs to be loaded in
-	bool isPrimitive = (bool)comp.getIntAttrib(0);
-
-	if(isPrimitive)
-	{
-		int shape = comp.getIntAttrib(1);
-		model->setMesh(Assets::getPrimitiveMesh((PrimitiveShapes::Type)shape)); // set mesh
-	}
-	else
-	{
-		if(comp.getStringAttrib(1) != "")
-		{
-			// TO DO...
-			// Load model from file once mesh loader implemented
-		}
-	}
-
-	// Set Material
-	if(comp.getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
-	{
-		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5)); // get tile values as vec2
-		model->setMaterial(Assets::getShader(comp.getStringAttrib(2)), Assets::getTexture(comp.getStringAttrib(3)), tile); // set material with shader and texture
-	}
-	else if(comp.getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
-	{
-		model->setMaterial(Assets::getShader(comp.getStringAttrib(2))); // set material with just shader
-	}
-}
-
-
-void SceneManager::initRobot(CompData &comp)
-{
-	std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(comp.getComp());
-	robot->reset();
-}
-
-void SceneManager::initPhysBody(CompData &comp)
-{
 }
 
 

@@ -99,6 +99,7 @@ int Editor::processTweakBarEvents(sf::Event* event)
             break;
         case sf::Keyboard::Return:
             key = TW_KEY_RETURN;
+			_goMenu.refreshGameObjects(); // refresh objects in go menu whenever you press return
             break;
         case sf::Keyboard::Tab:
             key = TW_KEY_TAB;
@@ -164,6 +165,7 @@ int Editor::processTweakBarEvents(sf::Event* event)
         s_KMod = 0;
         break;
     case sf::Event::TextEntered:
+		_goMenu.refreshGameObjects(); // refresh objects in go menu whenever you enter some text into a param and press return
         if (!s_PreventTextHandling && event->text.unicode != 0 && (event->text.unicode & 0xFF00) == 0)
         {
             if ((event->text.unicode & 0xFF) < 32) // CTRL+letter
@@ -178,6 +180,7 @@ int Editor::processTweakBarEvents(sf::Event* event)
         break;
     case sf::Event::MouseButtonPressed:
     case sf::Event::MouseButtonReleased:
+		_goMenu.refreshGameObjects(); // refresh objects in go menu whenever you press or release mouse
         mouseAction = (event->type==sf::Event::MouseButtonPressed) ? TW_MOUSE_PRESSED : TW_MOUSE_RELEASED;
         switch (event->mouseButton.button) 
         {
