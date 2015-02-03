@@ -70,7 +70,7 @@ private:
 */
 struct GOData
 {
-	std::string name;
+	//std::string name;
 	std::list<CompData> components;
 	std::vector<SPtr_Behaviour> behaviours;
 };

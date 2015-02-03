@@ -31,10 +31,12 @@ public:
 	void setGamePlaying(bool playing); 
 
 	
-	void initTweakBars();
+	void createTweakBar();
 
 	// Commands
 	void newGameObject(); // create new game object
+
+	
 
 
 private:
@@ -42,20 +44,27 @@ private:
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
 	
 	TwBar* _myBar; //!< My first ant tweak bar!
-	float _myFloat; // My first ant tweak bar variable
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
+	
+	// Vars in Menu
+	std::string _objName; //! Name of GO currently selected
+
+
 
 	// My test interface functiona!! ^_^
 	int _selectedObjectID;
+
+	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
+	void setParamsFromTweakBar(); //!< Update params to mathc those in tweak bar
 
 	void createGameObject();
 	void createComponent();
 	void deleteGameObject();
 	void deleteComponent();
 
-	bool mousePressed; //temp var for testing
-	int _fixedTime;
+	void nextGo();
+	void previousGo();
 };
 
 
