@@ -1,10 +1,10 @@
 #include "editor\editor.h"
 
-void Editor::startup(HINSTANCE hInstance, HWND goMenuHandle, ObjectManager* objectMngr, SceneManager* sceneMngr)
+void Editor::startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr)
 {
 	_hInstance = hInstance;
 	_menuBar.initialize(hInstance, _goMenu, sceneMngr);
-	_goMenu.initialize(hInstance, goMenuHandle, objectMngr);
+	_goMenu.initialize(objectMngr);
 	initConsole();
 
 	_processTwEvents = false; // must be false at start as it crashes for some reason (something to do with premature handling of mouse move event)
@@ -27,10 +27,6 @@ LRESULT Editor::mainMenuProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPar
 }
 
 
-LRESULT Editor::gameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	return _goMenu.processMsg(hWnd, message, wParam, lParam);
-}
 
 
 

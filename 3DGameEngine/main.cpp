@@ -29,7 +29,6 @@ EditorCamera editorCamera; // special camera for rendering in "edit" mode
 // Forward declarations of functions such as callbacks
 void regWindowsClasses(HINSTANCE hInstance);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM); // main meu commands
-LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // game object menu commands
 #endif              //--------------------END EDITOR DECLARATIONS-----------------
 
 // Main engine - needed in both editor and game mode
@@ -56,19 +55,14 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	HWND windowHandle = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
 	if (!windowHandle) return FALSE;	
 	sf::RenderWindow* mainWindow = engine.startEditorMode(windowHandle); // Link window with SFML RenderWindow in engine
-	
-	// Create inspector window
-	HWND goMenuHandle = CreateWindow(szGOMenuClass, L"Game Objects", WS_OVERLAPPEDWINDOW, CW_USEDEFAULT, CW_USEDEFAULT, 200, 720, NULL, NULL, hInstance, NULL);
-	if(!goMenuHandle) return false;
 
 	// Startup editor and engine
-	editor.startup(hInstance, goMenuHandle, engine.getObjectManager(), engine.getSceneManager());
+	editor.startup(hInstance, engine.getObjectManager(), engine.getSceneManager());
 	engine.startup();
 	TwInit(TW_OPENGL, NULL); // startup ant tweak bar
 	TwWindowSize(engine.getWidth(), engine.getHeight());
 	editor.initTweakBars();
 
-	BringWindowToTop(goMenuHandle);
 	editorCamera.init();
 
 	// To capture and dispatch windows message
@@ -164,7 +158,6 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 #ifdef EDITOR_MODE
 	TwTerminate(); // shut down ant tweak bar
 	DestroyWindow(windowHandle);
-	DestroyWindow(goMenuHandle);
 
 	// Don't forget to unregister the window class
 	UnregisterClass(szWindowClass, hInstance);
@@ -206,23 +199,6 @@ void regWindowsClasses(HINSTANCE hInstance)
 	windowClass.lpszClassName = szWindowClass;
 	windowClass.hIconSm = LoadIcon(windowClass.hInstance, MAKEINTRESOURCE(IDI_SMALL));
 	RegisterClassEx(&windowClass);
-
-	//--------------------------------------------------
-	// Define a class for game object menu
-	
-	WNDCLASS goMenuClass;
-	goMenuClass.style         = CS_NOCLOSE;
-	goMenuClass.lpfnWndProc   = GameObjectProc;
-	goMenuClass.cbClsExtra    = 0;
-	goMenuClass.cbWndExtra    = 0;
-	goMenuClass.hInstance     = hInstance;
-	goMenuClass.hIcon         = NULL;
-	goMenuClass.hCursor       = 0;
-	goMenuClass.hbrBackground = reinterpret_cast<HBRUSH>(COLOR_BACKGROUND);
-	goMenuClass.lpszMenuName  = NULL;
-	goMenuClass.lpszClassName = szGOMenuClass;
-	RegisterClass(&goMenuClass);
-	
 	//--------------------------------------------------------------
 }
 
@@ -230,11 +206,6 @@ void regWindowsClasses(HINSTANCE hInstance)
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	return editor.mainMenuProc(hWnd, message, wParam, lParam);
-}
-
-LRESULT CALLBACK GameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	return editor.gameObjectProc(hWnd, message, wParam, lParam);
 }
 
 

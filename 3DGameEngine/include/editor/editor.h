@@ -23,7 +23,7 @@
 class Editor
 {
 public:
-	void startup(HINSTANCE hInstance, HWND goMenuHandle, ObjectManager* objectMngr, SceneManager* sceneMngr);
+	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr);
 	void update();
 	bool gamePlaying(); //!< Get if the game is currently in play mode rather than edit mode
 
@@ -32,8 +32,6 @@ public:
 
 	// Call backs, called from main. Can't be static as need info about editor (could make editor singleton to circumvent this but works fine for now)
 	LRESULT mainMenuProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	LRESULT gameObjectProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-
 	
 
 private:
