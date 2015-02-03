@@ -12,13 +12,6 @@
 #include "core\objectManager.h"
 
 
-const int ID_STATIC = 1000; // id of the static text thing created in func
-
-const int ID_NEWGO_BUTTON = 1001;
-const int ID_GO_LIST = 1002; //!< The id of the list with all current GOs in it
-const int ID_GO_NAME = 1003;
-
-
 /*! \brief Game Object Menu
 
 	This menu handles all creation and editing of game objects
@@ -48,6 +41,7 @@ private:
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 	
 	// Vars in Menu
+	InitTableIterator _currentGodataIter;
 	std::string _objName; //! Name of GO currently selected
 
 
