@@ -1,4 +1,26 @@
 <?xml version="1.0" ?>
+
+<!--
+Component number
+0 = Transform
+1 = Model Renderer
+2 = Camera
+3 = Robot Renderer 
+4 = Physics Body
+5 = Light
+6 = 
+7 = 
+8 = 
+9 = 
+10 = 
+11 = 
+12 = 
+13 = 
+14 = 
+15 = 
+16 = 
+-->
+
 <GO name="Robot">
     <COMP type="4" />
     <BHVR type="0" />
@@ -11,7 +33,7 @@
 </GO>
 <GO name="Floor">
     <COMP type="0" tx="0" ty="-0.005" tz="0" rx="0" ry="0" rz="0" sx="40" sy="0.01" sz="40" />
-    <COMP type="1" primitive="1" mesh="1" shader="advanced" texture="grass.png" tileU="20" tileV="20" />
+    <COMP type="1" primitive="1" mesh="1" shader="advanced" texture="" tileU="20" tileV="20" />
 </GO>
 <GO name="Wall">
     <COMP type="0" tx="0" ty="0.3" tz="-2" rx="0" ry="0" rz="0" sx="10" sy="0.5" sz="0.5" />
@@ -51,4 +73,8 @@
     <COMP type="0" tx="-6.5" ty="2" tz="6.525" rx="0" ry="0" rz="0" sx="2" sy="2" sz="0.05" />
     <COMP type="1" primitive="1" mesh="1" shader="advanced" texture="sails.png" tileU="1" tileV="1" />
     <BHVR type="1" />
+</GO>
+<GO name="TestLight">
+  <COMP type="0" tx="0.0" ty="0.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
+  <COMP type="5" lightType="2" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>

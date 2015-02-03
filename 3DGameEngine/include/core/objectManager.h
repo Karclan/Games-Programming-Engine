@@ -13,6 +13,7 @@
 #include "behaviour\behaviour.h"
 #include "behaviour\behaviourSystem.h"
 #include "rendering\renderSystem.h"
+#include "rendering\light.h"
 #include "physics\physicsSystem.h"
 
 

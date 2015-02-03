@@ -15,6 +15,7 @@
 #include "core\transform.h"
 #include "rendering\modelRenderer.h"
 #include "rendering\primitiveShapes.h"
+#include "rendering\light.h"
 #include "physics\physicsBody.h"
 
 

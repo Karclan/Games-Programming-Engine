@@ -3,7 +3,7 @@
 void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
 {
 	_objMngr = &objMngr;
-	writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
+	//writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
 }
 
 void SceneManager::initFromInitTable()
@@ -22,6 +22,7 @@ void SceneManager::initFromInitTable()
 				case ComponentType::MODL_REND:	initModelRend(*comp);	break;
 				case ComponentType::ROB_REND:	initRobot(*comp);		break;
 				case ComponentType::PHY_BODY:	initPhysBody(*comp);	break;
+				case ComponentType::LIGHT:		initLight(*comp);		break;
 			}
 		}
 
@@ -104,6 +105,33 @@ void SceneManager::initPhysBody(CompData &comp)
 {
 }
 
+void SceneManager::initLight(CompData &comp)
+{
+	LightType::Type lightType = (LightType::Type)comp.getIntAttrib(0);
+
+	float aR = comp.getFloatAttrib(1);
+	float aG = comp.getFloatAttrib(2);
+	float aB = comp.getFloatAttrib(3);
+
+	float dR = comp.getFloatAttrib(4);
+	float dG = comp.getFloatAttrib(5);
+	float dB = comp.getFloatAttrib(6);
+
+	float sR = comp.getFloatAttrib(7);
+	float sG = comp.getFloatAttrib(8);
+	float sB = comp.getFloatAttrib(9);
+
+	float constant = comp.getFloatAttrib(10);
+	float linear = comp.getFloatAttrib(11);
+	float quadratic = comp.getFloatAttrib(12);
+
+	SPtr_Light light = std::static_pointer_cast<Light>(comp.getComp());
+	light->setLightType(lightType);
+	light->setAmbient(glm::vec3(aR,aG,aB));
+	light->setDiffuse(glm::vec3(dR,dG,dB));
+	light->setSpecular(glm::vec3(sR,sG,sB));
+	light->setAtteunation(glm::vec3(constant,linear,quadratic));
+}
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------

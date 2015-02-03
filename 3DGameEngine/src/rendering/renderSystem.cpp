@@ -7,6 +7,7 @@ void RenderSystem::render()
 }
 
 
+
 void RenderSystem::render(Camera* camera)
 {
 	// Here are some things to think about in the future, for optimization.
@@ -32,6 +33,7 @@ void RenderSystem::render(Camera* camera)
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);
 	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
+
 }
 
 
@@ -73,14 +75,40 @@ void RenderSystem::clear()
 	_animations.clear();
 }
 
-void RenderSystem::setAmbLight(glm::vec3 intensity)
+void RenderSystem::activateLights()
 {
 	std::map<std::string, Shader*>::const_iterator it;
 	it = _loadedShaders->begin();
 	glm::vec3 direction(-0.3f, -0.1f, -1);
 	for(it; it != _loadedShaders->end(); ++it)
 	{
-		it->second->setDirectionalLight(&direction.x, &intensity.x);//want to change this function
+		it->second->setDirectionalLight();//want to change this function
+
+		
+		/*for(int i = 0; i < _pointLights.size(); ++i)
+		{
+				it->second->setUniform("numOfPointLights",1);
+				it->second->setUniform("pointLight["+std::to_string(i)+"].position", _pointLights[i]->getTransform()->getPosition());
+				it->second->setUniform("pointLight["+std::to_string(i)+"].amb",		 _pointLights[i]->getAmbient());
+				it->second->setUniform("pointLight["+std::to_string(i)+"].diff",	 _pointLights[i]->getDiffuse());
+				it->second->setUniform("pointLight["+std::to_string(i)+"].spec",	 _pointLights[i]->getSpecular());
+				it->second->setUniform("pointLight["+std::to_string(i)+"].constant", _pointLights[i]->getAtteunation().x);
+				it->second->setUniform("pointLight["+std::to_string(i)+"].linear",	 _pointLights[i]->getAtteunation().y);
+				it->second->setUniform("pointLight["+std::to_string(i)+"].quadratic",_pointLights[i]->getAtteunation().z);		
+		}
+		for(int i=0; i<_spotLights.size();++i)
+		{
+				it->second->setUniform("spotLight["+std::to_string(i)+"].position",  _pointLights[i]->getTransform()->getPosition());
+				it->second->setUniform("spotLight["+std::to_string(i)+"].spotDir",   _pointLights[i]->getTransform()->getForward());
+				it->second->setUniform("spotLight["+std::to_string(i)+"].spotOutCut",glm::cos(glm::radians(28.f)));
+				it->second->setUniform("spotLight["+std::to_string(i)+"].spotInCut", glm::cos(glm::radians(14.f)));
+				it->second->setUniform("spotLight["+std::to_string(i)+"].amb",		 _pointLights[i]->getAmbient());
+				it->second->setUniform("spotLight["+std::to_string(i)+"].diff",		 _pointLights[i]->getDiffuse());
+				it->second->setUniform("spotLight["+std::to_string(i)+"].spec",		 _pointLights[i]->getSpecular());
+				it->second->setUniform("spotLight["+std::to_string(i)+"].constant",  _pointLights[i]->getAtteunation().x);
+				it->second->setUniform("spotLight["+std::to_string(i)+"].linear",    _pointLights[i]->getAtteunation().y);
+				it->second->setUniform("spotLight["+std::to_string(i)+"].quadratic", _pointLights[i]->getAtteunation().z);
+		}*/
 
 		glm::vec3 lightPos = glm::vec3(1.f,5.f,0.f);
 		it->second->setUniform("numOfSpotLights",2);
@@ -123,6 +151,18 @@ void RenderSystem::setAmbLight(glm::vec3 intensity)
 		it->second->setUniform("material.spec",glm::vec3(1.f,1.f,1.f));
 		it->second->setUniform("material.specEx",64.f);
 	}
+}
 
-
+void RenderSystem::addLight(SPtr_Light light)
+{
+	
+	switch(light->getLightType())
+	{
+	case LightType::POINT:
+		_pointLights.push_back(light);
+		break;
+	case LightType::SPOT:
+		_spotLights.push_back(light);
+		break;
+	}
 }

@@ -23,13 +23,13 @@ struct SpotLight
  float spotOutCut;		//Spotlight outer cuttoff angle
  float spotInCut;		//Spotlight inner cuttoff angle
 
- float constant;       	//Distance Attenuation amounts
- float linear;       	//Distance Attenuation amounts
- float quadratic;       //Distance Attenuation amounts
-
  vec3 amb;             	//ambient  light intensity
  vec3 diff;            	//Diffuse  light intensity
  vec3 spec;			   	//Specular light intensity
+
+ float constant;       	//Distance Attenuation amounts
+ float linear;       	//Distance Attenuation amounts
+ float quadratic;       //Distance Attenuation amounts
 };
 
 struct PointLight
@@ -131,26 +131,27 @@ void main()
 	vec3 norm = normalize(NormalMatrix * vertNorm);
     vec3 viewDir = normalize(viewPos - vertPos);
 
-	vec4 result= vec4(0.0,0.0,0.0,0.0);
-	
-	if(hasTex == 0) // false
-	{
-		result= vec4(0.0,0.0,0.0,1.0);
-	}
-	else
-	{
-		result =  texture(tex, texCoord * uvTile);
-	}
+	vec3 light= vec3(0.0,0.0,0.0);
 	
 	for(int i=0;i<numOfPointLights;++i)
 	{
-	result += vec4(CalPointLight(pointLight[i], norm, viewDir, vertPos),0.0);
+		light += CalPointLight(pointLight[i], norm, viewDir, vertPos);
 	}
 	for(int i=0;i<numOfSpotLights;i++)
 	{
-		result += vec4(CalSpotLight(spotLight[i] ,norm, viewDir,vertPos),0.0);
+		light += CalSpotLight(spotLight[i] ,norm, viewDir,vertPos);
 	}
-	
-	
-	FragColour=result,1.0;
+
+	vec4 result=vec4(light,1.0);
+
+	if(hasTex ==1) // false
+	{
+		result *= texture(tex, texCoord * uvTile);
+	}
+	else
+	{
+		result.w = 1;
+	}
+
+	FragColour=result;
 }

@@ -26,7 +26,7 @@ public:
 	void setTexTile(glm::vec2 tile); //!< Set tex tiles
 	GLuint getTexLocation() { return _texHandle; }
 	
-	void setDirectionalLight(GLfloat*, GLfloat*); //!< Setup lighting like this for now as I'm unsure exactly how lighting will be handled - need a few more shader lectures!
+	void setDirectionalLight(); //!< Setup lighting like this for now as I'm unsure exactly how lighting will be handled - need a few more shader lectures!
 
 	void setUniform(const char *name, float x, float y, float z);
     void setUniform(const char *name, const glm::vec2	&v);
@@ -34,11 +34,23 @@ public:
     void setUniform(const char *name, const glm::vec4	&v);
     void setUniform(const char *name, const glm::mat4	&m);
     void setUniform(const char *name, const glm::mat3	&m);
-    void setUniform(const char *name, float  val );
-    void setUniform(const char *name, int	 val );
-    void setUniform(const char *name, bool	 val );
-    void setUniform(const char *name, GLuint val );
-	void setUniform(const char *name, GLfloat *mat);
+    void setUniform(const char *name, float				val );
+    void setUniform(const char *name, int				val );
+    void setUniform(const char *name, bool				val );
+    void setUniform(const char *name, GLuint			val );
+	void setUniform(const char *name, GLfloat		*mat);
+
+	/*void setUniform(const std::string &name, float x, float y, float z);
+    void setUniform(const std::string &name, const glm::vec2	&v);
+    void setUniform(const std::string &name, const glm::vec3	&v);
+    void setUniform(const std::string &name, const glm::vec4	&v);
+    void setUniform(const std::string &name, const glm::mat4	&m);
+    void setUniform(const std::string &name, const glm::mat3	&m);
+    void setUniform(const std::string &name, float		 val );
+    void setUniform(const std::string &name, int		 val );
+    void setUniform(const std::string &name, bool		 val );
+    void setUniform(const std::string &name, GLuint		 val );
+	void setUniform(const std::string &name, GLfloat *mat);*/
 	
 
 private:

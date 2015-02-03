@@ -56,7 +56,7 @@ private:
 	void initModelRend(CompData &comp);
 	void initRobot(CompData &comp);
 	void initPhysBody(CompData &comp);
-
+	void initLight(CompData &comp);
 };
 
 #endif

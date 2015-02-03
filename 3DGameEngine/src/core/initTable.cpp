@@ -146,10 +146,6 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
-
-
-
-
 	case ComponentType::ROB_REND:
 		break;
 
@@ -159,7 +155,24 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
-
+	case ComponentType::LIGHT:
+		{
+			SPtr_Light light = std::static_pointer_cast<Light>(_comp);
+			addAttribi(light->getLightType());
+			addAttribf(light->getAmbient().x); // Ambient x
+			addAttribf(light->getAmbient().y); // Ambient y
+			addAttribf(light->getAmbient().z); // Ambient z
+			addAttribf(light->getDiffuse().x); // Diffuse x
+			addAttribf(light->getDiffuse().y); // Diffuse y
+			addAttribf(light->getDiffuse().z); // Diffuse z
+			addAttribf(light->getSpecular().x); // Specular x
+			addAttribf(light->getSpecular().y); // Specular y
+			addAttribf(light->getSpecular().z); // Specular z
+			addAttribf(light->getAtteunation().x); // Constant
+			addAttribf(light->getAtteunation().y); // Linear
+			addAttribf(light->getAtteunation().z); // Quadratic
+			break;
+		}
 	}
 }
 //----------
@@ -226,7 +239,21 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::PHY_BODY:
 		break;
-
+	case ComponentType::LIGHT:
+			addAttribi(to_int(compElmnt,"lightType")); //Type
+			addAttribf(to_float(compElmnt,"aR")); // Ambient x
+			addAttribf(to_float(compElmnt,"aG")); // Ambient y
+			addAttribf(to_float(compElmnt,"aB")); // Ambient z
+			addAttribf(to_float(compElmnt,"dR")); // Diffuse x
+			addAttribf(to_float(compElmnt,"dG")); // Diffuse y
+			addAttribf(to_float(compElmnt,"dB")); // Diffuse z
+			addAttribf(to_float(compElmnt,"sR")); // Specular x
+			addAttribf(to_float(compElmnt,"sG")); // Specular y
+			addAttribf(to_float(compElmnt,"sB")); // Specular z
+			addAttribf(to_float(compElmnt,"constant")); // Constant
+			addAttribf(to_float(compElmnt,"linear")); // Linear
+			addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
+		break;
 
 	}
 }

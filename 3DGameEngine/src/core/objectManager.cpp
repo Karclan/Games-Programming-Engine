@@ -210,6 +210,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::CAMERA:		newComponent.reset(new Camera());			break;
 	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
+	case ComponentType::LIGHT:		newComponent.reset(new Light());			break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -239,6 +240,9 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 		_physicsSys->addPhysBody(std::static_pointer_cast<PhysicsBody>(newComponent));
 		break;
 
+	case ComponentType::LIGHT:
+		_rendSys->addLight(std::static_pointer_cast<Light>(newComponent));
+		break;
 	}
 
 	// Add to init table

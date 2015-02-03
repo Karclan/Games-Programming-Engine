@@ -71,8 +71,8 @@ void Engine::startup()
 	_sceneMngr.initFromInitTable();
 
 
-	//remove this call. change it to the ambient
-	_rendSys.setAmbLight(glm::vec3(0.61, 0.63, 0.56)); // once scene loaded (and therefore all shaders) we can set light up
+	
+	_rendSys.activateLights(); // once scene loaded (and therefore all shaders) we can set light up
 	FTInterface::init();
 
 	// Setup input

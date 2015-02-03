@@ -58,17 +58,9 @@ void Shader::setTexTile(glm::vec2 tile)
 	setUniform("uvTile",tile);
 }
 
-void Shader::setDirectionalLight(GLfloat* lightDir, GLfloat* intensity)
+void Shader::setDirectionalLight()
 {
-	//GLint dirID = glGetUniformLocation(_shaderHandle, "lightDir");
-	//GLint intenseID = glGetUniformLocation(_shaderHandle, "lightIntens");
-	//if(dirID == -1 || intenseID == -1) return;
 	glUseProgram(_shaderHandle); // use the shader for current rendering
-	//glUniform3fv(dirID, 1, lightDir);
-	//glUniform3fv(intenseID, 1, intensity);
-	//setUniform("lightDir",lightDir);
-	//setUniform("lightIntens",intensity);
-
 }
 
 void Shader::setUniform(const char *name, float x, float y, float z)
@@ -133,6 +125,68 @@ void Shader::setUniform(const char *name, bool val )
 	glUniform1i(loc, val);
 }
 
+//void Shader::setUniform(const std::string &name, float x, float y, float z)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform3f(loc,x,y,z);
+//}
+//
+//void Shader::setUniform(const std::string &name, const glm::vec3 &v)
+//{
+//	this->setUniform(&name[0],v.x,v.y,v.z);
+//}
+//
+//void Shader::setUniform(const std::string &name, const glm::vec4 &v)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform4f(loc,v.x,v.y,v.z,v.w);
+//}
+//
+//void Shader::setUniform(const std::string &name, const glm::vec2 &v)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform2f(loc,v.x,v.y);
+//}
+//void Shader::setUniform(const std::string &name, const glm::mat4 & m)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
+//}
+//
+//void Shader::setUniform(const std::string &name, const glm::mat3 & m)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniformMatrix3fv(loc, 1, GL_FALSE, &m[0][0]);
+//}
+//
+//void Shader::setUniform(const std::string &name, float val )
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform1f(loc, val);
+//}
+//
+//void Shader::setUniform(const std::string &name, int val )
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform1i(loc, val);
+//}
+//
+//void Shader::setUniform(const std::string &name, GLuint val )
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniform1ui(loc, val);
+//}
+//void Shader::setUniform(const std::string &name, GLfloat *val)
+//{
+//	GLint loc = getUniformLocation(&name[0]);
+//	glUniformMatrix4fv(loc, 1, false, val);
+//}
+//void Shader::setUniform(const std::string &name, bool val )
+//{
+//	int loc = getUniformLocation(&name[0]);
+//	glUniform1i(loc, val);
+//}
+
 GLint Shader::getUniformLocation(const char *name)
 {
 	std::map<std::string, int>::iterator pos;
@@ -144,6 +198,11 @@ GLint Shader::getUniformLocation(const char *name)
 
 	return _uniformLocations[name];
 }
+
+
+
+
+
 
 bool Shader::loadShader(std::string vFilePath, std::string fFilePath)
 {
