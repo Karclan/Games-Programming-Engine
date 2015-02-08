@@ -180,6 +180,12 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			break;
+		}
+
 
 	}
 }
@@ -246,6 +252,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::PHY_BODY:
+		break;
+
+	case ComponentType::SPHERE_COL:
 		break;
 
 
@@ -335,6 +344,12 @@ void CompData::initializeComponent()
 	case ComponentType::LIGHT:
 		{
 			
+		}
+		break;
+
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
 		}
 		break;
 	}

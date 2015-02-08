@@ -14,7 +14,7 @@ namespace ComponentType
 {
 	// IMPORTANT! - Bitmask is defined in globals as an uint, minimum bits for an uint in C++ standard is 16 (usually 32 on 
 	// a modern computer though). If we make more than 16 types of component consider changing to an unsigned long.
-	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT };
+	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT, SPHERE_COL };
 }
 
 //! Different state the component can be in
@@ -42,17 +42,19 @@ public:
 	virtual void linkDependency(SPtr_Component component){}; //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 	
 	BITMASK getDepFlags();
+	BITMASK getOptionalDepFlags();
 	void destroy(); //!< Calling this will set a flag telling all subsystems to remove component
 
 protected:
 	void setDepFlag(ComponentType::Type type); //!< Set a flag in dependency flags
 	bool getIfDepFlagSet(ComponentType::Type type); //!< Get if specified component type flag is set
+	void setOptionalDepFlag(ComponentType::Type type); //!< Set a flag in dependency flags
 
 
 private:
 	ComponentState::State _lifeCycleState; //!< Current life cycle state, active, inactive or destroyed
 	BITMASK _dependencyFlags; //!< Flag to specify which other components it needs a reference to (if any)
-
+	BITMASK _optionalDepFlags; //!< Flags to specify optional dpendecies - ie if it has these components, we'd like to know about them
 	
 
 

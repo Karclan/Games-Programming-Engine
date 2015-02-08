@@ -1,6 +1,8 @@
 #ifndef PHYSICS_BODY_H
 #define PHYSICS_BODY_H
 
+#include <vector>
+
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
@@ -8,6 +10,7 @@
 
 #include "core\component.h"
 #include "core\transform.h"
+#include "physics\collider.h"
 
 /*! \brief Physics Body for handling collisions
 
@@ -18,20 +21,18 @@
 class PhysicsBody : public Component
 {
 public:
-	PhysicsBody(){};
+	PhysicsBody();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
-	
-	void setTransform(SPtr_Transform transform) { _transform = transform; }//!< Requires transform
+	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 
-
-	void test() { /*std::cout << "PHysics me!\n";*/ }
+	void test() { for(int i = 0; i < _colliders.size(); ++i) _colliders[i]->test(); }
 	
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform
-	
+	std::vector<SPtr_Collider> _colliders; //!< Colliders attached to this GO
 
 };
 

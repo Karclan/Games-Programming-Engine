@@ -95,6 +95,7 @@ void SceneManager::writeDemoXML()
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
+	xmlAddSphereCol(robot);
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
 	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddRobot(robot);
@@ -221,6 +222,14 @@ void SceneManager::xmlAddPhysBody(TiXmlElement* go)
 	TiXmlElement* physBodyElmnt = new TiXmlElement("COMP"); // Component Element
 	physBodyElmnt->SetAttribute("type", ComponentType::PHY_BODY); // Set type attrib
 	go->LinkEndChild(physBodyElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+
+void SceneManager::xmlAddSphereCol(TiXmlElement* go)
+{
+	TiXmlElement* sphereColElmnt = new TiXmlElement("COMP"); // Component Element
+	sphereColElmnt->SetAttribute("type", ComponentType::SPHERE_COL); // Set type attrib
+	go->LinkEndChild(sphereColElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------
