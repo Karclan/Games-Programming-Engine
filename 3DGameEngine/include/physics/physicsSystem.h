@@ -24,6 +24,9 @@ public:
 private:
 	std::vector<SPtr_PhysBody> _physBodys;
 
+	bool collides(SPtr_Collider colA, SPtr_Collider colB);
+
+
 };
 
 #endif
