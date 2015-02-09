@@ -183,6 +183,22 @@ void CompData::setAttribsToComponents()
 	case ComponentType::SPHERE_COL:
 		{
 			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			addAttribf(sphereCol->getRadius()); // radius
+			addAttribf(sphereCol->getOffset().x); // offset x
+			addAttribf(sphereCol->getOffset().y); // offset y
+			addAttribf(sphereCol->getOffset().z); // offset z
+			break;
+		}
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCollider = std::static_pointer_cast<BoxCollider>(_comp);
+			addAttribf(boxCollider->getExtents().x); // extents x
+			addAttribf(boxCollider->getExtents().y); // extents y
+			addAttribf(boxCollider->getExtents().z); // extents z
+			addAttribf(boxCollider->getOffset().x); // offset x
+			addAttribf(boxCollider->getOffset().y); // offset y
+			addAttribf(boxCollider->getOffset().z); // offset z
 			break;
 		}
 
@@ -255,6 +271,19 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::SPHERE_COL:
+		addAttribf(to_float(compElmnt, "radius"));
+		addAttribf(to_float(compElmnt, "ox")); // offset x
+		addAttribf(to_float(compElmnt, "oy")); // offset y
+		addAttribf(to_float(compElmnt, "oz")); // offset z
+		break;
+
+	case ComponentType::BOX_COL:
+		addAttribf(to_float(compElmnt, "ex")); // extents x
+		addAttribf(to_float(compElmnt, "ey")); // extents y
+		addAttribf(to_float(compElmnt, "ez")); // extents z
+		addAttribf(to_float(compElmnt, "ox")); // offset x
+		addAttribf(to_float(compElmnt, "oy")); // offset y
+		addAttribf(to_float(compElmnt, "oz")); // offset z
 		break;
 
 
@@ -350,6 +379,16 @@ void CompData::initializeComponent()
 	case ComponentType::SPHERE_COL:
 		{
 			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			sphereCol->setRadius(getFloatAttrib(0));
+			sphereCol->setOffset(glm::vec3(getFloatAttrib(1), getFloatAttrib(2), getFloatAttrib(3)));
+		}
+		break;
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_comp);
+			boxCol->setExtents(glm::vec3(getFloatAttrib(0), getFloatAttrib(1), getFloatAttrib(2)));
+			boxCol->setOffset(glm::vec3(getFloatAttrib(3), getFloatAttrib(4), getFloatAttrib(5)));
 		}
 		break;
 	}

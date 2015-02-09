@@ -9,6 +9,7 @@
 #include <glm\gtc\matrix_transform.hpp>
 
 #include "core\component.h"
+#include "rendering\mesh.h"
 #include "rendering\renderer.h"
 #include "core\transform.h"
 
@@ -32,6 +33,11 @@ public:
 	void preRender(); //!< Sort matrix out
 	void render(Renderer &renderer);
 	
+	
+	// Used for drawing shapes without camera
+	GLfloat* getView();
+	GLfloat* getProjection();
+
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform

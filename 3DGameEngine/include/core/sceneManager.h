@@ -47,7 +47,8 @@ private:
 	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV);
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);
-	void xmlAddSphereCol(TiXmlElement* go);
+	void xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset);
+	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
 
 };

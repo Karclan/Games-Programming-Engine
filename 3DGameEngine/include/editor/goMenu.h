@@ -10,6 +10,7 @@
 #include "core\input.h"
 #include "core\initTable.h"
 #include "core\objectManager.h"
+#include "editor\editorCamera.h"
 
 
 /*! \brief Game Object Menu
@@ -19,7 +20,7 @@
 class GoMenu
 {
 public:
-	void initialize(ObjectManager* mngr);
+	void initialize(ObjectManager* mngr, EditorCamera* editorCam);
 	void update();
 	void setGamePlaying(bool playing); 
 
@@ -40,6 +41,7 @@ private:
 	TwBar* _myBar; //!< My first ant tweak bar!
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
+	EditorCamera* _editorCam; //!< Pointer to editor cam so can set target
 	
 	// Vars in Menu
 	InitTableIterator _currentGodataIter;
@@ -49,6 +51,8 @@ private:
 
 	// My test interface functiona!! ^_^
 	int _selectedObjectID;
+
+	void setSelectedObject(int objID);
 
 	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
 

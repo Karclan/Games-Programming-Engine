@@ -231,6 +231,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
 	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
+	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -256,8 +257,9 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 		_rendSys->addAnimatedObject(std::static_pointer_cast<ModelRenderer>(newComponent));
 		break;
 
-	case ComponentType::PHY_BODY:
-		_physicsSys->addPhysBody(std::static_pointer_cast<PhysicsBody>(newComponent));
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));
 		break;
 
 	}

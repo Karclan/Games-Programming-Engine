@@ -16,6 +16,7 @@
 #include "rendering\modelRenderer.h"
 #include "rendering\primitiveShapes.h"
 #include "physics\physicsBody.h"
+#include "physics\collider.h"
 #include "rendering\robotRenderer.h"
 
 

@@ -25,11 +25,5 @@ void PhysicsBody::linkDependency(SPtr_Component component)
 	case ComponentType::TRANSFORM:
 		_transform = std::static_pointer_cast<Transform>(component);
 		break;
-
-	// Stick all collider types here with fallthrough (no break) as all will be cached in same vector
-	case ComponentType::SPHERE_COL:
-		_colliders.push_back(std::static_pointer_cast<Collider>(component));
-
-		break;
 	}
 }

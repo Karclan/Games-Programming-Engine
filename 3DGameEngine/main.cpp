@@ -57,13 +57,14 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	sf::RenderWindow* mainWindow = engine.startEditorMode(windowHandle); // Link window with SFML RenderWindow in engine
 
 	// Startup editor and engine
-	editor.startup(hInstance, engine.getObjectManager(), engine.getSceneManager());
+	editor.startup(hInstance, engine.getObjectManager(), engine.getSceneManager(), &editorCamera);
 	engine.startup();
 	TwInit(TW_OPENGL, NULL); // startup ant tweak bar
 	TwWindowSize(engine.getWidth(), engine.getHeight());
+	editorCamera.init(); // must init before init tweak bars
 	editor.initTweakBars();
 
-	editorCamera.init();
+	
 
 	// To capture and dispatch windows message
 	MSG msg;

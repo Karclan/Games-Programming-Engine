@@ -8,6 +8,7 @@ void PrimitiveShapes::loadShapes()
 {
 	loadTriangle();
 	loadCube();
+	loadSphere();
 
 	for(int i = 0; i < NUM_SHAPES; ++i)
 	{
@@ -146,4 +147,73 @@ void PrimitiveShapes::loadCube()
 	_meshes[CUBE].setNormals(normals);
 	_meshes[CUBE].setUvs(uvs);
 	_meshes[CUBE].setColours(colours);
+}
+
+
+
+
+void PrimitiveShapes::loadSphere()
+{
+	int rings = 10;
+	int divs = 10;
+	float radius = 0.5f;
+
+	std::vector<glm::vec3> verts;
+	std::vector<unsigned int> indices;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec2> uvs;
+	std::vector<glm::vec3> colours;
+
+
+	float const R = 1./(float)(rings-1);
+    float const D = 1./(float)(divs-1);
+
+    for(int r = 0; r < rings; r++)
+	{
+		for(int d = 0; d < divs; d++)
+		{
+            float const y = sin( -M_PI_2 + M_PI * r * R );
+            float const x = cos(2*M_PI * d * D) * sin( M_PI * r * R );
+            float const z = sin(2*M_PI * d * D) * sin( M_PI * r * R );
+
+			
+			verts.push_back(glm::vec3(x * radius, y * radius, z * radius));
+			normals.push_back(glm::vec3(x, y, z));
+			uvs.push_back(glm::vec2(d*D, r*R));
+		}
+    }
+
+    for(int r = 0; r < rings; r++)
+	{
+		for(int d = 0; d < divs; d++)
+		{
+			int tl = r * divs + d; // top left
+            int tr = r * divs + (d+1); // top right
+            int br = (r+1) * divs + (d+1); // bottom right
+            int bl =(r+1) * divs + d; // bottom left
+
+
+			indices.push_back(tl);
+			indices.push_back(bl);
+			indices.push_back(br);
+			indices.push_back(tl);
+			indices.push_back(br);
+			indices.push_back(tr);
+
+		}
+    }
+
+	// colours
+	for(int i = 0; i < verts.size(); i++) colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+
+	// Initialize the sphere mesh and define it via the above vectors
+	_meshes[SPHERE].generateBuffers();
+	_meshes[SPHERE].setVerts(verts);
+	_meshes[SPHERE].setIndices(indices);
+	_meshes[SPHERE].setNormals(normals);
+	_meshes[SPHERE].setUvs(uvs);
+	_meshes[SPHERE].setColours(colours);
+	
 }

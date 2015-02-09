@@ -41,3 +41,14 @@ void Camera::render(Renderer &renderer)
 {
 	renderer.render(glm::value_ptr(_viewMatrix), glm::value_ptr(_projectionMatrix));
 }
+
+
+GLfloat* Camera::getView()
+{
+	return glm::value_ptr(_viewMatrix);
+}
+
+GLfloat* Camera::getProjection()
+{
+	return glm::value_ptr(_projectionMatrix);
+}

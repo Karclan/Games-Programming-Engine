@@ -95,10 +95,19 @@ void SceneManager::writeDemoXML()
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
-	xmlAddSphereCol(robot);
+	//xmlAddSphereCol(robot, 0.25f, glm::vec3(0, 0.4f, 0));
+	xmlAddBoxCol(robot, glm::vec3(1, 0.2f, 1), glm::vec3(0, 1.0f, 0));
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
 	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddRobot(robot);
+
+	// Random test collidy thing
+	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
+	xmlAddPhysBody(ball);
+	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
+	xmlAddBoxCol(ball, glm::vec3(1, 2, 1), glm::vec3(0, 0, 0));
+	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
+
 
 	// Camera Object
 	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
@@ -225,11 +234,29 @@ void SceneManager::xmlAddPhysBody(TiXmlElement* go)
 }
 
 
-void SceneManager::xmlAddSphereCol(TiXmlElement* go)
+void SceneManager::xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset)
 {
 	TiXmlElement* sphereColElmnt = new TiXmlElement("COMP"); // Component Element
 	sphereColElmnt->SetAttribute("type", ComponentType::SPHERE_COL); // Set type attrib
+	sphereColElmnt->SetDoubleAttribute("radius", radius);
+	sphereColElmnt->SetDoubleAttribute("ox", offset.x);
+	sphereColElmnt->SetDoubleAttribute("oy", offset.y);
+	sphereColElmnt->SetDoubleAttribute("oz", offset.z);
 	go->LinkEndChild(sphereColElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+
+void SceneManager::xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset)
+{
+	TiXmlElement* boxColElmnt = new TiXmlElement("COMP"); // Component Element
+	boxColElmnt->SetAttribute("type", ComponentType::BOX_COL); // Set type attrib
+	boxColElmnt->SetDoubleAttribute("ex", extents.x);
+	boxColElmnt->SetDoubleAttribute("ey", extents.y);
+	boxColElmnt->SetDoubleAttribute("ez", extents.z);
+	boxColElmnt->SetDoubleAttribute("ox", offset.x);
+	boxColElmnt->SetDoubleAttribute("oy", offset.y);
+	boxColElmnt->SetDoubleAttribute("oz", offset.z);
+	go->LinkEndChild(boxColElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------

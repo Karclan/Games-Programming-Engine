@@ -1,10 +1,10 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
-void GoMenu::initialize(ObjectManager* mngr)
+void GoMenu::initialize(ObjectManager* mngr, EditorCamera* editorCam)
 {
 	_objectMngr = mngr;
-	_selectedObjectID = 0;
+	_editorCam = editorCam;
 }
 
 static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
@@ -18,6 +18,7 @@ void GoMenu::createTweakBar()
 	_myBar = TwNewBar("Game Object");
 	refreshTweakBar();
 	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
+	setSelectedObject(0);
 }
 
 
@@ -116,7 +117,7 @@ void GoMenu::setGamePlaying(bool playing)
 void GoMenu::createGameObject()
 {
 	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	_selectedObjectID = _objectMngr->createGameObject("Bobby McCormack");
+	setSelectedObject(_objectMngr->createGameObject("Bobby McCormack"));
 }
 void GoMenu::createComponent()
 {
@@ -146,7 +147,7 @@ void GoMenu::nextGo()
 	InitTableIterator it = initTable->find(_selectedObjectID); // iterator 
 	it = ++it;
 	if(it == initTable->end()) it = initTable->begin();
-	_selectedObjectID = it->first;
+	setSelectedObject(it->first);
 	refreshTweakBar();
 }
 
@@ -164,6 +165,23 @@ void GoMenu::previousGo()
 
 	it = --it;
 
-	_selectedObjectID = it->first;
+	setSelectedObject(it->first);
 	refreshTweakBar();
+}
+
+
+void GoMenu::setSelectedObject(int objID)
+{
+	_selectedObjectID = objID;
+	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
+	if(go)
+	{
+		SPtr_Transform trans = std::static_pointer_cast<Transform>(go->getComponent(ComponentType::TRANSFORM));
+		_editorCam->setTarget(trans->getPosition());
+	}
+	else
+	{
+		_editorCam->setTarget(glm::vec3(0, 0, 0));
+	}
+
 }

@@ -27,10 +27,13 @@ public:
 	void update(float t); //!< Process mouse input and alter transform accordingly
 	Camera* getCamera() { return _camera.get(); }
 
+	void setTarget(glm::vec3 target);
+
 private:
 	SPtr_Transform _transform; //!< Transform for the camera
 	SPtr_Camera _camera; //!< Camera
 	float _targetDist; //!< Distance to target, affecting the point we rotate around etc
+	glm::vec3 _targetPos; //!< Target position
 
 };
 

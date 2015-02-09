@@ -23,7 +23,7 @@
 class Editor
 {
 public:
-	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr);
+	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr, EditorCamera* editorCam);
 	void update();
 	bool gamePlaying(); //!< Get if the game is currently in play mode rather than edit mode
 
