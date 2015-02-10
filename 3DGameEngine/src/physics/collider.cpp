@@ -107,6 +107,22 @@ bool BoxCollider::collides(SPtr_Collider other)
 			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
 			
 			// TO DO - Logic!
+
+			// ACTUALLY....
+			// You need to use transformed verts of other to form an AABB using
+			// max values. Because could collide without vert being in bounds
+
+			// Create array of 8 vec 3s and set to verts of otherB in model space
+			// This will be based on 1/2 extents from origin * transform matrix
+			// Note could wrap extents up in that matrix as well, may as well 
+
+			// Next transform otherB by inverse of this transform matrix
+			// Note it may be possible to create compound matrix of both this
+			// and otherB's model matrix so only have to work out that matrix once,
+			// then apply to each vert
+
+			// If any vert is within AABB of extents size around origin then you're 
+			// colliding
 			
 			return false;
 		}
@@ -124,4 +140,10 @@ glm::vec3 BoxCollider::getExtents()
 glm::vec3 BoxCollider::getCentre()
 {
 	return _transform->getPosition() + _offset;
+}
+
+glm::mat4 BoxCollider::getTransformMatrix()
+{
+	return _transform->getMatrix() * glm::translate(_offset);
+
 }

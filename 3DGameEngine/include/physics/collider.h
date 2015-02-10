@@ -66,6 +66,8 @@ public:
 	void setRadius(float radius) { _radius = radius; }
 	void setOffset(glm::vec3 offset) { _offset = offset; }
 
+	
+
 private:
 	float _radius;
 	glm::vec3 _offset;
@@ -85,6 +87,10 @@ public:
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
 	bool collides(SPtr_Collider other); //!< Collision logic
+
+
+	glm::mat4 getRotationMatrix() { return _transform->getRotationMatrix(); }
+	glm::mat4 getTransformMatrix();
 
 	glm::vec3 getExtents();
 	glm::vec3 getOffset() { return _offset; }

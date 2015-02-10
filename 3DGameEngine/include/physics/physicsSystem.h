@@ -36,6 +36,8 @@ private:
 	// Draw debug shapes - would be nicer to outsource this to dedicated debug class or something but this works for now 
 	void renderSphere(Camera* camera, float radius, glm::vec3 pos);
 	void renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos);
+	void renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, glm::mat4 rot);
+	void renderBox(Camera* camera, glm::vec3 extents, const glm::mat4 &transform);
 
 };
 

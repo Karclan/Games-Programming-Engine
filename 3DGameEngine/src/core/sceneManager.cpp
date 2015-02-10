@@ -96,7 +96,7 @@ void SceneManager::writeDemoXML()
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
 	//xmlAddSphereCol(robot, 0.25f, glm::vec3(0, 0.4f, 0));
-	xmlAddBoxCol(robot, glm::vec3(1, 0.2f, 1), glm::vec3(0, 1.0f, 0));
+	xmlAddBoxCol(robot, glm::vec3(10, 2, 10), glm::vec3(0, 10, 0));
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
 	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
 	xmlAddRobot(robot);

@@ -79,7 +79,7 @@ void PhysicsSystem::renderColliders(Camera* camera)
 		case ComponentType::BOX_COL:
 			{
 				SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_colliders[i]);
-				renderBox(camera, boxCol->getExtents(), boxCol->getCentre());
+				renderBox(camera, boxCol->getExtents(), boxCol->getTransformMatrix());
 			}
 			break;
 		}
@@ -111,12 +111,17 @@ void PhysicsSystem::renderSphere(Camera* camera, float radius, glm::vec3 pos)
 
 void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos)
 {
+	renderBox(camera, extents, pos, glm::mat4());
+}
+void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, glm::mat4 rot)
+{
 	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::CUBE);
 	Material mat;
 	mat.setShader(Assets::getShader("collider"));
 
 
 	glm::mat4 modelMat = glm::translate(pos);
+	modelMat *= rot;
 	modelMat *= glm::scale(extents);
 
 
@@ -124,4 +129,21 @@ void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos)
 	glBindVertexArray(mesh->getVao());
 	glDrawElements(GL_TRIANGLES, mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(NULL);
+}
+
+
+void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, const glm::mat4 &transform)
+{
+	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::CUBE);
+	Material mat;
+	mat.setShader(Assets::getShader("collider"));
+
+	glm::mat4 modelMat = transform * glm::scale(extents);
+
+
+	mat.bind(modelMat, camera->getView(), camera->getProjection());
+	glBindVertexArray(mesh->getVao());
+	glDrawElements(GL_TRIANGLES, mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
+	glBindVertexArray(NULL);
+
 }
