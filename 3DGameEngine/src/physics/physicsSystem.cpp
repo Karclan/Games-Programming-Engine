@@ -45,19 +45,23 @@ void PhysicsSystem::fixedUpdate(float t)
 	// Now, in each leaf node check collisions
 	// If multiple "resolve" type collisions on same object, prioritize
 	// Resolve and then remove physic colliders that moved and re-add them to tree
+	Collision colInfo;
 
 	for(int i = 0; i < _testNode.physColliders.size(); ++i)
 	{
 		for(int pc = i+1; pc < _testNode.physColliders.size(); ++pc) // start at i+1 so don't duplicate collision tests
 		{
-			if(_testNode.physColliders[i]->collides(_testNode.physColliders[pc]))
-				std::cout << "I collider!\n";
+			if(_testNode.physColliders[i]->collides(_testNode.physColliders[pc], colInfo))
+			{
+				std::cout << "I collider! " << colInfo.penDepth << "\n";
+				_testNode.physColliders[i]->getPhysicsBody()->resolve(colInfo);
+			}
 		}
 
 		for(int rc = 0; rc < _testNode.regColliders.size(); ++rc)
 		{
-			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc]))
-				std::cout << "I collider!\n";
+			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc], colInfo))
+				std::cout << "I collider! " << colInfo.penDepth << "\n";
 		}
 	}
 

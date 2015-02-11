@@ -1,7 +1,7 @@
 <?xml version="1.0" ?>
 <GO name="Robot">
     <COMP type="4" />
-    <COMP type="7" ex="10" ey="2" ez="10" ox="0" oy="10" oz="0" />
+    <COMP type="7" ex="5" ey="12" ez="2" ox="0" oy="-1.5" oz="0" />
     <BHVR type="0" />
     <COMP type="0" tx="0" ty="0.8" tz="0" rx="0" ry="0" rz="0" sx="0.1" sy="0.1" sz="0.1" />
     <COMP type="3" />

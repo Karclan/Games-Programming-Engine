@@ -46,7 +46,7 @@ ComponentType::Type SphereCollider::getType()
 
 
 // Wonderful collision logic!
-bool SphereCollider::collides(SPtr_Collider other)
+bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 {
 	switch(other->getType())
 	{
@@ -98,7 +98,7 @@ ComponentType::Type BoxCollider::getType()
 
 
 // Wonderful collision logic!
-bool BoxCollider::collides(SPtr_Collider other)
+bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 {
 	switch(other->getType())
 	{
@@ -181,10 +181,31 @@ bool BoxCollider::collides(SPtr_Collider other)
 					otherMax = std::max(otherProjDist, otherMax);
 				}
 
-				// If the biggest min is greater than the smallest max then they don't over lap so no collision
+				// If the biggest min is greater than the smallest max then they don't over lap so no collision				
 				if(std::max(myMin, otherMin) > std::min(myMax, otherMax)) return false;
+
+
+				float overlap = myMax - otherMin;
+				float invOverlap = otherMax - myMin;
+
+				if(overlap < invOverlap) // then I am on "left" so collision normal positive
+				{
+					if(a == 0 || overlap < collInfo.penDepth)
+					{
+						collInfo.normal = axes[a];
+						collInfo.penDepth = overlap;
+					}
+				}
+				else // then I am on "right" so collision normal negative
+				{
+					if(a == 0 || overlap < collInfo.penDepth)
+					{
+						collInfo.normal = -axes[a];
+						collInfo.penDepth = invOverlap;
+					}
+				}
 			}
-			
+
 			return true; // couldn't find axis of separation, they collide!
 		}
 	}

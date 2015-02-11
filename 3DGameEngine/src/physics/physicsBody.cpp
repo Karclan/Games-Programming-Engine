@@ -27,3 +27,9 @@ void PhysicsBody::linkDependency(SPtr_Component component)
 		break;
 	}
 }
+
+
+void PhysicsBody::resolve(Collision &collision)
+{
+	_transform->translate(collision.normal * -collision.penDepth);
+}

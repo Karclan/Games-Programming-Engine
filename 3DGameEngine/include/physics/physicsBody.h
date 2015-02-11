@@ -11,6 +11,8 @@
 #include "core\component.h"
 #include "core\transform.h"
 
+// FWD Declarations
+class Collision;
 
 /*! \brief Physics Body for handling collisions
 
@@ -27,6 +29,7 @@ public:
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 
+	void resolve(Collision &collision); //!< Given a collision info, resolve based on it
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform
@@ -35,5 +38,10 @@ private:
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)
 typedef std::shared_ptr<PhysicsBody> SPtr_PhysBody;
+
+
+// Include after definition of physicsbody class because circular reference
+#include "physics\collision.h"
+
 
 #endif

@@ -18,6 +18,7 @@
 class Collider;
 class SphereCollider;
 class BoxCollider;
+class Collision;
 
 typedef std::shared_ptr<Collider> SPtr_Collider;
 typedef std::shared_ptr<SphereCollider> SPtr_SphereCol;
@@ -37,8 +38,9 @@ public:
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 
 	bool hasPhysicsBody() { return _physicsBody; } //!< Returns true if physics body exists
+	SPtr_PhysBody getPhysicsBody() { return _physicsBody; }
 
-	virtual bool collides(SPtr_Collider other)=0;
+	virtual bool collides(SPtr_Collider other, Collision &collInfo)=0;
 
 protected:
 	SPtr_Transform _transform; //!< Pointer to transform
@@ -57,7 +59,7 @@ public:
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
-	bool collides(SPtr_Collider other); //!< Collision logic
+	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
 
 	float getRadius();
 	glm::vec3 getOffset() { return _offset; }
@@ -86,7 +88,7 @@ public:
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
-	bool collides(SPtr_Collider other); //!< Collision logic
+	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
 
 
 	glm::mat4 getRotationMatrix() { return _transform->getRotationMatrix(); }
@@ -108,8 +110,8 @@ private:
 	
 };
 
-
-
+// Include after definition of collider classes because circular reference
+#include "physics\collision.h"
 
 
 #endif
