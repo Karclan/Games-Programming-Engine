@@ -20,6 +20,7 @@
 class PhysicsSystem
 {
 public:
+	PhysicsSystem();
 
 	void fixedUpdate(float t); //!< Physics uses a fixed timestep
 	void clear();
@@ -28,6 +29,10 @@ public:
 	void renderColliders(Camera* camera);
 
 private:
+	// debug only
+	bool tested;
+
+
 	std::vector<SPtr_Collider> _colliders;
 
 	OctTreeNode _testNode;
@@ -37,7 +42,7 @@ private:
 	void renderSphere(Camera* camera, float radius, glm::vec3 pos);
 	void renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos);
 	void renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, glm::mat4 rot);
-	void renderBox(Camera* camera, glm::vec3 extents, const glm::mat4 &transform);
+	void renderBox(Camera* camera, const glm::mat4 &transform);
 
 };
 

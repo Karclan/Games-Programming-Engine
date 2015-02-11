@@ -124,7 +124,68 @@ bool BoxCollider::collides(SPtr_Collider other)
 			// If any vert is within AABB of extents size around origin then you're 
 			// colliding
 			
-			return false;
+
+			
+			// Get verts in world space
+			glm::vec3 myVerts[8];
+			glm::vec3 otherVerts[8];
+			getWorldVerts(myVerts);
+			otherB->getWorldVerts(otherVerts);
+
+			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
+			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
+			glm::vec3 axes[15];
+			axes[0] = myVerts[1] - myVerts[0]; // axis myRight
+			axes[1] = myVerts[0] - myVerts[2]; // axis myUp
+			axes[2] = myVerts[0] - myVerts[4]; // axis myBack (Z+, towards us)
+			axes[3] = otherVerts[1] - otherVerts[0]; // axis otherRight
+			axes[4] = otherVerts[0] - otherVerts[2]; // axis otherUp
+			axes[5] = otherVerts[0] - otherVerts[4]; // axis otherBack (Z+, towards us)
+
+			axes[6] = glm::cross(axes[0], axes[3]);
+			axes[7] = glm::cross(axes[0], axes[4]);
+			axes[8] = glm::cross(axes[0], axes[5]);
+
+			axes[9] = glm::cross(axes[1], axes[3]);
+			axes[10] = glm::cross(axes[1], axes[4]);
+			axes[11] = glm::cross(axes[1], axes[5]);
+
+			axes[12] = glm::cross(axes[2], axes[3]);
+			axes[13] = glm::cross(axes[2], axes[4]);
+			axes[14] = glm::cross(axes[2], axes[5]);
+
+			
+			// Now check each axis
+			for(int a = 0; a < 15; ++a)
+			{
+				if(axes[a] == glm::vec3()) continue; // can happen if cross 2 vectors on same direction
+
+				// Normalize axis, potentially slowest part of this (optimize later)
+				axes[a] = glm::normalize(axes[a]);
+
+				// Floats to store min and max distances across axes of each vert, init to dist on axes of vert 0 (see loop for details)
+				float myMin = glm::dot(myVerts[0], axes[a]);
+				float myMax = myMin;
+				float otherMin = glm::dot(otherVerts[0], axes[a]);
+				float otherMax = otherMin;
+
+				// For every other vertex
+				for(int v = 1; v < 8; ++v)
+				{
+					// Note that the dot product gives you distance from origin of vert projected on axis
+					float myProjDist = glm::dot(myVerts[v], axes[a]);
+					float otherProjDist = glm::dot(otherVerts[v], axes[a]); 
+					myMin = std::min(myProjDist, myMin);
+					myMax = std::max(myProjDist, myMax);
+					otherMin = std::min(otherProjDist, otherMin);
+					otherMax = std::max(otherProjDist, otherMax);
+				}
+
+				// If the biggest min is greater than the smallest max then they don't over lap so no collision
+				if(std::max(myMin, otherMin) > std::min(myMax, otherMax)) return false;
+			}
+			
+			return true; // couldn't find axis of separation, they collide!
 		}
 	}
 
@@ -144,6 +205,43 @@ glm::vec3 BoxCollider::getCentre()
 
 glm::mat4 BoxCollider::getTransformMatrix()
 {
-	return _transform->getMatrix() * glm::translate(_offset);
+	return _transform->getMatrix() * glm::translate(_offset) * glm::scale(_extents);
+
+}
+
+
+void BoxCollider::getWorldVerts(glm::vec3 verts[])
+{
+	glm::mat4 transMat = getTransformMatrix();
+
+	
+	// near face
+	verts[0] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, 0.5f, 1.0)); // tl
+	verts[1] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, 0.5f, 1.0)); // tr
+	verts[2] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, 0.5f, 1.0)); // bl
+	verts[3] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, 0.5f, 1.0)); // br
+	
+	// far face
+	verts[4] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, -0.5f, 1.0)); // tl
+	verts[5] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, -0.5f, 1.0)); // tr
+	verts[6] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, -0.5f, 1.0)); // bl
+	verts[7] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, -0.5f, 1.0)); // br
+	
+}
+
+void BoxCollider::test()
+{
+	// Debug
+	glm::vec3 verts[8];
+	getWorldVerts(verts);
+
+	std::cout << "WORLD VERTS:\n";
+	for(int i = 0; i < 8; ++i)
+	{
+		std::cout << verts[i].x << ", ";
+		std::cout << verts[i].y << ", ";
+		std::cout << verts[i].z << "\n";
+	}
+	std::cout << "\n\n";
 
 }

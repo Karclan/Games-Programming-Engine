@@ -98,10 +98,14 @@ public:
 	void setExtents(glm::vec3 extents) { _extents = extents; }
 	void setOffset(glm::vec3 offset) { _offset = offset; }
 
+	void test();
+	void getWorldVerts(glm::vec3 verts[]);
+
 private:
 	glm::vec3 _extents; //!< Width, height and depth of box. Note - not half extents!
 	glm::vec3 _offset;
 
+	
 };
 
 

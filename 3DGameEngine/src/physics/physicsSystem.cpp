@@ -1,6 +1,11 @@
 #include "physics\physicsSystem.h"
 #include <math.h>
 
+PhysicsSystem::PhysicsSystem()
+{
+	tested = false;
+}
+
 void PhysicsSystem::clear()
 {
 	_colliders.clear();
@@ -79,7 +84,7 @@ void PhysicsSystem::renderColliders(Camera* camera)
 		case ComponentType::BOX_COL:
 			{
 				SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_colliders[i]);
-				renderBox(camera, boxCol->getExtents(), boxCol->getTransformMatrix());
+				renderBox(camera, boxCol->getTransformMatrix());
 			}
 			break;
 		}
@@ -132,16 +137,13 @@ void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, 
 }
 
 
-void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, const glm::mat4 &transform)
+void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 {
 	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::CUBE);
 	Material mat;
 	mat.setShader(Assets::getShader("collider"));
 
-	glm::mat4 modelMat = transform * glm::scale(extents);
-
-
-	mat.bind(modelMat, camera->getView(), camera->getProjection());
+	mat.bind(transform, camera->getView(), camera->getProjection());
 	glBindVertexArray(mesh->getVao());
 	glDrawElements(GL_TRIANGLES, mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(NULL);
