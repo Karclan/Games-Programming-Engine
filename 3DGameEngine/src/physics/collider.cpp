@@ -132,6 +132,10 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 			getWorldVerts(myVerts);
 			otherB->getWorldVerts(otherVerts);
 
+			//#####Debug Only!
+			glm::vec3 finalAxis;
+			//####}'[sa;
+
 			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
 			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
 			glm::vec3 axes[15];
@@ -190,21 +194,27 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 
 				if(overlap < invOverlap) // then I am on "left" so collision normal positive
 				{
-					if(a == 0 || overlap < collInfo.penDepth)
+					if(a == 0 || std::abs(overlap) < collInfo.penDepth)
 					{
 						collInfo.normal = axes[a];
 						collInfo.penDepth = overlap;
+						finalAxis = axes[a];
 					}
 				}
 				else // then I am on "right" so collision normal negative
 				{
-					if(a == 0 || overlap < collInfo.penDepth)
+					if(a == 0 || std::abs(invOverlap) < collInfo.penDepth)
 					{
 						collInfo.normal = -axes[a];
 						collInfo.penDepth = invOverlap;
+						finalAxis = axes[a];
 					}
 				}
 			}
+
+			std::cout << "Axis " << finalAxis.x << ", " << finalAxis.y << ", "  << finalAxis.z << "\n ";
+			std::cout << "Normal " << collInfo.normal.x << ", " << collInfo.normal.y << ", "  << collInfo.normal.z << "\n ";
+			std::cout << "PDepth " << collInfo.penDepth << "\n\n";
 
 			return true; // couldn't find axis of separation, they collide!
 		}
