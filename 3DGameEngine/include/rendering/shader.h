@@ -9,8 +9,10 @@
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <iostream>
 
 #include "core\asset.h"
+#include "core\globals.h"
 
 /*! \brief Wrapper to load and manage a shader program
 

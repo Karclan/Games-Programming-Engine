@@ -7,6 +7,8 @@
 #define BITMASK_SIZE  sizeof(BITMASK) * CHAR_BIT // size in bits of a bitmask (can change in different architecture)
 
 
+//const std::string ASSETS_PATH = "assets/";                     // path to assets. Change this if release seems to require weird folder structure
+#define ASSETS_PATH std::string("assets/")
 
 
 

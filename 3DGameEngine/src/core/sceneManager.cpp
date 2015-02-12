@@ -103,6 +103,7 @@ void SceneManager::writeDemoXML()
 
 	// Random test collidy thing
 	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
+	xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
 	xmlAddPhysBody(ball);
 	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
 	xmlAddBoxCol(ball, glm::vec3(1, 2, 1), glm::vec3(0, 0, 0));
@@ -204,6 +205,20 @@ void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh,
 	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
 	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
 	transElmnt->SetAttribute("primitive", (int)true); // It is a primitive mesh, not one loaded from file
+	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
+	transElmnt->SetAttribute("shader", shader); // Set material attrib
+	transElmnt->SetAttribute("texture", texture); // Set texture attrib
+	transElmnt->SetDoubleAttribute("tileU", tileU); // Set tile U attrib
+	transElmnt->SetDoubleAttribute("tileV", tileV); // Set tile U attrib
+	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV)
+{
+	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
+	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
+	transElmnt->SetAttribute("primitive", (int)false); // It is loaded from file
 	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
 	transElmnt->SetAttribute("shader", shader); // Set material attrib
 	transElmnt->SetAttribute("texture", texture); // Set texture attrib

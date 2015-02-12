@@ -335,6 +335,7 @@ void CompData::initializeComponent()
 				{
 					// TO DO...
 					// Load model from file once mesh loader implemented
+					model->setMesh(Assets::getMesh(getStringAttrib(1)));
 				}
 			}
 

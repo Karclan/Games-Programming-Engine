@@ -1,10 +1,10 @@
 #include "rendering\shader.h"
-#include <iostream>
+
 
 bool Shader::loadFromFile(std::string shaderName)
 {
-	std::string vFilePath = "assets/shaders/" + shaderName + ".vert";
-	std::string fFilePath = "assets/shaders/" + shaderName + ".frag";
+	std::string vFilePath = ASSETS_PATH + "shaders/" + shaderName + ".vert";
+	std::string fFilePath = ASSETS_PATH + "shaders/" + shaderName + ".frag";
 
 	bool success = loadShader(vFilePath, fFilePath);
 

@@ -7,6 +7,7 @@
     <COMP type="3" />
 </GO>
 <GO name="Ball">
+    <COMP type="1" primitive="0" mesh="bs_ears.obj" shader="advanced" texture="ogre_diffuse.png" tileU="1" tileV="1" />
     <COMP type="4" />
     <COMP type="7" ex="1" ey="2" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="0" tx="1.5" ty="1" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />

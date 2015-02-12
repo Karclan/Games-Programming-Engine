@@ -59,8 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/antTweakBar;$(SolutionDir)lib/sfml;$(SolutionDir)lib/freetype;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;freetype.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/antTweakBar;$(SolutionDir)lib/sfml;$(SolutionDir)lib/freetype;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/assimp;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;freetype.lib;AntTweakBar.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
