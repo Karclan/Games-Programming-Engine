@@ -67,7 +67,104 @@ bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 
 			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
 
+			// Get other's verts in world space
+			glm::vec3 otherVerts[8];
+			otherB->getWorldVerts(otherVerts);
 
+			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
+			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
+			glm::vec3 axes[3];
+			axes[0] = glm::normalize(otherVerts[1] - otherVerts[0]); // axis otherRight
+			axes[1] = glm::normalize(otherVerts[0] - otherVerts[2]); // axis otherUp
+			axes[2] = glm::normalize(otherVerts[0] - otherVerts[4]); // axis otherBack (Z+, towards us)
+
+			// Distance along axis for box
+			glm::vec2 boxMinMax[3];
+			boxMinMax[0] = glm::vec2(glm::dot(otherVerts[0], axes[0]), glm::dot(otherVerts[1], axes[0])); // top left and top right along relative X axis
+			boxMinMax[1] = glm::vec2(glm::dot(otherVerts[2], axes[1]), glm::dot(otherVerts[0], axes[1])); // bottom left and top left along relative Y axis
+			boxMinMax[2] = glm::vec2(glm::dot(otherVerts[4], axes[2]), glm::dot(otherVerts[0], axes[2])); // far top left and near top left along relative Z axis
+
+			// Distance along axis for sphere centre point
+			float sphCentreDist[3];
+			sphCentreDist[0] = glm::dot(getCentre(), axes[0]);
+			sphCentreDist[1] = glm::dot(getCentre(), axes[1]);
+			sphCentreDist[2] = glm::dot(getCentre(), axes[2]);
+
+			glm::vec3 vecToEdge = glm::vec3(0, 0, 0);
+
+			// Now check each axis
+			for(int i = 0; i < 3; ++i)
+			{
+				/*
+				if (center.x < bmin.x) {
+					dmin += Math.pow(center.x - bmin.x, 2);
+				} else if (center.x > bmax.x) {
+					dmin += Math.pow(center.x - bmax.x, 2);
+				}
+
+				if (center.y < bmin.y) {
+					dmin += Math.pow(center.y - bmin.y, 2);
+				} else if (center.y > bmax.y) {
+					dmin += Math.pow(center.y - bmax.y, 2);
+				}
+
+				if (center.z < bmin.z) {
+					dmin += Math.pow(center.z - bmin.z, 2);
+				} else if (center.z > bmax.z) {
+					dmin += Math.pow(center.z - bmax.z, 2);
+				}
+				*/
+
+				// "Left" and "Right" just to help me visualize, actually a 1D axis could be any direction  (depends on orientation of box)
+				if(sphCentreDist[i] < boxMinMax[i].x) // less than box "left" side x==min
+				{
+					vecToEdge[i] = boxMinMax[i].x - sphCentreDist[i]; // point from centre to "left" edge
+				}
+				else if(sphCentreDist[i] > boxMinMax[i].y) // more than box "right" side y==max
+				{
+					vecToEdge[i] = boxMinMax[i].y - sphCentreDist[i]; // point from centre to "right" edge
+				}
+				else // is definately colliding
+				{
+					float leftOverlap =  sphCentreDist[i] - boxMinMax[i].x; // x==min
+					float rightOverlap =  boxMinMax[i].x - sphCentreDist[i]; // y==max
+
+					if(leftOverlap > rightOverlap) // then I am on "left" so collision normal positive
+					{
+						float dist = leftOverlap + _radius;
+						if(i == 0 || std::abs(dist) < collInfo.penDepth)
+						{
+							collInfo.normal = axes[i];
+							collInfo.penDepth = dist;
+						}
+					}
+					else // then I am on "right" so collision normal negative
+					{
+						float dist = rightOverlap + _radius;
+						if(i == 0 || std::abs(dist) < collInfo.penDepth)
+						{
+							collInfo.normal = -axes[i];
+							collInfo.penDepth = dist;
+						}
+					}
+				}
+
+			}
+
+			// Ok, checked each axis. If vec to edge is zero then face collision, already worked out collision info. Else we can get it from vec to edge
+			if(vecToEdge == glm::vec3(0, 0, 0)) return true;
+			
+
+			// Is it acually collding though?
+			float squareDistToEdge = glm::dot(vecToEdge, vecToEdge);
+			float squareRad = _radius * _radius;
+			if(squareDistToEdge < squareRad)
+			{
+				float distMag = std::sqrt(squareDistToEdge);
+				collInfo.penDepth = _radius - distMag;
+				collInfo.normal = vecToEdge / distMag;
+				return true;
+			}
 		}
 	}
 
