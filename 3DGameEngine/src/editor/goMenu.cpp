@@ -28,6 +28,8 @@ void GoMenu::refreshTweakBar()
 	// Remove all the variables from the tweak bar
 	TwRemoveAllVars(_myBar);
 
+	// TwDefine(" GLOBAL fontstyle=fixed ");	// Changes the font style
+
 	// Add the GO Name
 	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
 
@@ -48,18 +50,81 @@ void GoMenu::refreshTweakBar()
 			switch(compData->getComp()->getType())
 			{
 			case ComponentType::TRANSFORM:
-				TwAddVarRW(_myBar, "tx", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "");
-				TwAddVarRW(_myBar, "ty", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "");
-				TwAddVarRW(_myBar, "tz", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "");
-				TwAddVarRW(_myBar, "rx", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "");
-				TwAddVarRW(_myBar, "ry", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "");
-				TwAddVarRW(_myBar, "rz", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "");
-				TwAddVarRW(_myBar, "sx", TW_TYPE_FLOAT, compData->attribPtrFloat(6), "");
-				TwAddVarRW(_myBar, "sy", TW_TYPE_FLOAT, compData->attribPtrFloat(7), "");
-				TwAddVarRW(_myBar, "sz", TW_TYPE_FLOAT, compData->attribPtrFloat(8), "");
-
+				TwAddVarRW(_myBar, "tx", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Transform");
+				TwAddVarRW(_myBar, "ty", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Transform");
+				TwAddVarRW(_myBar, "tz", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Transform");
+				TwAddVarRW(_myBar, "rx", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Transform");
+				TwAddVarRW(_myBar, "ry", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Transform");
+				TwAddVarRW(_myBar, "rz", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Transform");
+				TwAddVarRW(_myBar, "sx", TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform");
+				TwAddVarRW(_myBar, "sy", TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform");
+				TwAddVarRW(_myBar, "sz", TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform");
 
 				break;
+			
+			case ComponentType::CAMERA:
+
+				// None to add for now
+
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Camera");
+
+				break;
+
+				
+			case ComponentType::BOX_COL:
+
+				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Box Col");
+
+				TwAddVarRW(_myBar, "X extent", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box Col");
+				TwAddVarRW(_myBar, "Y extent", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box Col");
+				TwAddVarRW(_myBar, "Z extent", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box Col");
+				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box Col");
+				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box Col");
+				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box Col");
+				
+				break;
+
+			case ComponentType::LIGHT:
+
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Light");
+
+				break;
+
+			case ComponentType::MODL_REND:
+
+				// Leave for now
+
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Model Render");
+
+				break;
+
+			case ComponentType::PHY_BODY:
+
+				// None for now
+
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Physics Body");
+				
+				break;
+
+			case ComponentType::ROB_REND:
+
+				// None for now
+
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Robot Render");
+
+				break;
+
+			case ComponentType::SPHERE_COL:
+
+				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Sphere Col");
+
+				TwAddVarRW(_myBar, "Radius", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere Col");
+				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere Col");
+				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere Col");
+				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere Col");
+
+				break;
+				
 			}
 
 		}

@@ -34,6 +34,10 @@ LRESULT MenuBar::processMsg(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		case ID_CONTROL_PLAY:
 			playStop();
 			break;
+
+		case ID_GAMEOBJECT_NEWOBJECT:
+			
+			break;
 			
 
 		default:
