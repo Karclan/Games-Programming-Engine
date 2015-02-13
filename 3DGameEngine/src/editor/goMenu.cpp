@@ -25,7 +25,6 @@ void GoMenu::createTweakBar()
 
 static void TW_CALL addCameraComponent(void *clientData)
 {
-	//GoMenu* goMenu = static_cast<GoMenu>(clientData);
 	GoMenu* goMenu = (GoMenu*)clientData;
 
 	goMenu->addComponent(ComponentType::CAMERA);
@@ -34,9 +33,7 @@ static void TW_CALL addCameraComponent(void *clientData)
 void GoMenu::addComponent(ComponentType::Type type)
 {
 	_objectMngr->addComponent(_selectedObjectID, type);
-	std::cout << "hi";
 	refreshTweakBar();
-
 }
 
 void GoMenu::refreshTweakBar()
