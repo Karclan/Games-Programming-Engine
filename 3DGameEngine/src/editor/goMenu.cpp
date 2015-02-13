@@ -94,9 +94,9 @@ void GoMenu::refreshTweakBar()
 
 				//TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Model Render");
 
-				TwAddVarRW(_myBar, "Mesh File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(0), "group=Model_Render");
-				TwAddVarRW(_myBar, "Shader File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(1), "group=Model_Render");
-				TwAddVarRW(_myBar, "Texture File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(2), "group=Model_Render");
+				TwAddVarRW(_myBar, "Mesh File Path", TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render");
+				TwAddVarRW(_myBar, "Shader File Path", TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render");
+				TwAddVarRW(_myBar, "Texture File Path", TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render");
 				TwAddVarRW(_myBar, "UV Tile X", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render");
 				TwAddVarRW(_myBar, "UV Tile Y", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render");
 
@@ -167,10 +167,12 @@ void GoMenu::refreshGameObjects()
 void GoMenu::update()
 {
 	// Dummy function calls on button presses for testing
+	
 	if(Input::getKeyPressed(sf::Keyboard::C)) createGameObject();
 	if(Input::getKeyPressed(sf::Keyboard::D)) deleteGameObject();
 	if(Input::getKeyPressed(sf::Keyboard::A)) createComponent();
 	if(Input::getKeyPressed(sf::Keyboard::U)) deleteComponent();
+	
 
 	// Left and right cycle through game objects
 	if(Input::getKeyPressed(sf::Keyboard::Left)) previousGo();
@@ -187,6 +189,7 @@ void GoMenu::createGameObject()
 {
 	if(_gamePlaying) return; // Cannot alter objects when in play mode
 	setSelectedObject(_objectMngr->createGameObject("Bobby McCormack"));
+	refreshTweakBar();
 }
 void GoMenu::createComponent()
 {
@@ -243,10 +246,17 @@ void GoMenu::setSelectedObject(int objID)
 {
 	_selectedObjectID = objID;
 	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
-	if(go)
+	if(go )
 	{
 		SPtr_Transform trans = std::static_pointer_cast<Transform>(go->getComponent(ComponentType::TRANSFORM));
-		_editorCam->setTarget(trans->getPosition());
+		if(trans)
+		{
+			_editorCam->setTarget(trans->getPosition());
+		}
+		else
+		{
+			_editorCam->setTarget(glm::vec3(0, 0, 0));
+		}
 	}
 	else
 	{
