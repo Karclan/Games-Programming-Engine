@@ -5,6 +5,7 @@ void GoMenu::initialize(ObjectManager* mngr, EditorCamera* editorCam)
 {
 	_objectMngr = mngr;
 	_editorCam = editorCam;
+	testBool = false;
 }
 
 static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
@@ -16,12 +17,19 @@ static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, 
 void GoMenu::createTweakBar()
 {
 	_myBar = TwNewBar("Game Object");
+	_addCompBar = TwNewBar("Add Component");
 	refreshTweakBar();
 	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
 	setSelectedObject(0);
 }
 
+static TwButtonCallback addCameraComponent(GameObject gameObject)
+{
+	// gameObject.addComponent();
+	std::cout << "hi";
 
+	return 0;
+}
 
 void GoMenu::refreshTweakBar()
 {
@@ -32,6 +40,9 @@ void GoMenu::refreshTweakBar()
 
 	// Add the GO Name
 	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
+	TwAddVarRW(_addCompBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
+
+	
 
 	// Get game object name
 	_objName = "No Object Selected";
@@ -42,7 +53,13 @@ void GoMenu::refreshTweakBar()
 
 		InitTable* initTable = _objectMngr->getInitTable();
 		GOData* goData = &initTable->find(_selectedObjectID)->second;
+
+		TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
+		TwAddButton(_addCompBar, "buttonTest", addCameraComponent(*go), &go, "");
 		
+		//TwAddVarRW(_addCompBar, "hasCameraComponent", TW_TYPE_BOOL8, &hasCamera, "");
+
+
 		// Now link all component vars
 		std::list<CompData>::iterator compData;
 		for(compData = goData->components.begin(); compData != goData->components.end(); ++compData)

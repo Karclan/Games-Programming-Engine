@@ -37,8 +37,11 @@ public:
 private:
 	// Private member variables
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
+
+	bool testBool;
 	
 	TwBar* _myBar; //!< My first ant tweak bar!
+	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 	EditorCamera* _editorCam; //!< Pointer to editor cam so can set target
