@@ -23,12 +23,13 @@ void GoMenu::createTweakBar()
 	setSelectedObject(0);
 }
 
-static TwButtonCallback addCameraComponent(GameObject gameObject)
+static void TW_CALL addCameraComponent(void *clientData)
 {
-	// gameObject.addComponent();
-	std::cout << "hi";
+	//GoMenu* goMenu = static_cast<GoMenu>(clientData);
+	GoMenu* goMenu = (GoMenu*)clientData;
+	goMenu->testFunc();
 
-	return 0;
+	// gameObject.addComponent();
 }
 
 void GoMenu::refreshTweakBar()
@@ -55,7 +56,7 @@ void GoMenu::refreshTweakBar()
 		GOData* goData = &initTable->find(_selectedObjectID)->second;
 
 		TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
-		TwAddButton(_addCompBar, "buttonTest", addCameraComponent(*go), &go, "");
+		TwAddButton(_addCompBar, "buttonTest", addCameraComponent, this, "");
 		
 		//TwAddVarRW(_addCompBar, "hasCameraComponent", TW_TYPE_BOOL8, &hasCamera, "");
 

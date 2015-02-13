@@ -31,7 +31,7 @@ public:
 	void newGameObject(); // create new game object
 	void refreshGameObjects(); //!< Refreshes all game objects to match init data
 	
-	
+	void testFunc() { std::cout << _objName << " Hello? Is it me you're looking for?\n"; }
 
 
 private:
