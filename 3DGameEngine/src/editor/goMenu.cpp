@@ -75,12 +75,12 @@ void GoMenu::refreshTweakBar()
 
 				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Box Col");
 
-				TwAddVarRW(_myBar, "X extent", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box Col");
-				TwAddVarRW(_myBar, "Y extent", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box Col");
-				TwAddVarRW(_myBar, "Z extent", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box Col");
-				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box Col");
-				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box Col");
-				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box Col");
+				TwAddVarRW(_myBar, "X extent", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col");
+				TwAddVarRW(_myBar, "Y extent", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col");
+				TwAddVarRW(_myBar, "Z extent", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col");
+				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col");
+				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col");
+				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col");
 				
 				break;
 
@@ -92,9 +92,13 @@ void GoMenu::refreshTweakBar()
 
 			case ComponentType::MODL_REND:
 
-				// Leave for now
+				//TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Model Render");
 
-				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Model Render");
+				TwAddVarRW(_myBar, "Mesh File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(0), "group=Model_Render");
+				TwAddVarRW(_myBar, "Shader File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(1), "group=Model_Render");
+				TwAddVarRW(_myBar, "Texture File Path", TW_TYPE_STDSTRING, compData->attribPtrFloat(2), "group=Model_Render");
+				TwAddVarRW(_myBar, "UV Tile X", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render");
+				TwAddVarRW(_myBar, "UV Tile Y", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render");
 
 				break;
 
@@ -102,7 +106,7 @@ void GoMenu::refreshTweakBar()
 
 				// None for now
 
-				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Physics Body");
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Physics_Body");
 				
 				break;
 
@@ -110,7 +114,7 @@ void GoMenu::refreshTweakBar()
 
 				// None for now
 
-				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Robot Render");
+				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Robot_Render");
 
 				break;
 
@@ -118,10 +122,10 @@ void GoMenu::refreshTweakBar()
 
 				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Sphere Col");
 
-				TwAddVarRW(_myBar, "Radius", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere Col");
-				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere Col");
-				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere Col");
-				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere Col");
+				TwAddVarRW(_myBar, "Radius", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col");
+				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col");
+				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col");
+				TwAddVarRW(_myBar, "Z offset", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere_Col");
 
 				break;
 				
