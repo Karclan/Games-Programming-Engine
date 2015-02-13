@@ -128,6 +128,8 @@ Shader* Assets::getShader(std::string name)
 
 Texture2D* Assets::getTexture(std::string fileName)
 {
+	if(fileName == "") return nullptr;
+
 	Assets* ins = Assets::get(); // get instance
 
 	std::map<std::string, Texture2D*>::iterator it;
@@ -158,9 +160,9 @@ Texture2D* Assets::getTexture(std::string fileName)
 
 Mesh* Assets::getMesh(std::string fileName)
 {
+	if(fileName == "") return nullptr;
+
 	Assets* ins = Assets::get(); // get instance
-
-
 
 	// Primitive meshes
 	if(fileName == "triangle") return ins->_primitives.getMesh(PrimitiveShapes::TRIANGLE);

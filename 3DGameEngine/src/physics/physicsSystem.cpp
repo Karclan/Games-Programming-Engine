@@ -55,6 +55,11 @@ void PhysicsSystem::fixedUpdate(float t)
 			{
 				//std::cout << "I collider! " << colInfo.penDepth << "\n";
 				_testNode.physColliders[i]->getPhysicsBody()->resolve(colInfo);
+
+				std::cout << "Pen Depth " << colInfo.penDepth << "\n";
+				std::cout << "Normal " << colInfo.normal.x << ", " << colInfo.normal.y << ", " << colInfo.normal.z << "\n\n";
+
+
 			}
 		}
 

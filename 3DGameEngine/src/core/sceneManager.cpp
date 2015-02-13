@@ -96,17 +96,21 @@ void SceneManager::writeDemoXML()
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
 	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
+	xmlAddModelRend(robot, "sphere", "advanced", "");
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
 	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
-	xmlAddRobot(robot);
+	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
+	//xmlAddRobot(robot);
+	
 
 	// Random test collidy thing
 	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
-	xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
+	//xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
+	xmlAddModelRend(ball, "cube", "advanced", "ogre_diffuse.png");
 	xmlAddPhysBody(ball);
 	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
-	xmlAddBoxCol(ball, glm::vec3(1, 2, 1), glm::vec3(0, 0, 0));
+	xmlAddBoxCol(ball, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
 	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
 
 

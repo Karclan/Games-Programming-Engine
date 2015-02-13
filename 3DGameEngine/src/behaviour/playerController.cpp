@@ -21,8 +21,8 @@ void PlayerController::initialize()
 
 	// Get Robot Renderer
 	comp = getComponent(ComponentType::ROB_REND);
-	_robotAnim = std::static_pointer_cast<RobotRenderer>(comp);
-	_robotAnim->setSpeed(10);
+	//_robotAnim = std::static_pointer_cast<RobotRenderer>(comp);
+	//_robotAnim->setSpeed(10);
 
 	_speed = 2;
 	_turn = 0;
@@ -59,8 +59,8 @@ void PlayerController::update(float t)
 	}
 
 	// Animation
-	if(axisV == 0) _robotAnim->stop();
-	else _robotAnim->play();
+	//if(axisV == 0) _robotAnim->stop();
+	//else _robotAnim->play();
 }
 
 void PlayerController::fixedUpdate(float t)
