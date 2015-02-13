@@ -27,6 +27,7 @@ static void TW_CALL addCameraComponent(void *clientData)
 {
 	//GoMenu* goMenu = static_cast<GoMenu>(clientData);
 	GoMenu* goMenu = (GoMenu*)clientData;
+
 	goMenu->addComponent(ComponentType::CAMERA);
 }
 
@@ -129,7 +130,7 @@ void GoMenu::refreshTweakBar()
 			case ComponentType::PHY_BODY:
 
 				// None for now
-
+				
 				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Physics_Body");
 				
 				break;
