@@ -118,20 +118,20 @@ void SceneManager::writeDemoXML()
 	// Floor
 	TiXmlElement * floor = xmlAddGo(&doc, "Floor");
 	xmlAddTransform(floor, glm::vec3(0, -0.005f, 0), glm::vec3(), glm::vec3(40, 0.01f, 40));
-	xmlAddModelRend(floor, PrimitiveShapes::CUBE, "advanced", "grass.png", 20, 20);
+	xmlAddModelRend(floor, "cube", "advanced", "grass.png", 20, 20);
 
 	// Walls
 	TiXmlElement * wall = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall, glm::vec3(0, 0.3, -2), glm::vec3(), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall, "cube", "advanced", "wall.png", 20, 1);
 
 	TiXmlElement * wall2 = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall2, glm::vec3(-5.25, 0.3, 2.75), glm::vec3(0, 90, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall2, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall2, "cube", "advanced", "wall.png", 20, 1);
 
 	TiXmlElement * wall3 = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall3, glm::vec3(-10, 0.3, 8), glm::vec3(0, 0, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall3, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall3, "cube", "advanced", "wall.png", 20, 1);
 
 
 	// Windmills and sails
@@ -141,12 +141,12 @@ void SceneManager::writeDemoXML()
 		// Windmill
 		TiXmlElement * windmill = xmlAddGo(&doc, "Windmill");
 		xmlAddTransform(windmill, glm::vec3(windPosits[i].x, 1.3f, windPosits[i].y), glm::vec3(), glm::vec3(1, 2.6f, 1));
-		xmlAddModelRend(windmill, PrimitiveShapes::CUBE, "advanced", "windmill.png", 1, 2.6f);
+		xmlAddModelRend(windmill, "cube", "advanced", "windmill.png", 1, 2.6f);
 
 		// Sail
 		TiXmlElement * sail = xmlAddGo(&doc, "Sail");
 		xmlAddTransform(sail, glm::vec3(windPosits[i].x, 2, windPosits[i].y + 0.525f), glm::vec3(), glm::vec3(2, 2, 0.05f));
-		xmlAddModelRend(sail, PrimitiveShapes::CUBE, "advanced", "sails.png");
+		xmlAddModelRend(sail, "cube", "advanced", "sails.png");
 		xmlAddBehaviour(sail, BehaviourTypes::ROT_OBJ);
 	}
 
@@ -199,20 +199,6 @@ void SceneManager::xmlAddCamera(TiXmlElement* go)
 }
 
 // Add model renderer.
-void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
-void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV)
-{
-	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
-	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
-	transElmnt->SetAttribute("primitive", (int)true); // It is a primitive mesh, not one loaded from file
-	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
-	transElmnt->SetAttribute("shader", shader); // Set material attrib
-	transElmnt->SetAttribute("texture", texture); // Set texture attrib
-	transElmnt->SetDoubleAttribute("tileU", tileU); // Set tile U attrib
-	transElmnt->SetDoubleAttribute("tileV", tileV); // Set tile U attrib
-	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
-}
-
 void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
 void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV)
 {

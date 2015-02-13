@@ -100,7 +100,7 @@ void PhysicsSystem::renderColliders(Camera* camera)
 // Functions that probably should be put in another class! Maybe debug class?
 void PhysicsSystem::renderSphere(Camera* camera, float radius, glm::vec3 pos)
 {
-	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::SPHERE);
+	Mesh* mesh = Assets::getMesh("sphere");
 	Material mat;
 	mat.setShader(Assets::getShader("collider"));
 
@@ -124,7 +124,7 @@ void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos)
 }
 void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, glm::mat4 rot)
 {
-	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::CUBE);
+	Mesh* mesh = Assets::getMesh("cube");
 	Material mat;
 	mat.setShader(Assets::getShader("collider"));
 
@@ -143,7 +143,7 @@ void PhysicsSystem::renderBox(Camera* camera, glm::vec3 extents, glm::vec3 pos, 
 
 void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 {
-	Mesh* mesh = Assets::getPrimitiveMesh(PrimitiveShapes::CUBE);
+	Mesh* mesh = Assets::getMesh("cube");
 	Material mat;
 	mat.setShader(Assets::getShader("collider"));
 

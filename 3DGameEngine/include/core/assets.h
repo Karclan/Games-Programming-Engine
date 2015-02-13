@@ -26,7 +26,7 @@
 class Assets
 {
 public:
-	static Mesh* getPrimitiveMesh(PrimitiveShapes::Type type); //!< Get one of the hard-coded primitive shapes
+	//static Mesh* getPrimitiveMesh(PrimitiveShapes::Type type); //!< Get one of the hard-coded primitive shapes
 	static Shader* getShader(std::string name); //!< Returns shader if loaded, loads and returns if not loaded or null if can't load. Request by name (no need for .frag or .vert suffix). Both .vert and .frag files must be in shaders folder
 	static Texture2D* getTexture(std::string fileName); //!< Loads (if not loaded) and returns texture. Request by filename with extension, e.g. img.png. Texture must be stored in textures folder
 	static Mesh* getMesh(std::string fileName); //!< Loads (if not loaded) and returns mesh. Request by filename with extension, e.g. mesh.obj. Meshes must be stored in models folders

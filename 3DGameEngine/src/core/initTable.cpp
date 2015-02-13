@@ -136,34 +136,18 @@ void CompData::setAttribsToComponents()
 	case ComponentType::MODL_REND:
 		{
 			SPtr_ModelRend modelRend = std::static_pointer_cast<ModelRenderer>(_comp);
+
+			// Mesh
 			Mesh* mesh = modelRend->getMesh();
-			int prim = -1; // if primitive mesh will be something other than -1
-			
-			if(mesh != nullptr)
-			{
-				prim = modelRend->getMesh()->getPrimID();
-				if(prim != -1)
-				{
-					addAttribi((int)true); // attrib 0 is if primitive mesh or not
-					addAttribi(prim); // attrib 1 is prim ID if prim
-				}
-				else
-				{
-					addAttribi((int)false); // attrib 0 is if primitive mesh or not
-					addAttribs(modelRend->getMesh()->getFilePath()); // attrib 1 is filepath of mesh if not prim
-				}
-			}
-			else
-			{
-				addAttribi((int)false); // attrib 0 is if primitive mesh or not
-				addAttribs(""); // attrib 1 is prim ID if prim
-			}
-			
+			addAttribs(modelRend->getMesh()->getFilePath()); // attrib 0 is filepath of mesh if not prim
+
+			// Material
 			Material* mat = modelRend->getMaterial();
-			addAttribs(mat->getShaderFilePath()); // attrib 2 is shader
-			addAttribs(mat->getTextureFilePath()); // attrib 3 is texture file path as string
-			addAttribf(mat->getUvTile().x); // attrib 4 is tile u
-			addAttribf(mat->getUvTile().y); // attrib 5 is tile v
+			addAttribs(mat->getShaderFilePath()); // attrib 1 is shader
+			addAttribs(mat->getTextureFilePath()); // attrib 2 is texture file path as string
+			addAttribf(mat->getUvTile().x); // attrib 3 is tile u
+			addAttribf(mat->getUvTile().y); // attrib 4 is tile v		
+			
 			break;
 		}
 
@@ -249,14 +233,11 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::MODL_REND:
 		{
-		int isPrimitive = to_int(compElmnt, "primitive"); // attrib 0 is if primitive mesh or not
-		addAttribi(isPrimitive);
-		if(isPrimitive) addAttribi(to_int(compElmnt, "mesh")); // attrib 1 is prim ID or...
-		else addAttribs(compElmnt->Attribute("mesh")); // ...filepath of mesh if not prim
-		addAttribs(compElmnt->Attribute("shader")); // attrib 2 is shader
-		addAttribs(compElmnt->Attribute("texture")); // attrib 3 is texture file path as string
-		addAttribf(to_float(compElmnt, "tileU")); // attrib 4 is tile u
-		addAttribf(to_float(compElmnt,"tileV")); // attrib 5 is tile v
+		addAttribs(compElmnt->Attribute("mesh")); // attrib 0 is model filepath
+		addAttribs(compElmnt->Attribute("shader")); // attrib 1 is shader
+		addAttribs(compElmnt->Attribute("texture")); // attrib 2 is texture file path as string
+		addAttribf(to_float(compElmnt, "tileU")); // attrib 3 is tile u
+		addAttribf(to_float(compElmnt,"tileV")); // attrib 4 is tile v
 		break;
 		}
 
@@ -320,35 +301,16 @@ void CompData::initializeComponent()
 	case ComponentType::MODL_REND:
 		{
 			SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(getComp());
-			
-			// Figure out if the mesh is primitive or if it needs to be loaded in
-			bool isPrimitive = (bool)getIntAttrib(0);
 
-			if(isPrimitive)
-			{
-				int shape = getIntAttrib(1);
-				model->setMesh(Assets::getPrimitiveMesh((PrimitiveShapes::Type)shape)); // set mesh
-			}
-			else
-			{
-				if(getStringAttrib(1) != "")
-				{
-					// TO DO...
-					// Load model from file once mesh loader implemented
-					model->setMesh(Assets::getMesh(getStringAttrib(1)));
-				}
-			}
+			// Set model (attrib 0)
+			model->setMesh(Assets::getMesh(getStringAttrib(0))); // attrib 0 = mesh filepath
 
-			// Set Material
-			if(getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
-			{
-				glm::vec2 tile = glm::vec2(getFloatAttrib(4), getFloatAttrib(5)); // get tile values as vec2
-				model->setMaterial(Assets::getShader(getStringAttrib(2)), Assets::getTexture(getStringAttrib(3)), tile); // set material with shader and texture
-			}
-			else if(getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
-			{
-				model->setMaterial(Assets::getShader(getStringAttrib(2))); // set material with just shader
-			}
+			// Set material (attrib 1 - 4)
+			// attrib 1 = shader file path
+			// attrib 2 = texture file path
+			// attrib 3 = uv tile U
+			// attrib 4 = uv tile V
+			model->setMaterial(Assets::getShader(getStringAttrib(1)), Assets::getTexture(getStringAttrib(2)), glm::vec2(getFloatAttrib(3), getFloatAttrib(4))); // set material with shader and texture
 		}
 		break;
 

@@ -43,8 +43,6 @@ private:
 	TiXmlElement* xmlAddGo(TiXmlDocument* doc, std::string name);
 	void xmlAddTransform(TiXmlElement* go, glm::vec3 t, glm::vec3 r, glm::vec3 s);
 	void xmlAddCamera(TiXmlElement* go);
-	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture);
-	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV);
 	void xmlAddRobot(TiXmlElement* go);

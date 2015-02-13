@@ -87,15 +87,19 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 //-------------------------GET ASSET----------------------
 // Functions for requesting (and loading if needed) assets
 //--------------------------------------------------------
+/*
 Mesh* Assets::getPrimitiveMesh(PrimitiveShapes::Type type)
 {
 	Assets* ins = Assets::get(); // get instance
 
 	return ins->_primitives.getMesh(type);
 }
+*/
 
 Shader* Assets::getShader(std::string name)
 {
+	if(name == "") return nullptr;
+
 	Assets* ins = Assets::get(); // get instance
 
 	std::map<std::string, Shader*>::iterator it;
@@ -155,6 +159,14 @@ Texture2D* Assets::getTexture(std::string fileName)
 Mesh* Assets::getMesh(std::string fileName)
 {
 	Assets* ins = Assets::get(); // get instance
+
+
+
+	// Primitive meshes
+	if(fileName == "triangle") return ins->_primitives.getMesh(PrimitiveShapes::TRIANGLE);
+	if(fileName == "cube") return ins->_primitives.getMesh(PrimitiveShapes::CUBE);
+	if(fileName == "sphere") return ins->_primitives.getMesh(PrimitiveShapes::SPHERE);
+
 
 	std::map<std::string, Mesh*>::iterator it;
 	it = ins->_meshes.find(fileName);

@@ -61,6 +61,14 @@ bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 
 			return squareDist < squareRadSum; // they're colliding if the distance is less than the sum of the radii
 		}
+
+	case ComponentType::BOX_COL:
+		{
+
+			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
+
+
+		}
 	}
 
 
@@ -106,35 +114,11 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 		{
 			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
 			
-			// TO DO - Logic!
-
-			// ACTUALLY....
-			// You need to use transformed verts of other to form an AABB using
-			// max values. Because could collide without vert being in bounds
-
-			// Create array of 8 vec 3s and set to verts of otherB in model space
-			// This will be based on 1/2 extents from origin * transform matrix
-			// Note could wrap extents up in that matrix as well, may as well 
-
-			// Next transform otherB by inverse of this transform matrix
-			// Note it may be possible to create compound matrix of both this
-			// and otherB's model matrix so only have to work out that matrix once,
-			// then apply to each vert
-
-			// If any vert is within AABB of extents size around origin then you're 
-			// colliding
-			
-
-			
 			// Get verts in world space
 			glm::vec3 myVerts[8];
 			glm::vec3 otherVerts[8];
 			getWorldVerts(myVerts);
 			otherB->getWorldVerts(otherVerts);
-
-			//#####Debug Only!
-			glm::vec3 finalAxis;
-			//####}'[sa;
 
 			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
 			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
@@ -198,7 +182,6 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 					{
 						collInfo.normal = axes[a];
 						collInfo.penDepth = overlap;
-						finalAxis = axes[a];
 					}
 				}
 				else // then I am on "right" so collision normal negative
@@ -207,15 +190,11 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 					{
 						collInfo.normal = -axes[a];
 						collInfo.penDepth = invOverlap;
-						finalAxis = axes[a];
 					}
 				}
 			}
 
-			std::cout << "Axis " << finalAxis.x << ", " << finalAxis.y << ", "  << finalAxis.z << "\n ";
-			std::cout << "Normal " << collInfo.normal.x << ", " << collInfo.normal.y << ", "  << collInfo.normal.z << "\n ";
-			std::cout << "PDepth " << collInfo.penDepth << "\n\n";
-
+			
 			return true; // couldn't find axis of separation, they collide!
 		}
 	}
