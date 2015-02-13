@@ -33,6 +33,8 @@ public:
 	
 	void testFunc() { std::cout << _objName << " Hello? Is it me you're looking for?\n"; }
 
+	void addComponent(ComponentType::Type type);
+
 
 private:
 	// Private member variables
@@ -63,6 +65,8 @@ private:
 	void createComponent();
 	void deleteGameObject();
 	void deleteComponent();
+
+	
 
 	void nextGo();
 	void previousGo();

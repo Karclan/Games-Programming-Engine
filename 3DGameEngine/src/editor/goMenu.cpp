@@ -27,9 +27,15 @@ static void TW_CALL addCameraComponent(void *clientData)
 {
 	//GoMenu* goMenu = static_cast<GoMenu>(clientData);
 	GoMenu* goMenu = (GoMenu*)clientData;
-	goMenu->testFunc();
+	goMenu->addComponent(ComponentType::CAMERA);
+}
 
-	// gameObject.addComponent();
+void GoMenu::addComponent(ComponentType::Type type)
+{
+	_objectMngr->addComponent(_selectedObjectID, type);
+	std::cout << "hi";
+	refreshTweakBar();
+
 }
 
 void GoMenu::refreshTweakBar()
