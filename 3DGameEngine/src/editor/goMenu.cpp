@@ -25,20 +25,6 @@ void GoMenu::createTweakBar()
 
 /******************************** Add Component Functions ********************************/
 
-static void TW_CALL addCameraComponent(void *clientData)
-{
-	GoMenu* goMenu = (GoMenu*)clientData;
-
-	goMenu->addComponent(ComponentType::CAMERA);
-}
-
-static void TW_CALL addTransformComponent(void *clientData)
-{
-	GoMenu* goMenu = (GoMenu*)clientData;
-
-	goMenu->addComponent(ComponentType::TRANSFORM);
-}
-
 static void TW_CALL addBoxColComponent(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
@@ -46,11 +32,11 @@ static void TW_CALL addBoxColComponent(void *clientData)
 	goMenu->addComponent(ComponentType::BOX_COL);
 }
 
-static void TW_CALL addSphereColComponent(void *clientData)
+static void TW_CALL addCameraComponent(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
 
-	goMenu->addComponent(ComponentType::SPHERE_COL);
+	goMenu->addComponent(ComponentType::CAMERA);
 }
 
 static void TW_CALL addLightComponent(void *clientData)
@@ -80,6 +66,26 @@ static void TW_CALL addRobotRenderComponent(void *clientData)
 
 	goMenu->addComponent(ComponentType::ROB_REND);
 }
+
+static void TW_CALL addSphereColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::SPHERE_COL);
+}
+
+static void TW_CALL addTransformComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::TRANSFORM);
+}
+
+
+
+
+
+
 
 void GoMenu::addComponent(ComponentType::Type type)
 {
@@ -130,9 +136,16 @@ void GoMenu::refreshTweakBar()
 		GOData* goData = &initTable->find(_selectedObjectID)->second;
 
 		//TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
-		TwAddButton(_addCompBar, "buttonTest", addCameraComponent, this, "");
+		TwAddButton(_addCompBar, "addBoxCol", addBoxColComponent, this, "");
+		TwAddButton(_addCompBar, "addCamera", addCameraComponent, this, "");
+		TwAddButton(_addCompBar, "addLight", addLightComponent, this, "");
+		TwAddButton(_addCompBar, "addModelRender", addModelRenderComponent, this, "");
+		TwAddButton(_addCompBar, "addPhysicsBody", addPhysicsBodyComponent, this, "");
+		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
+		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
+		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
 		
-		//TwAddVarRW(_addCompBar, "hasCameraComponent", TW_TYPE_BOOL8, &hasCamera, "");
+		
 		
 
 		// Now link all component vars
