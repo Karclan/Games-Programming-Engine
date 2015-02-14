@@ -32,11 +32,24 @@ static void TW_CALL addCameraComponent(void *clientData)
 
 void GoMenu::addComponent(ComponentType::Type type)
 {
+
 	_objectMngr->addComponent(_selectedObjectID, type);
 	refreshTweakBar();
 
 	TwRefreshBar(_myBar);
 	TwRefreshBar(_addCompBar);
+
+	std::cout << "Adding comp " << type << " to object " << _selectedObjectID << " now!\n";
+	if(_objectMngr->addComponent(_selectedObjectID, type))
+	{
+		std::cout << "Success!\n";
+		refreshTweakBar();
+	}
+	else
+	{
+		std::cout << "Failure!\n";
+	}
+	
 }
 
 void GoMenu::refreshTweakBar()
@@ -66,40 +79,42 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "buttonTest", addCameraComponent, this, "");
 		
 		//TwAddVarRW(_addCompBar, "hasCameraComponent", TW_TYPE_BOOL8, &hasCamera, "");
-
+		
 
 		// Now link all component vars
 		std::list<CompData>::iterator compData;
+		int i = 0; // int to record place in iteration loop
 		for(compData = goData->components.begin(); compData != goData->components.end(); ++compData)
 		{
+			
+			std::cout << "i = " << i << "\n";
+			std::string id = std::to_string(i); // convert i to a string
+
+			// Now give each element the name "name + id" so it will be unique, but give it the label of just it's name
 			switch(compData->getComp()->getType())
 			{
 			case ComponentType::TRANSFORM:
-				TwAddVarRW(_myBar, "tx", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Transform");
-				TwAddVarRW(_myBar, "ty", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Transform");
-				TwAddVarRW(_myBar, "tz", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Transform");
-				TwAddVarRW(_myBar, "rx", TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Transform");
-				TwAddVarRW(_myBar, "ry", TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Transform");
-				TwAddVarRW(_myBar, "rz", TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Transform");
-				TwAddVarRW(_myBar, "sx", TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform");
-				TwAddVarRW(_myBar, "sy", TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform");
-				TwAddVarRW(_myBar, "sz", TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform");
+				TwAddVarRW(_myBar, &(id+"tx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Transform label=tx");
+				TwAddVarRW(_myBar, &(id+"ty")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Transform label=ty");
+				TwAddVarRW(_myBar, &(id+"tz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Transform label=tz");
+				TwAddVarRW(_myBar, &(id+"rx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Transform label=rx");
+				TwAddVarRW(_myBar, &(id+"ry")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Transform label=ry");
+				TwAddVarRW(_myBar, &(id+"rz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Transform label=rz");
+				TwAddVarRW(_myBar, &(id+"sx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform label=sx");
+				TwAddVarRW(_myBar, &(id+"sy")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform label=sy");
+				TwAddVarRW(_myBar,&(id+"sz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform label=sz");
 
 				break;
 			
 			case ComponentType::CAMERA:
-
 				// None to add for now
-
-				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Camera");
+				std::cout << "Why won't you vork??\n";
+				TwAddVarRO(_myBar, "roger", TW_TYPE_INT16, &_selectedObjectID, "group=Camera");
 
 				break;
 
 				
 			case ComponentType::BOX_COL:
-
-				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Box Col");
-
 				TwAddVarRW(_myBar, "X extent", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col");
 				TwAddVarRW(_myBar, "Y extent", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col");
 				TwAddVarRW(_myBar, "Z extent", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col");
@@ -110,15 +125,11 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::LIGHT:
-
 				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Light");
 
 				break;
 
 			case ComponentType::MODL_REND:
-
-				//TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Model Render");
-
 				TwAddVarRW(_myBar, "Mesh File Path", TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render");
 				TwAddVarRW(_myBar, "Shader File Path", TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render");
 				TwAddVarRW(_myBar, "Texture File Path", TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render");
@@ -128,7 +139,6 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::PHY_BODY:
-
 				// None for now
 				
 				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Physics_Body");
@@ -136,7 +146,6 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::ROB_REND:
-
 				// None for now
 
 				TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Robot_Render");
@@ -144,9 +153,6 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::SPHERE_COL:
-
-				// TwAddVarRW(_myBar, "placeholder", TW_TYPE_FLOAT, "nothing", "group=Sphere Col");
-
 				TwAddVarRW(_myBar, "Radius", TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col");
 				TwAddVarRW(_myBar, "X offset", TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col");
 				TwAddVarRW(_myBar, "Y offset", TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col");
@@ -156,11 +162,12 @@ void GoMenu::refreshTweakBar()
 				
 			}
 
+			// Advance i
+			i++;
 		}
 		
 
 	}
-	//TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
 	TwRefreshBar(_myBar);
 }
 
