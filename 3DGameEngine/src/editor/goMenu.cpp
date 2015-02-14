@@ -23,11 +23,62 @@ void GoMenu::createTweakBar()
 	setSelectedObject(0);
 }
 
+/******************************** Add Component Functions ********************************/
+
 static void TW_CALL addCameraComponent(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
 
 	goMenu->addComponent(ComponentType::CAMERA);
+}
+
+static void TW_CALL addTransformComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::TRANSFORM);
+}
+
+static void TW_CALL addBoxColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::BOX_COL);
+}
+
+static void TW_CALL addSphereColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::SPHERE_COL);
+}
+
+static void TW_CALL addLightComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::LIGHT);
+}
+
+static void TW_CALL addModelRenderComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::MODL_REND);
+}
+
+static void TW_CALL addPhysicsBodyComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::PHY_BODY);
+}
+
+static void TW_CALL addRobotRenderComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::ROB_REND);
 }
 
 void GoMenu::addComponent(ComponentType::Type type)
@@ -51,6 +102,9 @@ void GoMenu::addComponent(ComponentType::Type type)
 	}
 	
 }
+
+
+/******************************** Tweak Bars Setup ********************************/
 
 void GoMenu::refreshTweakBar()
 {
