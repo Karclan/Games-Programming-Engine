@@ -52,6 +52,11 @@ public:
 	float* attribPtrFloat(int index);
 	std::string* attribPtrString(int index);
 
+	// Get Attribs
+	int getIntAttrib(int index); //!< Get an int attribute by index
+	float getFloatAttrib(int index); //!< Get a float attribute by index
+	std::string getStringAttrib(int index); //!< Get a string attribute by index
+
 private:
 	SPtr_Component _comp; //!< Pointer to the actual component object
 	std::vector<SPtr_AttribData> _attribs; //!< Attributes used as args in initialization. Bools and enums etc are stored as ints
@@ -61,10 +66,7 @@ private:
 	void addAttribf(float data); //!< Add a float attribute
 	void addAttribs(std::string data); //!< Add a string attribute
 
-	// Get Attribs
-	int getIntAttrib(int index); //!< Get an int attribute by index
-	float getFloatAttrib(int index); //!< Get a float attribute by index
-	std::string getStringAttrib(int index); //!< Get a string attribute by index
+	
 
 	// Set Attribs
 	void setIntAttrib(int index, int value); //!< Set an int attribute by index
