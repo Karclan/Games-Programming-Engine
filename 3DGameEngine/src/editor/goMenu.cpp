@@ -115,48 +115,48 @@ void GoMenu::refreshTweakBar()
 
 				
 			case ComponentType::BOX_COL:
-				TwAddVarRW(_myBar, &(id+"X extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col");
-				TwAddVarRW(_myBar, &(id+"Y extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col");
-				TwAddVarRW(_myBar, &(id+"Z extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col");
-				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col");
-				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col");
-				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col");
+				TwAddVarRW(_myBar, &(id+"X extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col label=X_extent");
+				TwAddVarRW(_myBar, &(id+"Y extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col label=Y_extent");
+				TwAddVarRW(_myBar, &(id+"Z extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col label=Z_extent");
+				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col label=X_offset");
+				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col label=Y_offset");
+				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col label=Z_offset");
 				
 				break;
 
 			case ComponentType::LIGHT:
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Light");
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Light label=placeholder");
 
 				break;
 
 			case ComponentType::MODL_REND:
-				TwAddVarRW(_myBar, &(id+"Mesh File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render");
-				TwAddVarRW(_myBar, &(id+"Shader File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render");
-				TwAddVarRW(_myBar, &(id+"Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render");
-				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render");
-				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render");
+				TwAddVarRW(_myBar, &(id+"Mesh File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render label=Mesh_File_Path");
+				TwAddVarRW(_myBar, &(id+"Shader File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render label=Shader_File_Path");
+				TwAddVarRW(_myBar, &(id+"Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render label=Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render label=UV_Tile_X");
+				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render label=UV_Tile_Y");
 
 				break;
 
 			case ComponentType::PHY_BODY:
 				// None for now
 				
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Physics_Body");
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Physics_Body label=placeholder");
 				
 				break;
 
 			case ComponentType::ROB_REND:
 				// None for now
 
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render");
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render label=placeholder");
 
 				break;
 
 			case ComponentType::SPHERE_COL:
-				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col");
-				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col");
-				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col");
-				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere_Col");
+				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
+				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col label=X_offset");
+				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col label=Y_offset");
+				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere_Col label=Z_offset");
 
 				break;
 				
