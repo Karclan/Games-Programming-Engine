@@ -1,9 +1,10 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
-void GoMenu::initialize(ObjectManager* mngr, EditorCamera* editorCam)
+void GoMenu::initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorCamera* editorCam)
 {
-	_objectMngr = mngr;
+	_objectMngr = objMngr;
+	_sceneMngr = sceneMngr;
 	_editorCam = editorCam;
 	testBool = false;
 }
@@ -89,24 +90,11 @@ static void TW_CALL addTransformComponent(void *clientData)
 
 void GoMenu::addComponent(ComponentType::Type type)
 {
-
 	_objectMngr->addComponent(_selectedObjectID, type);
 	refreshTweakBar();
 
 	TwRefreshBar(_myBar);
 	TwRefreshBar(_addCompBar);
-
-	std::cout << "Adding comp " << type << " to object " << _selectedObjectID << " now!\n";
-	if(_objectMngr->addComponent(_selectedObjectID, type))
-	{
-		std::cout << "Success!\n";
-		refreshTweakBar();
-	}
-	else
-	{
-		std::cout << "Failure!\n";
-	}
-	
 }
 
 
@@ -263,10 +251,7 @@ void GoMenu::update()
 {
 	// Dummy function calls on button presses for testing
 	
-	if(Input::getKeyPressed(sf::Keyboard::C)) createGameObject();
-	if(Input::getKeyPressed(sf::Keyboard::D)) deleteGameObject();
-	if(Input::getKeyPressed(sf::Keyboard::A)) createComponent();
-	if(Input::getKeyPressed(sf::Keyboard::U)) deleteComponent();
+	if(Input::getKeyPressed(sf::Keyboard::N) && Input::getKeyHeld(sf::Keyboard::LControl)) createGameObject();
 	
 
 	// Left and right cycle through game objects

@@ -66,6 +66,28 @@ std::string CompData::getStringAttrib(int index)
 	return std::static_pointer_cast<AttribDatas>(_attribs[index])->data; 
 }
 
+
+
+// Set Attribs
+void CompData::setIntAttrib(int index, int value)
+{
+	std::shared_ptr<AttribDatai> data = std::static_pointer_cast<AttribDatai>(_attribs[index]);
+	data->data = value;
+}
+void CompData::setFloatAttrib(int index, float value)
+{
+	std::shared_ptr<AttribDataf> data = std::static_pointer_cast<AttribDataf>(_attribs[index]);
+	data->data = value;
+}
+void CompData::setStringAttrib(int index, std::string value)
+{
+	std::shared_ptr<AttribDatas> data = std::static_pointer_cast<AttribDatas>(_attribs[index]);
+	data->data = value;
+}
+
+
+
+
 int CompData::attribCount() 
 {
 	return _attribs.size();
@@ -139,7 +161,8 @@ void CompData::setAttribsToComponents()
 
 			// Mesh
 			Mesh* mesh = modelRend->getMesh();
-			addAttribs(modelRend->getMesh()->getFilePath()); // attrib 0 is filepath of mesh if not prim
+			if(mesh) addAttribs(modelRend->getMesh()->getFilePath()); // attrib 0 is filepath of mesh
+			else addAttribs(""); // blank string if no mesh
 
 			// Material
 			Material* mat = modelRend->getMaterial();
@@ -302,15 +325,21 @@ void CompData::initializeComponent()
 		{
 			SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(getComp());
 
-			// Set model (attrib 0)
-			model->setMesh(Assets::getMesh(getStringAttrib(0))); // attrib 0 = mesh filepath
+			Mesh* mesh = Assets::getMesh(getStringAttrib(0)); // attrib 0 = mesh filepath
+			Shader* shader = Assets::getShader(getStringAttrib(1)); // attrib 1 = shader file path
+			Texture2D* texture = Assets::getTexture(getStringAttrib(2)); // attrib 2 = texture file path
 
-			// Set material (attrib 1 - 4)
+			if(mesh == nullptr) setStringAttrib(0, "");
+			if(shader == nullptr) setStringAttrib(1, "");
+			if(texture == nullptr) setStringAttrib(2, "");
+
+			// attrib 0 = model file path
 			// attrib 1 = shader file path
 			// attrib 2 = texture file path
 			// attrib 3 = uv tile U
 			// attrib 4 = uv tile V
-			model->setMaterial(Assets::getShader(getStringAttrib(1)), Assets::getTexture(getStringAttrib(2)), glm::vec2(getFloatAttrib(3), getFloatAttrib(4))); // set material with shader and texture
+			model->setMesh(mesh); // set model
+			model->setMaterial(shader, texture, glm::vec2(getFloatAttrib(3), getFloatAttrib(4))); // set material with shader and texture
 		}
 		break;
 

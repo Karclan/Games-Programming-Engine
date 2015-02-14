@@ -73,7 +73,10 @@ void SceneManager::loadFromXML(std::string filePath)
 //------------------------------------------------------------------
 
 
-
+void SceneManager::saveToXML(std::string filePath)
+{
+	std::cout << "Woot woot! Saving to " << filePath << "!!!!!\n";
+}
 
 
 

@@ -4,7 +4,7 @@ void Editor::startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManage
 {
 	_hInstance = hInstance;
 	_menuBar.initialize(hInstance, _goMenu, sceneMngr);
-	_goMenu.initialize(objectMngr, editorCam);
+	_goMenu.initialize(objectMngr, sceneMngr, editorCam);
 	initConsole();
 
 	_processTwEvents = false; // must be false at start as it crashes for some reason (something to do with premature handling of mouse move event)

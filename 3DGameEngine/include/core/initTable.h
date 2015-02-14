@@ -66,6 +66,11 @@ private:
 	float getFloatAttrib(int index); //!< Get a float attribute by index
 	std::string getStringAttrib(int index); //!< Get a string attribute by index
 
+	// Set Attribs
+	void setIntAttrib(int index, int value); //!< Set an int attribute by index
+	void setFloatAttrib(int index, float value); //!< Set a float attribute by index
+	void setStringAttrib(int index, std::string value); //!< Set a string attribute by index
+
 	// Helper functions for getting tinyxml data more easily
 	int to_int(TiXmlElement* elmnt, std::string attribute);
 	float to_float(TiXmlElement* elmnt, std::string attribute);

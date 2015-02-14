@@ -10,6 +10,7 @@
 #include "core\input.h"
 #include "core\initTable.h"
 #include "core\objectManager.h"
+#include "core\sceneManager.h"
 #include "editor\editorCamera.h"
 
 
@@ -20,7 +21,7 @@
 class GoMenu
 {
 public:
-	void initialize(ObjectManager* mngr, EditorCamera* editorCam);
+	void initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorCamera* editorCam);
 	void update();
 	void setGamePlaying(bool playing); 
 
@@ -46,7 +47,9 @@ private:
 	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
+	SceneManager* _sceneMngr; //!< We need this to save to XML
 	EditorCamera* _editorCam; //!< Pointer to editor cam so can set target
+	
 	
 	// Vars in Menu
 	InitTableIterator _currentGodataIter;
