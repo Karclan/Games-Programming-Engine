@@ -129,7 +129,7 @@ void GoMenu::refreshTweakBar()
 		InitTable* initTable = _objectMngr->getInitTable();
 		GOData* goData = &initTable->find(_selectedObjectID)->second;
 
-		TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
+		//TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
 		TwAddButton(_addCompBar, "buttonTest", addCameraComponent, this, "");
 		
 		//TwAddVarRW(_addCompBar, "hasCameraComponent", TW_TYPE_BOOL8, &hasCamera, "");
@@ -140,8 +140,6 @@ void GoMenu::refreshTweakBar()
 		int i = 0; // int to record place in iteration loop
 		for(compData = goData->components.begin(); compData != goData->components.end(); ++compData)
 		{
-			
-			std::cout << "i = " << i << "\n";
 			std::string id = std::to_string(i); // convert i to a string
 
 			// Now give each element the name "name + id" so it will be unique, but give it the label of just it's name
@@ -161,9 +159,7 @@ void GoMenu::refreshTweakBar()
 				break;
 			
 			case ComponentType::CAMERA:
-				// None to add for now
-				std::cout << "Why won't you vork??\n";
-				TwAddVarRO(_myBar, "roger", TW_TYPE_INT16, &_selectedObjectID, "group=Camera");
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Camera label=placeholder");
 
 				break;
 
