@@ -34,6 +34,9 @@ void GoMenu::addComponent(ComponentType::Type type)
 {
 	_objectMngr->addComponent(_selectedObjectID, type);
 	refreshTweakBar();
+
+	TwRefreshBar(_myBar);
+	TwRefreshBar(_addCompBar);
 }
 
 void GoMenu::refreshTweakBar()
@@ -46,8 +49,8 @@ void GoMenu::refreshTweakBar()
 	// Add the GO Name
 	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
 	TwAddVarRW(_addCompBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
-
 	
+
 
 	// Get game object name
 	_objName = "No Object Selected";
