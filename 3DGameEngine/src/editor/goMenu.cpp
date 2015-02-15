@@ -97,6 +97,14 @@ void GoMenu::addComponent(ComponentType::Type type)
 	TwRefreshBar(_addCompBar);
 }
 
+/******************************** Save to File Function ********************************/
+
+static void TW_CALL  saveToFile(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	// _sceneMngr->saveToXML
+}
 
 /******************************** Tweak Bars Setup ********************************/
 
@@ -110,6 +118,11 @@ void GoMenu::refreshTweakBar()
 	// Add the GO Name
 	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
 	TwAddVarRW(_addCompBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
+
+	// Write file path/save function
+
+	TwAddVarRW(_addCompBar, "File_Path_Name", TW_TYPE_STDSTRING, &filePath, "group=SaveTo label=File_Path_Name");
+	TwAddButton(_addCompBar, "Save", saveToFile, this, "");
 	
 
 
@@ -132,6 +145,7 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
 		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
 		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
+		
 		
 		
 		

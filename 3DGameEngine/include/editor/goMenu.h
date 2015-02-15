@@ -42,6 +42,7 @@ private:
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
 
 	bool testBool;
+	std::string filePath;
 	
 	TwBar* _myBar; //!< My first ant tweak bar!
 	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
