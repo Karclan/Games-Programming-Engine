@@ -57,6 +57,7 @@ private:
 	void initRobot(CompData &comp);
 	void initPhysBody(CompData &comp);
 	void initLight(CompData &comp);
+	void initMaterial(CompData &comp);
 };
 
 #endif

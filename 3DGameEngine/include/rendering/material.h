@@ -7,11 +7,17 @@
 #include "rendering\shader.h"
 #include "rendering\texture2D.h"
 
+#include "core\component.h"
+
 //! \brief Material
-class Material
+class Material : public Component
 {
 public:
 	Material(); 
+
+	ComponentType::Type getType();
+	bool isOnePerObject();
+
 
 	void setShader(Shader* shader);
 	void setTexture(Texture2D* texture);

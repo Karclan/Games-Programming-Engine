@@ -10,7 +10,7 @@ Material::Material()
 
 	_diffuse = glm::vec3(1.f,1.f,1.f);
 	_specular= glm::vec3(1.f,1.f,1.f);
-	_specularExp = 1.f;
+	_specularExp = 128.f;
 }
 
 

@@ -14,7 +14,7 @@ namespace ComponentType
 {
 	// IMPORTANT! - Bitmask is defined in globals as an uint, minimum bits for an uint in C++ standard is 16 (usually 32 on 
 	// a modern computer though). If we make more than 16 types of component consider changing to an unsigned long.
-	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT };
+	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT, MATERIAL };
 }
 
 //! Different state the component can be in

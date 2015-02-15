@@ -23,6 +23,7 @@ void SceneManager::initFromInitTable()
 				case ComponentType::ROB_REND:	initRobot(*comp);		break;
 				case ComponentType::PHY_BODY:	initPhysBody(*comp);	break;
 				case ComponentType::LIGHT:		initLight(*comp);		break;
+				case ComponentType::MATERIAL:   initMaterial(*comp);    break;
 			}
 		}
 
@@ -131,6 +132,11 @@ void SceneManager::initLight(CompData &comp)
 	light->setDiffuse(glm::vec3(dR,dG,dB));
 	light->setSpecular(glm::vec3(sR,sG,sB));
 	light->setAtteunation(glm::vec3(constant,linear,quadratic));
+}
+
+void SceneManager::initMaterial(CompData &comp)
+{
+
 }
 
 //------------------------------------------------------------------

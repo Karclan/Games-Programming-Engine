@@ -5,7 +5,7 @@ RobotRenderer::RobotRenderer()
 	// Set dependency flags so linkDependency is called with requested component
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
-	_material.setShader(Assets::getShader("diffuse"));
+	_material.setShader(Assets::getShader("advanced"));
 	_material.setTexture(nullptr);
 	generateMesh();
 
