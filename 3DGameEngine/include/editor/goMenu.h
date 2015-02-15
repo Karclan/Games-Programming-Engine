@@ -34,6 +34,7 @@ public:
 
 
 	void addComponent(ComponentType::Type type);
+	void saveToFileXML();
 
 
 
@@ -70,7 +71,7 @@ private:
 	void deleteGameObject();
 	void deleteComponent();
 
-	
+
 
 	void nextGo();
 	void previousGo();

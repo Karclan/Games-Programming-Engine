@@ -97,19 +97,30 @@ void GoMenu::addComponent(ComponentType::Type type)
 	TwRefreshBar(_addCompBar);
 }
 
-/******************************** Save to File Function ********************************/
+/******************************** Save to File Functions ********************************/
+
+void GoMenu::saveToFileXML()
+{
+	_sceneMngr->saveToXML(filePath);
+}
+
+
+
 
 static void TW_CALL  saveToFile(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
 
-	// _sceneMngr->saveToXML
+	goMenu->saveToFileXML();
 }
 
 /******************************** Tweak Bars Setup ********************************/
 
+
 void GoMenu::refreshTweakBar()
 {
+	_sceneMngr->loadFromXML(filePath);
+
 	// Remove all the variables from the tweak bar
 	TwRemoveAllVars(_myBar);
 
