@@ -7,6 +7,8 @@ void GoMenu::initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorC
 	_sceneMngr = sceneMngr;
 	_editorCam = editorCam;
 	testBool = false;
+	saveFilePath = "";
+	loadFilePath = "";
 }
 
 static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
@@ -19,6 +21,7 @@ void GoMenu::createTweakBar()
 {
 	_myBar = TwNewBar("Game Object");
 	_addCompBar = TwNewBar("Add Component");
+	_utilityBar = TwNewBar("Utility Bar");
 	refreshTweakBar();
 	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
 	setSelectedObject(0);
@@ -82,12 +85,6 @@ static void TW_CALL addTransformComponent(void *clientData)
 	goMenu->addComponent(ComponentType::TRANSFORM);
 }
 
-
-
-
-
-
-
 void GoMenu::addComponent(ComponentType::Type type)
 {
 	_objectMngr->addComponent(_selectedObjectID, type);
@@ -95,17 +92,10 @@ void GoMenu::addComponent(ComponentType::Type type)
 
 	TwRefreshBar(_myBar);
 	TwRefreshBar(_addCompBar);
+	TwRefreshBar(_utilityBar);
 }
 
 /******************************** Save to File Functions ********************************/
-
-void GoMenu::saveToFileXML()
-{
-	_sceneMngr->saveToXML(filePath);
-}
-
-
-
 
 static void TW_CALL  saveToFile(void *clientData)
 {
@@ -114,12 +104,52 @@ static void TW_CALL  saveToFile(void *clientData)
 	goMenu->saveToFileXML();
 }
 
-/******************************** Tweak Bars Setup ********************************/
+void GoMenu::saveToFileXML()
+{
+	_sceneMngr->saveToXML(saveFilePath);
+}
 
+
+/******************************** Load from File Functions ********************************/
+
+static void TW_CALL  loadFromFile(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->loadFromFileXML();
+}
+
+void GoMenu::loadFromFileXML()
+{
+	_sceneMngr->loadFromXML(loadFilePath);
+}
+
+
+/******************************** New Level Function ********************************/
+
+static void TW_CALL  newLevel(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	// TO DO - complete this function
+}
+
+
+/******************************** Create Game Object Function ********************************/
+
+static void TW_CALL  makeGameObject(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->createGameObject();
+}
+
+
+/******************************** Tweak Bars Setup ********************************/
 
 void GoMenu::refreshTweakBar()
 {
-	_sceneMngr->loadFromXML(filePath);
+	_sceneMngr->loadFromXML(loadFilePath);
 
 	// Remove all the variables from the tweak bar
 	TwRemoveAllVars(_myBar);
@@ -132,8 +162,15 @@ void GoMenu::refreshTweakBar()
 
 	// Write file path/save function
 
-	TwAddVarRW(_addCompBar, "File_Path_Name", TW_TYPE_STDSTRING, &filePath, "group=SaveTo label=File_Path_Name");
-	TwAddButton(_addCompBar, "Save", saveToFile, this, "");
+	TwAddVarRW(_utilityBar, "Save_File_Path_Name", TW_TYPE_STDSTRING, &saveFilePath, "group=SaveTo label=File_Path_Name");
+	TwAddButton(_utilityBar, "Save", saveToFile, this, "group=SaveTo");
+
+	TwAddVarRW(_utilityBar, "Load_File_Path_Name", TW_TYPE_STDSTRING, &loadFilePath, "group=LoadFrom label=File_Path_Name");
+	TwAddButton(_utilityBar, "Load", loadFromFile, this, "group=LoadFrom");
+
+	TwAddButton(_utilityBar, "Start New Level", newLevel, this, "group=NewLevel");
+
+	TwAddButton(_utilityBar, "Create Game Object", makeGameObject, this, "group=CreateGameObject");
 	
 
 

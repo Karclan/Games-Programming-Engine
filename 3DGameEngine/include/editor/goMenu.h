@@ -27,6 +27,7 @@ public:
 
 	
 	void createTweakBar();
+	void createGameObject();
 
 	// Commands
 	void newGameObject(); // create new game object
@@ -35,6 +36,7 @@ public:
 
 	void addComponent(ComponentType::Type type);
 	void saveToFileXML();
+	void loadFromFileXML();
 
 
 
@@ -43,10 +45,12 @@ private:
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
 
 	bool testBool;
-	std::string filePath;
+	std::string saveFilePath;
+	std::string loadFilePath;
 	
 	TwBar* _myBar; //!< My first ant tweak bar!
 	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
+	TwBar* _utilityBar; //!< Used for saving/loading from a file and adding a new Game Object
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 	SceneManager* _sceneMngr; //!< We need this to save to XML
@@ -66,7 +70,6 @@ private:
 
 	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
 
-	void createGameObject();
 	void createComponent();
 	void deleteGameObject();
 	void deleteComponent();
