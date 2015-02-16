@@ -12,6 +12,7 @@
 #include <assimp/scene.h>           // Output data structure
 #include <assimp/postprocess.h>     // Post processing flags
 
+
 #include "rendering\primitiveShapes.h"
 #include "rendering\material.h"
 #include "rendering\texture2D.h"
