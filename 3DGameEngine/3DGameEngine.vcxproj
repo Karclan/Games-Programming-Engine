@@ -94,6 +94,9 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\animation\animMD5.h" />
+    <ClInclude Include="include\animation\animMesh.h" />
+    <ClInclude Include="include\animation\Helpers.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
     <ClInclude Include="include\physics\octTree.h" />
@@ -137,6 +140,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\animation\animMD5.cpp" />
+    <ClCompile Include="src\animation\animMesh.cpp" />
+    <ClCompile Include="src\animation\Helpers.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
     <ClCompile Include="src\behaviour\behaviourSystem.cpp" />

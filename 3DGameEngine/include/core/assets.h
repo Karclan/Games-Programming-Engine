@@ -15,6 +15,8 @@
 #include "rendering\primitiveShapes.h"
 #include "rendering\material.h"
 #include "rendering\texture2D.h"
+#include "animation\animMD5.h"
+#include "animation\animMesh.h"
 /*! \brief Singleton class for loading and retreiving assets
 
 	Provides functions for retreiving pointers to assets such as meshes, textures and shaders.
