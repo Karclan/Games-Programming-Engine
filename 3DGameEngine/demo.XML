@@ -2,5 +2,5 @@
 <GO name="Robot">
     <COMP type="4" />
     <COMP type="1" primitive="0" mesh="Boblamp/boblampclean.md5mesh" shader="basic" texture="" tileU="1" tileV="1" />
-    <COMP type="0" tx="0" ty="0" tz="0" rx="-90" ry="0" rz="0" sx="0.05" sy="0.05" sz="0.05" />
+    <COMP type="0" tx="0" ty="1.8" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
 </GO>
