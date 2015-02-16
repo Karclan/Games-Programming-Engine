@@ -72,6 +72,11 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	}
 	for(int i = 0; i < loadedMesh->mNumFaces; ++i)
 	{
+		aiFace face = loadedMesh->mFaces[i];
+		//indices.push_back(loadedMesh->mFaces[i].mIndices[0]);
+		//indices.push_back(loadedMesh->mFaces[i].mIndices[1]);
+		//indices.push_back(loadedMesh->mFaces[i].mIndices[2]);
+		std::cout << i;
 		for(int j = 0; j < loadedMesh->mFaces[i].mNumIndices; ++j)
 		{
 			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
