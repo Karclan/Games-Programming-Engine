@@ -186,7 +186,7 @@ void SceneManager::writeDemoXML()
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
 	xmlAddModelRend(robot, "Boblamp/boblampclean.md5mesh", "basic", "");
-	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(1, 1, 1));
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(-90, 0, 0), glm::vec3(0.05f, 0.05f, 0.05f));
 	
 	// Save doc
 	doc.SaveFile();

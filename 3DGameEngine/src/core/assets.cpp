@@ -61,12 +61,13 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	for(int i = 0; i < loadedMesh->mNumVertices; ++i)
 	{
 		verts.push_back(glm::vec3(loadedMesh->mVertices[i].x, loadedMesh->mVertices[i].y, loadedMesh->mVertices[i].z));
-		//normals.push_back(glm::vec3(loadedMesh->mNormals[i].x, loadedMesh->mNormals[i].y, loadedMesh->mNormals[i].z));
-		normals.push_back(glm::vec3(0,1,0));
-
-		//uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
-		uvs.push_back(glm::vec2(1, 1));
-
+		
+		if(loadedMesh->HasNormals())
+			normals.push_back(glm::vec3(loadedMesh->mNormals[i].x, loadedMesh->mNormals[i].y, loadedMesh->mNormals[i].z));
+		
+		if(loadedMesh->HasTextureCoords(0))
+			uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
+		
 		colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
 	}
 	for(int i = 0; i < loadedMesh->mNumFaces; ++i)
@@ -82,8 +83,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->generateBuffers();
 	mesh->setVerts(verts);
 	mesh->setIndices(indices);
-	mesh->setNormals(normals);
-	mesh->setUvs(uvs);
+	if(normals.size() > 0) mesh->setNormals(normals);
+	if(uvs.size() > 0) mesh->setUvs(uvs);
 	mesh->setColours(colours);
 
 	return mesh;
