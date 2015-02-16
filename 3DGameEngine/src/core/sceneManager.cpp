@@ -185,67 +185,8 @@ void SceneManager::writeDemoXML()
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
-	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
-	xmlAddModelRend(robot, "sphere", "advanced", "");
-	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
-	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
-	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
-	//xmlAddRobot(robot);
-	
-
-	// Random test collidy thing
-	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
-	//xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
-	xmlAddModelRend(ball, "cube", "advanced", "ogre_diffuse.png");
-	xmlAddPhysBody(ball);
-	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
-	xmlAddBoxCol(ball, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
-
-
-	// Camera Object
-	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
-	xmlAddTransform(cameraGo, glm::vec3(0, 0, 5), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddCamera(cameraGo);
-
-	// Floor
-	TiXmlElement * floor = xmlAddGo(&doc, "Floor");
-	xmlAddTransform(floor, glm::vec3(0, -0.005f, 0), glm::vec3(), glm::vec3(40, 0.01f, 40));
-	xmlAddModelRend(floor, "cube", "advanced", "grass.png", 20, 20);
-
-	// Walls
-	TiXmlElement * wall = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall, glm::vec3(0, 0.3, -2), glm::vec3(), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall, "cube", "advanced", "wall.png", 20, 1);
-
-	TiXmlElement * wall2 = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall2, glm::vec3(-5.25, 0.3, 2.75), glm::vec3(0, 90, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall2, "cube", "advanced", "wall.png", 20, 1);
-
-	TiXmlElement * wall3 = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall3, glm::vec3(-10, 0.3, 8), glm::vec3(0, 0, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall3, "cube", "advanced", "wall.png", 20, 1);
-
-
-	// Windmills and sails
-	glm::vec2 windPosits[] = { glm::vec2(-1, -5), glm::vec2(3, 0), glm::vec2(-6.5, 6) };
-	for(int i = 0; i < 3; i++)
-	{
-		// Windmill
-		TiXmlElement * windmill = xmlAddGo(&doc, "Windmill");
-		xmlAddTransform(windmill, glm::vec3(windPosits[i].x, 1.3f, windPosits[i].y), glm::vec3(), glm::vec3(1, 2.6f, 1));
-		xmlAddModelRend(windmill, "cube", "advanced", "windmill.png", 1, 2.6f);
-
-		// Sail
-		TiXmlElement * sail = xmlAddGo(&doc, "Sail");
-		xmlAddTransform(sail, glm::vec3(windPosits[i].x, 2, windPosits[i].y + 0.525f), glm::vec3(), glm::vec3(2, 2, 0.05f));
-		xmlAddModelRend(sail, "cube", "advanced", "sails.png");
-		xmlAddBehaviour(sail, BehaviourTypes::ROT_OBJ);
-	}
-
-	
-
+	xmlAddModelRend(robot, "Boblamp/boblampclean.md5mesh", "basic", "");
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(1, 1, 1));
 	
 	// Save doc
 	doc.SaveFile();
