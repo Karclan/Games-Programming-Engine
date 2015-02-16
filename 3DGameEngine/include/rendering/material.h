@@ -18,10 +18,10 @@ public:
 	ComponentType::Type getType();
 	bool isOnePerObject();
 
+	void bind(glm::mat4 m, GLfloat* v, GLfloat* p);
 
 	void setShader(Shader* shader);
 	void setTexture(Texture2D* texture);
-	void bind(glm::mat4 m, GLfloat* v, GLfloat* p);
 	void setUVTiling(glm::vec2 tile); //!< Set how many times image should tile
 
 	void setDiffuse(glm::vec3 diff);
@@ -46,5 +46,8 @@ private:
 	glm::vec3 _specular;
 	GLfloat _specularExp;
 };
+
+
+typedef std::shared_ptr<Material> SPtr_Material;
 
 #endif

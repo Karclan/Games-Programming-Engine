@@ -173,7 +173,14 @@ void CompData::setAttribsToComponents()
 			addAttribf(light->getAtteunation().z); // Quadratic
 			break;
 		}
+	case ComponentType::MATERIAL:
+		{
+
+			break;
+		}
 	}
+	
+
 }
 //----------
 
@@ -254,6 +261,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 			addAttribf(to_float(compElmnt,"linear")); // Linear
 			addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
 		break;
-
+	case ComponentType::MATERIAL:
+		break;
 	}
 }

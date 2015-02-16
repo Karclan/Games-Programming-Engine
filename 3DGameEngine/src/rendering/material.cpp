@@ -3,6 +3,7 @@
 
 Material::Material()
 {
+
 	glEnable(GL_TEXTURE_2D);
 	_shader = nullptr;
 	_texture = nullptr;
@@ -12,7 +13,14 @@ Material::Material()
 	_specular= glm::vec3(1.f,1.f,1.f);
 	_specularExp = 128.f;
 }
-
+ComponentType::Type Material::getType()
+{
+	return ComponentType::MATERIAL;
+}
+bool Material::isOnePerObject()
+{
+	return true;
+}
 
 void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 {
@@ -21,7 +29,6 @@ void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 	if(_texture == nullptr)
 	{
 		// Unbind texture and draw without
-
 		_shader->useProgram();
 		_shader->setUniform("Material.diff",_diffuse);
 		_shader->setUniform("Material.spec",_specular);
