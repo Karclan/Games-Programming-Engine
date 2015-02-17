@@ -6,7 +6,6 @@ Assets* Assets::get()
 	return &assets;
 }
 
-
 Assets::Assets()
 {
 	loadBasicAssets();
@@ -17,14 +16,11 @@ Assets::~Assets()
 	unloadAllAssets();
 }
 
-
-
 void Assets::loadBasicAssets()
 {
 	// Load the primitive shapes
 	_primitives.loadShapes();
 }
-
 
 // Imperfect function but hey it's just for testing!
 Mesh* Assets::loadMeshFromFile(std::string &filePath)
