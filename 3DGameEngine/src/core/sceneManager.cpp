@@ -117,7 +117,7 @@ void SceneManager::initLight(CompData &comp)
 	float constant = comp.getFloatAttrib(10);
 	float linear = comp.getFloatAttrib(11);
 	float quadratic = comp.getFloatAttrib(12);
-	std::cout<<"quadratic: " <<quadratic<<"\n";
+
 	SPtr_Light light = std::static_pointer_cast<Light>(comp.getComp());
 	light->setLightType(lightType);
 	light->setAmbient(glm::vec3(aR,aG,aB));
