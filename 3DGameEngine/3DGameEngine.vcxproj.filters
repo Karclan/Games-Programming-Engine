@@ -336,5 +336,11 @@
     <None Include="assets\shaders\specular.vert">
       <Filter>Resource Files\ShaderFiles</Filter>
     </None>
+    <None Include="assets\shaders\advanced.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\advanced.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -45,6 +45,9 @@ struct PointLight
  vec3 spec;			   	//Specular light intensity
 };
 
+uniform SpotLight spotLight[MAX_SPOTLIGHTS];
+uniform PointLight pointLight[MAX_POINTLIGHTS];
+
 uniform mat3 NormalMatrix;
 uniform vec3 viewPos;
 
@@ -54,8 +57,8 @@ uniform vec2 uvTile;
 
 uniform int numOfSpotLights;
 uniform int numOfPointLights;
-uniform SpotLight spotLight[MAX_SPOTLIGHTS];
-uniform PointLight pointLight[MAX_POINTLIGHTS];
+
+
 
 uniform Material material;
 

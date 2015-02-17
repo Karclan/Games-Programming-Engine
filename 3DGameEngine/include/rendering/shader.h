@@ -27,8 +27,6 @@ public:
 	void setMVP(GLfloat* m, GLfloat* v, GLfloat* p); //!< set the mvp matrices in the shader
 	void setTexTile(glm::vec2 tile); //!< Set tex tiles
 	GLuint getTexLocation() { return _texHandle; }
-	
-	void setDirectionalLight(); //!< Setup lighting like this for now as I'm unsure exactly how lighting will be handled - need a few more shader lectures!
 
 	void setUniform(const char *name, float x, float y, float z);
     void setUniform(const char *name, const glm::vec2	&v);
