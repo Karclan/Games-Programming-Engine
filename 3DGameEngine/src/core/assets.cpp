@@ -77,6 +77,7 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
 		}
 	}
+
 	
 	// Now set mesh properties via vector
 	Mesh* mesh = new Mesh();
