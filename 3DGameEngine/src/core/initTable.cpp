@@ -228,31 +228,7 @@ void CompData::setAttribsToComponents()
 		{
 			break;
 		}
-
-	case ComponentType::SPHERE_COL:
-		{
-			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
-			addAttribf(sphereCol->getRadius()); // radius
-			addAttribf(sphereCol->getOffset().x); // offset x
-			addAttribf(sphereCol->getOffset().y); // offset y
-			addAttribf(sphereCol->getOffset().z); // offset z
-			break;
-		}
-
-	case ComponentType::BOX_COL:
-		{
-			SPtr_BoxCol boxCollider = std::static_pointer_cast<BoxCollider>(_comp);
-			addAttribf(boxCollider->getExtents().x); // extents x
-			addAttribf(boxCollider->getExtents().y); // extents y
-			addAttribf(boxCollider->getExtents().z); // extents z
-			addAttribf(boxCollider->getOffset().x); // offset x
-			addAttribf(boxCollider->getOffset().y); // offset y
-			addAttribf(boxCollider->getOffset().z); // offset z
-			break;
-		}
 	}
-	
-
 }
 //----------
 
