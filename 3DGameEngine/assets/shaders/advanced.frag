@@ -45,6 +45,9 @@ struct PointLight
  vec3 spec;			   	//Specular light intensity
 };
 
+uniform SpotLight spotLight[MAX_SPOTLIGHTS];
+uniform PointLight pointLight[MAX_POINTLIGHTS];
+
 uniform mat3 NormalMatrix;
 uniform vec3 viewPos;
 
@@ -54,8 +57,8 @@ uniform vec2 uvTile;
 
 uniform int numOfSpotLights;
 uniform int numOfPointLights;
-uniform SpotLight spotLight[MAX_SPOTLIGHTS];
-uniform PointLight pointLight[MAX_POINTLIGHTS];
+
+
 
 uniform Material material;
 
@@ -77,8 +80,8 @@ vec3 CalSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 
 	if(theta > light.spotOutCut)
 	{
-		//if(dot(viewDir,normal)>0)
-		//{
+		if(dot(viewDir,normal)>0)
+		{
 			float intensity = clamp((theta - light.spotOutCut) / epsilon, 0.0, 1.0);
  
 			float diffuse = max(dot(normal, lightDir), 0.0);
@@ -92,7 +95,7 @@ vec3 CalSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 			specularCol*= attenuation;
 
 			return ambientCol + diffuseCol + specularCol;
-		//}
+		}
 	}
 	return  ambientCol;
 }
@@ -107,8 +110,8 @@ vec3 CalPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 	
 	vec3 ambientCol = light.amb * material.diff;
 	ambientCol *= attenuation;
-	//if(dot(viewDir,normal)>0)
-	//{
+	if(dot(viewDir,normal)>0)
+	{
 	float diffuse  = max(dot(normal, lightDir), 0.0);
 	float specular = pow(max(dot(viewDir, reflectDir), 0.0), material.specEx);
     
@@ -121,8 +124,8 @@ vec3 CalPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 	specularCol*= attenuation;
 		
 	return ambientCol + diffuseCol + specularCol;
-	//}
-	//return  ambientCol;
+	}
+	return  ambientCol;
 }
 
 void main()

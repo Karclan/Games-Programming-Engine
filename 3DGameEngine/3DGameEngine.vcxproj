@@ -180,6 +180,8 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
+    <None Include="assets\shaders\advanced.frag" />
+    <None Include="assets\shaders\advanced.vert" />
     <None Include="assets\shaders\basic.frag" />
     <None Include="assets\shaders\basic.vert" />
     <None Include="assets\shaders\diffuse.frag" />
