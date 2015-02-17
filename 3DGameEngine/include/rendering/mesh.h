@@ -61,7 +61,7 @@ private:
 	int _dataSize[MeshAttribs::NUM_ATTRIBS]; //!< Holds the number of elements in each buffer (useful for if you want to read from buffers later and also for drawing as we need to know how many elements)
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
 
-
+	std::vector<VertexBoneData> _bones;
 };
 
 #endif
