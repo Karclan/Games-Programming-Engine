@@ -1,7 +1,10 @@
 #ifndef PRIMITIVE_SHAPES_H
 #define PRIMITIVE_SHAPES_H
 
+#define _USE_MATH_DEFINES
+
 #include <vector>
+#include <math.h>
 
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
@@ -17,7 +20,7 @@
 class PrimitiveShapes
 {
 public:
-	enum Type { TRIANGLE, CUBE, NUM_SHAPES };
+	enum Type { TRIANGLE, CUBE, SPHERE, NUM_SHAPES };
 	
 	PrimitiveShapes();
 	
@@ -33,11 +36,13 @@ public:
 private:
 	void loadTriangle();
 	void loadCube();
+	void loadSphere();
 
 	Mesh _meshes[NUM_SHAPES];
 
 
 
+	
 
 };
 

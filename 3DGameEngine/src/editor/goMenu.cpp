@@ -1,29 +1,324 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
-void GoMenu::initialize(ObjectManager* mngr)
+void GoMenu::initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorCamera* editorCam)
 {
-	_objectMngr = mngr;
+	_objectMngr = objMngr;
+	_sceneMngr = sceneMngr;
+	_editorCam = editorCam;
+	testBool = false;
+	saveFilePath = "";
+	loadFilePath = "";
+}
+
+static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
+{
+  // Copy the content of souceString handled by the AntTweakBar library to destinationClientString handled by your application
+  destinationClientString = sourceLibraryString;
+}
+
+void GoMenu::createTweakBar()
+{
+	_myBar = TwNewBar("Game Object");
+	_addCompBar = TwNewBar("Add Component");
+	_utilityBar = TwNewBar("Utility Bar");
+	refreshTweakBar();
+	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
+	setSelectedObject(0);
+}
+
+/******************************** Add Component Functions ********************************/
+
+static void TW_CALL addBoxColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::BOX_COL);
+}
+
+static void TW_CALL addCameraComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::CAMERA);
+}
+
+static void TW_CALL addLightComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::LIGHT);
+}
+
+static void TW_CALL addModelRenderComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::MODL_REND);
+}
+
+static void TW_CALL addPhysicsBodyComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::PHY_BODY);
+}
+
+static void TW_CALL addRobotRenderComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::ROB_REND);
+}
+
+static void TW_CALL addSphereColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::SPHERE_COL);
+}
+
+static void TW_CALL addTransformComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::TRANSFORM);
+}
+
+void GoMenu::addComponent(ComponentType::Type type)
+{
+	_objectMngr->addComponent(_selectedObjectID, type);
+	refreshTweakBar();
+
+	TwRefreshBar(_myBar);
+	TwRefreshBar(_addCompBar);
+	TwRefreshBar(_utilityBar);
+}
+
+/******************************** Save to File Functions ********************************/
+
+static void TW_CALL  saveToFile(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->saveToFileXML();
+}
+
+void GoMenu::saveToFileXML()
+{
+	_sceneMngr->saveToXML(saveFilePath);
 }
 
 
+/******************************** Load from File Functions ********************************/
 
-void GoMenu::initTweakBars()
+static void TW_CALL  loadFromFile(void *clientData)
 {
-	_myBar = TwNewBar("Babby's First");
-	TwAddVarRW(_myBar, "NameOfMyVariable", TW_TYPE_FLOAT, &_myFloat, NULL);
-	mousePressed = false;
-	_fixedTime = 0;
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->loadFromFileXML();
+}
+
+void GoMenu::loadFromFileXML()
+{
+	_sceneMngr->loadFromXML(loadFilePath);
 }
 
 
+/******************************** New Level Function ********************************/
+
+static void TW_CALL  newLevel(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	// TO DO - complete this function
+}
+
+
+/******************************** Create Game Object Function ********************************/
+
+static void TW_CALL  makeGameObject(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->createGameObject();
+}
+
+
+/******************************** Tweak Bars Setup ********************************/
+
+void GoMenu::refreshTweakBar()
+{
+	_sceneMngr->loadFromXML(loadFilePath);
+
+	// Remove all the variables from the tweak bar
+	TwRemoveAllVars(_myBar);
+
+	// TwDefine(" GLOBAL fontstyle=fixed ");	// Changes the font style
+
+	// Add the GO Name
+	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
+	TwAddVarRW(_addCompBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
+
+	// Write file path/save function
+
+	TwAddVarRW(_utilityBar, "Save_File_Path_Name", TW_TYPE_STDSTRING, &saveFilePath, "group=SaveTo label=File_Path_Name");
+	TwAddButton(_utilityBar, "Save", saveToFile, this, "group=SaveTo");
+
+	TwAddVarRW(_utilityBar, "Load_File_Path_Name", TW_TYPE_STDSTRING, &loadFilePath, "group=LoadFrom label=File_Path_Name");
+	TwAddButton(_utilityBar, "Load", loadFromFile, this, "group=LoadFrom");
+
+	TwAddButton(_utilityBar, "Start New Level", newLevel, this, "group=NewLevel");
+
+	TwAddButton(_utilityBar, "Create Game Object", makeGameObject, this, "group=CreateGameObject");
+	
+
+
+	// Get game object name
+	_objName = "No Object Selected";
+	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
+	if(go)
+	{
+		_objName = go->getName();
+
+		InitTable* initTable = _objectMngr->getInitTable();
+		GOData* goData = &initTable->find(_selectedObjectID)->second;
+
+		//TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
+		TwAddButton(_addCompBar, "addBoxCol", addBoxColComponent, this, "");
+		TwAddButton(_addCompBar, "addCamera", addCameraComponent, this, "");
+		TwAddButton(_addCompBar, "addLight", addLightComponent, this, "");
+		TwAddButton(_addCompBar, "addModelRender", addModelRenderComponent, this, "");
+		TwAddButton(_addCompBar, "addPhysicsBody", addPhysicsBodyComponent, this, "");
+		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
+		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
+		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
+		
+		
+		
+		
+
+		// Now link all component vars
+		std::list<CompData>::iterator compData;
+		int i = 0; // int to record place in iteration loop
+		for(compData = goData->components.begin(); compData != goData->components.end(); ++compData)
+		{
+			std::string id = std::to_string(i); // convert i to a string
+
+			// Now give each element the name "name + id" so it will be unique, but give it the label of just it's name
+			switch(compData->getComp()->getType())
+			{
+			case ComponentType::TRANSFORM:
+				TwAddVarRW(_myBar, &(id+"tx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Transform label=tx");
+				TwAddVarRW(_myBar, &(id+"ty")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Transform label=ty");
+				TwAddVarRW(_myBar, &(id+"tz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Transform label=tz");
+				TwAddVarRW(_myBar, &(id+"rx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Transform label=rx");
+				TwAddVarRW(_myBar, &(id+"ry")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Transform label=ry");
+				TwAddVarRW(_myBar, &(id+"rz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Transform label=rz");
+				TwAddVarRW(_myBar, &(id+"sx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform label=sx");
+				TwAddVarRW(_myBar, &(id+"sy")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform label=sy");
+				TwAddVarRW(_myBar, &(id+"sz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform label=sz");
+
+				break;
+			
+			case ComponentType::CAMERA:
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Camera label=placeholder");
+
+				break;
+
+				
+			case ComponentType::BOX_COL:
+				TwAddVarRW(_myBar, &(id+"X extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col label=X_extent");
+				TwAddVarRW(_myBar, &(id+"Y extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col label=Y_extent");
+				TwAddVarRW(_myBar, &(id+"Z extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col label=Z_extent");
+				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col label=X_offset");
+				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col label=Y_offset");
+				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col label=Z_offset");
+				
+				break;
+
+			case ComponentType::LIGHT:
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Light label=placeholder");
+
+				break;
+
+			case ComponentType::MODL_REND:
+				TwAddVarRW(_myBar, &(id+"Mesh File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render label=Mesh_File_Path");
+				TwAddVarRW(_myBar, &(id+"Shader File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render label=Shader_File_Path");
+				TwAddVarRW(_myBar, &(id+"Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render label=Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render label=UV_Tile_X");
+				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render label=UV_Tile_Y");
+
+				break;
+
+			case ComponentType::PHY_BODY:
+				// None for now
+				
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Physics_Body label=placeholder");
+				
+				break;
+
+			case ComponentType::ROB_REND:
+				// None for now
+
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render label=placeholder");
+
+				break;
+
+			case ComponentType::SPHERE_COL:
+				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
+				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col label=X_offset");
+				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col label=Y_offset");
+				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere_Col label=Z_offset");
+
+				break;
+				
+			}
+
+			// Advance i
+			i++;
+		}
+		
+
+	}
+	TwRefreshBar(_myBar);
+}
+
+
+// This will go through each object and ensure it matches init data. It's called automatically when certain events occur
+void GoMenu::refreshGameObjects()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+
+	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
+	if(go)
+	{
+		go->setName(_objName);
+	}
+
+	InitTable* initTable = _objectMngr->getInitTable();
+	InitTableIterator goData;
+	for(goData = initTable->begin(); goData != initTable->end(); ++goData)
+	{
+		// Iterate through every component and init it
+		for(std::list<CompData>::iterator comp = goData->second.components.begin(); comp != goData->second.components.end(); ++comp)
+		{
+			comp->initializeComponent();
+		}
+	}
+
+}
 
 void GoMenu::update()
 {
-	if(Input::getKeyPressed(sf::Keyboard::C)) createGameObject();
-	if(Input::getKeyPressed(sf::Keyboard::D)) deleteGameObject();
-	if(Input::getKeyPressed(sf::Keyboard::A)) createComponent();
-	if(Input::getKeyPressed(sf::Keyboard::U)) deleteComponent();
+	// Dummy function calls on button presses for testing
+	
+	if(Input::getKeyPressed(sf::Keyboard::N) && Input::getKeyHeld(sf::Keyboard::LControl)) createGameObject();
+	
+
+	// Left and right cycle through game objects
+	if(Input::getKeyPressed(sf::Keyboard::Left)) previousGo();
+	if(Input::getKeyPressed(sf::Keyboard::Right)) nextGo();
 }
 
 
@@ -32,12 +327,11 @@ void GoMenu::setGamePlaying(bool playing)
 	_gamePlaying = playing;
 }
 
-
-
 void GoMenu::createGameObject()
 {
 	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	_selectedObjectID = _objectMngr->createGameObject("Bobby McCormack");
+	setSelectedObject(_objectMngr->createGameObject("Bobby McCormack"));
+	refreshTweakBar();
 }
 void GoMenu::createComponent()
 {
@@ -53,4 +347,62 @@ void GoMenu::deleteComponent()
 {
 	if(_gamePlaying) return; // Cannot alter objects when in play mode
 	std::cout << "Deleted Component!\n";
+}
+
+
+
+
+void GoMenu::nextGo()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+
+	refreshGameObjects();
+	InitTable* initTable = _objectMngr->getInitTable();
+	InitTableIterator it = initTable->find(_selectedObjectID); // iterator 
+	it = ++it;
+	if(it == initTable->end()) it = initTable->begin();
+	setSelectedObject(it->first);
+	refreshTweakBar();
+}
+
+void GoMenu::previousGo()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+
+	refreshGameObjects();
+	InitTable* initTable = _objectMngr->getInitTable();
+	InitTableIterator it = initTable->find(_selectedObjectID); // iterator
+	if(it == initTable->begin())
+	{
+		it = initTable->end();
+	}
+
+	it = --it;
+
+	setSelectedObject(it->first);
+	refreshTweakBar();
+}
+
+
+void GoMenu::setSelectedObject(int objID)
+{
+	_selectedObjectID = objID;
+	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
+	if(go )
+	{
+		SPtr_Transform trans = std::static_pointer_cast<Transform>(go->getComponent(ComponentType::TRANSFORM));
+		if(trans)
+		{
+			_editorCam->setTarget(trans->getPosition());
+		}
+		else
+		{
+			_editorCam->setTarget(glm::vec3(0, 0, 0));
+		}
+	}
+	else
+	{
+		_editorCam->setTarget(glm::vec3(0, 0, 0));
+	}
+
 }

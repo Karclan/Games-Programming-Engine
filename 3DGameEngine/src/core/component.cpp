@@ -18,6 +18,11 @@ BITMASK Component::getDepFlags()
 	return _dependencyFlags;
 }
 
+BITMASK Component::getOptionalDepFlags()
+{
+	return _optionalDepFlags;
+}
+
 
 
 void Component::destroy()
@@ -55,4 +60,11 @@ bool Component::getIfDepFlagSet(ComponentType::Type type)
 	// If it is 1 then the flag is set and this value will & with 1 in the bitmask to produce 1, giving us some number other than 0. Cast to bool gives you true!
 
 	return _dependencyFlags & 1<<(int)type;
+}
+
+
+
+void Component::setOptionalDepFlag(ComponentType::Type type)
+{
+	_optionalDepFlags = _optionalDepFlags | 1<<(int)type;
 }

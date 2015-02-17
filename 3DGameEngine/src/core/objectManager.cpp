@@ -155,28 +155,48 @@ void ObjectManager::linkComponents(unsigned int goID)
 {
 	// For now using init table as easier to access list of components. This function could be done using _gameObjects or even actually in the GameObject class itself
 	GOData* goData = &_initTable.find(goID)->second;
+	SPtr_GameObject gameObject = getGameObject(goID);
 
-	// Iterate through every component and add it to the game object
+	// Iterate through every component check if it requires any dependencies
 	for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
 	{
 		// New dependency what not
 		BITMASK dependencies = comp->getComp()->getDepFlags();
-		SPtr_GameObject gameObject = getGameObject(goID);
-
-		// For each bit in the bitmask
-		for(int i = 0; i < BITMASK_SIZE; ++i)
+		BITMASK optDependencies = comp->getComp()->getOptionalDepFlags();
+		
+		// If has dependencies
+		if(dependencies != 0)
 		{
-			if((dependencies & 1<<i) != 0) // if bit 'i' is set
+			// For each bit in the bitmask
+			for(int i = 0; i < BITMASK_SIZE; ++i)
 			{
-				SPtr_Component desiredComponent = gameObject->getComponent((ComponentType::Type)i);
-				if(!desiredComponent)
+				if((dependencies & 1<<i) != 0) // if bit 'i' is set
 				{
-					addComponent(goID, (ComponentType::Type)i);
-					return; // coz addComponent will link again we can just return after this
+					SPtr_Component desiredComponent = gameObject->getComponent((ComponentType::Type)i);
+					if(!desiredComponent)
+					{
+						addComponent(goID, (ComponentType::Type)i);
+						return; // coz addComponent will link again we can just return after this
+					}
+					else
+					{
+						comp->getComp()->linkDependency(desiredComponent);
+					}
 				}
-				else
+			}
+		}
+
+
+		// If has optional dependencies
+		if(optDependencies != 0)
+		{
+			// For each bit in the bitmask
+			for(int i = 0; i < BITMASK_SIZE; ++i)
+			{
+				if((optDependencies & 1<<i) != 0) // if bit 'i' is set
 				{
-					comp->getComp()->linkDependency(desiredComponent);
+					SPtr_Component desiredComponent = gameObject->getComponent((ComponentType::Type)i);
+					if(desiredComponent) comp->getComp()->linkDependency(desiredComponent);
 				}
 			}
 		}
@@ -211,6 +231,9 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
 	case ComponentType::LIGHT:		newComponent.reset(new Light());			break;
+	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
+	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
+
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -236,8 +259,9 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 		_rendSys->addAnimatedObject(std::static_pointer_cast<ModelRenderer>(newComponent));
 		break;
 
-	case ComponentType::PHY_BODY:
-		_physicsSys->addPhysBody(std::static_pointer_cast<PhysicsBody>(newComponent));
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));
 		break;
 
 	case ComponentType::LIGHT:

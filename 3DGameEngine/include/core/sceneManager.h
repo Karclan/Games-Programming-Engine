@@ -34,7 +34,7 @@ public:
 	void writeDemoXML(); //!< Write a basic scene to XML, mainly used for testing purposes.
 	void loadFromXML(std::string filePath); //!< Load init table from xml file
 	void initFromInitTable(); //!< Initialize all components to their starting values
-	
+	void saveToXML(std::string filePath); //!< Save from init table to XML
 
 private:
 	ObjectManager* _objMngr;
@@ -43,21 +43,14 @@ private:
 	TiXmlElement* xmlAddGo(TiXmlDocument* doc, std::string name);
 	void xmlAddTransform(TiXmlElement* go, glm::vec3 t, glm::vec3 r, glm::vec3 s);
 	void xmlAddCamera(TiXmlElement* go);
-	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture);
-	void xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV);
+	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture);
+	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV);
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);
+	void xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset);
+	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
 	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
 
-
-	// Functions that init a component
-	void initTransform(CompData &comp);
-	void initCamera(CompData &comp);
-	void initModelRend(CompData &comp);
-	void initRobot(CompData &comp);
-	void initPhysBody(CompData &comp);
-	void initLight(CompData &comp);
-	void initMaterial(CompData &comp);
 };
 
 #endif

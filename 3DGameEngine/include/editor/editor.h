@@ -23,11 +23,11 @@
 class Editor
 {
 public:
-	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr);
+	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr, EditorCamera* editorCam);
 	void update();
 	bool gamePlaying(); //!< Get if the game is currently in play mode rather than edit mode
 
-	void initTweakBars() { _goMenu.initTweakBars(); }
+	void initTweakBars() { _goMenu.createTweakBar(); }
 	int processTweakBarEvents(sf::Event* e);
 
 	// Call backs, called from main. Can't be static as need info about editor (could make editor singleton to circumvent this but works fine for now)

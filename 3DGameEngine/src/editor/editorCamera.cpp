@@ -15,8 +15,20 @@ void EditorCamera::init()
 	_targetDist = 10.0f;
 }
 
+
+void EditorCamera::setTarget(glm::vec3 target)
+{
+	if(!_transform) return;
+	_transform->setPosition(target);
+	_transform->translate(_transform->getForward() * -_targetDist);
+	_targetPos = target;
+}
+
+
 void EditorCamera::update(float t)
 {
+	_targetDist = glm::distance(_transform->getPosition(), _targetPos);
+
 	// ROTATE CAMERA BY HOLDING LEFT MOUSE AND LEFT ALT BUTTON
 	if(Input::getKeyHeld(sf::Keyboard::LAlt) && Input::getMouseHeld(sf::Mouse::Left))
 	{

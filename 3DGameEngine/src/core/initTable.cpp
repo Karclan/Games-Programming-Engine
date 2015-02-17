@@ -13,6 +13,22 @@ CompData::~CompData()
 	_attribs.clear();
 }
 
+// Get pointers to attribs so they can be linked with editor
+int* CompData::attribPtrInt(int index)
+{
+	return &std::static_pointer_cast<AttribDatai>(_attribs[index])->data;
+}
+
+float* CompData::attribPtrFloat(int index)
+{
+	return &std::static_pointer_cast<AttribDataf>(_attribs[index])->data;
+}
+
+std::string* CompData::attribPtrString(int index)
+{
+	return &std::static_pointer_cast<AttribDatas>(_attribs[index])->data;
+}
+
 
 void CompData::addAttribi(int data)
 {
@@ -50,6 +66,28 @@ std::string CompData::getStringAttrib(int index)
 	return std::static_pointer_cast<AttribDatas>(_attribs[index])->data; 
 }
 
+
+
+// Set Attribs
+void CompData::setIntAttrib(int index, int value)
+{
+	std::shared_ptr<AttribDatai> data = std::static_pointer_cast<AttribDatai>(_attribs[index]);
+	data->data = value;
+}
+void CompData::setFloatAttrib(int index, float value)
+{
+	std::shared_ptr<AttribDataf> data = std::static_pointer_cast<AttribDataf>(_attribs[index]);
+	data->data = value;
+}
+void CompData::setStringAttrib(int index, std::string value)
+{
+	std::shared_ptr<AttribDatas> data = std::static_pointer_cast<AttribDatas>(_attribs[index]);
+	data->data = value;
+}
+
+
+
+
 int CompData::attribCount() 
 {
 	return _attribs.size();
@@ -82,6 +120,11 @@ float CompData::to_float(TiXmlElement* elmnt, std::string attribute)
 //####################################################################################
 //~~~~~~~~~~~~~~ FUNCTIONS TO EDIT WHEN MAKING NEW TYPES OF COMPONENT! ~~~~~~~~~~~~~~~
 //####################################################################################
+// Basically we need to know 3 things
+// 1) - How to set attribs in this data class to the corresponding variable values in actual component
+// 2) - How to convert attribs from XML to corresponding attribs in this data class
+// 3) - How to initialize the component, in other words how to set the variables in actual component to the values stored in this data class
+// These 3 things are defined in switch statements (with a case for each component type) in the 3 functions below
 
 // The default attribs - please ensure correct number and type for this component's initialization
 void CompData::setAttribsToComponents()
@@ -115,34 +158,19 @@ void CompData::setAttribsToComponents()
 	case ComponentType::MODL_REND:
 		{
 			SPtr_ModelRend modelRend = std::static_pointer_cast<ModelRenderer>(_comp);
+
+			// Mesh
 			Mesh* mesh = modelRend->getMesh();
-			int prim = -1; // if primitive mesh will be something other than -1
-			
-			if(mesh != nullptr)
-			{
-				prim = modelRend->getMesh()->getPrimID();
-				if(prim != -1)
-				{
-					addAttribi((int)true); // attrib 0 is if primitive mesh or not
-					addAttribi(prim); // attrib 1 is prim ID if prim
-				}
-				else
-				{
-					addAttribi((int)false); // attrib 0 is if primitive mesh or not
-					addAttribs(modelRend->getMesh()->getFilePath()); // attrib 1 is filepath of mesh if not prim
-				}
-			}
-			else
-			{
-				addAttribi((int)false); // attrib 0 is if primitive mesh or not
-				addAttribs(""); // attrib 1 is prim ID if prim
-			}
-			
+			if(mesh) addAttribs(modelRend->getMesh()->getFilePath()); // attrib 0 is filepath of mesh
+			else addAttribs(""); // blank string if no mesh
+
+			// Material
 			Material* mat = modelRend->getMaterial();
-			addAttribs(mat->getShaderFilePath()); // attrib 2 is shader
-			addAttribs(mat->getTextureFilePath()); // attrib 3 is texture file path as string
-			addAttribf(mat->getUvTile().x); // attrib 4 is tile u
-			addAttribf(mat->getUvTile().y); // attrib 5 is tile v
+			addAttribs(mat->getShaderFilePath()); // attrib 1 is shader
+			addAttribs(mat->getTextureFilePath()); // attrib 2 is texture file path as string
+			addAttribf(mat->getUvTile().x); // attrib 3 is tile u
+			addAttribf(mat->getUvTile().y); // attrib 4 is tile v		
+			
 			break;
 		}
 
@@ -154,6 +182,7 @@ void CompData::setAttribsToComponents()
 			SPtr_PhysBody physBody = std::static_pointer_cast<PhysicsBody>(_comp);
 			break;
 		}
+
 
 	case ComponentType::LIGHT:
 		{
@@ -175,7 +204,28 @@ void CompData::setAttribsToComponents()
 		}
 	case ComponentType::MATERIAL:
 		{
+			break;
+		}
 
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			addAttribf(sphereCol->getRadius()); // radius
+			addAttribf(sphereCol->getOffset().x); // offset x
+			addAttribf(sphereCol->getOffset().y); // offset y
+			addAttribf(sphereCol->getOffset().z); // offset z
+			break;
+		}
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCollider = std::static_pointer_cast<BoxCollider>(_comp);
+			addAttribf(boxCollider->getExtents().x); // extents x
+			addAttribf(boxCollider->getExtents().y); // extents y
+			addAttribf(boxCollider->getExtents().z); // extents z
+			addAttribf(boxCollider->getOffset().x); // offset x
+			addAttribf(boxCollider->getOffset().y); // offset y
+			addAttribf(boxCollider->getOffset().z); // offset z
 			break;
 		}
 	}
@@ -226,14 +276,11 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::MODL_REND:
 		{
-		int isPrimitive = to_int(compElmnt, "primitive"); // attrib 0 is if primitive mesh or not
-		addAttribi(isPrimitive);
-		if(isPrimitive) addAttribi(to_int(compElmnt, "mesh")); // attrib 1 is prim ID or...
-		else addAttribs(compElmnt->Attribute("mesh")); // ...filepath of mesh if not prim
-		addAttribs(compElmnt->Attribute("shader")); // attrib 2 is shader
-		addAttribs(compElmnt->Attribute("texture")); // attrib 3 is texture file path as string
-		addAttribf(to_float(compElmnt, "tileU")); // attrib 4 is tile u
-		addAttribf(to_float(compElmnt,"tileV")); // attrib 5 is tile v
+		addAttribs(compElmnt->Attribute("mesh")); // attrib 0 is model filepath
+		addAttribs(compElmnt->Attribute("shader")); // attrib 1 is shader
+		addAttribs(compElmnt->Attribute("texture")); // attrib 2 is texture file path as string
+		addAttribf(to_float(compElmnt, "tileU")); // attrib 3 is tile u
+		addAttribf(to_float(compElmnt,"tileV")); // attrib 4 is tile v
 		break;
 		}
 
@@ -246,6 +293,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::PHY_BODY:
 		break;
+
 	case ComponentType::LIGHT:
 			addAttribi(to_int(compElmnt,"lightType")); //Type
 			addAttribf(to_float(compElmnt,"aR")); // Ambient x
@@ -261,7 +309,118 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 			addAttribf(to_float(compElmnt,"linear")); // Linear
 			addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
 		break;
+
 	case ComponentType::MATERIAL:
+		break;
+
+	case ComponentType::SPHERE_COL:
+		addAttribf(to_float(compElmnt, "radius"));
+		addAttribf(to_float(compElmnt, "ox")); // offset x
+		addAttribf(to_float(compElmnt, "oy")); // offset y
+		addAttribf(to_float(compElmnt, "oz")); // offset z
+		break;
+
+	case ComponentType::BOX_COL:
+		addAttribf(to_float(compElmnt, "ex")); // extents x
+		addAttribf(to_float(compElmnt, "ey")); // extents y
+		addAttribf(to_float(compElmnt, "ez")); // extents z
+		addAttribf(to_float(compElmnt, "ox")); // offset x
+		addAttribf(to_float(compElmnt, "oy")); // offset y
+		addAttribf(to_float(compElmnt, "oz")); // offset z
+		break;
+
+
+	}
+}
+
+
+// Initialize component's values to values stored in comp data
+void CompData::initializeComponent()
+{
+	switch(_comp->getType())
+	{
+	case ComponentType::TRANSFORM:
+		{
+			float tx = getFloatAttrib(0);
+			float ty = getFloatAttrib(1);
+			float tz = getFloatAttrib(2);
+
+			float rx = getFloatAttrib(3);
+			float ry = getFloatAttrib(4);
+			float rz = getFloatAttrib(5);
+
+			float sx = getFloatAttrib(6);
+			float sy = getFloatAttrib(7);
+			float sz = getFloatAttrib(8);
+
+			SPtr_Transform transform = std::static_pointer_cast<Transform>(getComp());
+			transform->setPosition(glm::vec3(tx, ty, tz));
+			transform->setEulerAngles(glm::vec3(rx, ry, rz));
+			transform->setScale(glm::vec3(sx, sy, sz));
+		}
+		break;
+
+	case ComponentType::MODL_REND:
+		{
+			SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(getComp());
+
+			Mesh* mesh = Assets::getMesh(getStringAttrib(0)); // attrib 0 = mesh filepath
+			Shader* shader = Assets::getShader(getStringAttrib(1)); // attrib 1 = shader file path
+			Texture2D* texture = Assets::getTexture(getStringAttrib(2)); // attrib 2 = texture file path
+
+			if(mesh == nullptr) setStringAttrib(0, "");
+			if(shader == nullptr) setStringAttrib(1, "");
+			if(texture == nullptr) setStringAttrib(2, "");
+
+			// attrib 0 = model file path
+			// attrib 1 = shader file path
+			// attrib 2 = texture file path
+			// attrib 3 = uv tile U
+			// attrib 4 = uv tile V
+			model->setMesh(mesh); // set model
+			model->setMaterial(shader, texture, glm::vec2(getFloatAttrib(3), getFloatAttrib(4))); // set material with shader and texture
+		}
+		break;
+
+	case ComponentType::CAMERA:
+		{
+		
+		}
+		break;
+
+	case ComponentType::ROB_REND:
+		{
+			std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(getComp());
+			robot->reset();
+		}
+		break;
+
+	case ComponentType::PHY_BODY:
+		{
+			
+		}
+		break;
+
+	case ComponentType::LIGHT:
+		{
+			
+		}
+		break;
+
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			sphereCol->setRadius(getFloatAttrib(0));
+			sphereCol->setOffset(glm::vec3(getFloatAttrib(1), getFloatAttrib(2), getFloatAttrib(3)));
+		}
+		break;
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_comp);
+			boxCol->setExtents(glm::vec3(getFloatAttrib(0), getFloatAttrib(1), getFloatAttrib(2)));
+			boxCol->setOffset(glm::vec3(getFloatAttrib(3), getFloatAttrib(4), getFloatAttrib(5)));
+		}
 		break;
 	}
 }

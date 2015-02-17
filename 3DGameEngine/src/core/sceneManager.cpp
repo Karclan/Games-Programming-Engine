@@ -15,16 +15,7 @@ void SceneManager::initFromInitTable()
 		// Iterate through every component and init it
 		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
 		{
-			switch(comp->getComp()->getType())
-			{
-				case ComponentType::TRANSFORM:	initTransform(*comp);	break;
-				case ComponentType::CAMERA:		initCamera(*comp);		break;
-				case ComponentType::MODL_REND:	initModelRend(*comp);	break;
-				case ComponentType::ROB_REND:	initRobot(*comp);		break;
-				case ComponentType::PHY_BODY:	initPhysBody(*comp);	break;
-				case ComponentType::LIGHT:		initLight(*comp);		break;
-				case ComponentType::MATERIAL:   initMaterial(*comp);    break;
-			}
+			comp->initializeComponent();
 		}
 
 		// Iterate through behaviours and init them
@@ -34,6 +25,7 @@ void SceneManager::initFromInitTable()
 		}
 	}
 }
+
 
 void SceneManager::initTransform(CompData &comp)
 {
@@ -185,7 +177,97 @@ void SceneManager::loadFromXML(std::string filePath)
 //------------------------------------------------------------------
 
 
+void SceneManager::saveToXML(std::string filePath)
+{
+	std::cout << "Woot woot! Saving to " << filePath << "!!!!!\n";
 
+	// Ref to demo file
+	TiXmlDocument doc(filePath); // xml file
+
+	// Declaration at start of xml file
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
+	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
+
+	//------------------- For platform game demo
+	// Robot
+	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
+	xmlAddPhysBody(robot);
+	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
+	xmlAddModelRend(robot, "sphere", "advanced", "");
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
+	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
+	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
+	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
+	//xmlAddRobot(robot);
+	
+
+	InitTable* init = _objMngr->getInitTable();
+	InitTableIterator it = init->begin();
+
+	for(it; it != init->end(); ++it) // foreach game object in init table
+	{
+		std::string name = _objMngr->getGameObject(it->first)->getName();
+		TiXmlElement * go = xmlAddGo(&doc, name);
+		std::list<CompData>::iterator compData = it->second.components.begin();
+		std::vector<SPtr_Behaviour>::iterator bhvrData = it->second.behaviours.begin();
+
+
+		for(compData; compData != it->second.components.end(); ++compData)
+		{
+			switch(compData->getComp()->getType())
+			{
+			case ComponentType::TRANSFORM: 
+				xmlAddTransform(go, glm::vec3(compData->getFloatAttrib(0), compData->getFloatAttrib(1), compData->getFloatAttrib(2)),
+									glm::vec3(compData->getFloatAttrib(3), compData->getFloatAttrib(4), compData->getFloatAttrib(5)),
+									glm::vec3(compData->getFloatAttrib(6), compData->getFloatAttrib(7), compData->getFloatAttrib(8)));
+				break;
+
+			case ComponentType::MODL_REND:
+				xmlAddModelRend(go, compData->getStringAttrib(0), compData->getStringAttrib(1), compData->getStringAttrib(2), compData->getFloatAttrib(3), compData->getFloatAttrib(4));
+				break;
+
+			case ComponentType::CAMERA:
+				xmlAddCamera(go);
+				break;
+
+			case ComponentType::ROB_REND: 
+				xmlAddRobot(go);
+				break;
+
+			case ComponentType::PHY_BODY:
+				xmlAddPhysBody(go);
+				break;
+
+			case ComponentType::LIGHT:
+				break;
+
+			case ComponentType::SPHERE_COL:
+				xmlAddSphereCol(go, compData->getFloatAttrib(0), glm::vec3(compData->getFloatAttrib(1), compData->getFloatAttrib(2), compData->getFloatAttrib(3)));
+				break;
+
+			case ComponentType::BOX_COL: 
+				xmlAddBoxCol(go, glm::vec3(compData->getFloatAttrib(0), compData->getFloatAttrib(1), compData->getFloatAttrib(2)),
+								 glm::vec3(compData->getFloatAttrib(3), compData->getFloatAttrib(4), compData->getFloatAttrib(5)));
+				break;
+			}
+		}
+		
+
+		// Dirty dirty behaviours
+		/*
+		for(bhvrData; bhvrData != it->second.behaviours.end(); ++bhvrData)
+		{
+			xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
+		}
+		*/
+
+
+	}
+
+	
+	// Save doc
+	doc.SaveFile();
+}
 
 
 
@@ -207,9 +289,24 @@ void SceneManager::writeDemoXML()
 	// Robot
 	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
 	xmlAddPhysBody(robot);
+	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
+	xmlAddModelRend(robot, "sphere", "advanced", "");
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
+	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
 	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-	xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
-	xmlAddRobot(robot);
+	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
+	//xmlAddRobot(robot);
+	
+
+	// Random test collidy thing
+	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
+	//xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
+	xmlAddModelRend(ball, "cube", "advanced", "ogre_diffuse.png");
+	xmlAddPhysBody(ball);
+	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
+	xmlAddBoxCol(ball, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
+	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
+
 
 	// Camera Object
 	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
@@ -219,20 +316,20 @@ void SceneManager::writeDemoXML()
 	// Floor
 	TiXmlElement * floor = xmlAddGo(&doc, "Floor");
 	xmlAddTransform(floor, glm::vec3(0, -0.005f, 0), glm::vec3(), glm::vec3(40, 0.01f, 40));
-	xmlAddModelRend(floor, PrimitiveShapes::CUBE, "advanced", "grass.png", 20, 20);
+	xmlAddModelRend(floor, "cube", "advanced", "grass.png", 20, 20);
 
 	// Walls
 	TiXmlElement * wall = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall, glm::vec3(0, 0.3, -2), glm::vec3(), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall, "cube", "advanced", "wall.png", 20, 1);
 
 	TiXmlElement * wall2 = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall2, glm::vec3(-5.25, 0.3, 2.75), glm::vec3(0, 90, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall2, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall2, "cube", "advanced", "wall.png", 20, 1);
 
 	TiXmlElement * wall3 = xmlAddGo(&doc, "Wall");
 	xmlAddTransform(wall3, glm::vec3(-10, 0.3, 8), glm::vec3(0, 0, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall3, PrimitiveShapes::CUBE, "advanced", "wall.png", 20, 1);
+	xmlAddModelRend(wall3, "cube", "advanced", "wall.png", 20, 1);
 
 
 	// Windmills and sails
@@ -242,12 +339,12 @@ void SceneManager::writeDemoXML()
 		// Windmill
 		TiXmlElement * windmill = xmlAddGo(&doc, "Windmill");
 		xmlAddTransform(windmill, glm::vec3(windPosits[i].x, 1.3f, windPosits[i].y), glm::vec3(), glm::vec3(1, 2.6f, 1));
-		xmlAddModelRend(windmill, PrimitiveShapes::CUBE, "advanced", "windmill.png", 1, 2.6f);
+		xmlAddModelRend(windmill, "cube", "advanced", "windmill.png", 1, 2.6f);
 
 		// Sail
 		TiXmlElement * sail = xmlAddGo(&doc, "Sail");
 		xmlAddTransform(sail, glm::vec3(windPosits[i].x, 2, windPosits[i].y + 0.525f), glm::vec3(), glm::vec3(2, 2, 0.05f));
-		xmlAddModelRend(sail, PrimitiveShapes::CUBE, "advanced", "sails.png");
+		xmlAddModelRend(sail, "cube", "advanced", "sails.png");
 		xmlAddBehaviour(sail, BehaviourTypes::ROT_OBJ);
 	}
 
@@ -300,12 +397,12 @@ void SceneManager::xmlAddCamera(TiXmlElement* go)
 }
 
 // Add model renderer.
-void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
-void SceneManager::xmlAddModelRend(TiXmlElement* go, PrimitiveShapes::Type mesh, std::string shader, std::string texture, float tileU, float tileV)
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV)
 {
 	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
 	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
-	transElmnt->SetAttribute("primitive", (int)true); // It is a primitive mesh, not one loaded from file
+	transElmnt->SetAttribute("primitive", (int)false); // It is loaded from file
 	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
 	transElmnt->SetAttribute("shader", shader); // Set material attrib
 	transElmnt->SetAttribute("texture", texture); // Set texture attrib
@@ -333,6 +430,32 @@ void SceneManager::xmlAddPhysBody(TiXmlElement* go)
 	TiXmlElement* physBodyElmnt = new TiXmlElement("COMP"); // Component Element
 	physBodyElmnt->SetAttribute("type", ComponentType::PHY_BODY); // Set type attrib
 	go->LinkEndChild(physBodyElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+
+void SceneManager::xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset)
+{
+	TiXmlElement* sphereColElmnt = new TiXmlElement("COMP"); // Component Element
+	sphereColElmnt->SetAttribute("type", ComponentType::SPHERE_COL); // Set type attrib
+	sphereColElmnt->SetDoubleAttribute("radius", radius);
+	sphereColElmnt->SetDoubleAttribute("ox", offset.x);
+	sphereColElmnt->SetDoubleAttribute("oy", offset.y);
+	sphereColElmnt->SetDoubleAttribute("oz", offset.z);
+	go->LinkEndChild(sphereColElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+
+void SceneManager::xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset)
+{
+	TiXmlElement* boxColElmnt = new TiXmlElement("COMP"); // Component Element
+	boxColElmnt->SetAttribute("type", ComponentType::BOX_COL); // Set type attrib
+	boxColElmnt->SetDoubleAttribute("ex", extents.x);
+	boxColElmnt->SetDoubleAttribute("ey", extents.y);
+	boxColElmnt->SetDoubleAttribute("ez", extents.z);
+	boxColElmnt->SetDoubleAttribute("ox", offset.x);
+	boxColElmnt->SetDoubleAttribute("oy", offset.y);
+	boxColElmnt->SetDoubleAttribute("oz", offset.z);
+	go->LinkEndChild(boxColElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------

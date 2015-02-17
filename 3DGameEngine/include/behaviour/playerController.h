@@ -27,7 +27,7 @@ protected:
 private:
 	SPtr_Transform _transform; //!< Robot's transform
 	SPtr_Transform _cameraTrans; //!< Camera's transform component
-	std::shared_ptr<RobotRenderer> _robotAnim; //!< Robot Renderer so we can control animations
+	//std::shared_ptr<RobotRenderer> _robotAnim; //!< Robot Renderer so we can control animations
 	float _speed;
 	glm::vec3 _velocity;
 	float _turn;

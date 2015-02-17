@@ -10,13 +10,8 @@
 #include "core\input.h"
 #include "core\initTable.h"
 #include "core\objectManager.h"
-
-
-const int ID_STATIC = 1000; // id of the static text thing created in func
-
-const int ID_NEWGO_BUTTON = 1001;
-const int ID_GO_LIST = 1002; //!< The id of the list with all current GOs in it
-const int ID_GO_NAME = 1003;
+#include "core\sceneManager.h"
+#include "editor\editorCamera.h"
 
 
 /*! \brief Game Object Menu
@@ -26,36 +21,63 @@ const int ID_GO_NAME = 1003;
 class GoMenu
 {
 public:
-	void initialize(ObjectManager* mngr);
+	void initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorCamera* editorCam);
 	void update();
 	void setGamePlaying(bool playing); 
 
 	
-	void initTweakBars();
+	void createTweakBar();
+	void createGameObject();
 
 	// Commands
 	void newGameObject(); // create new game object
+	void refreshGameObjects(); //!< Refreshes all game objects to match init data
+
+
+	void addComponent(ComponentType::Type type);
+	void saveToFileXML();
+	void loadFromFileXML();
+
 
 
 private:
 	// Private member variables
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
+
+	bool testBool;
+	std::string saveFilePath;
+	std::string loadFilePath;
 	
 	TwBar* _myBar; //!< My first ant tweak bar!
-	float _myFloat; // My first ant tweak bar variable
+	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
+	TwBar* _utilityBar; //!< Used for saving/loading from a file and adding a new Game Object
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
+	SceneManager* _sceneMngr; //!< We need this to save to XML
+	EditorCamera* _editorCam; //!< Pointer to editor cam so can set target
+	
+	
+	// Vars in Menu
+	InitTableIterator _currentGodataIter;
+	std::string _objName; //! Name of GO currently selected
+
+
 
 	// My test interface functiona!! ^_^
 	int _selectedObjectID;
 
-	void createGameObject();
+	void setSelectedObject(int objID);
+
+	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
+
 	void createComponent();
 	void deleteGameObject();
 	void deleteComponent();
 
-	bool mousePressed; //temp var for testing
-	int _fixedTime;
+
+
+	void nextGo();
+	void previousGo();
 };
 
 

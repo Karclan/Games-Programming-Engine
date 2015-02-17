@@ -17,6 +17,8 @@
 #include "rendering\primitiveShapes.h"
 #include "rendering\light.h"
 #include "physics\physicsBody.h"
+#include "physics\collider.h"
+#include "rendering\robotRenderer.h"
 
 
 /*! \brief Data object for attributes
@@ -39,22 +41,38 @@ class CompData
 public:
 	CompData(SPtr_Component comp);
 	~CompData();
-	void addAttribi(int data); //!< Add an int attribute
-	void addAttribf(float data); //!< Add a float attribute
-	void addAttribs(std::string data); //!< Add a string attribute
+	
 	void setAttribsToComponents(); //!< Set all of the attibs to whatever values the actual component currently has
 	void setAttribsFromXML(TiXmlElement* compElmnt); //!< Set all of the attibs based on a tiny xml element
-	
+	void initializeComponent(); //!< Initialize component's values to values stored in comp data
 
+	int attribCount(); //!< Total Number of attributes
+	SPtr_Component getComp(); //!< Get pointer to actual component object
+
+	int* attribPtrInt(int index);
+	float* attribPtrFloat(int index);
+	std::string* attribPtrString(int index);
+
+	// Get Attribs
 	int getIntAttrib(int index); //!< Get an int attribute by index
 	float getFloatAttrib(int index); //!< Get a float attribute by index
 	std::string getStringAttrib(int index); //!< Get a string attribute by index
-	int attribCount(); //!< Total Number of attributes
-	SPtr_Component getComp(); //!< Get pointer to actual component object
 
 private:
 	SPtr_Component _comp; //!< Pointer to the actual component object
 	std::vector<SPtr_AttribData> _attribs; //!< Attributes used as args in initialization. Bools and enums etc are stored as ints
+
+	// Add attributes
+	void addAttribi(int data); //!< Add an int attribute
+	void addAttribf(float data); //!< Add a float attribute
+	void addAttribs(std::string data); //!< Add a string attribute
+
+	
+
+	// Set Attribs
+	void setIntAttrib(int index, int value); //!< Set an int attribute by index
+	void setFloatAttrib(int index, float value); //!< Set a float attribute by index
+	void setStringAttrib(int index, std::string value); //!< Set a string attribute by index
 
 	// Helper functions for getting tinyxml data more easily
 	int to_int(TiXmlElement* elmnt, std::string attribute);
@@ -71,7 +89,7 @@ private:
 */
 struct GOData
 {
-	std::string name;
+	//std::string name;
 	std::list<CompData> components;
 	std::vector<SPtr_Behaviour> behaviours;
 };

@@ -62,6 +62,8 @@ public:
 
 	void translate(glm::vec3 translation);
 	void rotate(glm::vec3 eulerAngles);
+
+	glm::mat4 getRotationMatrix(); //!< Public so box collider can use. May be temp
 	
 	// Unimplemented functions (see note in description)
 	void rotateAround(glm::vec3 eulerAngles, glm::vec3 point);
@@ -84,7 +86,7 @@ private:
 
 
 	// FUNCTIONS
-	glm::mat4 getRotationMatrix();
+	
 	void recalculateMatrix(); //!< Call whenever there is a change to pos, rot or scale
 
 };
