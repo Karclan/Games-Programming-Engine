@@ -106,11 +106,12 @@ void RenderSystem::activateLights()
 	for(it; it != _loadedShaders->end(); ++it)
 	{
 		it->second->useProgram();
-
-		it->second->setUniform("numOfPointLights",_pointLights.size());
+		int pointLights = _pointLights.size();
+		int spotLights = _spotLights.size();
+		it->second->setUniform("numOfPointLights",pointLights);
 		std::cout<<"pointlights :" <<_pointLights.size()<<"\n";
 
-		it->second->setUniform("numOfSpotLights",_spotLights.size());
+		it->second->setUniform("numOfSpotLights",spotLights);
 		std::cout<<"spotLights :" <<_spotLights.size()<<"\n";
 
 
