@@ -40,7 +40,17 @@ void SceneManager::clearScene()
 // load from XML
 void SceneManager::loadFromXML(std::string filePath)
 {
+	// Ensure file name is ok
+	filePath = ASSETS_PATH + "scenes/" + filePath;
+
 	TiXmlDocument doc(filePath);
+	if(!doc.LoadFile())
+	{
+		filePath = filePath + std::string(".XML");
+		doc.SetValue(filePath);
+	}
+
+
 	if(!doc.LoadFile())
 	{
 		std::cout << "Failed to load XML!\n\n\n";
@@ -83,7 +93,11 @@ void SceneManager::loadFromXML(std::string filePath)
 
 void SceneManager::saveToXML(std::string filePath)
 {
-	std::cout << "Woot woot! Saving to " << filePath << "!!!!!\n";
+	// Ensure file name is ok
+	std::size_t dotPos =  filePath.find_first_of('.');
+	if(dotPos != std::string::npos) filePath = filePath.substr(0, dotPos); // remove file extension if any specified
+	filePath = ASSETS_PATH + "scenes/" + filePath + std::string(".XML"); // add correct file extension
+
 
 	// Ref to demo file
 	TiXmlDocument doc(filePath); // xml file
@@ -91,19 +105,6 @@ void SceneManager::saveToXML(std::string filePath)
 	// Declaration at start of xml file
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
 	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
-
-	//------------------- For platform game demo
-	// Robot
-	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
-	xmlAddPhysBody(robot);
-	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
-	xmlAddModelRend(robot, "sphere", "advanced", "");
-	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
-	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
-	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
-	//xmlAddRobot(robot);
-	
 
 	InitTable* init = _objMngr->getInitTable();
 	InitTableIterator it = init->begin();
@@ -171,7 +172,9 @@ void SceneManager::saveToXML(std::string filePath)
 
 	
 	// Save doc
-	doc.SaveFile();
+	if(doc.SaveFile()) std::cout << "Saved to " << filePath << "!\n";
+	else
+		std::cout << "Save Failed. Ensure you have a folder called 'scenes' in the assets folder\n";
 }
 
 

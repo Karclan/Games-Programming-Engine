@@ -22,7 +22,7 @@ void RenderSystem::render(Camera* camera)
 
 	// Draw calls would be harder to manage, needs more research
 
-
+	if(_unsortedLights.size() != 0) activateLights(); // activate lights if any added
 	camera->preRender();
 
 	for(unsigned int i = 0; i < _models.size(); ++i)

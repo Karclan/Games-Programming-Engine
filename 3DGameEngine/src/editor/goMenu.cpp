@@ -346,6 +346,7 @@ void GoMenu::nextGo()
 
 	refreshGameObjects();
 	InitTable* initTable = _objectMngr->getInitTable();
+	if(initTable->size() == 0) return; // to stop crash if no game objects
 	InitTableIterator it = initTable->find(_selectedObjectID); // iterator 
 	it = ++it;
 	if(it == initTable->end()) it = initTable->begin();
@@ -359,6 +360,7 @@ void GoMenu::previousGo()
 
 	refreshGameObjects();
 	InitTable* initTable = _objectMngr->getInitTable();
+	if(initTable->size() == 0) return; // to stop crash if no game objects
 	InitTableIterator it = initTable->find(_selectedObjectID); // iterator
 	if(it == initTable->begin())
 	{
@@ -390,6 +392,7 @@ void GoMenu::setSelectedObject(int objID)
 	}
 	else
 	{
+		_selectedObjectID = 0;
 		_editorCam->setTarget(glm::vec3(0, 0, 0));
 	}
 

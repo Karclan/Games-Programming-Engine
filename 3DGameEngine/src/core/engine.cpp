@@ -69,9 +69,6 @@ void Engine::startup()
 	
 	//_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 
-
-	
-	_rendSys.activateLights(); // once scene loaded (and therefore all shaders) we can set light up
 	FTInterface::init();
 
 	// Setup input
