@@ -23,6 +23,7 @@ Component number
 
 <GO name="Robot">
     <COMP type="4" />
+<<<<<<< HEAD
     <COMP type="6" radius="1" ox="0" oy="0" oz="0" />
     <COMP type="1" primitive="0" mesh="sphere" shader="advanced" texture="" tileU="1" tileV="1" />
     <COMP type="0" tx="0" ty="1.8" tz="0" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
@@ -80,6 +81,10 @@ Component number
     <COMP type="0" tx="-6.5" ty="2" tz="6.525" rx="0" ry="0" rz="0" sx="2" sy="2" sz="0.05" />
     <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" />
     <BHVR type="1" />
+=======
+    <COMP type="1" primitive="0" mesh="Boblamp/boblampclean.md5mesh" shader="basic" texture="" tileU="1" tileV="1" />
+    <COMP type="0" tx="0" ty="1.8" tz="0" rx="-90" ry="0" rz="0" sx="0.05" sy="0.05" sz="0.05" />
+>>>>>>> origin/sprint_02_kev
 </GO>
 <GO name="TestLight">
   <COMP type="0" tx="0.0" ty="0.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />

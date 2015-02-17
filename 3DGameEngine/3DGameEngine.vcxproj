@@ -156,6 +156,10 @@
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
     <ClCompile Include="src\editor\menuBar.cpp" />
+<<<<<<< HEAD
+=======
+    <ClCompile Include="src\light\light.cpp" />
+>>>>>>> origin/sprint_02_kev
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\physics\collision.cpp" />
     <ClCompile Include="src\physics\physicsBody.cpp" />

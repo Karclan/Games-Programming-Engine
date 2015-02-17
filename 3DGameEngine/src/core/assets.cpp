@@ -55,19 +55,27 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 
 	// Assimp conversion here!
 	aiMesh* loadedMesh = scene->mMeshes[0];
+
 	
 	for(int i = 0; i < loadedMesh->mNumVertices; ++i)
 	{
 		verts.push_back(glm::vec3(loadedMesh->mVertices[i].x, loadedMesh->mVertices[i].y, loadedMesh->mVertices[i].z));
-		normals.push_back(glm::vec3(loadedMesh->mNormals[i].x, loadedMesh->mNormals[i].y, loadedMesh->mNormals[i].z));
-		uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
+
+		
+		if(loadedMesh->HasNormals())
+			normals.push_back(glm::vec3(loadedMesh->mNormals[i].x, loadedMesh->mNormals[i].y, loadedMesh->mNormals[i].z));
+		
+		if(loadedMesh->HasTextureCoords(0))
+			uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
+		
 		colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
 	}
 	for(int i = 0; i < loadedMesh->mNumFaces; ++i)
 	{
-		indices.push_back(loadedMesh->mFaces[i].mIndices[0]);
-		indices.push_back(loadedMesh->mFaces[i].mIndices[1]);
-		indices.push_back(loadedMesh->mFaces[i].mIndices[2]);
+		for(int j = 0; j < loadedMesh->mFaces[i].mNumIndices; ++j)
+		{
+			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
+		}
 	}
 	
 	// Now set mesh properties via vector

@@ -32,6 +32,8 @@ void RenderSystem::render(Camera* camera)
 	}
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);
+	
+
 	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 
 }

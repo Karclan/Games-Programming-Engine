@@ -187,12 +187,15 @@
     <ClInclude Include="include\physics\collision.h">
       <Filter>Header Files\physics</Filter>
     </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="include\rendering\light.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
     <ClInclude Include="include\rendering\shaders.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
+=======
+>>>>>>> origin/sprint_02_kev
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -309,12 +312,15 @@
     <ClCompile Include="src\physics\collision.cpp">
       <Filter>Source Files\physics</Filter>
     </ClCompile>
+<<<<<<< HEAD
     <ClCompile Include="src\rendering\light.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\shaders.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
+=======
+>>>>>>> origin/sprint_02_kev
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />

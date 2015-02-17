@@ -26,6 +26,7 @@ void SceneManager::initFromInitTable()
 	}
 }
 
+
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
@@ -174,8 +175,10 @@ void SceneManager::saveToXML(std::string filePath)
 // Writes an example scene to XML. Mainly used for testing
 void SceneManager::writeDemoXML()
 {
+	std::cout << "Woot woot! Saving to " << filePath << "!!!!!\n";
+
 	// Ref to demo file
-	TiXmlDocument doc(DEMO_SCENE_PATH); // xml file
+	TiXmlDocument doc(filePath); // xml file
 
 	// Declaration at start of xml file
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
@@ -194,6 +197,7 @@ void SceneManager::writeDemoXML()
 	//xmlAddRobot(robot);
 	
 
+
 	// Random test collidy thing
 	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
 	//xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
@@ -204,10 +208,9 @@ void SceneManager::writeDemoXML()
 	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
 
 
-	// Camera Object
-	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
-	xmlAddTransform(cameraGo, glm::vec3(0, 0, 5), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddCamera(cameraGo);
+	InitTable* init = _objMngr->getInitTable();
+	InitTableIterator it = init->begin();
+
 
 	// Floor
 	TiXmlElement * floor = xmlAddGo(&doc, "Floor");
@@ -242,10 +245,94 @@ void SceneManager::writeDemoXML()
 		xmlAddTransform(sail, glm::vec3(windPosits[i].x, 2, windPosits[i].y + 0.525f), glm::vec3(), glm::vec3(2, 2, 0.05f));
 		xmlAddModelRend(sail, "cube", "advanced", "sails.png");
 		xmlAddBehaviour(sail, BehaviourTypes::ROT_OBJ);
+
+	for(it; it != init->end(); ++it) // foreach game object in init table
+	{
+		std::string name = _objMngr->getGameObject(it->first)->getName();
+		TiXmlElement * go = xmlAddGo(&doc, name);
+		std::list<CompData>::iterator compData = it->second.components.begin();
+		std::vector<SPtr_Behaviour>::iterator bhvrData = it->second.behaviours.begin();
+
+
+		for(compData; compData != it->second.components.end(); ++compData)
+		{
+			switch(compData->getComp()->getType())
+			{
+			case ComponentType::TRANSFORM: 
+				xmlAddTransform(go, glm::vec3(compData->getFloatAttrib(0), compData->getFloatAttrib(1), compData->getFloatAttrib(2)),
+									glm::vec3(compData->getFloatAttrib(3), compData->getFloatAttrib(4), compData->getFloatAttrib(5)),
+									glm::vec3(compData->getFloatAttrib(6), compData->getFloatAttrib(7), compData->getFloatAttrib(8)));
+				break;
+
+			case ComponentType::MODL_REND:
+				xmlAddModelRend(go, compData->getStringAttrib(0), compData->getStringAttrib(1), compData->getStringAttrib(2), compData->getFloatAttrib(3), compData->getFloatAttrib(4));
+				break;
+
+			case ComponentType::CAMERA:
+				xmlAddCamera(go);
+				break;
+
+			case ComponentType::ROB_REND: 
+				xmlAddRobot(go);
+				break;
+
+			case ComponentType::PHY_BODY:
+				xmlAddPhysBody(go);
+				break;
+
+			case ComponentType::LIGHT:
+				break;
+
+			case ComponentType::SPHERE_COL:
+				xmlAddSphereCol(go, compData->getFloatAttrib(0), glm::vec3(compData->getFloatAttrib(1), compData->getFloatAttrib(2), compData->getFloatAttrib(3)));
+				break;
+
+			case ComponentType::BOX_COL: 
+				xmlAddBoxCol(go, glm::vec3(compData->getFloatAttrib(0), compData->getFloatAttrib(1), compData->getFloatAttrib(2)),
+								 glm::vec3(compData->getFloatAttrib(3), compData->getFloatAttrib(4), compData->getFloatAttrib(5)));
+				break;
+			}
+		}
+		
+
+		// Dirty dirty behaviours
+		/*
+		for(bhvrData; bhvrData != it->second.behaviours.end(); ++bhvrData)
+		{
+			xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
+		}
+		*/
+
+
 	}
 
 	
+	// Save doc
+	doc.SaveFile();
+}
 
+
+
+
+
+
+
+// Writes an example scene to XML. Mainly used for testing
+void SceneManager::writeDemoXML()
+{
+	// Ref to demo file
+	TiXmlDocument doc(DEMO_SCENE_PATH); // xml file
+
+	// Declaration at start of xml file
+	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
+	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
+
+	//------------------- For platform game demo
+	// Robot
+	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
+	xmlAddPhysBody(robot);
+	xmlAddModelRend(robot, "Boblamp/boblampclean.md5mesh", "basic", "");
+	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(-90, 0, 0), glm::vec3(0.05f, 0.05f, 0.05f));
 	
 	// Save doc
 	doc.SaveFile();

@@ -183,6 +183,28 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
+			addAttribf(sphereCol->getRadius()); // radius
+			addAttribf(sphereCol->getOffset().x); // offset x
+			addAttribf(sphereCol->getOffset().y); // offset y
+			addAttribf(sphereCol->getOffset().z); // offset z
+			break;
+		}
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCollider = std::static_pointer_cast<BoxCollider>(_comp);
+			addAttribf(boxCollider->getExtents().x); // extents x
+			addAttribf(boxCollider->getExtents().y); // extents y
+			addAttribf(boxCollider->getExtents().z); // extents z
+			addAttribf(boxCollider->getOffset().x); // offset x
+			addAttribf(boxCollider->getOffset().y); // offset y
+			addAttribf(boxCollider->getOffset().z); // offset z
+			break;
+		}
+
 
 	case ComponentType::LIGHT:
 		{
@@ -294,6 +316,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 	case ComponentType::PHY_BODY:
 		break;
 
+
 	case ComponentType::LIGHT:
 			addAttribi(to_int(compElmnt,"lightType")); //Type
 			addAttribf(to_float(compElmnt,"aR")); // Ambient x
@@ -312,6 +335,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::MATERIAL:
 		break;
+
 
 	case ComponentType::SPHERE_COL:
 		addAttribf(to_float(compElmnt, "radius"));
@@ -332,6 +356,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	}
 }
+
 
 
 // Initialize component's values to values stored in comp data
@@ -439,6 +464,7 @@ void CompData::initializeComponent()
 			sphereCol->setOffset(glm::vec3(getFloatAttrib(1), getFloatAttrib(2), getFloatAttrib(3)));
 		}
 		break;
+
 
 	case ComponentType::BOX_COL:
 		{
