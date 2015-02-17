@@ -67,7 +67,7 @@ void Engine::startup()
 	_objMngr.startUp(_rendSys, _physicsSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
 	_sceneMngr.initialize(_objMngr, _behvrSys); // init and pass reference to object manager
 	
-	//_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
+	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 
 	FTInterface::init();
 

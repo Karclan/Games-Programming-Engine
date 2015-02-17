@@ -17,16 +17,6 @@ static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, 
   destinationClientString = sourceLibraryString;
 }
 
-void GoMenu::createTweakBar()
-{
-	_myBar = TwNewBar("Game Object");
-	_addCompBar = TwNewBar("Add Component");
-	_utilityBar = TwNewBar("Utility Bar");
-	refreshTweakBar();
-	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
-	setSelectedObject(0);
-}
-
 /******************************** Add Component Functions ********************************/
 
 static void TW_CALL addBoxColComponent(void *clientData)
@@ -159,6 +149,24 @@ void GoMenu::createGameObject()
 
 
 /******************************** Tweak Bars Setup ********************************/
+void GoMenu::createTweakBar()
+{
+	_myBar = TwNewBar("Game Object");
+	_addCompBar = TwNewBar("Add Component");
+	_utilityBar = TwNewBar("Utility Bar");
+	refreshTweakBar();
+	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
+	setSelectedObject(0);
+
+	// Write file path/save function
+	TwAddVarRW(_utilityBar, "Save_File_Path_Name", TW_TYPE_STDSTRING, &saveFilePath, "group=SaveTo label=File_Path_Name");
+	TwAddButton(_utilityBar, "Save", saveToFile, this, "group=SaveTo");
+	TwAddVarRW(_utilityBar, "Load_File_Path_Name", TW_TYPE_STDSTRING, &loadFilePath, "group=LoadFrom label=File_Path_Name");
+	TwAddButton(_utilityBar, "Load", loadFromFile, this, "group=LoadFrom");
+	TwAddButton(_utilityBar, "Start New Level", newLevel, this, "group=NewLevel");
+	TwAddButton(_utilityBar, "Create Game Object", makeGameObject, this, "group=CreateGameObject");
+}
+
 
 void GoMenu::refreshTweakBar()
 {
@@ -170,18 +178,6 @@ void GoMenu::refreshTweakBar()
 	// Add the GO Name
 	TwAddVarRW(_myBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
 	TwAddVarRW(_addCompBar, "NAME", TW_TYPE_STDSTRING, &_objName, NULL);
-
-	// Write file path/save function
-
-	TwAddVarRW(_utilityBar, "Save_File_Path_Name", TW_TYPE_STDSTRING, &saveFilePath, "group=SaveTo label=File_Path_Name");
-	TwAddButton(_utilityBar, "Save", saveToFile, this, "group=SaveTo");
-
-	TwAddVarRW(_utilityBar, "Load_File_Path_Name", TW_TYPE_STDSTRING, &loadFilePath, "group=LoadFrom label=File_Path_Name");
-	TwAddButton(_utilityBar, "Load", loadFromFile, this, "group=LoadFrom");
-
-	TwAddButton(_utilityBar, "Start New Level", newLevel, this, "group=NewLevel");
-
-	TwAddButton(_utilityBar, "Create Game Object", makeGameObject, this, "group=CreateGameObject");
 	
 
 
@@ -351,7 +347,6 @@ void GoMenu::nextGo()
 	it = ++it;
 	if(it == initTable->end()) it = initTable->begin();
 	setSelectedObject(it->first);
-	refreshTweakBar();
 }
 
 void GoMenu::previousGo()
@@ -370,7 +365,6 @@ void GoMenu::previousGo()
 	it = --it;
 
 	setSelectedObject(it->first);
-	refreshTweakBar();
 }
 
 
@@ -395,5 +389,5 @@ void GoMenu::setSelectedObject(int objID)
 		_selectedObjectID = 0;
 		_editorCam->setTarget(glm::vec3(0, 0, 0));
 	}
-
+	refreshTweakBar();
 }
