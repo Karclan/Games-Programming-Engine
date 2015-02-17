@@ -59,8 +59,8 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(SolutionDir)lib/antTweakBar;$(SolutionDir)lib/sfml;$(SolutionDir)lib/freetype;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;freetype.lib;AntTweakBar.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(SolutionDir)lib/antTweakBar;$(SolutionDir)lib/sfml;$(SolutionDir)lib/freetype;$(SolutionDir)lib/glew;$(SolutionDir)lib/gl;$(SolutionDir)lib/assimp;$(SolutionDir)lib/glfw;$(ProjectDir)src/;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>sfml-graphics-d.lib;sfml-window-d.lib;sfml-system-d.lib;sfml-main-d.lib;sfml-audio-d.lib;opengl32.lib;glu32.lib;glew32.lib;glfw3.lib;freetype.lib;AntTweakBar.lib;assimp.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,6 +94,9 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\physics\collider.h" />
+    <ClInclude Include="include\physics\collision.h" />
+    <ClInclude Include="include\physics\octTree.h" />
     <ClInclude Include="include\core\asset.h" />
     <ClInclude Include="include\core\globals.h" />
     <ClInclude Include="include\core\initTable.h" />
@@ -127,6 +130,7 @@
     <ClInclude Include="include\rendering\renderSystem.h" />
     <ClInclude Include="include\rendering\robotRenderer.h" />
     <ClInclude Include="include\rendering\shader.h" />
+    <ClInclude Include="include\rendering\shaders.h" />
     <ClInclude Include="include\rendering\texture2D.h" />
     <ClInclude Include="include\tinyXML\tinystr.h" />
     <ClInclude Include="include\tinyXML\tinyxml.h" />
@@ -152,6 +156,8 @@
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
     <ClCompile Include="src\editor\menuBar.cpp" />
+    <ClCompile Include="src\physics\collider.cpp" />
+    <ClCompile Include="src\physics\collision.cpp" />
     <ClCompile Include="src\physics\physicsBody.cpp" />
     <ClCompile Include="src\physics\physicsSystem.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
@@ -165,6 +171,7 @@
     <ClCompile Include="src\rendering\renderSystem.cpp" />
     <ClCompile Include="src\rendering\robotRenderer.cpp" />
     <ClCompile Include="src\rendering\shader.cpp" />
+    <ClCompile Include="src\rendering\shaders.cpp" />
     <ClCompile Include="src\rendering\texture2D.cpp" />
     <ClCompile Include="src\tinyXML\tinystr.cpp" />
     <ClCompile Include="src\tinyXML\tinyxml.cpp" />
@@ -173,19 +180,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
-    <None Include="assets\shaders\advanced.frag" />
-    <None Include="assets\shaders\advanced.vert" />
     <None Include="assets\shaders\basic.frag" />
     <None Include="assets\shaders\basic.vert" />
     <None Include="assets\shaders\diffuse.frag" />
     <None Include="assets\shaders\diffuse.vert" />
     <None Include="assets\shaders\specular.frag" />
     <None Include="assets\shaders\specular.vert" />
-    <None Include="assets\shaders\text.frag" />
-    <None Include="assets\shaders\text.vert" />
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="demo.XML" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

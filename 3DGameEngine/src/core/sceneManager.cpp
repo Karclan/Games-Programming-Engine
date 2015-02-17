@@ -26,111 +26,6 @@ void SceneManager::initFromInitTable()
 	}
 }
 
-
-void SceneManager::initTransform(CompData &comp)
-{
-	float tx = comp.getFloatAttrib(0);
-	float ty = comp.getFloatAttrib(1);
-	float tz = comp.getFloatAttrib(2);
-
-	float rx = comp.getFloatAttrib(3);
-	float ry = comp.getFloatAttrib(4);
-	float rz = comp.getFloatAttrib(5);
-
-	float sx = comp.getFloatAttrib(6);
-	float sy = comp.getFloatAttrib(7);
-	float sz = comp.getFloatAttrib(8);
-
-	SPtr_Transform transform = std::static_pointer_cast<Transform>(comp.getComp());
-	transform->setPosition(glm::vec3(tx, ty, tz));
-	transform->setEulerAngles(glm::vec3(rx, ry, rz));
-	transform->setScale(glm::vec3(sx, sy, sz));
-}
-
-
-void SceneManager::initCamera(CompData &comp)
-{
-
-}
-
-
-void SceneManager::initModelRend(CompData &comp)
-{
-	SPtr_ModelRend model = std::static_pointer_cast<ModelRenderer>(comp.getComp());
-			
-	// Figure out if the mesh is primitive or if it needs to be loaded in
-	bool isPrimitive = (bool)comp.getIntAttrib(0);
-
-	if(isPrimitive)
-	{
-		int shape = comp.getIntAttrib(1);
-		model->setMesh(Assets::getPrimitiveMesh((PrimitiveShapes::Type)shape)); // set mesh
-	}
-	else
-	{
-		if(comp.getStringAttrib(1) != "")
-		{
-			// TO DO...
-			// Load model from file once mesh loader implemented
-		}
-	}
-
-	// Set Material
-	if(comp.getStringAttrib(3) != "") // 3 = texture path, so if not "" then it has a texture
-	{
-		glm::vec2 tile = glm::vec2(comp.getFloatAttrib(4), comp.getFloatAttrib(5)); // get tile values as vec2
-		model->setMaterial(Assets::getShader(comp.getStringAttrib(2)), Assets::getTexture(comp.getStringAttrib(3)), tile); // set material with shader and texture
-	}
-	else if(comp.getStringAttrib(2) != "") // 2 = shader path, so if not "" then it has a shader
-	{
-		model->setMaterial(Assets::getShader(comp.getStringAttrib(2))); // set material with just shader
-	}
-}
-
-
-void SceneManager::initRobot(CompData &comp)
-{
-	std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(comp.getComp());
-	robot->reset();
-}
-
-void SceneManager::initPhysBody(CompData &comp)
-{
-}
-
-void SceneManager::initLight(CompData &comp)
-{
-	LightType::Type lightType = (LightType::Type)comp.getIntAttrib(0);
-
-	float aR = comp.getFloatAttrib(1);
-	float aG = comp.getFloatAttrib(2);
-	float aB = comp.getFloatAttrib(3);
-
-	float dR = comp.getFloatAttrib(4);
-	float dG = comp.getFloatAttrib(5);
-	float dB = comp.getFloatAttrib(6);
-
-	float sR = comp.getFloatAttrib(7);
-	float sG = comp.getFloatAttrib(8);
-	float sB = comp.getFloatAttrib(9);
-
-	float constant = comp.getFloatAttrib(10);
-	float linear = comp.getFloatAttrib(11);
-	float quadratic = comp.getFloatAttrib(12);
-
-	SPtr_Light light = std::static_pointer_cast<Light>(comp.getComp());
-	light->setLightType(lightType);
-	light->setAmbient(glm::vec3(aR,aG,aB));
-	light->setDiffuse(glm::vec3(dR,dG,dB));
-	light->setSpecular(glm::vec3(sR,sG,sB));
-	light->setAtteunation(glm::vec3(constant,linear,quadratic));
-}
-
-void SceneManager::initMaterial(CompData &comp)
-{
-
-}
-
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
@@ -239,6 +134,7 @@ void SceneManager::saveToXML(std::string filePath)
 				break;
 
 			case ComponentType::LIGHT:
+
 				break;
 
 			case ComponentType::SPHERE_COL:

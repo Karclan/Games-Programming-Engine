@@ -40,11 +40,7 @@ Component number
 </GO>
 <GO name="Floor">
     <COMP type="0" tx="0" ty="-0.005" tz="0" rx="0" ry="0" rz="0" sx="40" sy="0.01" sz="40" />
-<<<<<<< HEAD
-    <COMP type="1" primitive="1" mesh="1" shader="advanced" texture="" tileU="20" tileV="20" />
-=======
     <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="grass.png" tileU="20" tileV="20" />
->>>>>>> origin/sprint_02_alex
 </GO>
 <GO name="Wall">
     <COMP type="0" tx="0" ty="0.3" tz="-2" rx="0" ry="0" rz="0" sx="10" sy="0.5" sz="0.5" />

@@ -18,6 +18,8 @@ Light::Light()
 	_atteunation.x =0;
 	_atteunation.y =0;
 	_atteunation.z =0;
+
+	
 }
 ComponentType::Type Light::getType()
 {

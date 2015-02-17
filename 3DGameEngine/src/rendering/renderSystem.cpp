@@ -80,89 +80,96 @@ void RenderSystem::activateLights()
 	std::map<std::string, Shader*>::const_iterator it;
 	it = _loadedShaders->begin();
 	glm::vec3 direction(-0.3f, -0.1f, -1);
+	std::string index;
 	for(it; it != _loadedShaders->end(); ++it)
 	{
 		it->second->setDirectionalLight();//want to change this function
 
-		
-		/*for(int i = 0; i < _pointLights.size(); ++i)
+		it->second->setUniform("numOfPointLights",_pointLights.size());
+		it->second->setUniform("numOfSpotLights",_spotLights.size());
+
+		for(int i = 0; i < _pointLights.size(); ++i)
 		{
-				it->second->setUniform("numOfPointLights",1);
-				it->second->setUniform("pointLight["+std::to_string(i)+"].position", _pointLights[i]->getTransform()->getPosition());
-				it->second->setUniform("pointLight["+std::to_string(i)+"].amb",		 _pointLights[i]->getAmbient());
-				it->second->setUniform("pointLight["+std::to_string(i)+"].diff",	 _pointLights[i]->getDiffuse());
-				it->second->setUniform("pointLight["+std::to_string(i)+"].spec",	 _pointLights[i]->getSpecular());
-				it->second->setUniform("pointLight["+std::to_string(i)+"].constant", _pointLights[i]->getAtteunation().x);
-				it->second->setUniform("pointLight["+std::to_string(i)+"].linear",	 _pointLights[i]->getAtteunation().y);
-				it->second->setUniform("pointLight["+std::to_string(i)+"].quadratic",_pointLights[i]->getAtteunation().z);		
+			index = std::to_string(i);
+				it->second->setUniform(std::string("pointLight["+index+"].position").c_str(),	 _pointLights[i]->getTransform()->getPosition());
+				it->second->setUniform(std::string("pointLight["+index+"].amb").c_str(),		 _pointLights[i]->getAmbient());
+				it->second->setUniform(std::string("pointLight["+index+"].diff").c_str(),		 _pointLights[i]->getDiffuse());
+				it->second->setUniform(std::string("pointLight["+index+"].spec").c_str(),		 _pointLights[i]->getSpecular());
+				it->second->setUniform(std::string("pointLight["+index+"].constant").c_str(),	 _pointLights[i]->getAtteunation().x);
+				it->second->setUniform(std::string("pointLight["+index+"].linear").c_str(),		 _pointLights[i]->getAtteunation().y);
+				it->second->setUniform(std::string("pointLight["+index+"].quadratic").c_str(),	 _pointLights[i]->getAtteunation().z);		
 		}
+
 		for(int i=0; i<_spotLights.size();++i)
 		{
-				it->second->setUniform("spotLight["+std::to_string(i)+"].position",  _pointLights[i]->getTransform()->getPosition());
-				it->second->setUniform("spotLight["+std::to_string(i)+"].spotDir",   _pointLights[i]->getTransform()->getForward());
-				it->second->setUniform("spotLight["+std::to_string(i)+"].spotOutCut",glm::cos(glm::radians(28.f)));
-				it->second->setUniform("spotLight["+std::to_string(i)+"].spotInCut", glm::cos(glm::radians(14.f)));
-				it->second->setUniform("spotLight["+std::to_string(i)+"].amb",		 _pointLights[i]->getAmbient());
-				it->second->setUniform("spotLight["+std::to_string(i)+"].diff",		 _pointLights[i]->getDiffuse());
-				it->second->setUniform("spotLight["+std::to_string(i)+"].spec",		 _pointLights[i]->getSpecular());
-				it->second->setUniform("spotLight["+std::to_string(i)+"].constant",  _pointLights[i]->getAtteunation().x);
-				it->second->setUniform("spotLight["+std::to_string(i)+"].linear",    _pointLights[i]->getAtteunation().y);
-				it->second->setUniform("spotLight["+std::to_string(i)+"].quadratic", _pointLights[i]->getAtteunation().z);
-		}*/
+			index = std::to_string(i);
+				it->second->setUniform(std::string("spotLight["+index+"].position").c_str(),	 _pointLights[i]->getTransform()->getPosition());
+				it->second->setUniform(std::string("spotLight["+index+"].spotDir").c_str(),		 _pointLights[i]->getTransform()->getForward());
+				it->second->setUniform(std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
+				it->second->setUniform(std::string("spotLight["+index+"].spotInCut").c_str(),	 glm::cos(glm::radians(14.f)));
+				it->second->setUniform(std::string("spotLight["+index+"].amb").c_str(),			 _pointLights[i]->getAmbient());
+				it->second->setUniform(std::string("spotLight["+index+"].diff").c_str(),		 _pointLights[i]->getDiffuse());
+				it->second->setUniform(std::string("spotLight["+index+"].spec").c_str(),		 _pointLights[i]->getSpecular());
+				it->second->setUniform(std::string("spotLight["+index+"].constant").c_str(),	 _pointLights[i]->getAtteunation().x);
+				it->second->setUniform(std::string("spotLight["+index+"].linear").c_str(),		 _pointLights[i]->getAtteunation().y);
+				it->second->setUniform(std::string("spotLight["+index+"].quadratic").c_str(),	 _pointLights[i]->getAtteunation().z);
+		}
 
-		glm::vec3 lightPos = glm::vec3(1.f,5.f,0.f);
-		it->second->setUniform("numOfSpotLights",2);
-		it->second->setUniform("spotLight[0].position", lightPos);
-		it->second->setUniform("spotLight[0].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
-		it->second->setUniform("spotLight[0].spotOutCut",glm::cos(glm::radians(28.f)));
-		it->second->setUniform("spotLight[0].spotInCut",glm::cos(glm::radians(14.f)));
-		it->second->setUniform("spotLight[0].constant",1.f);
-		it->second->setUniform("spotLight[0].linear",0.014f);
-		it->second->setUniform("spotLight[0].quadratic",0.0007f);
-		it->second->setUniform("spotLight[0].amb",  0.2f, 0.2f, 0.2f);
-		it->second->setUniform("spotLight[0].diff", 1.f, 0.0f, 0.0f);
-		it->second->setUniform("spotLight[0].spec", 1.f, 0.0f, 0.0f);
+		//glm::vec3 lightPos = glm::vec3(1.f,5.f,0.f);
+		//it->second->setUniform("numOfSpotLights",2);
+		//it->second->setUniform("spotLight[0].position", lightPos);
+		//it->second->setUniform("spotLight[0].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
+		//it->second->setUniform("spotLight[0].spotOutCut",glm::cos(glm::radians(28.f)));
+		//it->second->setUniform("spotLight[0].spotInCut",glm::cos(glm::radians(14.f)));
+		//it->second->setUniform("spotLight[0].constant",1.f);
+		//it->second->setUniform("spotLight[0].linear",0.014f);
+		//it->second->setUniform("spotLight[0].quadratic",0.0007f);
+		//it->second->setUniform("spotLight[0].amb",  0.2f, 0.2f, 0.2f);
+		//it->second->setUniform("spotLight[0].diff", 1.f, 0.0f, 0.0f);
+		//it->second->setUniform("spotLight[0].spec", 1.f, 0.0f, 0.0f);
+		////SpotLight2
+		//lightPos = glm::vec3(-1.f,5.f,0.f);
+		//it->second->setUniform("spotLight[1].position", lightPos);
+		//it->second->setUniform("spotLight[1].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
+		//it->second->setUniform("spotLight[1].spotOutCut",glm::cos(glm::radians(28.f)));
+		//it->second->setUniform("spotLight[1].spotInCut",glm::cos(glm::radians(14.f)));
+		//it->second->setUniform("spotLight[1].constant",1.f);
+		//it->second->setUniform("spotLight[1].linear",0.014f);
+		//it->second->setUniform("spotLight[1].quadratic",0.0007f);
+		//it->second->setUniform("spotLight[1].amb",  0.2f, 0.2f, 0.2f);
+		//it->second->setUniform("spotLight[1].diff", 0.0f, 1.0f, 0.0f);
+		//it->second->setUniform("spotLight[1].spec", 0.f,  1.f,  0.f);
+		////PointLight1
+		//lightPos = glm::vec3(0.f,5.f,10.f);
+		//it->second->setUniform("numOfPointLights",1);
+		//it->second->setUniform("pointLight[0].position", lightPos);
+		//it->second->setUniform("pointLight[0].constant",1.f);
+		//it->second->setUniform("pointLight[0].linear",0.014f);
+		//it->second->setUniform("pointLight[0].quadratic",0.0007f);
+		//it->second->setUniform("pointLight[0].amb",  0.2f, 0.2f, 0.2f);
+		//it->second->setUniform("pointLight[0].diff", 0.5f, 0.5f, 0.5f);
+		//it->second->setUniform("pointLight[0].spec", 0.f,  1.f,  0.f);	
+		//it->second->setUniform("material.diff",glm::vec3(0.5f,0.5f,0.5f));
+		//it->second->setUniform("material.spec",glm::vec3(1.f,1.f,1.f));
+		//it->second->setUniform("material.specEx",64.f);
 
-		//SpotLight2
-		lightPos = glm::vec3(-1.f,5.f,0.f);
-		it->second->setUniform("spotLight[1].position", lightPos);
-		it->second->setUniform("spotLight[1].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
-		it->second->setUniform("spotLight[1].spotOutCut",glm::cos(glm::radians(28.f)));
-		it->second->setUniform("spotLight[1].spotInCut",glm::cos(glm::radians(14.f)));
-		it->second->setUniform("spotLight[1].constant",1.f);
-		it->second->setUniform("spotLight[1].linear",0.014f);
-		it->second->setUniform("spotLight[1].quadratic",0.0007f);
-		it->second->setUniform("spotLight[1].amb",  0.2f, 0.2f, 0.2f);
-		it->second->setUniform("spotLight[1].diff", 0.0f, 1.0f, 0.0f);
-		it->second->setUniform("spotLight[1].spec", 0.f,  1.f,  0.f);
-
-		//PointLight1
-		lightPos = glm::vec3(0.f,5.f,10.f);
-		it->second->setUniform("numOfPointLights",1);
-		it->second->setUniform("pointLight[0].position", lightPos);
-		it->second->setUniform("pointLight[0].constant",1.f);
-		it->second->setUniform("pointLight[0].linear",0.014f);
-		it->second->setUniform("pointLight[0].quadratic",0.0007f);
-		it->second->setUniform("pointLight[0].amb",  0.2f, 0.2f, 0.2f);
-		it->second->setUniform("pointLight[0].diff", 0.5f, 0.5f, 0.5f);
-		it->second->setUniform("pointLight[0].spec", 0.f,  1.f,  0.f);	
-
-		it->second->setUniform("material.diff",glm::vec3(0.5f,0.5f,0.5f));
-		it->second->setUniform("material.spec",glm::vec3(1.f,1.f,1.f));
-		it->second->setUniform("material.specEx",64.f);
 	}
 }
 
 void RenderSystem::addLight(SPtr_Light light)
 {
-	
+
+	std::cout<<"added a light lol!\n";
+	std::cout<<"Attenuation: " << light->getAtteunation().z<<"\n";
 	switch(light->getLightType())
 	{
 	case LightType::POINT:
 		_pointLights.push_back(light);
+		std::cout<<"Added a point light\n";
 		break;
 	case LightType::SPOT:
 		_spotLights.push_back(light);
+		std::cout<<"Added a spot light\n";
 		break;
 	}
 }

@@ -12,6 +12,8 @@ Material::Material()
 	_diffuse = glm::vec3(1.f,1.f,1.f);
 	_specular= glm::vec3(1.f,1.f,1.f);
 	_specularExp = 128.f;
+
+	//std::cout << "It's the material guyz\n";
 }
 ComponentType::Type Material::getType()
 {

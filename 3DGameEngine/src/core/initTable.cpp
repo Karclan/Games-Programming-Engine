@@ -403,7 +403,32 @@ void CompData::initializeComponent()
 
 	case ComponentType::LIGHT:
 		{
+			SPtr_Light light = std::static_pointer_cast<Light>(_comp);
+
+			LightType::Type lightType = (LightType::Type)getIntAttrib(0);
+
+			float aR = getFloatAttrib(1);
+			float aG = getFloatAttrib(2);
+			float aB = getFloatAttrib(3);
+
+			float dR = getFloatAttrib(4);
+			float dG = getFloatAttrib(5);
+			float dB = getFloatAttrib(6);
+
+			float sR = getFloatAttrib(7);
+			float sG = getFloatAttrib(8);
+			float sB = getFloatAttrib(9);
+
+			float constant = getFloatAttrib(10);
+			float linear = getFloatAttrib(11);
+			float quadratic = getFloatAttrib(12);
+
 			
+			light->setLightType(lightType);
+			light->setAmbient(glm::vec3(aR,aG,aB));
+			light->setDiffuse(glm::vec3(dR,dG,dB));
+			light->setSpecular(glm::vec3(sR,sG,sB));
+			light->setAtteunation(glm::vec3(constant,linear,quadratic));
 		}
 		break;
 
