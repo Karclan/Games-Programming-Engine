@@ -122,6 +122,7 @@ static void TW_CALL  loadFromFile(void *clientData)
 void GoMenu::loadFromFileXML()
 {
 	_sceneMngr->loadFromXML(loadFilePath);
+	setSelectedObject(0); // important to set currently selected object to 0 as might be out of range!!
 }
 
 
@@ -131,9 +132,14 @@ static void TW_CALL  newLevel(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
 
-	// TO DO - complete this function
+	goMenu->newScene();
 }
 
+void GoMenu::newScene()
+{
+	_sceneMngr->clearScene();
+	setSelectedObject(0); // important to set currently selected object to 0 as might be out of range!!
+}
 
 /******************************** Create Game Object Function ********************************/
 
@@ -144,13 +150,18 @@ static void TW_CALL  makeGameObject(void *clientData)
 	goMenu->createGameObject();
 }
 
+void GoMenu::createGameObject()
+{
+	if(_gamePlaying) return; // Cannot alter objects when in play mode
+	setSelectedObject(_objectMngr->createGameObject("New Game Object"));
+	refreshTweakBar();
+}
+
 
 /******************************** Tweak Bars Setup ********************************/
 
 void GoMenu::refreshTweakBar()
 {
-	_sceneMngr->loadFromXML(loadFilePath);
-
 	// Remove all the variables from the tweak bar
 	TwRemoveAllVars(_myBar);
 
@@ -326,29 +337,6 @@ void GoMenu::setGamePlaying(bool playing)
 {
 	_gamePlaying = playing;
 }
-
-void GoMenu::createGameObject()
-{
-	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	setSelectedObject(_objectMngr->createGameObject("Bobby McCormack"));
-	refreshTweakBar();
-}
-void GoMenu::createComponent()
-{
-	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	std::cout << "New Component Created!\n";
-}
-void GoMenu::deleteGameObject()
-{
-	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	std::cout << "Deleted Game Object!\n";
-}
-void GoMenu::deleteComponent()
-{
-	if(_gamePlaying) return; // Cannot alter objects when in play mode
-	std::cout << "Deleted Component!\n";
-}
-
 
 
 

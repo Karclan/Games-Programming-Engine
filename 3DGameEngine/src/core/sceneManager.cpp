@@ -30,6 +30,12 @@ void SceneManager::initFromInitTable()
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
+// clear scene
+void SceneManager::clearScene()
+{
+	_objMngr->clearInitTable();
+	_objMngr->destroyAll();
+}
 
 // load from XML
 void SceneManager::loadFromXML(std::string filePath)
@@ -42,8 +48,7 @@ void SceneManager::loadFromXML(std::string filePath)
 	}
 
 	// Clear out old scene
-	_objMngr->clearInitTable();
-	_objMngr->destroyAll();
+	clearScene();
 
 	TiXmlHandle handle(&doc);
 	
@@ -63,6 +68,9 @@ void SceneManager::loadFromXML(std::string filePath)
 		_objMngr->addComponentsFromXML(goID, goElmnt); // Add all componets via xml
 		_objMngr->addBehavioursFromXML(goID, goElmnt);
 	}
+
+	// Initialize the scene
+	initFromInitTable();
 }
 
 

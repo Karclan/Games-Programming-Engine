@@ -31,6 +31,7 @@ public:
 
 	void initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys);
 	
+	void clearScene(); //!< Clear current scene to start a new, blank scene
 	void writeDemoXML(); //!< Write a basic scene to XML, mainly used for testing purposes.
 	void loadFromXML(std::string filePath); //!< Load init table from xml file
 	void initFromInitTable(); //!< Initialize all components to their starting values

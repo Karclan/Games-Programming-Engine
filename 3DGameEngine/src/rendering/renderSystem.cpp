@@ -75,6 +75,8 @@ void RenderSystem::clear()
 	_cameras.clear();
 	_models.clear(); 
 	_animations.clear();
+	_pointLights.clear();
+	_spotLights.clear();
 }
 
 void RenderSystem::activateLights()

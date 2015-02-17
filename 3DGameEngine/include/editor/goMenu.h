@@ -27,16 +27,14 @@ public:
 
 	
 	void createTweakBar();
-	void createGameObject();
-
-	// Commands
-	void newGameObject(); // create new game object
 	void refreshGameObjects(); //!< Refreshes all game objects to match init data
 
-
+	// Commands
+	void createGameObject(); // create new game object
 	void addComponent(ComponentType::Type type);
-	void saveToFileXML();
-	void loadFromFileXML();
+	void newScene(); //!< Create new scene (blank scene)
+	void saveToFileXML(); //!< Save current scene
+	void loadFromFileXML(); //!< Load a scene from XML
 
 
 
@@ -63,17 +61,11 @@ private:
 
 
 
-	// My test interface functiona!! ^_^
 	int _selectedObjectID;
 
 	void setSelectedObject(int objID);
 
 	void refreshTweakBar(); //!< Refreshes tweak bar to match currently selected object
-
-	void createComponent();
-	void deleteGameObject();
-	void deleteComponent();
-
 
 
 	void nextGo();
