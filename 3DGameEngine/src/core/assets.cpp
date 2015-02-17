@@ -83,8 +83,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->generateBuffers();
 	mesh->setVerts(verts);
 	mesh->setIndices(indices);
-	if(normals.size() > 0) mesh->setNormals(normals);
-	if(uvs.size() > 0) mesh->setUvs(uvs);
+	mesh->setNormals(normals);
+	mesh->setUvs(uvs);
 	mesh->setColours(colours);
 
 	return mesh;
