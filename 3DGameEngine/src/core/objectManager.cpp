@@ -232,6 +232,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
 	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
 	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
+	case ComponentType::ANIMATION:	newComponent.reset(new Animator());		break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!

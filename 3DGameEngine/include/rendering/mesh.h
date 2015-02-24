@@ -62,6 +62,7 @@ private:
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
 
 	std::vector<VertexBoneData> _bones;
+	
 };
 
 #endif

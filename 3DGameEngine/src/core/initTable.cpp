@@ -211,14 +211,11 @@ void CompData::setAttribsToComponents()
 
 	case ComponentType::ANIMATION:
 		{
-			SPtr_ModelRend modelRend = std::static_pointer_cast<ModelRenderer>(_comp);
-
-			// Mesh
-			Animation* anim = modelRend->getAnim();
-			//if(anim) addAttribs(modelRend->getAnim()->getFilePath()); // attrib 0 is filepath of mesh
-			//else addAttribs(""); // blank string if no mesh
-
-
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(_comp);
+			Animation* anim = animator->getAnimation();
+			if(anim != nullptr) addAttribs(anim->getFilePath());
+			else addAttribs("");
+			
 			break;
 		}
 
@@ -403,8 +400,8 @@ void CompData::initializeComponent()
 
 	case ComponentType::ANIMATION:
 		{
-			SPtr_Animation animation = std::static_pointer_cast<Animation>(getComp());
-			animation->LoadAnimation(getStringAttrib(0));
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(getComp());
+			animator->setAnimation(Assets::getAnim(getStringAttrib(0)));
 		}
 		break;
 	}
