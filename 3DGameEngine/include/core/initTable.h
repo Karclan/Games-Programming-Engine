@@ -18,6 +18,7 @@
 #include "physics\physicsBody.h"
 #include "physics\collider.h"
 #include "rendering\robotRenderer.h"
+#include "rendering\animation.h"
 
 
 /*! \brief Data object for attributes

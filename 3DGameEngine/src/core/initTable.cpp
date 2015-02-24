@@ -209,6 +209,19 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+	case ComponentType::ANIMATION:
+		{
+			SPtr_ModelRend modelRend = std::static_pointer_cast<ModelRenderer>(_comp);
+
+			// Mesh
+			Animation* anim = modelRend->getAnim();
+			//if(anim) addAttribs(modelRend->getAnim()->getFilePath()); // attrib 0 is filepath of mesh
+			//else addAttribs(""); // blank string if no mesh
+
+
+			break;
+		}
+
 
 	}
 }
@@ -288,6 +301,10 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		addAttribf(to_float(compElmnt, "ox")); // offset x
 		addAttribf(to_float(compElmnt, "oy")); // offset y
 		addAttribf(to_float(compElmnt, "oz")); // offset z
+		break;
+
+	case ComponentType::ANIMATION:
+		addAttribs(compElmnt->Attribute("animation")); // attrib 0 is model filepath
 		break;
 
 
@@ -381,6 +398,13 @@ void CompData::initializeComponent()
 			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_comp);
 			boxCol->setExtents(glm::vec3(getFloatAttrib(0), getFloatAttrib(1), getFloatAttrib(2)));
 			boxCol->setOffset(glm::vec3(getFloatAttrib(3), getFloatAttrib(4), getFloatAttrib(5)));
+		}
+		break;
+
+	case ComponentType::ANIMATION:
+		{
+			SPtr_Animation animation = std::static_pointer_cast<Animation>(getComp());
+			animation->LoadAnimation(getStringAttrib(0));
 		}
 		break;
 	}

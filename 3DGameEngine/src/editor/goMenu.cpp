@@ -85,6 +85,13 @@ static void TW_CALL addTransformComponent(void *clientData)
 	goMenu->addComponent(ComponentType::TRANSFORM);
 }
 
+static void TW_CALL addAnimationComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::ANIMATION);
+}
+
 void GoMenu::addComponent(ComponentType::Type type)
 {
 	_objectMngr->addComponent(_selectedObjectID, type);
@@ -193,6 +200,7 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
 		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
 		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
+		TwAddButton(_addCompBar, "addAnimation", addAnimationComponent, this, "");
 		
 		
 		
@@ -273,6 +281,9 @@ void GoMenu::refreshTweakBar()
 
 				break;
 				
+			case ComponentType::ANIMATION:
+				TwAddVarRW(_myBar, &(id+"Animation File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Animation label=Animation_File_Path");
+				break;
 			}
 
 			// Advance i

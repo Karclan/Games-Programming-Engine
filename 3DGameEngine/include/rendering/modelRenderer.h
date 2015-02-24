@@ -4,6 +4,7 @@
 #include "rendering\renderer.h"
 #include "rendering\mesh.h"
 #include "rendering\material.h"
+#include "rendering\animation.h"
 
 #include "rendering\FTInterface.h"
 
@@ -24,15 +25,18 @@ public:
 
 	void render(GLfloat* viewMatrix, GLfloat* projMatrix); //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
 	void setMesh(Mesh* mesh);
+	void setAnim(Animation* anim);
 	void setMaterial(Shader* shader);
 	void setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile);
 
 	// Getters for info needed to write to XML / init data
 	Mesh * getMesh() { return _mesh; }
+	Animation * getAnim() {return _anim; }
 	Material * getMaterial() { return &_material; }
 
 private:
 	Mesh* _mesh; //!< Pointer to mesh used for rendering
+	Animation* _anim;
 	Material _material; //!< Material used for this object. Not a pointer as pretty lightweight, just a pointer to a shader and a pointer to a texture
 	
 };

@@ -42,6 +42,10 @@ void ModelRenderer::setMesh(Mesh* mesh)
 	_mesh = mesh;
 }
 
+void ModelRenderer::setAnim(Animation* anim)
+{
+	_anim = anim;
+}
 
 void ModelRenderer::setMaterial(Shader* shader)
 {

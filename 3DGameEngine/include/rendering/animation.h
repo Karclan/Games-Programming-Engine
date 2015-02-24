@@ -5,6 +5,7 @@
 #include "rendering\mesh.h"
 #include "rendering\renderer.h"
 #include "core\transform.h"
+#include "core\asset.h"
 
 #include <iostream>
 #include <fstream>
@@ -15,7 +16,7 @@
 	Contains all information for MD5 animation
 */
 
-class Animation : public Component
+class Animation : public Component, Asset
 {
 public:
 	Animation();
@@ -99,7 +100,6 @@ public:
 	void BuildFrameSkeleton( FrameSkeletonList& skeletons, const JointInfoList& jointInfos, const BaseFrameList& baseFrames, const Frame& frame );
 
 protected:
-
     JointInfoList       _JointInfos;
     BoundsList          _Bounds;
     BaseFrameList       _BaseFrames;
