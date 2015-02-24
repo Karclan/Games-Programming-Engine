@@ -76,12 +76,11 @@ vec3 CalSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 	
 	vec3 ambientCol = light.amb * material.diff;
-	ambientCol *= attenuation;
+	//ambientCol *= attenuation;
 
 	if(theta > light.spotOutCut)
 	{
-		if(dot(viewDir,normal)>0)
-		{
+		
 			float intensity = clamp((theta - light.spotOutCut) / epsilon, 0.0, 1.0);
  
 			float diffuse = max(dot(normal, lightDir), 0.0);
@@ -90,12 +89,15 @@ vec3 CalSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
     
 			vec3 diffuseCol = light.diff * diffuse * material.diff * intensity; 
 			vec3 specularCol = light.spec * specular * material.spec * intensity;
-
+			if(dot(viewDir,normal)>0)
+			{
+			specularCol=vec3(0,0,0);
+			}
 			diffuseCol *= attenuation;
 			specularCol*= attenuation;
 
 			return ambientCol + diffuseCol + specularCol;
-		}
+		
 	}
 	return  ambientCol;
 }
@@ -109,23 +111,26 @@ vec3 CalPointLight(PointLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
 	
 	vec3 ambientCol = light.amb * material.diff;
-	ambientCol *= attenuation;
-	if(dot(viewDir,normal)>0)
-	{
+	//ambientCol *= attenuation;
+	//if(dot(viewDir,normal)>0)
+	//{
 	float diffuse  = max(dot(normal, lightDir), 0.0);
 	float specular = pow(max(dot(viewDir, reflectDir), 0.0), material.specEx);
     
 
 	vec3 diffuseCol  = light.diff * diffuse  * material.diff; 
 	vec3 specularCol = light.spec * specular * material.spec;
-
+	if(dot(viewDir,normal)<0)
+	{
+	specularCol=vec3(0,0,0);
+	}
 
 	diffuseCol *= attenuation;
 	specularCol*= attenuation;
 		
 	return ambientCol + diffuseCol + specularCol;
-	}
-	return  ambientCol;
+	//}
+	//return  ambientCol;
 }
 
 void main()
