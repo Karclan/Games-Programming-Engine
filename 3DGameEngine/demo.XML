@@ -82,14 +82,14 @@ Component number
     <BHVR type="1" />
 </GO>
 <GO name="SpotLight">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="0.0" ty="3.0" tz="-3.0" rx="0" ry="0" rz="0" sx="0.0" sy="-0.5" sz="0.0" />
+  <COMP type="5" lightType="2" aR="0.1" aG="0.1" aB="0.1" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>
 <GO name="Spotlight2">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="3.0" ty="3.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="-0.5" sz="0.0" />
+  <COMP type="5" lightType="2" aR="0.1" aG="0.1" aB="0.1" dR ="0.1" dG ="0.5" dB ="0.8" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>
 <GO name="PointLight">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="-3.0" ty="3.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
+  <COMP type="5" lightType="1" aR="0.1" aG="0.1" aB="0.1" dR ="0.5" dG ="0.8" dB ="0.1" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>

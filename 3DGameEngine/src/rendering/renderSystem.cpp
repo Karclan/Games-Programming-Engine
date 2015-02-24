@@ -136,7 +136,7 @@ void RenderSystem::activateLights()
 		{
 			index = std::to_string(i);
 			it->second->setUniform( std::string("spotLight["+index+"].position")  .c_str(),	 _spotLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getForward());
+			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getScale());
 			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
 			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	 glm::cos(glm::radians(14.f)));
 			it->second->setUniform( std::string("spotLight["+index+"].amb")		  .c_str(),	 _spotLights[i]->getAmbient());
