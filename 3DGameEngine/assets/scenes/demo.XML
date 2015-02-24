@@ -24,12 +24,12 @@ Component number
 <GO name="Robot">
     <COMP type="4" />
     <COMP type="6" radius="1" ox="0" oy="0" oz="0" />
-    <COMP type="1" primitive="0" mesh="sphere" shader="advanced" texture="" tileU="1" tileV="1" />
+    <COMP type="1" primitive="0" mesh="sphere" shader="advanced" texture="" tileU="1" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
     <COMP type="0" tx="0" ty="1.8" tz="0" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
     <BHVR type="0" />
 </GO>
-<GO name="Ball">
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="ogre_diffuse.png" tileU="1" tileV="1" />
+<GO name="Cube">
+    <COMP type="1" primitive="0" mesh="HexagonPrism.obj" shader="advanced" texture="ogre_diffuse.png" tileU="1" tileV="1" dR="0.7" dG="0.6" dB="0.7" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
     <COMP type="4" />
     <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="0" tx="1.5" ty="1" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
@@ -40,56 +40,56 @@ Component number
 </GO>
 <GO name="Floor">
     <COMP type="0" tx="0" ty="-0.005" tz="0" rx="0" ry="0" rz="0" sx="40" sy="0.01" sz="40" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="grass.png" tileU="20" tileV="20" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="grass.png" tileU="20" tileV="20" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Wall">
     <COMP type="0" tx="0" ty="0.3" tz="-2" rx="0" ry="0" rz="0" sx="10" sy="0.5" sz="0.5" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Wall">
     <COMP type="0" tx="-5.25" ty="0.3" tz="2.75" rx="0" ry="90" rz="0" sx="10" sy="0.5" sz="0.5" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Wall">
     <COMP type="0" tx="-10" ty="0.3" tz="8" rx="0" ry="0" rz="0" sx="10" sy="0.5" sz="0.5" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="wall.png" tileU="20" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Windmill">
     <COMP type="0" tx="-1" ty="1.3" tz="-5" rx="0" ry="0" rz="0" sx="1" sy="2.6" sz="1" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Sail">
     <COMP type="0" tx="-1" ty="2" tz="-4.475" rx="0" ry="0" rz="0" sx="2" sy="2" sz="0.05" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
     <BHVR type="1" />
 </GO>
 <GO name="Windmill">
     <COMP type="0" tx="3" ty="1.3" tz="0" rx="0" ry="0" rz="0" sx="1" sy="2.6" sz="1" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Sail">
     <COMP type="0" tx="3" ty="2" tz="0.525" rx="0" ry="0" rz="0" sx="2" sy="2" sz="0.05" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
     <BHVR type="1" />
 </GO>
 <GO name="Windmill">
     <COMP type="0" tx="-6.5" ty="1.3" tz="6" rx="0" ry="0" rz="0" sx="1" sy="2.6" sz="1" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="windmill.png" tileU="1" tileV="2.6" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
 </GO>
 <GO name="Sail">
     <COMP type="0" tx="-6.5" ty="2" tz="6.525" rx="0" ry="0" rz="0" sx="2" sy="2" sz="0.05" />
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" />
+    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="sails.png" tileU="1" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1.0" sG="1.0" sB="1.0" specEx="64"/>
     <BHVR type="1" />
 </GO>
 <GO name="SpotLight">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="0.0" ty="3.0" tz="-3.0" rx="0" ry="0" rz="0" sx="0.0" sy="-0.5" sz="0.0" />
+  <COMP type="5" lightType="2" aR="0.1" aG="0.1" aB="0.1" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>
 <GO name="Spotlight2">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="3.0" ty="3.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="-0.5" sz="0.0" />
+  <COMP type="5" lightType="2" aR="0.1" aG="0.1" aB="0.1" dR ="0.1" dG ="0.5" dB ="0.8" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>
 <GO name="PointLight">
-  <COMP type="0" tx="0.0" ty="1.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
-  <COMP type="5" lightType="1" aR="0.2" aG="0.2" aB="0.2" dR ="0.8" dG ="0.1" dB ="0.5" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
+  <COMP type="0" tx="-3.0" ty="3.0" tz="0.0" rx="0" ry="0" rz="0" sx="0.0" sy="0.0" sz="0.0" />
+  <COMP type="5" lightType="1" aR="0.1" aG="0.1" aB="0.1" dR ="0.5" dG ="0.8" dB ="0.1" sR="1.0" sG="1.0" sB="1.0" constant="1.0" linear="0.014" quadratic="0.0007" />
 </GO>

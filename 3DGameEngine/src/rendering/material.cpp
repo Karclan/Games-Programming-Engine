@@ -9,20 +9,20 @@ Material::Material()
 	_texture = nullptr;
 	_uvTile = glm::vec2(1, 1);
 
-	_diffuse = glm::vec3(1.f,1.f,1.f);
-	_specular= glm::vec3(1.f,1.f,1.f);
-	_specularExp = 128.f;
+	_diffuse = glm::vec3(0.f,0.f,0.f);
+	_specular= glm::vec3(0.f,0.f,0.f);
+	_specularExp = 1.f;
 
 	//std::cout << "It's the material guyz\n";
 }
-ComponentType::Type Material::getType()
-{
-	return ComponentType::MATERIAL;
-}
-bool Material::isOnePerObject()
-{
-	return true;
-}
+//ComponentType::Type Material::getType()
+//{
+//	return ComponentType::MATERIAL;
+//}
+//bool Material::isOnePerObject()
+//{
+//	return true;
+//}
 
 void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 {
@@ -32,9 +32,9 @@ void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 	{
 		// Unbind texture and draw without
 		_shader->useProgram();
-		_shader->setUniform("Material.diff",_diffuse);
-		_shader->setUniform("Material.spec",_specular);
-		_shader->setUniform("Material.specEx",_specularExp);
+		_shader->setUniform("material.diff",_diffuse);
+		_shader->setUniform("material.spec",_specular);
+		_shader->setUniform("material.specEx",_specularExp);
 		_shader->setUniform("hasTex",0);
 		_shader->setMVP(glm::value_ptr(m), v, p);
 		_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));
@@ -45,9 +45,9 @@ void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 	{
 		// Bind and draw with texture
 		_shader->useProgram();
-		_shader->setUniform("Material.diff",_diffuse);
-		_shader->setUniform("Material.spec",_specular);
-		_shader->setUniform("Material.specEx",_specularExp);
+		_shader->setUniform("material.diff",_diffuse);
+		_shader->setUniform("material.spec",_specular);
+		_shader->setUniform("material.specEx",_specularExp);
 		_shader->setUniform("hasTex",1);
 		_shader->setMVP(glm::value_ptr(m), v, p);
 		_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));

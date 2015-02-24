@@ -50,9 +50,13 @@ void ModelRenderer::setMaterial(Shader* shader)
 	_material.setUVTiling(glm::vec2(1, 1)); // default value
 }
 
-void ModelRenderer::setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile)
+void ModelRenderer::setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile, glm::vec3 diffuse, glm::vec3 specular, float specularExponent)
 {
-	_material.setShader(shader);
-	_material.setTexture(texture);
-	_material.setUVTiling(uvTile);
+
+	_material.setShader		(shader);
+	_material.setTexture	(texture);
+	_material.setUVTiling	(uvTile);
+	_material.setDiffuse	(diffuse);
+	_material.setSpecular	(specular);
+	_material.setSpecularExp(specularExponent);
 }

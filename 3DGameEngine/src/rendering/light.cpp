@@ -19,7 +19,7 @@ Light::Light()
 	_atteunation.y =0;
 	_atteunation.z =0;
 
-	
+	std::cout<<"light created!\n";
 }
 ComponentType::Type Light::getType()
 {

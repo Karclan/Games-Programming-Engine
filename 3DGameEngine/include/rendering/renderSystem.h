@@ -31,6 +31,11 @@ public:
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
 	
+	void setGlobalAmbient	(glm::vec3 ambient);
+	void setGlobalDiffuse	(glm::vec3 diffuse);
+	void setGlobalSpecular  (glm::vec3 specular);
+	void setGlobalDirection (glm::vec3 direction);
+	
 	void clear();
 
 	// To do with light. SetShaderMap allows access to all loaded shaders. Not sure I like this design too much but ok for now
@@ -40,6 +45,12 @@ public:
 	void addLight(SPtr_Light light);
 
 private:
+
+	glm::vec3 _globalAmbient;	//!< Global Lighting - Ambient
+	glm::vec3 _globalDiffuse;	//!< Global Lighting - Diffuse
+	glm::vec3 _globalSpecular;  //!< Global Lighting - Specular
+	glm::vec3 _globalDirection;	//!< Global Lighting - Direction
+
 	std::vector<SPtr_Camera>   _cameras; //!< All cameras in scene. Currently set to simply render through camera at index 0.
 	std::vector<SPtr_Renderer> _models; //!< All the models to be rendered each frame
 	std::vector<SPtr_Renderer> _animations; //!< All the models to be animated each frame

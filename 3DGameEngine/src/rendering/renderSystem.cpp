@@ -69,6 +69,22 @@ void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
 }
 
 
+void RenderSystem::setGlobalAmbient(glm::vec3 ambient)
+{
+	_globalAmbient = ambient;
+}
+void RenderSystem::setGlobalDiffuse(glm::vec3 diffuse)
+{
+	_globalDiffuse = diffuse;
+}
+void RenderSystem::setGlobalSpecular(glm::vec3 specular)
+{
+	_globalSpecular = specular;
+}
+void RenderSystem::setGlobalDirection(glm::vec3 direction)
+{
+	_globalDirection = glm::normalize(direction);
+}
 
 void RenderSystem::clear()
 {
@@ -189,9 +205,9 @@ void RenderSystem::activateLights()
 
 
 
-		it->second->setUniform("material.diff",glm::vec3(0.8f,0.8f,0.8f));
+	/*	it->second->setUniform("material.diff",glm::vec3(0.8f,0.8f,0.8f));
 		it->second->setUniform("material.spec",glm::vec3(0.5f,0.5f,0.5f));
-		it->second->setUniform("material.specEx",128.f);
+		it->second->setUniform("material.specEx",128.f);*/
 
 
 	}

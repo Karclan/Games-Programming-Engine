@@ -10,13 +10,13 @@
 #include "core\component.h"
 
 //! \brief Material
-class Material : public Component
+class Material //: public Component
 {
 public:
 	Material(); 
 
-	ComponentType::Type getType();
-	bool isOnePerObject();
+	//ComponentType::Type getType();
+	//bool isOnePerObject();
 
 	void bind(glm::mat4 m, GLfloat* v, GLfloat* p);
 
@@ -48,6 +48,6 @@ private:
 };
 
 
-typedef std::shared_ptr<Material> SPtr_Material;
+//typedef std::shared_ptr<Material> SPtr_Material;
 
 #endif

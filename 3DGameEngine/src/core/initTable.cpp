@@ -171,6 +171,13 @@ void CompData::setAttribsToComponents()
 			addAttribf(mat->getUvTile().x); // attrib 3 is tile u
 			addAttribf(mat->getUvTile().y); // attrib 4 is tile v		
 			
+			addAttribf(mat->getDiffuse().x);	//diffuse r
+			addAttribf(mat->getDiffuse().y);	//diffuse g
+			addAttribf(mat->getDiffuse().z);	//diffuse b
+			addAttribf(mat->getSpecular().x);	//specular r
+			addAttribf(mat->getSpecular().y);	//specular g
+			addAttribf(mat->getSpecular().z);	//specular b
+			addAttribf(mat->getSpecularExp());	//specular exponent
 			break;
 		}
 
@@ -268,10 +275,6 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 	case ComponentType::CAMERA:
 		break;
 
-
-
-
-
 	case ComponentType::MODL_REND:
 		{
 		addAttribs(compElmnt->Attribute("mesh")); // attrib 0 is model filepath
@@ -279,12 +282,15 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		addAttribs(compElmnt->Attribute("texture")); // attrib 2 is texture file path as string
 		addAttribf(to_float(compElmnt, "tileU")); // attrib 3 is tile u
 		addAttribf(to_float(compElmnt,"tileV")); // attrib 4 is tile v
+		addAttribf(to_float(compElmnt,"dR")); // Diffuse x
+		addAttribf(to_float(compElmnt,"dG")); // Diffuse y
+		addAttribf(to_float(compElmnt,"dB")); // Diffuse z
+		addAttribf(to_float(compElmnt,"sR")); // Specular x
+		addAttribf(to_float(compElmnt,"sG")); // Specular y
+		addAttribf(to_float(compElmnt,"sB")); // Specular z
+		addAttribf(to_float(compElmnt,"specEx"));//Specular exponent
 		break;
 		}
-
-
-
-
 
 	case ComponentType::ROB_REND:
 		break;
@@ -292,26 +298,24 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 	case ComponentType::PHY_BODY:
 		break;
 
-
 	case ComponentType::LIGHT:
-			addAttribi(to_int(compElmnt,"lightType")); //Type
-			addAttribf(to_float(compElmnt,"aR")); // Ambient x
-			addAttribf(to_float(compElmnt,"aG")); // Ambient y
-			addAttribf(to_float(compElmnt,"aB")); // Ambient z
-			addAttribf(to_float(compElmnt,"dR")); // Diffuse x
-			addAttribf(to_float(compElmnt,"dG")); // Diffuse y
-			addAttribf(to_float(compElmnt,"dB")); // Diffuse z
-			addAttribf(to_float(compElmnt,"sR")); // Specular x
-			addAttribf(to_float(compElmnt,"sG")); // Specular y
-			addAttribf(to_float(compElmnt,"sB")); // Specular z
-			addAttribf(to_float(compElmnt,"constant")); // Constant
-			addAttribf(to_float(compElmnt,"linear")); // Linear
-			addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
+		addAttribi(to_int(compElmnt,"lightType")); //Type
+		addAttribf(to_float(compElmnt,"aR")); // Ambient x
+		addAttribf(to_float(compElmnt,"aG")); // Ambient y
+		addAttribf(to_float(compElmnt,"aB")); // Ambient z
+		addAttribf(to_float(compElmnt,"dR")); // Diffuse x
+		addAttribf(to_float(compElmnt,"dG")); // Diffuse y
+		addAttribf(to_float(compElmnt,"dB")); // Diffuse z
+		addAttribf(to_float(compElmnt,"sR")); // Specular x
+		addAttribf(to_float(compElmnt,"sG")); // Specular y
+		addAttribf(to_float(compElmnt,"sB")); // Specular z
+		addAttribf(to_float(compElmnt,"constant")); // Constant
+		addAttribf(to_float(compElmnt,"linear")); // Linear
+		addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
 		break;
 
 	case ComponentType::MATERIAL:
 		break;
-
 
 	case ComponentType::SPHERE_COL:
 		addAttribf(to_float(compElmnt, "radius"));
@@ -378,8 +382,16 @@ void CompData::initializeComponent()
 			// attrib 2 = texture file path
 			// attrib 3 = uv tile U
 			// attrib 4 = uv tile V
+
+			// attrib 5 = diffuse r
+			// attrib 6 = diffuse g
+			// attrib 7 = diffuse b
+			// attrib 8 = specular r
+			// attrib 9 = specular g 
+			// attrib 10 = specular b
+			// attrib 11 = specular exponent
 			model->setMesh(mesh); // set model
-			model->setMaterial(shader, texture, glm::vec2(getFloatAttrib(3), getFloatAttrib(4))); // set material with shader and texture
+			model->setMaterial(shader, texture, glm::vec2(getFloatAttrib(3), getFloatAttrib(4)), glm::vec3(getFloatAttrib(5),getFloatAttrib(6),getFloatAttrib(7)),glm::vec3(getFloatAttrib(8),getFloatAttrib(9),getFloatAttrib(10)),getFloatAttrib(11)); // set material with shader and texture
 		}
 		break;
 
