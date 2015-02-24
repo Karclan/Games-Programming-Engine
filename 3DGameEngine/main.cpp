@@ -215,3 +215,5 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 //Animation - guy waving arms
 
 //     \o\   /o/   \o\   /o/
+
+//JohnBervegeAvecMoi

@@ -4,6 +4,10 @@ void RenderSystem::render()
 {
 	if(_cameras.size() <= 0) return;
 	render(_cameras[0].get()); // call version of render that takes camera pointer as an arg
+	_globalAmbient = glm::vec3(0.1f,0.1f,0.1f);
+	_globalDiffuse = glm::vec3(0.1f,0.1f,0.1f);
+	_globalSpecular = glm::vec3(0.1f,0.1f,0.1f);
+	_globalDirection = glm::vec3(0.f,0.f,-1.f);
 }
 
 
@@ -22,9 +26,10 @@ void RenderSystem::render(Camera* camera)
 
 	// Draw calls would be harder to manage, needs more research
 
-	if(_unsortedLights.size() != 0) activateLights(); // activate lights if any added
-	camera->preRender();
+	//if(_unsortedLights.size() != 0) activateLights(); // activate lights if any added
 
+	camera->preRender();
+	activateLights();
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
@@ -129,19 +134,12 @@ void RenderSystem::activateLights()
 		int pointLights = _pointLights.size();
 		int spotLights = _spotLights.size();
 		it->second->setUniform("numOfPointLights",pointLights);
-		std::cout<<"pointlights :" <<_pointLights.size()<<"\n";
-
 		it->second->setUniform("numOfSpotLights",spotLights);
-		std::cout<<"spotLights :" <<_spotLights.size()<<"\n";
-
-
+				
 		for(int i = 0; i < _pointLights.size(); ++i)
 		{
 			index = std::to_string(i);
-			//std::cout<<"index: "<<index<<"\n";
-			//std::cout<<std::string("pointLight["+index+"].position").c_str() << " " << _pointLights[i]->getTransform()->getPosition().y<<"\n";
-			//std::cout<<"attenuation  :"<<_pointLights[i]->getAtteunation().x<<" "<<_pointLights[i]->getAtteunation().y<<" "<<_pointLights[i]->getAtteunation().z<<"\n";
-
+		
 			it->second->setUniform( std::string("pointLight["+index+"].position") .c_str(),	 _pointLights[i]->getTransform()->getPosition());
 			it->second->setUniform( std::string("pointLight["+index+"].amb")	  .c_str(),	 _pointLights[i]->getAmbient());
 			it->second->setUniform( std::string("pointLight["+index+"].diff")	  .c_str(),	 _pointLights[i]->getDiffuse());
@@ -150,8 +148,7 @@ void RenderSystem::activateLights()
 			it->second->setUniform( std::string("pointLight["+index+"].linear")	  .c_str(),	 _pointLights[i]->getAtteunation().y);
 			it->second->setUniform( std::string("pointLight["+index+"].quadratic").c_str(),	 _pointLights[i]->getAtteunation().z);		
 		}
-
-
+		
 		for(int i=0; i<_spotLights.size();++i)
 		{
 			index = std::to_string(i);
@@ -166,50 +163,6 @@ void RenderSystem::activateLights()
 			it->second->setUniform( std::string("spotLight["+index+"].linear")	  .c_str(),	 _spotLights[i]->getAtteunation().y);
 			it->second->setUniform( std::string("spotLight["+index+"].quadratic") .c_str(),	 _spotLights[i]->getAtteunation().z);
 		}
-
-
-		//glm::vec3 lightPos = glm::vec3(1.f,5.f,0.f);
-		//it->second->setUniform("numOfSpotLights",2);
-		//it->second->setUniform("spotLight[0].position", lightPos);
-		//it->second->setUniform("spotLight[0].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
-		//it->second->setUniform("spotLight[0].spotOutCut",glm::cos(glm::radians(28.f)));
-		//it->second->setUniform("spotLight[0].spotInCut",glm::cos(glm::radians(14.f)));
-		//it->second->setUniform("spotLight[0].constant",1.f);
-		//it->second->setUniform("spotLight[0].linear",0.014f);
-		//it->second->setUniform("spotLight[0].quadratic",0.0007f);
-		//it->second->setUniform("spotLight[0].amb",  0.2f, 0.2f, 0.2f);
-		//it->second->setUniform("spotLight[0].diff", 1.f, 0.0f, 0.0f);
-		//it->second->setUniform("spotLight[0].spec", 1.f, 0.0f, 0.0f);
-		////SpotLight2
-		//lightPos = glm::vec3(-1.f,5.f,0.f);
-		//it->second->setUniform("spotLight[1].position", lightPos);
-		//it->second->setUniform("spotLight[1].spotDir", glm::vec3(-0.0f,-1.f,-0.f));
-		//it->second->setUniform("spotLight[1].spotOutCut",glm::cos(glm::radians(28.f)));
-		//it->second->setUniform("spotLight[1].spotInCut",glm::cos(glm::radians(14.f)));
-		//it->second->setUniform("spotLight[1].constant",1.f);
-		//it->second->setUniform("spotLight[1].linear",0.014f);
-		//it->second->setUniform("spotLight[1].quadratic",0.0007f);
-		//it->second->setUniform("spotLight[1].amb",  0.2f, 0.2f, 0.2f);
-		//it->second->setUniform("spotLight[1].diff", 0.0f, 1.0f, 0.0f);
-		//it->second->setUniform("spotLight[1].spec", 0.f,  1.f,  0.f);
-		////PointLight1
-		//lightPos = glm::vec3(0.f,5.f,10.f);
-		//it->second->setUniform("numOfPointLights",1);
-		//it->second->setUniform("pointLight[0].position", lightPos);
-		//it->second->setUniform("pointLight[0].constant",1.f);
-		//it->second->setUniform("pointLight[0].linear",0.014f);
-		//it->second->setUniform("pointLight[0].quadratic",0.0007f);
-		//it->second->setUniform("pointLight[0].amb",  0.2f, 0.2f, 0.2f);
-		//it->second->setUniform("pointLight[0].diff", 0.5f, 0.5f, 0.5f);
-		//it->second->setUniform("pointLight[0].spec", 0.f,  1.f,  0.f);	
-
-
-
-	/*	it->second->setUniform("material.diff",glm::vec3(0.8f,0.8f,0.8f));
-		it->second->setUniform("material.spec",glm::vec3(0.5f,0.5f,0.5f));
-		it->second->setUniform("material.specEx",128.f);*/
-
-
 	}
 }
 
