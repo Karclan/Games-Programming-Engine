@@ -199,6 +199,37 @@ Mesh* Assets::getMesh(std::string fileName)
 	}
 }
 
+Animation* Assets::getAnim(std::string fileName)
+{
+	if(fileName == "") return nullptr;
+
+	Assets* ins = Assets::get(); // get instance
+
+
+	std::map<std::string, Animation*>::iterator it;
+	it = ins->_anims.find(fileName);
+	
+	if(it != ins->_anims.end()) // then it found it!
+	{
+		return it->second;
+	}
+	else // try to load it!
+	{
+		Animation* newAnim = new Animation();
+		std::string filePath = ASSETS_PATH + "models/" + fileName;
+		if(!newAnim->LoadAnimation(filePath))
+		{
+			std::cout << "Failed to load " << fileName << " anim\n";
+			delete newAnim;
+			return nullptr;
+		}
+		
+		// Add texture to map and return
+		ins->_anims.emplace(fileName, newAnim);
+		newAnim->setFilePath(fileName);
+		return newAnim;
+	}
+}
 
 
 
@@ -215,6 +246,7 @@ void Assets::unloadAllAssets()
 	unloadShaders();
 	unloadTextures();
 	unloadMeshes();
+	unloadAnims();
 }
 
 void Assets::unloadShaders()
@@ -260,6 +292,19 @@ void Assets::unloadMeshes()
 	ins->_meshes.clear();
 }
 
+void Assets::unloadAnims()
+{
+	Assets* ins = Assets::get(); // get instance
+
+	std::map<std::string, Animation*>::iterator it;
+	for(it = ins->_anims.begin(); it != ins->_anims.end(); ++it)
+	{
+		Animation* anim = it->second;
+		delete anim;
+	}
+
+	ins->_anims.clear();
+}
 
 
 const std::map<std::string, Shader*>* Assets::getShadersMap()

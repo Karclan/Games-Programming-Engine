@@ -46,7 +46,7 @@ public:
     {
         return _AnimatedSkeleton;
     }
- 
+
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
