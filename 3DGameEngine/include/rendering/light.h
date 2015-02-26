@@ -28,7 +28,6 @@ public:
 
 	void setLightType(LightType::Type type);
 
-	void setAmbient(glm::vec3 amb);
 	void setDiffuse(glm::vec3 diff);
 	void setSpecular(glm::vec3 specular);
 
@@ -36,7 +35,6 @@ public:
 	
 	LightType::Type getLightType(){return (LightType::Type)_type;}
 
-	glm::vec3 getAmbient(){return _ambient;}
 	glm::vec3 getDiffuse(){return _diffuse;}
 	glm::vec3 getSpecular(){return _specular;}
 	
@@ -49,7 +47,6 @@ private:
 
 	LightType::Type _type;
 
-	glm::vec3 _ambient;
 	glm::vec3 _diffuse;
 	glm::vec3 _specular;
 

@@ -29,29 +29,33 @@ public:
 	SceneManager(){};
 	~SceneManager(){};
 
-	void initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys);
+	void initialize(ObjectManager &objMngr, RenderSystem &rendSys);
 	
 	void clearScene(); //!< Clear current scene to start a new, blank scene
-	void writeDemoXML(); //!< Write a basic scene to XML, mainly used for testing purposes.
 	void loadFromXML(std::string filePath); //!< Load init table from xml file
 	void initFromInitTable(); //!< Initialize all components to their starting values
 	void saveToXML(std::string filePath); //!< Save from init table to XML
 
 private:
 	ObjectManager* _objMngr;
+	RenderSystem* _rendSys;
 
 	// functions to do with writing different types of info to file
 	TiXmlElement* xmlAddGo(TiXmlDocument* doc, std::string name);
 	void xmlAddTransform(TiXmlElement* go, glm::vec3 t, glm::vec3 r, glm::vec3 s);
 	void xmlAddCamera(TiXmlElement* go);
-	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture);
-	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV);
+	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp);
+	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV);
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset);
 	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
-	void xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type);
+	void xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten);
+	void xmlAddCustom(TiXmlElement* go, std::string behvr);
 
+	// saving scene params funcs
+	void xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, glm::vec3 dir);
+	
 };
 
 #endif

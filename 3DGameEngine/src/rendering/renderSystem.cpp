@@ -1,13 +1,15 @@
 #include "rendering\renderSystem.h"
 
+RenderSystem::RenderSystem()
+{
+	setLightDefaults();
+}
+
+
 void RenderSystem::render()
 {
 	if(_cameras.size() <= 0) return;
 	render(_cameras[0].get()); // call version of render that takes camera pointer as an arg
-	_globalAmbient = glm::vec3(0.1f,0.1f,0.1f);
-	_globalDiffuse = glm::vec3(0.1f,0.1f,0.1f);
-	_globalSpecular = glm::vec3(0.1f,0.1f,0.1f);
-	_globalDirection = glm::vec3(0.f,0.f,-1.f);
 }
 
 
@@ -73,6 +75,15 @@ void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
 	_animations.push_back(renderer);
 }
 
+
+// Default lighting values
+void RenderSystem::setLightDefaults()
+{
+	setGlobalAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
+	setGlobalDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
+	setGlobalSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
+	setGlobalDirection(glm::vec3(1.0f, -1.0f, -1.0f)); // will normalize coz setting through function
+}
 
 void RenderSystem::setGlobalAmbient(glm::vec3 ambient)
 {
@@ -141,7 +152,7 @@ void RenderSystem::activateLights()
 			index = std::to_string(i);
 		
 			it->second->setUniform( std::string("pointLight["+index+"].position") .c_str(),	 _pointLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("pointLight["+index+"].amb")	  .c_str(),	 _pointLights[i]->getAmbient());
+			it->second->setUniform( std::string("pointLight["+index+"].amb")	  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("pointLight["+index+"].diff")	  .c_str(),	 _pointLights[i]->getDiffuse());
 			it->second->setUniform( std::string("pointLight["+index+"].spec")	  .c_str(),	 _pointLights[i]->getSpecular());
 			it->second->setUniform( std::string("pointLight["+index+"].constant") .c_str(),	 _pointLights[i]->getAtteunation().x);
@@ -153,10 +164,10 @@ void RenderSystem::activateLights()
 		{
 			index = std::to_string(i);
 			it->second->setUniform( std::string("spotLight["+index+"].position")  .c_str(),	 _spotLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getScale());
+			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getForward());
 			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
 			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	 glm::cos(glm::radians(14.f)));
-			it->second->setUniform( std::string("spotLight["+index+"].amb")		  .c_str(),	 _spotLights[i]->getAmbient());
+			it->second->setUniform( std::string("spotLight["+index+"].amb")		  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("spotLight["+index+"].diff")	  .c_str(),	 _spotLights[i]->getDiffuse());
 			it->second->setUniform( std::string("spotLight["+index+"].spec")	  .c_str(),	 _spotLights[i]->getSpecular());
 			it->second->setUniform( std::string("spotLight["+index+"].constant")  .c_str(),	 _spotLights[i]->getAtteunation().x);

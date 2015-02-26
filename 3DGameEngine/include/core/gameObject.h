@@ -8,6 +8,9 @@
 #include "rendering\camera.h"
 #include "rendering\modelRenderer.h"
 
+// Forward Declarations
+class Behaviour;
+typedef std::shared_ptr<Behaviour> SPtr_Behaviour;
 
 /*! \brief Game Object
 
@@ -37,5 +40,7 @@ private:
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)
 typedef std::shared_ptr<GameObject> SPtr_GameObject;
+
+//#include "behaviour\behaviour.h"
 
 #endif

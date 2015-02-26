@@ -21,7 +21,7 @@
 class RenderSystem
 {
 public:
-	RenderSystem(){};
+	RenderSystem();
 	~RenderSystem(){};
 
 	void render(); //!< Render the camera through the currently selected camera
@@ -31,10 +31,17 @@ public:
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
 	
+	void setLightDefaults(); //!< Set default values for the global light params
+
 	void setGlobalAmbient	(glm::vec3 ambient);
 	void setGlobalDiffuse	(glm::vec3 diffuse);
 	void setGlobalSpecular  (glm::vec3 specular);
 	void setGlobalDirection (glm::vec3 direction);
+
+	glm::vec3 getGlobalAmbient	() { return _globalAmbient; }
+	glm::vec3 getGlobalDiffuse	() { return _globalDiffuse; }
+	glm::vec3 getGlobalSpecular  () { return _globalSpecular; }
+	glm::vec3 getGlobalDirection () { return _globalDirection; }
 	
 	void clear();
 

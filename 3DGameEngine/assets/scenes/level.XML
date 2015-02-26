@@ -1,0 +1,26 @@
+<?xml version="1.0" ?>
+<SCENE>
+    <LIGHTS>
+        <AMB r="0.2" g="0.2" b="0.2" />
+        <DIFF r="0.4" g="0.4" b="0.4" />
+        <SPEC r="1" g="1" b="1" />
+        <DIR x="0.2" y="0.2" z="0.2" />
+    </LIGHTS>
+</SCENE>
+<GO name="Robot">
+    <COMP type="1" mesh="legs.obj" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="0.76" tz="0" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+    <COMP type="9" behvr="Player" />
+</GO>
+<GO name="Floor">
+    <COMP type="1" mesh="plane.obj" shader="advanced" texture="grass.png" tileU="10" tileV="10" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="10" sy="1" sz="10" />
+</GO>
+<GO name="Light">
+    <COMP type="5" lightType="1" dR="0.5" dG="0.7" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" />
+    <COMP type="0" tx="0" ty="20" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+</GO>
+<GO name="Camera">
+    <COMP type="2" />
+    <COMP type="0" tx="0" ty="2" tz="5" rx="-10" ry="0" rz="0" sx="1" sy="1" sz="1" />
+</GO>

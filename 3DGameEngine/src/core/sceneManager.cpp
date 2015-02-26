@@ -1,8 +1,9 @@
 #include "core\sceneManager.h"
 
-void SceneManager::initialize(ObjectManager &objMngr, BehaviourSystem &behvrSys)
+void SceneManager::initialize(ObjectManager &objMngr, RenderSystem &rendSys)
 {
 	_objMngr = &objMngr;
+	_rendSys = &rendSys;
 	//writeDemoXML(); // This writes data to the example XML file, note will overwirte demo.xml. Used for testing save functions
 }
 
@@ -13,17 +14,13 @@ void SceneManager::initFromInitTable()
 	for(go = initTable->begin(); go != initTable->end(); ++go)
 	{
 		// Iterate through every component and init it
+		
 		for(std::list<CompData>::iterator comp = go->second.components.begin(); comp != go->second.components.end(); ++comp)
 		{
 			comp->initializeComponent();
 		}
-
-		// Iterate through behaviours and init them
-		for(int i = 0 ; i < go->second.behaviours.size(); ++i)
-		{
-			go->second.behaviours[i]->reset();
-		}
 	}
+	_rendSys->activateLights();
 }
 
 
@@ -35,6 +32,7 @@ void SceneManager::clearScene()
 {
 	_objMngr->clearInitTable();
 	_objMngr->destroyAll();
+	_rendSys->setLightDefaults();
 }
 
 // load from XML
@@ -62,10 +60,58 @@ void SceneManager::loadFromXML(std::string filePath)
 
 	TiXmlHandle handle(&doc);
 	
+	// Scene Params
+	TiXmlElement* sceneElmnt = handle.FirstChildElement("SCENE").ToElement();
+	if(sceneElmnt)
+	{
+		TiXmlElement* lightElmnt = sceneElmnt->FirstChildElement("LIGHTS");
+	
+		double x, y, z;
+
+		TiXmlElement* lightParam = lightElmnt->FirstChildElement("AMB");
+		if(lightParam)
+		{
+			lightParam->Attribute("r", &x);
+			lightParam->Attribute("g", &y);
+			lightParam->Attribute("b", &z);
+			_rendSys->setGlobalAmbient(glm::vec3(x, y, z));
+		}
+
+		lightParam = lightElmnt->FirstChildElement("DIFF");
+		if(lightParam)
+		{
+			lightParam->Attribute("r", &x);
+			lightParam->Attribute("g", &y);
+			lightParam->Attribute("b", &z);
+			_rendSys->setGlobalDiffuse(glm::vec3(x, y, z));
+		}
+
+		if(lightParam)
+		{
+			lightParam = lightElmnt->FirstChildElement("SPEC");
+			lightParam->Attribute("r", &x);
+			lightParam->Attribute("g", &y);
+			lightParam->Attribute("b", &z);
+			_rendSys->setGlobalSpecular(glm::vec3(x, y, z));
+		}
+
+		if(lightParam)
+		{
+			lightParam = lightElmnt->FirstChildElement("DIR");
+			lightParam->Attribute("x", &x);
+			lightParam->Attribute("y", &y);
+			lightParam->Attribute("z", &z);
+			_rendSys->setGlobalDirection(glm::vec3(x, y, z));
+		}
+	}
+
+
+	// Game Objects
 	TiXmlElement* goElmnt;
 	goElmnt = handle.FirstChildElement("GO").ToElement();
 	for(goElmnt; goElmnt != NULL; goElmnt=goElmnt->NextSiblingElement()) // foreach game object element in xml
 	{
+
 		// Get Name
 		std::string goName;
 		if(goElmnt->Attribute("name"))
@@ -76,7 +122,6 @@ void SceneManager::loadFromXML(std::string filePath)
 		// Create the game object and add to init table
 		unsigned int goID = _objMngr->createGameObject(goName); // Create GO
 		_objMngr->addComponentsFromXML(goID, goElmnt); // Add all componets via xml
-		_objMngr->addBehavioursFromXML(goID, goElmnt);
 	}
 
 	// Initialize the scene
@@ -89,8 +134,6 @@ void SceneManager::loadFromXML(std::string filePath)
 
 //------------------------------------------------------------------
 //------------------------------------------------------------------
-
-
 void SceneManager::saveToXML(std::string filePath)
 {
 	// Ensure file name is ok
@@ -106,6 +149,15 @@ void SceneManager::saveToXML(std::string filePath)
 	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
 	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
 
+	// Scene parametres
+	TiXmlElement* sceneElmnt = new TiXmlElement("SCENE");
+	doc.LinkEndChild(sceneElmnt);
+	xmlAddSceneLights(sceneElmnt, _rendSys->getGlobalAmbient(), _rendSys->getGlobalDiffuse(), _rendSys->getGlobalSpecular(), _rendSys->getGlobalDirection());
+
+
+
+
+	// Init table (Game Objects)
 	InitTable* init = _objMngr->getInitTable();
 	InitTableIterator it = init->begin();
 
@@ -114,7 +166,6 @@ void SceneManager::saveToXML(std::string filePath)
 		std::string name = _objMngr->getGameObject(it->first)->getName();
 		TiXmlElement * go = xmlAddGo(&doc, name);
 		std::list<CompData>::iterator compData = it->second.components.begin();
-		std::vector<SPtr_Behaviour>::iterator bhvrData = it->second.behaviours.begin();
 
 
 		for(compData; compData != it->second.components.end(); ++compData)
@@ -128,7 +179,11 @@ void SceneManager::saveToXML(std::string filePath)
 				break;
 
 			case ComponentType::MODL_REND:
-				xmlAddModelRend(go, compData->getStringAttrib(0), compData->getStringAttrib(1), compData->getStringAttrib(2), compData->getFloatAttrib(3), compData->getFloatAttrib(4));
+				{
+				glm::vec3 diff(compData->getFloatAttrib(5), compData->getFloatAttrib(6), compData->getFloatAttrib(7));
+				glm::vec3 spec(compData->getFloatAttrib(8), compData->getFloatAttrib(9), compData->getFloatAttrib(10));
+				xmlAddModelRend(go, compData->getStringAttrib(0), compData->getStringAttrib(1), compData->getStringAttrib(2), diff, spec, compData->getFloatAttrib(11), compData->getFloatAttrib(3), compData->getFloatAttrib(4));
+				}
 				break;
 
 			case ComponentType::CAMERA:
@@ -144,7 +199,9 @@ void SceneManager::saveToXML(std::string filePath)
 				break;
 
 			case ComponentType::LIGHT:
-
+				xmlAddLight(go, compData->getIntAttrib(0), glm::vec3(compData->getFloatAttrib(1), compData->getFloatAttrib(2), compData->getFloatAttrib(3)),
+														   glm::vec3(compData->getFloatAttrib(4), compData->getFloatAttrib(5), compData->getFloatAttrib(6)),
+														   glm::vec3(compData->getFloatAttrib(7), compData->getFloatAttrib(8), compData->getFloatAttrib(9)));
 				break;
 
 			case ComponentType::SPHERE_COL:
@@ -155,19 +212,12 @@ void SceneManager::saveToXML(std::string filePath)
 				xmlAddBoxCol(go, glm::vec3(compData->getFloatAttrib(0), compData->getFloatAttrib(1), compData->getFloatAttrib(2)),
 								 glm::vec3(compData->getFloatAttrib(3), compData->getFloatAttrib(4), compData->getFloatAttrib(5)));
 				break;
+
+			case ComponentType::CUSTOM:
+				xmlAddCustom(go, compData->getStringAttrib(0));
+				break;
 			}
 		}
-		
-
-		// Dirty dirty behaviours
-		/*
-		for(bhvrData; bhvrData != it->second.behaviours.end(); ++bhvrData)
-		{
-			xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-		}
-		*/
-
-
 	}
 
 	
@@ -176,94 +226,6 @@ void SceneManager::saveToXML(std::string filePath)
 	else
 		std::cout << "Save Failed. Ensure you have a folder called 'scenes' in the assets folder\n";
 }
-
-
-
-
-
-
-
-// Writes an example scene to XML. Mainly used for testing
-void SceneManager::writeDemoXML()
-{
-	// Ref to demo file
-	TiXmlDocument doc(DEMO_SCENE_PATH); // xml file
-
-	// Declaration at start of xml file
-	TiXmlDeclaration * decl = new TiXmlDeclaration( "1.0", "", "" ); // version declaration at top of file
-	doc.LinkEndChild( decl ); // Add declaration to file, this auto cleans up pointer as well
-
-	//------------------- For platform game demo
-	// Robot
-	TiXmlElement * robot = xmlAddGo(&doc, "Robot");
-	xmlAddPhysBody(robot);
-	xmlAddSphereCol(robot, 1, glm::vec3(0, 0, 0));
-	xmlAddModelRend(robot, "sphere", "advanced", "");
-	xmlAddTransform(robot, glm::vec3(0, 1.8f, 0), glm::vec3(), glm::vec3(2, 2, 2));
-	//xmlAddBoxCol(robot, glm::vec3(5, 12, 2), glm::vec3(0, -1.5, 0));
-	xmlAddBehaviour(robot, BehaviourTypes::PLAYER_CON);
-	//xmlAddTransform(robot, glm::vec3(0, 0.8f, 0), glm::vec3(), glm::vec3(0.1f, 0.1f, 0.1f));
-	//xmlAddRobot(robot);
-	
-
-	// Random test collidy thing
-	TiXmlElement * ball = xmlAddGo(&doc, "Ball");
-	//xmlAddModelRend(ball, "bs_ears.obj", "advanced", "ogre_diffuse.png");
-	xmlAddModelRend(ball, "cube", "advanced", "ogre_diffuse.png");
-	xmlAddPhysBody(ball);
-	//xmlAddSphereCol(ball, 1.0f, glm::vec3());
-	xmlAddBoxCol(ball, glm::vec3(1, 1, 1), glm::vec3(0, 0, 0));
-	xmlAddTransform(ball, glm::vec3(1.5f, 1, 0), glm::vec3(), glm::vec3(1, 1, 1));
-
-
-	// Camera Object
-	TiXmlElement * cameraGo = xmlAddGo(&doc, "Camera");
-	xmlAddTransform(cameraGo, glm::vec3(0, 0, 5), glm::vec3(), glm::vec3(1, 1, 1));
-	xmlAddCamera(cameraGo);
-
-	// Floor
-	TiXmlElement * floor = xmlAddGo(&doc, "Floor");
-	xmlAddTransform(floor, glm::vec3(0, -0.005f, 0), glm::vec3(), glm::vec3(40, 0.01f, 40));
-	xmlAddModelRend(floor, "cube", "advanced", "grass.png", 20, 20);
-
-	// Walls
-	TiXmlElement * wall = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall, glm::vec3(0, 0.3, -2), glm::vec3(), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall, "cube", "advanced", "wall.png", 20, 1);
-
-	TiXmlElement * wall2 = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall2, glm::vec3(-5.25, 0.3, 2.75), glm::vec3(0, 90, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall2, "cube", "advanced", "wall.png", 20, 1);
-
-	TiXmlElement * wall3 = xmlAddGo(&doc, "Wall");
-	xmlAddTransform(wall3, glm::vec3(-10, 0.3, 8), glm::vec3(0, 0, 0), glm::vec3(10, 0.5f, 0.5f));
-	xmlAddModelRend(wall3, "cube", "advanced", "wall.png", 20, 1);
-
-
-	// Windmills and sails
-	glm::vec2 windPosits[] = { glm::vec2(-1, -5), glm::vec2(3, 0), glm::vec2(-6.5, 6) };
-	for(int i = 0; i < 3; i++)
-	{
-		// Windmill
-		TiXmlElement * windmill = xmlAddGo(&doc, "Windmill");
-		xmlAddTransform(windmill, glm::vec3(windPosits[i].x, 1.3f, windPosits[i].y), glm::vec3(), glm::vec3(1, 2.6f, 1));
-		xmlAddModelRend(windmill, "cube", "advanced", "windmill.png", 1, 2.6f);
-
-		// Sail
-		TiXmlElement * sail = xmlAddGo(&doc, "Sail");
-		xmlAddTransform(sail, glm::vec3(windPosits[i].x, 2, windPosits[i].y + 0.525f), glm::vec3(), glm::vec3(2, 2, 0.05f));
-		xmlAddModelRend(sail, "cube", "advanced", "sails.png");
-		xmlAddBehaviour(sail, BehaviourTypes::ROT_OBJ);
-	}
-
-	
-
-	
-	// Save doc
-	doc.SaveFile();
-
-}
-
 
 
 
@@ -306,26 +268,45 @@ void SceneManager::xmlAddCamera(TiXmlElement* go)
 }
 
 // Add model renderer.
-void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture){xmlAddModelRend(go, mesh, shader, texture, 1, 1);}
-void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, float tileU, float tileV)
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp) {xmlAddModelRend(go, mesh, shader, texture, diff, spec, specExp, 1, 1);}
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV)
 {
 	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
 	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
-	transElmnt->SetAttribute("primitive", (int)false); // It is loaded from file
-	transElmnt->SetAttribute("mesh", mesh); // Set mesh attrib
-	transElmnt->SetAttribute("shader", shader); // Set material attrib
-	transElmnt->SetAttribute("texture", texture); // Set texture attrib
-	transElmnt->SetDoubleAttribute("tileU", tileU); // Set tile U attrib
-	transElmnt->SetDoubleAttribute("tileV", tileV); // Set tile U attrib
+	transElmnt->SetAttribute("mesh", mesh); // 0 Set mesh attrib
+	transElmnt->SetAttribute("shader", shader); // 1 Set material attrib
+	transElmnt->SetAttribute("texture", texture); // 2 Set texture attrib
+	transElmnt->SetDoubleAttribute("tileU", tileU); // 3 Set tile U attrib
+	transElmnt->SetDoubleAttribute("tileV", tileV); // 4 Set tile U attrib
+	transElmnt->SetDoubleAttribute("dR", diff.x); // 5 diff
+	transElmnt->SetDoubleAttribute("dG", diff.y); // 6 diff
+	transElmnt->SetDoubleAttribute("dB", diff.z); // 7 diff
+	transElmnt->SetDoubleAttribute("sR", spec.x); // 8 spec
+	transElmnt->SetDoubleAttribute("sG", spec.y); // 9 spec
+	transElmnt->SetDoubleAttribute("sB", spec.z); // 10 spec
+	transElmnt->SetDoubleAttribute("specEx", specExp); // 11 spec exp
+
 	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
-void SceneManager::xmlAddBehaviour(TiXmlElement* go, BehaviourTypes::Type type)
+void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten)
 {
-	TiXmlElement* behavElmnt = new TiXmlElement("BHVR"); // behaviour element
-	behavElmnt->SetAttribute("type", type);
-	go->LinkEndChild(behavElmnt);
+	TiXmlElement* lightElmnt = new TiXmlElement("COMP"); // Component Element
+	lightElmnt->SetAttribute("type", ComponentType::LIGHT); // Set type attrib
+	lightElmnt->SetAttribute("lightType", type);  // 0 light type (0=dir, 1=point, 2=spot)
+	lightElmnt->SetDoubleAttribute("dR", diff.x); // 1 Diffuse x
+	lightElmnt->SetDoubleAttribute("dG", diff.y); // 2 Diffuse y
+	lightElmnt->SetDoubleAttribute("dB", diff.z); // 3 Diffuse z
+	lightElmnt->SetDoubleAttribute("sR", spec.x); // 4 Specular x
+	lightElmnt->SetDoubleAttribute("sG", spec.y); // 5 Specular y
+	lightElmnt->SetDoubleAttribute("sB", spec.z); // 6 Specular z
+	lightElmnt->SetDoubleAttribute("constant", atten.x); // 7 Constant
+	lightElmnt->SetDoubleAttribute("linear", atten.y); // 8 Linear
+	lightElmnt->SetDoubleAttribute("quadratic", atten.z); // 9 Quadratic
+
+	go->LinkEndChild(lightElmnt); // Add element to file, this auto cleans up pointer as well
 }
+
 
 void SceneManager::xmlAddRobot(TiXmlElement* go)
 {
@@ -365,6 +346,50 @@ void SceneManager::xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 o
 	boxColElmnt->SetDoubleAttribute("oy", offset.y);
 	boxColElmnt->SetDoubleAttribute("oz", offset.z);
 	go->LinkEndChild(boxColElmnt); // Add element to file, this auto cleans up pointer as well
+}
+
+void SceneManager::xmlAddCustom(TiXmlElement* go, std::string behvr)
+{
+	TiXmlElement* boxColElmnt = new TiXmlElement("COMP"); // Component Element
+	boxColElmnt->SetAttribute("type", ComponentType::CUSTOM); // Set type attrib
+	boxColElmnt->SetAttribute("behvr", behvr);
+	go->LinkEndChild(boxColElmnt); // Add element to file, this auto cleans up pointer as well
+
+}
+
+
+
+
+
+//=======SCENE PARAM FUNCS
+void SceneManager::xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, glm::vec3 dir)
+{
+	TiXmlElement* lightsElmnt = new TiXmlElement("LIGHTS");
+	scene->LinkEndChild(lightsElmnt);
+
+	TiXmlElement* ambElmnt = new TiXmlElement("AMB");
+	ambElmnt->SetDoubleAttribute("r", amb.x);
+	ambElmnt->SetDoubleAttribute("g", amb.y);
+	ambElmnt->SetDoubleAttribute("b", amb.z);
+	lightsElmnt->LinkEndChild(ambElmnt);
+
+	TiXmlElement* diffElmnt = new TiXmlElement("DIFF");
+	diffElmnt->SetDoubleAttribute("r", diff.x);
+	diffElmnt->SetDoubleAttribute("g", diff.y);
+	diffElmnt->SetDoubleAttribute("b", diff.z);
+	lightsElmnt->LinkEndChild(diffElmnt);
+
+	TiXmlElement* specElmnt = new TiXmlElement("SPEC");
+	specElmnt->SetDoubleAttribute("r", spec.x);
+	specElmnt->SetDoubleAttribute("g", spec.y);
+	specElmnt->SetDoubleAttribute("b", spec.z);
+	lightsElmnt->LinkEndChild(specElmnt);
+
+	TiXmlElement* dirElmnt = new TiXmlElement("DIR");
+	dirElmnt->SetDoubleAttribute("x", amb.x);
+	dirElmnt->SetDoubleAttribute("y", amb.y);
+	dirElmnt->SetDoubleAttribute("z", amb.z);
+	lightsElmnt->LinkEndChild(dirElmnt);
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------

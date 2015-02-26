@@ -9,8 +9,8 @@ Material::Material()
 	_texture = nullptr;
 	_uvTile = glm::vec2(1, 1);
 
-	_diffuse = glm::vec3(0.f,0.f,0.f);
-	_specular= glm::vec3(0.f,0.f,0.f);
+	_diffuse = glm::vec3(1.f,1.f,1.f);
+	_specular= glm::vec3(1.f,1.f,1.f);
 	_specularExp = 1.f;
 
 	//std::cout << "It's the material guyz\n";

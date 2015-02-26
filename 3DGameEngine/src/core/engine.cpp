@@ -65,7 +65,7 @@ void Engine::startup()
 	// Time to initialize all core engine systems - can decompose this into separate function later if it gets messy
 	_rendSys.setShadersMap(Assets::getShadersMap()); // link map of shaders to rendering system
 	_objMngr.startUp(_rendSys, _physicsSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
-	_sceneMngr.initialize(_objMngr, _behvrSys); // init and pass reference to object manager
+	_sceneMngr.initialize(_objMngr, _rendSys); // init and pass reference to object manager
 	
 	_sceneMngr.loadFromXML(DEMO_SCENE_PATH); // this loads the demo scene from XML
 

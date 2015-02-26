@@ -11,7 +11,8 @@ void ObjectManager::startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys, Be
 	_rendSys = &rendSys;
 	_physicsSys = &physicsSys;
 	_behvrSys = &behvrSys;
-	_objectFinder.setReferences(_gameObjects);
+	_objectFinder.setReferences(_gameObjects); // TO DO - may as well cut out middle-man and pass reference to behaviour system itself...
+	_behvrSys->setObjectFinder(_objectFinder);
 }
 
 unsigned int ObjectManager::createGameObject(std::string name)
@@ -33,20 +34,6 @@ bool ObjectManager::addComponent(unsigned int objectID, ComponentType::Type type
 	return true;
 }
 
-bool ObjectManager::addBehaviour(unsigned int objectID, SPtr_Behaviour behaviour)
-{
-	if(!behaviour) return false;
-
-	// Find object by ID
-	SPtr_GameObject obj = getGameObject(objectID);
-	if(!obj) return false; // Failed! Return false
-	
-	// Link object to script and add to behaviour system
-	behaviour->linkToObject(obj);
-	behaviour->linkToObjectFinder(_objectFinder);
-	_behvrSys->addBehaviour(behaviour);
-	return true;
-}
 
 SPtr_GameObject ObjectManager::getGameObject(unsigned int objectID)
 {
@@ -101,42 +88,6 @@ bool ObjectManager::addComponentsFromXML(unsigned int objectID, TiXmlElement* go
 	linkComponents(objectID);
 
 	 return true;
-}
-
-
-
-
-
-bool ObjectManager::addBehavioursFromXML(unsigned int objectID, TiXmlElement* goElmnt)
-{
-	GOData* goData = &_initTable.find(objectID)->second; // get GoData object in table entry
-	goData->behaviours.clear();
-
-	// Add behaviours to goData
-	TiXmlElement* behvrElmnt = goElmnt->FirstChildElement("BHVR");
-	for(behvrElmnt; behvrElmnt != NULL; behvrElmnt=behvrElmnt->NextSiblingElement("BHVR"))
-	{
-		// Output type
-		if(behvrElmnt->Attribute("type"))
-		{
-			int bType;
-			behvrElmnt->Attribute("type", &bType);
-			switch (bType)
-			{
-				case BehaviourTypes::PLAYER_CON:	 goData->behaviours.push_back(SPtr_Behaviour(new PlayerController()));	break;
-				case BehaviourTypes::ROT_OBJ:		 goData->behaviours.push_back(SPtr_Behaviour(new RotatingObject()));	break;
-				case BehaviourTypes::MAN_ROT:		 goData->behaviours.push_back(SPtr_Behaviour(new ManualRotater()));		break;
-			}
-		}
-	}
-
-	// Iterate through behaviours and add to go
-	for(int i = 0 ; i < goData->behaviours.size(); ++i)
-	{
-		addBehaviour(objectID, goData->behaviours[i]);
-	}
-
-	return true;
 }
 
 
@@ -233,7 +184,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::LIGHT:		newComponent.reset(new Light());			break;
 	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
 	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
-
+	case ComponentType::CUSTOM:		newComponent.reset(new Custom(objectID));	break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -266,6 +217,10 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 
 	case ComponentType::LIGHT:
 		_rendSys->addLight(std::static_pointer_cast<Light>(newComponent));
+		break;
+
+	case ComponentType::CUSTOM:
+		_behvrSys->addCustom(std::static_pointer_cast<Custom>(newComponent));
 		break;
 	}
 

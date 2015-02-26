@@ -15,6 +15,7 @@
 #include "rendering\renderSystem.h"
 #include "rendering\light.h"
 #include "physics\physicsSystem.h"
+#include "behaviour\custom.h"
 
 
 
@@ -34,11 +35,9 @@ public:
 	
 	unsigned int createGameObject(std::string name); //!< Create object and return its unique ID
 	bool addComponent(unsigned int objectID, ComponentType::Type type); //!< Find object by id and add component to it if exists. Return true on success, false on fail
-	bool addBehaviour(unsigned int objectID, SPtr_Behaviour behaviour); 
 	SPtr_GameObject getGameObject(unsigned int objectID); //!< Returns an object by unique ID number
 	SPtr_GameObject getGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found	
 	bool addComponentsFromXML(unsigned int objectID, TiXmlElement* goElmnt); //!< Add all components from a tiny xml elemnet (tagged GO)
-	bool addBehavioursFromXML(unsigned int objectID, TiXmlElement* goElmnt); //!< Add all behaviours from a tiny xml elemnet (tagged GO)
 	void linkComponents(unsigned int goID); //!< Ensures all components in an object are linked. If one requires a component that isn't there is creates and adds it
 	void destroyAll(); //!< Clear all objects
 	

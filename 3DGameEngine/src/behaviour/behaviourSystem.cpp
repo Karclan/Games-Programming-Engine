@@ -3,6 +3,7 @@
 
 BehaviourSystem::BehaviourSystem()
 {
+	_objFinder = nullptr;
 }
 
 BehaviourSystem::~BehaviourSystem()
@@ -18,9 +19,18 @@ bool BehaviourSystem::addBehaviour(SPtr_Behaviour behaviour)
 }
 
 
+bool BehaviourSystem::addCustom(SPtr_Custom custom)
+{
+	if(!custom) return false;
+	_customList.push_back(custom);
+	return true;
+}
+
+
 
 void BehaviourSystem::clear()
 {
+	_customList.clear();
 	_initializeList.clear();
 	_updateList.clear();
 	_fixedUpdateList.clear();
@@ -29,6 +39,16 @@ void BehaviourSystem::clear()
 
 void BehaviourSystem::update(float t)
 {
+	// LOAD REQUESTED BEHAVIOURS
+	for(int i = 0; i <_customList.size(); ++i)
+	{
+		if(_customList[i]->requestBehaviour())
+		{
+			loadBehaviour(_customList[i]);
+		}
+	}
+
+
 	// INITIALIZE
 	// Call initialize on any newly added behaviours
 	while(_initializeList.size() > 0)
@@ -58,6 +78,70 @@ void BehaviourSystem::update(float t)
 	}
 }
 
+void BehaviourSystem::loadBehaviour(SPtr_Custom custom)
+{
+	if(_objFinder == nullptr) return;
+	custom->behvrRequestMet(); // to say we have met request and set behaviour if possible
+	if(!custom) return;
+
+	// Get new behaviour if valid
+	SPtr_Behaviour newBehaviour = CustomBehaviours::getBehaviour(custom->getBehvrName());
+	if(!newBehaviour) return;
+
+	// Destroy old behaviour if exists
+	SPtr_Behaviour oldBehaviour = custom->getBehaviour();
+	if(oldBehaviour != nullptr)
+	{
+		removeBehaviour(oldBehaviour);
+	}
+
+	
+
+	// Find object by ID
+	SPtr_GameObject obj;
+	std::unordered_map<unsigned int, SPtr_GameObject>::const_iterator it; // iterator for searching map
+	it = _objFinder->_gameObjects->find(custom->getObjectID());
+	if(it == _objFinder->_gameObjects->end()) 
+		return; // Failed! Iterator == end indicates key not found
+	else
+		obj = it->second;
+	
+	// Link object to behaviour system and custom object
+	newBehaviour->linkToObject(obj);
+	newBehaviour->linkToObjectFinder(*_objFinder);
+	addBehaviour(newBehaviour);
+	custom->setBehaviour(newBehaviour);
+}
+
+
+void BehaviourSystem::removeBehaviour(SPtr_Behaviour behaviour)
+{
+	for(int i = 0; i < _initializeList.size(); ++i)
+	{
+		if(behaviour == _initializeList[i])
+		{
+			_initializeList.erase(_initializeList.begin()+i);
+			continue;
+		}
+	}
+	for(int i = 0; i < _updateList.size(); ++i)
+	{
+		if(behaviour == _updateList[i])
+		{
+			_updateList.erase(_updateList.begin()+i);
+			continue;
+		}
+	}
+	for(int i = 0; i < _fixedUpdateList.size(); ++i)
+	{
+		if(behaviour == _fixedUpdateList[i])
+		{
+			_fixedUpdateList.erase(_fixedUpdateList.begin()+i);
+			continue;
+		}
+	}
+
+}
 
 
 void BehaviourSystem::fixedUpdate(float t)

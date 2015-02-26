@@ -2,22 +2,21 @@
 
 Light::Light()
 {
+	_type = LightType::POINT; // just made this default for now
+
 	setDepFlag(ComponentType::TRANSFORM);
-	_ambient.x =0;
-	_ambient.y =0;
-	_ambient.z =0;
 
-	_diffuse.x =0;
-	_diffuse.y =0;
-	_diffuse.z =0;
+	_diffuse.x =0.5;
+	_diffuse.y =0.5;
+	_diffuse.z =0.5;
 
-	_specular.x =0;
-	_specular.y =0;
-	_specular.z =0;
+	_specular.x =1;
+	_specular.y =1;
+	_specular.z =1;
 
-	_atteunation.x =0;
-	_atteunation.y =0;
-	_atteunation.z =0;
+	_atteunation.x =1;
+	_atteunation.y =0.014;
+	_atteunation.z =0.0007;
 
 	std::cout<<"light created!\n";
 }
@@ -43,10 +42,6 @@ void Light::linkDependency(SPtr_Component component)
 void Light::setLightType(LightType::Type type)
 {
 	_type=type;
-}
-void Light::setAmbient(glm::vec3 amb)
-{
-	_ambient = amb;
 }
 void Light::setDiffuse(glm::vec3 diff)
 {

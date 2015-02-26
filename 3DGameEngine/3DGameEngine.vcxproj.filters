@@ -52,6 +52,12 @@
     <Filter Include="Resource Files\ShaderFiles">
       <UniqueIdentifier>{6704a22f-0398-4bce-a384-cdd5837fa667}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\custom">
+      <UniqueIdentifier>{bd0fb6be-aee2-44b6-a57e-08af6febd6ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\custom">
+      <UniqueIdentifier>{14768d7d-b2b7-4851-9840-812a395e6495}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -193,6 +199,12 @@
     <ClInclude Include="include\rendering\shaders.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\custom.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\customBehaviours.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -314,6 +326,9 @@
     </ClCompile>
     <ClCompile Include="src\rendering\shaders.cpp">
       <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\behaviour\custom.cpp">
+      <Filter>Source Files\behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -11,7 +11,7 @@
 
 #include "core\assets.h"
 #include "core\component.h"
-#include "behaviour\behaviour.h"
+#include "rendering\camera.h"
 #include "core\transform.h"
 #include "rendering\modelRenderer.h"
 #include "rendering\primitiveShapes.h"
@@ -19,7 +19,7 @@
 #include "physics\physicsBody.h"
 #include "physics\collider.h"
 #include "rendering\robotRenderer.h"
-
+#include "behaviour\custom.h"
 
 /*! \brief Data object for attributes
 */
@@ -91,7 +91,6 @@ struct GOData
 {
 	//std::string name;
 	std::list<CompData> components;
-	std::vector<SPtr_Behaviour> behaviours;
 };
 
 

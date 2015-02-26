@@ -34,6 +34,7 @@ public:
 	friend class BehaviourSystem; //!< This allows only the behaviour system to call base update
 	Behaviour();
 	~Behaviour();
+	
 
 	void linkToObject(SPtr_GameObject gameObject);
 	void linkToObjectFinder(ObjectFinder &finder);

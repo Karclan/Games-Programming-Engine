@@ -216,10 +216,7 @@ void CompData::setAttribsToComponents()
 	case ComponentType::LIGHT:
 		{
 			SPtr_Light light = std::static_pointer_cast<Light>(_comp);
-			addAttribi(light->getLightType());
-			addAttribf(light->getAmbient().x); // Ambient x
-			addAttribf(light->getAmbient().y); // Ambient y
-			addAttribf(light->getAmbient().z); // Ambient z
+			addAttribi(light->getLightType()); // light type (0=dir, 1=point, 2=spot)
 			addAttribf(light->getDiffuse().x); // Diffuse x
 			addAttribf(light->getDiffuse().y); // Diffuse y
 			addAttribf(light->getDiffuse().z); // Diffuse z
@@ -233,6 +230,13 @@ void CompData::setAttribsToComponents()
 		}
 	case ComponentType::MATERIAL:
 		{
+			break;
+		}
+
+		case ComponentType::CUSTOM:
+		{
+			SPtr_Custom custom = std::static_pointer_cast<Custom>(_comp);
+			addAttribs(custom->getBehvrName()); // attrib 0 is custom class name
 			break;
 		}
 	}
@@ -299,10 +303,7 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::LIGHT:
-		addAttribi(to_int(compElmnt,"lightType")); //Type
-		addAttribf(to_float(compElmnt,"aR")); // Ambient x
-		addAttribf(to_float(compElmnt,"aG")); // Ambient y
-		addAttribf(to_float(compElmnt,"aB")); // Ambient z
+		addAttribi(to_int(compElmnt,"lightType"));  // light type (0=dir, 1=point, 2=spot)
 		addAttribf(to_float(compElmnt,"dR")); // Diffuse x
 		addAttribf(to_float(compElmnt,"dG")); // Diffuse y
 		addAttribf(to_float(compElmnt,"dB")); // Diffuse z
@@ -333,6 +334,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		addAttribf(to_float(compElmnt, "oz")); // offset z
 		break;
 
+	case ComponentType::CUSTOM:
+		addAttribs(compElmnt->Attribute("behvr")); // attrib 0 is model filepath
+		break;
 
 	}
 }
@@ -420,25 +424,20 @@ void CompData::initializeComponent()
 
 			LightType::Type lightType = (LightType::Type)getIntAttrib(0);
 
-			float aR = getFloatAttrib(1);
-			float aG = getFloatAttrib(2);
-			float aB = getFloatAttrib(3);
+			float dR = getFloatAttrib(1);
+			float dG = getFloatAttrib(2);
+			float dB = getFloatAttrib(3);
 
-			float dR = getFloatAttrib(4);
-			float dG = getFloatAttrib(5);
-			float dB = getFloatAttrib(6);
+			float sR = getFloatAttrib(4);
+			float sG = getFloatAttrib(5);
+			float sB = getFloatAttrib(6);
 
-			float sR = getFloatAttrib(7);
-			float sG = getFloatAttrib(8);
-			float sB = getFloatAttrib(9);
-
-			float constant = getFloatAttrib(10);
-			float linear = getFloatAttrib(11);
-			float quadratic = getFloatAttrib(12);
+			float constant = getFloatAttrib(7);
+			float linear = getFloatAttrib(8);
+			float quadratic = getFloatAttrib(9);
 
 			
 			light->setLightType(lightType);
-			light->setAmbient(glm::vec3(aR,aG,aB));
 			light->setDiffuse(glm::vec3(dR,dG,dB));
 			light->setSpecular(glm::vec3(sR,sG,sB));
 			light->setAtteunation(glm::vec3(constant,linear,quadratic));
@@ -459,6 +458,13 @@ void CompData::initializeComponent()
 			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_comp);
 			boxCol->setExtents(glm::vec3(getFloatAttrib(0), getFloatAttrib(1), getFloatAttrib(2)));
 			boxCol->setOffset(glm::vec3(getFloatAttrib(3), getFloatAttrib(4), getFloatAttrib(5)));
+		}
+		break;
+
+	case ComponentType::CUSTOM:
+		{
+			SPtr_Custom custom = std::static_pointer_cast<Custom>(_comp);
+			custom->setBehaviour(getStringAttrib(0));
 		}
 		break;
 	}
