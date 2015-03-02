@@ -163,8 +163,30 @@ bool Animation::LoadAnimation( const std::string& filename )
     return true;
 }
 
+int Animation::getNumFrames()
+{
+	return _iNumFrames;
+}
 
+float Animation::getAnimTime()
+{
+	return _fAnimTime;
+}
 
+float Animation::getAnimDuration()
+{
+	return _fAnimDuration;
+}
+
+int Animation::getFrameRate()
+{
+	return _iFramRate;
+}
+
+float Animation::getFrameDuration()
+{
+	return _fFrameDuration;
+}
 // Remove the quotes from a string
 void RemoveQuotes( std::string& str )
 {

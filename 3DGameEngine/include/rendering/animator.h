@@ -10,6 +10,16 @@
 #include <fstream>
 #include <ctime>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/compatibility.hpp>
+#include <glm/gtx/matrix_operation.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/norm.hpp>
 
 class Animator : public Component
 {
@@ -50,10 +60,12 @@ public:
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
-	
+	void Update( float fDeltaTime );
 	void bind(Shader* shader);
 
 	void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
+	void InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate );
+	
 	void setAnimation(Animation* anim) 
 	{ 
 		if(anim != nullptr)
@@ -69,6 +81,7 @@ protected:
 
 private:
 	Animation* _animation;
+	float animTime;
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

@@ -3,6 +3,7 @@
 Animator::Animator()
 {
 	_animation = nullptr;
+	animTime = _animation->getAnimTime();
 }
 
 ComponentType::Type Animator::getType()
@@ -73,7 +74,48 @@ void Animator::BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation
     skeletons.push_back(skeleton);
 }
 
+void Animator::Update( float fDeltaTime )
+{
+	
+    if ( _animation->getNumFrames() < 1 ) return;
 
+	animTime += fDeltaTime;
+	float animTime = _animation->getAnimTime();
+
+	while ( animTime >_animation->getAnimDuration() ) animTime -= _animation->getAnimDuration();
+    while ( animTime < 0.0f ) animTime += _animation->getAnimDuration();
+
+    // Figure out which frame we're on
+	float fFramNum = animTime * (float)_animation->getFrameRate();
+    int iFrame0 = (int)floorf( fFramNum );
+    int iFrame1 = (int)ceilf( fFramNum );
+	iFrame0 = iFrame0 % _animation->getNumFrames();
+    iFrame1 = iFrame1 % _animation->getNumFrames();
+
+	float fInterpolate = fmodf( animTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
+
+    //InterpolateSkeletons( m_AnimatedSkeleton, m_Skeletons[iFrame0], m_Skeletons[iFrame1], fInterpolate );
+}
+
+void Animator::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate )
+{
+    for ( int i = 0; i < _animation->GetNumJoints(); ++i )
+    {
+        SkeletonJoint& finalJoint = finalSkeleton.m_Joints[i];
+       // glm::mat4x4& finalMatrix = finalSkeleton.m_BoneMatrices[i];
+
+        const SkeletonJoint& joint0 = skeleton0.m_Joints[i];
+        const SkeletonJoint& joint1 = skeleton1.m_Joints[i];
+
+        finalJoint.m_Parent = joint0.m_Parent;
+
+        finalJoint.m_Pos = glm::lerp( joint0.m_Pos, joint1.m_Pos, fInterpolate );
+        finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
+
+        // Build the bone matrix for GPU skinning.
+       // finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
+    }
+}
 
 ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
 : m_fMaxTimeStep( maxTimeStep )

@@ -142,3 +142,26 @@ void Mesh::setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &b
 	
 	glBindVertexArray(0); // Unbind VAO
 }
+
+void Mesh::BuildBindPose( const JointList& joints )
+{
+    m_BindPose.clear();
+    m_InverseBindPose.clear();
+
+    JointList::const_iterator iter = joints.begin();
+    while ( iter != joints.end() )
+    {
+        const Joint& joint = (*iter);
+        glm::mat4x4 boneTranslation = glm::translate( joint.m_Pos );
+        glm::mat4x4 boneRotation = glm::toMat4( joint.m_Orient );
+
+        glm::mat4x4 boneMatrix = boneTranslation * boneRotation;
+
+        glm::mat4x4 inverseBoneMatrix = glm::inverse( boneMatrix );
+
+        m_BindPose.push_back( boneMatrix );
+        m_InverseBindPose.push_back( inverseBoneMatrix );
+
+        ++iter;
+    }
+}

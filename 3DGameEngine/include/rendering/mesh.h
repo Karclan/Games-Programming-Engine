@@ -24,12 +24,35 @@ namespace MeshAttribs
 	const unsigned int NUM_ATTRIBS = 7; // Number may change with time if I add more attribs, but never used in shader so doesn't matter
 }
 
-struct VertexBoneData
-{
-	GLint ids[4];		/************** HARD CODED - Number of bones that can affect a vertex ******************/
-	GLfloat weights[4];
 
-};
+typedef std::vector<glm::vec4> WeightBuffer;
+typedef std::vector<glm::vec4> BoneIndexBuffer;
+#define BONES_PER_VERTEX 4	/************** HARD CODED - Number of bones that can affect a vertex ******************/
+
+struct Vertex
+{
+	glm::vec3   m_Pos;
+    glm::vec3   m_Normal;
+    glm::vec2   m_Tex0;
+    glm::vec4   m_BoneWeights;
+    glm::vec4   m_BoneIndices;
+};	typedef std::vector<Vertex> VertexList;
+
+struct Triangle
+{
+	int m_Indices[3];
+};	typedef std::vector<Triangle> TriangleList;
+
+struct Joint
+{
+	std::string m_Name;
+	int			m_ParentID;
+	glm::vec3	m_Pos;
+	glm::quat	m_Orient;
+}; typedef std::vector<Joint> JointList;
+
+
+
 
 //! \brief Mesh
 
@@ -38,6 +61,11 @@ class Mesh : public Asset
 public:
 	Mesh();
 	~Mesh();
+
+
+	void SetWorldTransform( const glm::mat4x4 world );
+    glm::mat4x4 GetWorldTransform() const;
+    glm::mat4x4 GetInverseWorldTransform() const;
 
 	void generateBuffers(); //!< Create VAO and buffer for data
 
@@ -55,13 +83,22 @@ public:
 	void setPrimID(int id) { _primID = id; }
 	bool getPrimID() { return _primID; }
 
+	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
+
 private:
 	GLuint _vao; //!< The vao holding everything together!
 	GLuint _buffers[MeshAttribs::NUM_ATTRIBS]; //!< To store handles for vbos / element buffer
 	int _dataSize[MeshAttribs::NUM_ATTRIBS]; //!< Holds the number of elements in each buffer (useful for if you want to read from buffers later and also for drawing as we need to know how many elements)
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
 
-	std::vector<VertexBoneData> _bones;
+	typedef std::vector<glm::mat4x4> MatrixList;
+
+	MatrixList m_BindPose;
+	MatrixList m_InverseBindPose;
+	MatrixList m_AnimatedBones;
+
+	glm::mat4x4 m_LocalToWorldMatrix;
+	glm::mat4x4 m_WorldToLocalMatrix;
 	
 };
 

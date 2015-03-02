@@ -65,6 +65,13 @@ public:
 
 
 	bool LoadAnimation( const std::string& filename ); //!< Loads an animation from an MD5 file
+	int getNumFrames();
+	float getAnimTime();
+	float getAnimDuration();
+	int getFrameRate();
+	float getFrameDuration();
+
+
 
 protected:
     JointInfoList       _JointInfos;
