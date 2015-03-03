@@ -8,7 +8,7 @@ Camera::Camera()
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
 	_transform = nullptr;
-	_projectionMatrix = glm::perspective(glm::radians(35.0f), 1280.0f / 720.0f, 0.1f, 100.0f); //fov, aspect, zNear, ZFar
+	_projectionMatrix = glm::perspectiveFov(glm::radians(35.0f), 1280.0f , 720.0f, 0.1f, 100.0f); //fov, aspect, zNear, ZFar
 }
 
 ComponentType::Type Camera::getType()

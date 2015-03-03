@@ -121,8 +121,14 @@ void Engine::update(float t)
 void Engine::render()
 {
 	// Render
+	///first pass
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//render everything to back buffer
+
+	//second pass
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
-	_rendSys.render(); // render everything to back buffer
+	_rendSys.render();
+
 	_window.display(); // switch buffers
 	//_window.pushGLStates();
 	//_window.resetGLStates(); // think you have to reset GL states before drawing any SFML

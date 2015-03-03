@@ -33,15 +33,15 @@ public:
 	
 	void setLightDefaults(); //!< Set default values for the global light params
 
-	void setGlobalAmbient	(glm::vec3 ambient);
-	void setGlobalDiffuse	(glm::vec3 diffuse);
-	void setGlobalSpecular  (glm::vec3 specular);
+	void setGlobalAmbient	(glm::vec3 ambient  );
+	void setGlobalDiffuse	(glm::vec3 diffuse  );
+	void setGlobalSpecular  (glm::vec3 specular );
 	void setGlobalDirection (glm::vec3 direction);
 
-	glm::vec3 getGlobalAmbient	() { return _globalAmbient; }
-	glm::vec3 getGlobalDiffuse	() { return _globalDiffuse; }
-	glm::vec3 getGlobalSpecular  () { return _globalSpecular; }
-	glm::vec3 getGlobalDirection () { return _globalDirection; }
+	glm::vec3 getGlobalAmbient	(){ return _globalAmbient;  }
+	glm::vec3 getGlobalDiffuse	(){ return _globalDiffuse;  }
+	glm::vec3 getGlobalSpecular (){ return _globalSpecular; }
+	glm::vec3 getGlobalDirection(){ return _globalDirection;}
 	
 	void clear();
 
@@ -66,6 +66,11 @@ private:
 	std::vector<SPtr_Light>    _unsortedLights;
 	// NOTE: Having a pointer to the map of assets isn't that elegant but it'll do for the moment. It's relatively safe as the map exists for the duration of the program (no null pointers) and quicker than cycling throgh materials (which may have the same shader - why update uniforms in the same shader more than once??)
 	const std::map<std::string, Shader*>* _loadedShaders; //!< Pointer to map of shaders in assets. Rendering system needs to be able to update uniforms in all shaders (e.g. for lighting).
+
+	GLuint _pass1Index, _pass2Index, _shadowFBO;
+	glm::mat4 _lightPV ,_shadowView, _shadowModel, _shadowProjection, _shadowMapBias;
+	int _shadowMapWidth, _shadowMapHeight;
+
 
 };
 
