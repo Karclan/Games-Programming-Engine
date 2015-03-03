@@ -32,6 +32,9 @@ void RenderSystem::render(Camera* camera)
 
 	camera->preRender();
 	activateLights();
+
+	//pass 1
+
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
@@ -40,6 +43,8 @@ void RenderSystem::render(Camera* camera)
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);
 	
+	//pass 2
+
 
 	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 
@@ -79,10 +84,10 @@ void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
 // Default lighting values
 void RenderSystem::setLightDefaults()
 {
-	setGlobalAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
-	setGlobalDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
-	setGlobalSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-	setGlobalDirection(glm::vec3(1.0f, -1.0f, -1.0f)); // will normalize coz setting through function
+	setGlobalAmbient	(glm::vec3(0.2f, 0.2f, 0.2f));
+	setGlobalDiffuse	(glm::vec3(0.4f, 0.4f, 0.4f));
+	setGlobalSpecular	(glm::vec3(1.0f, 1.0f, 1.0f));
+	setGlobalDirection	(glm::vec3(0.0f, 0.0f,-1.0f)); // will normalize coz setting through function
 }
 
 void RenderSystem::setGlobalAmbient(glm::vec3 ambient)
@@ -104,11 +109,11 @@ void RenderSystem::setGlobalDirection(glm::vec3 direction)
 
 void RenderSystem::clear()
 {
-	_cameras.clear();
-	_models.clear(); 
-	_animations.clear();
-	_pointLights.clear();
-	_spotLights.clear();
+	_cameras.clear		();
+	_models.clear		(); 
+	_animations.clear	();
+	_pointLights.clear	();
+	_spotLights.clear	();
 }
 
 void RenderSystem::activateLights()
@@ -142,6 +147,12 @@ void RenderSystem::activateLights()
 	for(it; it != _loadedShaders->end(); ++it)
 	{
 		it->second->useProgram();
+
+		it->second->setUniform("glDirLight.amb",	  _globalAmbient); // Global Ambient
+		it->second->setUniform("glDirLight.diff",   _globalDiffuse); // Global Ambient
+		it->second->setUniform("glDirLight.spec",  _globalSpecular); // Global Ambient
+		it->second->setUniform("glDirLight.direction", _globalDirection); // Global Ambient
+
 		int pointLights = _pointLights.size();
 		int spotLights = _spotLights.size();
 		it->second->setUniform("numOfPointLights",pointLights);
@@ -152,7 +163,6 @@ void RenderSystem::activateLights()
 			index = std::to_string(i);
 		
 			it->second->setUniform( std::string("pointLight["+index+"].position") .c_str(),	 _pointLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("pointLight["+index+"].amb")	  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("pointLight["+index+"].diff")	  .c_str(),	 _pointLights[i]->getDiffuse());
 			it->second->setUniform( std::string("pointLight["+index+"].spec")	  .c_str(),	 _pointLights[i]->getSpecular());
 			it->second->setUniform( std::string("pointLight["+index+"].constant") .c_str(),	 _pointLights[i]->getAtteunation().x);
@@ -167,7 +177,6 @@ void RenderSystem::activateLights()
 			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getForward());
 			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
 			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	 glm::cos(glm::radians(14.f)));
-			it->second->setUniform( std::string("spotLight["+index+"].amb")		  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("spotLight["+index+"].diff")	  .c_str(),	 _spotLights[i]->getDiffuse());
 			it->second->setUniform( std::string("spotLight["+index+"].spec")	  .c_str(),	 _spotLights[i]->getSpecular());
 			it->second->setUniform( std::string("spotLight["+index+"].constant")  .c_str(),	 _spotLights[i]->getAtteunation().x);

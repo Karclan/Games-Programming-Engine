@@ -12,17 +12,7 @@ Material::Material()
 	_diffuse = glm::vec3(1.f,1.f,1.f);
 	_specular= glm::vec3(1.f,1.f,1.f);
 	_specularExp = 1.f;
-
-	//std::cout << "It's the material guyz\n";
 }
-//ComponentType::Type Material::getType()
-//{
-//	return ComponentType::MATERIAL;
-//}
-//bool Material::isOnePerObject()
-//{
-//	return true;
-//}
 
 void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 {

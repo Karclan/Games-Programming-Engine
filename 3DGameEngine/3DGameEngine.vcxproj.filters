@@ -199,11 +199,8 @@
     <ClInclude Include="include\rendering\shaders.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\custom.h">
+    <ClInclude Include="include\behaviour\custom.h">
       <Filter>Header Files\behaviour</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\customBehaviours.h">
-      <Filter>Header Files\custom</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -327,7 +324,7 @@
     <ClCompile Include="src\rendering\shaders.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\behaviour\custom.cpp">
+    <ClCompile Include="src\behaviour\custom.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
   </ItemGroup>
