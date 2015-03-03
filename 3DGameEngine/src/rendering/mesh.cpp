@@ -165,3 +165,42 @@ void Mesh::BuildBindPose( const JointList& joints )
         ++iter;
     }
 }
+/*
+bool Mesh::PrepareMesh( Mesh& mesh )
+{
+    // Compute vertex positions
+    for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
+    {
+        glm::vec3 finalPos(0);
+        Vertex& vert = mesh.m_Verts[i];
+
+        vert.m_Pos = glm::vec3(0);
+        vert.m_Normal = glm::vec3(0);
+        vert.m_BoneWeights = glm::vec4(0);
+        vert.m_BoneIndices = glm::vec4(0);
+
+        // Sum the position of the weights
+        for ( int j = 0; j < vert.m_WeightCount; ++j )
+        {
+            assert( j < 4 );
+
+            Weight& weight = mesh.m_Weights[vert.m_StartWeight + j];
+            Joint& joint = m_Joints[weight.m_JointID];
+            
+            // Convert the weight position from Joint local space to object space
+            glm::vec3 rotPos = joint.m_Orient * weight.m_Pos;
+
+            vert.m_Pos += ( joint.m_Pos + rotPos ) * weight.m_Bias;
+            vert.m_BoneIndices[j] = (float)weight.m_JointID;
+            vert.m_BoneWeights[j] = weight.m_Bias;
+        }
+
+        mesh.m_PositionBuffer.push_back(vert.m_Pos);
+        mesh.m_Tex2DBuffer.push_back(vert.m_Tex0);
+        mesh.m_BoneIndex.push_back(vert.m_BoneIndices);
+        mesh.m_BoneWeights.push_back(vert.m_BoneWeights);
+    }
+
+    return true;
+}
+*/

@@ -6,6 +6,16 @@
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/compatibility.hpp>
+#include <glm/gtx/matrix_operation.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include "core\asset.h"
 
@@ -84,6 +94,8 @@ public:
 	bool getPrimID() { return _primID; }
 
 	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
+	void BuildBindPose( const JointList& joints );
+	bool PrepareMesh(Mesh& mesh);
 
 private:
 	GLuint _vao; //!< The vao holding everything together!

@@ -26,6 +26,7 @@ class Animator : public Component
 public:
 	Animator();
 
+	typedef std::vector<glm::mat4x4> SkeletonMatrixList;
 	 // A Skeleton joint is a joint of the skeleton per frame
     struct SkeletonJoint
     {
@@ -48,6 +49,7 @@ public:
     // A frame skeleton stores the joints of the skeleton for a single frame.
     struct FrameSkeleton
     {
+		SkeletonMatrixList  m_BoneMatrices;
         SkeletonJointList   m_Joints;
     };
     typedef std::vector<FrameSkeleton> FrameSkeletonList;
