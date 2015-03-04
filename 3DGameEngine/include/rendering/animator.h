@@ -59,15 +59,23 @@ public:
         return _AnimatedSkeleton;
     }
 
+	   const SkeletonMatrixList& GetSkeletonMatrixList() const
+    {
+		return _AnimatedSkeleton.m_BoneMatrices;
+    }
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
-	void Update( float fDeltaTime );
+	void UpdateAnim( float fDeltaTime );
+	void UpdateMesh( float fDeltaTime );
 	void bind(Shader* shader);
 
+	
 	void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
 	void InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate );
 	
+	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
+
 	void setAnimation(Animation* anim) 
 	{ 
 		if(anim != nullptr)
@@ -84,6 +92,7 @@ protected:
 private:
 	Animation* _animation;
 	float animTime;
+	typedef std::vector<glm::mat4x4> MatrixList;
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

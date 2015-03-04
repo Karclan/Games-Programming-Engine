@@ -72,7 +72,6 @@ public:
 	float getFrameDuration();
 
 
-
 protected:
     JointInfoList       _JointInfos;
     BoundsList          _Bounds;

@@ -72,7 +72,7 @@ public:
 	Mesh();
 	~Mesh();
 
-
+	
 	void SetWorldTransform( const glm::mat4x4 world );
     glm::mat4x4 GetWorldTransform() const;
     glm::mat4x4 GetInverseWorldTransform() const;
@@ -85,7 +85,6 @@ public:
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
 	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
-	
 
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
@@ -93,9 +92,10 @@ public:
 	void setPrimID(int id) { _primID = id; }
 	bool getPrimID() { return _primID; }
 
-	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	void BuildBindPose( const JointList& joints );
+	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	bool PrepareMesh(Mesh& mesh);
+	void update(float fDeltaTime);
 
 private:
 	GLuint _vao; //!< The vao holding everything together!

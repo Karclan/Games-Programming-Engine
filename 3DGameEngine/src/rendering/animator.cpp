@@ -74,7 +74,7 @@ void Animator::BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation
     skeletons.push_back(skeleton);
 }
 
-void Animator::Update( float fDeltaTime )
+void Animator::UpdateAnim( float fDeltaTime )
 {
 	
     if ( _animation->getNumFrames() < 1 ) return;
@@ -94,7 +94,18 @@ void Animator::Update( float fDeltaTime )
 
 	float fInterpolate = fmodf( animTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
 
-    //InterpolateSkeletons( m_AnimatedSkeleton, m_Skeletons[iFrame0], m_Skeletons[iFrame1], fInterpolate );
+    InterpolateSkeletons( _AnimatedSkeleton, _Skeletons[iFrame0], _Skeletons[iFrame1], fInterpolate );
+}
+
+void Animator::UpdateMesh(float fDeltaTime)
+{
+	UpdateAnim(fDeltaTime);
+	const MatrixList& animatedSkeleton = GetSkeletonMatrixList();
+
+	for(int i=0; i < _animation->GetNumJoints(); ++i)
+	{
+		//_animatedBones[i] = animatedSkeleton[i] * InverseBindPose[i];
+	}
 }
 
 void Animator::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate )
@@ -133,7 +144,5 @@ float ElapsedTime::GetElapsedTime() const
 
     return fDeltaTime;
 }
-
-
 
 
