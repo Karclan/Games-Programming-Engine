@@ -176,15 +176,16 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	// Here is where you set creation of component based on enum
 	switch(type)
 	{
-	case ComponentType::TRANSFORM:	newComponent.reset(new Transform());		break;
-	case ComponentType::MODL_REND:	newComponent.reset(new ModelRenderer());	break;
-	case ComponentType::CAMERA:		newComponent.reset(new Camera());			break;
-	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
-	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
-	case ComponentType::LIGHT:		newComponent.reset(new Light());			break;
-	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
-	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
-	case ComponentType::CUSTOM:		newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
+	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
+	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
+	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
+	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
+	case ComponentType::LIGHT:			newComponent.reset(new Light());			break;
+	case ComponentType::SPHERE_COL:		newComponent.reset(new SphereCollider());	break;
+	case ComponentType::BOX_COL:		newComponent.reset(new BoxCollider());		break;
+	case ComponentType::CUSTOM:			newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -221,6 +222,10 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 
 	case ComponentType::CUSTOM:
 		_behvrSys->addCustom(std::static_pointer_cast<Custom>(newComponent));
+		break;
+
+	case ComponentType::TERRAIN_COL:
+		_physicsSys->addTerrainCollider(std::static_pointer_cast<TerrainCollider>(newComponent));
 		break;
 	}
 

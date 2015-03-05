@@ -10,6 +10,7 @@
 // For debug shapes
 #include "core\assets.h"
 #include "rendering\camera.h"
+#include "physics\terrainCollider.h"
 
 /*! \brief Physics Sub-System
 
@@ -25,6 +26,7 @@ public:
 	void fixedUpdate(float t); //!< Physics uses a fixed timestep
 	void clear();
 	void addCollider(SPtr_Collider collider);
+	void addTerrainCollider(SPtr_TerrainCol collider);
 
 	void renderColliders(Camera* camera);
 
@@ -32,8 +34,9 @@ private:
 	// debug only
 	bool tested;
 
-
+	SPtr_TerrainCol _terrainCollider; // terrain collider if any
 	std::vector<SPtr_Collider> _colliders;
+
 
 	OctTreeNode _testNode;
 

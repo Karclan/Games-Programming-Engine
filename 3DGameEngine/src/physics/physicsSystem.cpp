@@ -4,16 +4,23 @@
 PhysicsSystem::PhysicsSystem()
 {
 	tested = false;
+	_terrainCollider = nullptr;
 }
 
 void PhysicsSystem::clear()
 {
+	_terrainCollider = nullptr;
 	_colliders.clear();
 }
 
 void PhysicsSystem::addCollider(SPtr_Collider collider)
 {
 	_colliders.push_back(collider);
+}
+
+void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
+{
+	_terrainCollider = collider;
 }
 
 void PhysicsSystem::fixedUpdate(float t)
@@ -67,6 +74,22 @@ void PhysicsSystem::fixedUpdate(float t)
 		{
 			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc], colInfo))
 				std::cout << "I collider! " << colInfo.penDepth << "\n";
+		}
+
+		// And the floor...
+		if(_terrainCollider != nullptr)
+		{
+			if(_terrainCollider->collides(_testNode.physColliders[i], colInfo))
+			{
+				//std::cout << "I collider! " << colInfo.penDepth << "\n";
+				_testNode.physColliders[i]->getPhysicsBody()->resolve(colInfo);
+
+				std::cout << "Pen Depth " << colInfo.penDepth << "\n";
+				std::cout << "Normal " << colInfo.normal.x << ", " << colInfo.normal.y << ", " << colInfo.normal.z << "\n\n";
+
+
+			}
+
 		}
 	}
 

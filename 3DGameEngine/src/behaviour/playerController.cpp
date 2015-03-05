@@ -52,11 +52,13 @@ void PlayerController::update(float t)
 	_turn = -axisH * _speed * 60;
 
 	// If press space, jump
+	/*
 	if(!_jumping && Input::getKeyPressed(sf::Keyboard::J)) 
 	{
 		_jumping = true;
 		_velocity.y = _jumpStrength;
 	}
+	*/
 
 	// Animation
 	//if(axisV == 0) _robotAnim->stop();
@@ -68,6 +70,7 @@ void PlayerController::fixedUpdate(float t)
 	// Update position
 	_transform->translate(_velocity * t);
 
+	/*
 	if(_jumping) _velocity.y -= _gravitationalPull * t; // If jumping, fall
 	if(_transform->getPosition().y < _groundHeight) // if lower than ground, snap to ground and make not jumping
 	{
@@ -77,6 +80,7 @@ void PlayerController::fixedUpdate(float t)
 		newPos.y = _groundHeight;
 		_transform->setPosition(newPos);
 	}
+	*/
 
 	// Update rotation
 	_transform->rotate(glm::vec3(0, _turn * t, 0));

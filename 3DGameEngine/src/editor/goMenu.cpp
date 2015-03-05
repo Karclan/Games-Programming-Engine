@@ -1,6 +1,7 @@
 #include "editor\goMenu.h"
 #include <iostream>
 
+
 void GoMenu::initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorCamera* editorCam)
 {
 	_objectMngr = objMngr;
@@ -9,6 +10,7 @@ void GoMenu::initialize(ObjectManager* objMngr, SceneManager* sceneMngr, EditorC
 	testBool = false;
 	saveFilePath = "";
 	loadFilePath = "";
+	_noAttribs = "No Attributes";
 }
 
 static void TW_CALL CopyStdStringToClient(std::string& destinationClientString, const std::string& sourceLibraryString)
@@ -80,6 +82,13 @@ static void TW_CALL addCustomComponent(void *clientData)
 	GoMenu* goMenu = (GoMenu*)clientData;
 
 	goMenu->addComponent(ComponentType::CUSTOM);
+}
+
+static void TW_CALL addTerrainColComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::TERRAIN_COL);
 }
 
 void GoMenu::addComponent(ComponentType::Type type)
@@ -208,7 +217,7 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
 		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
 		TwAddButton(_addCompBar, "addCustom", addCustomComponent, this, "");
-		
+		TwAddButton(_addCompBar, "addTerrainCol", addTerrainColComponent, this, "");
 		
 		
 
@@ -236,7 +245,7 @@ void GoMenu::refreshTweakBar()
 				break;
 			
 			case ComponentType::CAMERA:
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Camera label=placeholder");
+				TwAddVarRO(_myBar, &(id+"placeholder")[0], TW_TYPE_STDSTRING, &_noAttribs, "group=Camera label=Camera");
 
 				break;
 
@@ -284,14 +293,14 @@ void GoMenu::refreshTweakBar()
 			case ComponentType::PHY_BODY:
 				// None for now
 				
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Physics_Body label=placeholder");
+				TwAddVarRO(_myBar, &(id+"placeholder")[0], TW_TYPE_STDSTRING, &_noAttribs, "group=Physics_Body label=Physics_Body");
 				
 				break;
 
 			case ComponentType::ROB_REND:
 				// None for now
 
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render label=placeholder");
+				TwAddVarRO(_myBar, &(id+"placeholder")[0], TW_TYPE_STDSTRING, &_noAttribs, "group=Robot_Render label=Robot_Render");
 
 				break;
 
@@ -305,6 +314,11 @@ void GoMenu::refreshTweakBar()
 
 			case ComponentType::CUSTOM:
 				TwAddVarRW(_myBar, &(id+"Behaviour")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Custom label=Behaviour");
+				
+				break;
+
+			case ComponentType::TERRAIN_COL:
+				TwAddVarRO(_myBar, &(id+"Test")[0], TW_TYPE_STDSTRING, &_noAttribs, "group=TerrainCollider label=TerrainCollider");
 				
 				break;
 			}

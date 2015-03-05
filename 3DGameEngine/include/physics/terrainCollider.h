@@ -17,17 +17,18 @@ class TerrainCollider : public Component
 public:
 	TerrainCollider();
 
-	ComponentType::Type getType() { return ColliderType::TERRAIN_COL; }
+	ComponentType::Type getType() { return ComponentType::TERRAIN_COL; }
 	bool isOnePerObject() { return true; }
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
+	void init();
 
-	bool hasPhysicsBody() { return _physicsBody; } //!< Returns true if physics body exists
-	SPtr_PhysBody getPhysicsBody() { return _physicsBody; }
+	bool collides(SPtr_Collider other, Collision &collInfo);
+
 
 protected:
 	SPtr_Transform _transform; //!< Pointer to transform
-
-
+	SPtr_ModelRend _renderer;
+	Texture2D* _tex; //!< Pointer to the texture2D so we can use image data to determine height
 };
 
 typedef std::shared_ptr<TerrainCollider> SPtr_TerrainCol;

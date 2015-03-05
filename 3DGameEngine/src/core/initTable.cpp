@@ -233,10 +233,16 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
-		case ComponentType::CUSTOM:
+	case ComponentType::CUSTOM:
 		{
 			SPtr_Custom custom = std::static_pointer_cast<Custom>(_comp);
 			addAttribs(custom->getBehvrName()); // attrib 0 is custom class name
+			break;
+		}
+
+	case ComponentType::TERRAIN_COL:
+		{
+			SPtr_TerrainCol terrain = std::static_pointer_cast<TerrainCollider>(_comp);
 			break;
 		}
 	}
@@ -336,6 +342,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::CUSTOM:
 		addAttribs(compElmnt->Attribute("behvr")); // attrib 0 is model filepath
+		break;
+
+	case ComponentType::TERRAIN_COL:
 		break;
 
 	}
@@ -467,5 +476,14 @@ void CompData::initializeComponent()
 			custom->setBehaviour(getStringAttrib(0));
 		}
 		break;
+
+	case ComponentType::TERRAIN_COL:
+		{
+			SPtr_TerrainCol custom = std::static_pointer_cast<TerrainCollider>(_comp);
+		}
+		break;
 	}
+
+	// Call init on component in case it needs a hug
+	_comp->init();
 }

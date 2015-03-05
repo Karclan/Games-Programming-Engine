@@ -36,6 +36,8 @@ public:
 	glm::vec3 getSpecular();
 	GLfloat getSpecularExp();
 
+	Texture2D* getTexture() { return _texture; }
+
 private:
 	Shader* _shader;
 	Texture2D* _texture;

@@ -14,6 +14,8 @@
 #include "editor\editorCamera.h"
 
 
+
+
 /*! \brief Game Object Menu
 
 	This menu handles all creation and editing of game objects
@@ -43,6 +45,7 @@ private:
 	bool _gamePlaying; //!< If play mode or edito mode, set from MenuBar class
 
 	bool testBool;
+	std::string _noAttribs; // placeholder string for components with no attributes
 	std::string saveFilePath;
 	std::string loadFilePath;
 	
