@@ -13,14 +13,18 @@
     <COMP type="9" behvr="Player" />
 </GO>
 <GO name="Floor">
-    <COMP type="1" mesh="plane.obj" shader="advanced" texture="grass.png" tileU="10" tileV="10" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="1" mesh="plane.obj" shader="terrain" texture="terrain.png" tileU="10" tileV="10" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
     <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="10" sy="1" sz="10" />
 </GO>
 <GO name="Light">
     <COMP type="5" lightType="1" dR="0.5" dG="0.7" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" />
-    <COMP type="0" tx="0" ty="20" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="-4" ty="11" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
 </GO>
 <GO name="Camera">
     <COMP type="2" />
     <COMP type="0" tx="0" ty="2" tz="5" rx="-10" ry="0" rz="0" sx="1" sy="1" sz="1" />
+</GO>
+<GO name="Vork Building">
+    <COMP type="1" mesh="vorkBuilding.obj" shader="advanced" texture="vorkBuildingUV.png" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
 </GO>

@@ -14,7 +14,7 @@
 #include "rendering\robotRenderer.h"
 #include "physics\physicsBody.h"
 
-#define DEMO_SCENE_PATH "demo.xml"
+
 
 
 /*! \brief Responsible for loading scenes
