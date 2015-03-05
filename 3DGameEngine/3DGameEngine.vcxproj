@@ -121,6 +121,7 @@
     <ClInclude Include="include\editor\menuBar.h" />
     <ClInclude Include="include\physics\physicsBody.h" />
     <ClInclude Include="include\physics\physicsSystem.h" />
+    <ClInclude Include="include\physics\terrainCollider.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
     <ClInclude Include="include\rendering\light.h" />
@@ -163,6 +164,7 @@
     <ClCompile Include="src\physics\collision.cpp" />
     <ClCompile Include="src\physics\physicsBody.cpp" />
     <ClCompile Include="src\physics\physicsSystem.cpp" />
+    <ClCompile Include="src\physics\terrainCollider.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\FTInterface.cpp" />
     <ClCompile Include="src\rendering\light.cpp" />
