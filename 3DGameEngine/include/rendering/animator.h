@@ -93,6 +93,8 @@ private:
 	Animation* _animation;
 	float animTime;
 	typedef std::vector<glm::mat4x4> MatrixList;
+
+	MatrixList _AnimatedBones
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

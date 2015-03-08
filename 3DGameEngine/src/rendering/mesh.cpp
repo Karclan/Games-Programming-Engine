@@ -165,3 +165,84 @@ void Mesh::BuildBindPose( const JointList& joints )
         ++iter;
     }
 }
+
+
+///// Need to get the verts position based on the weights //////
+
+/*
+bool Mesh::PrepareMesh( Mesh& mesh )
+{
+    //mesh.m_PositionBuffer.clear();
+    //mesh.m_Tex2DBuffer.clear();
+    //mesh.m_BoneIndex.clear();
+    //mesh.m_BoneWeights.clear();
+    
+	// Compute vertex positions
+    for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
+    {
+        glm::vec3 finalPos(0);
+        Vertex& vert = mesh.m_Verts[i];
+
+        vert.m_Pos = glm::vec3(0);
+        vert.m_Normal = glm::vec3(0);
+        vert.m_BoneWeights = glm::vec4(0);
+        vert.m_BoneIndices = glm::vec4(0);
+
+        // Sum the position of the weights
+        for ( int j = 0; j < vert.m_WeightCount; ++j )
+        {
+            assert( j < 4 );
+
+            Weight& weight = mesh.m_Weights[vert.m_StartWeight + j];
+            Joint& joint = m_Joints[weight.m_JointID];
+            
+            // Convert the weight position from Joint local space to object space
+            glm::vec3 rotPos = joint.m_Orient * weight.m_Pos;
+
+            vert.m_Pos += ( joint.m_Pos + rotPos ) * weight.m_Bias;
+            vert.m_BoneIndices[j] = (float)weight.m_JointID;
+            vert.m_BoneWeights[j] = weight.m_Bias;
+        }
+
+        mesh.m_PositionBuffer.push_back(vert.m_Pos);
+        mesh.m_Tex2DBuffer.push_back(vert.m_Tex0);
+        mesh.m_BoneIndex.push_back(vert.m_BoneIndices);
+        mesh.m_BoneWeights.push_back(vert.m_BoneWeights);
+    }
+
+    return true;
+}
+*/
+
+//// Compute the vertex normals in the Mesh's bind pose
+/*
+bool Mesh::PrepareNormals( Mesh& mesh )
+{
+   // mesh.m_NormalBuffer.clear();
+
+    // Loop through all triangles and calculate the normal of each triangle
+    for ( unsigned int i = 0; i < mesh.m_Tris.size(); ++i )
+    {
+        glm::vec3 v0 = mesh.m_Verts[ mesh.m_Tris[i].m_Indices[0] ].m_Pos;
+        glm::vec3 v1 = mesh.m_Verts[ mesh.m_Tris[i].m_Indices[1] ].m_Pos;
+        glm::vec3 v2 = mesh.m_Verts[ mesh.m_Tris[i].m_Indices[2] ].m_Pos;
+
+        glm::vec3 normal = glm::cross( v2 - v0, v1 - v0 );
+
+        mesh.m_Verts[ mesh.m_Tris[i].m_Indices[0] ].m_Normal += normal;
+        mesh.m_Verts[ mesh.m_Tris[i].m_Indices[1] ].m_Normal += normal;
+        mesh.m_Verts[ mesh.m_Tris[i].m_Indices[2] ].m_Normal += normal;
+    }
+
+    // Now normalize all the normals
+    for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
+    {
+        Vertex& vert = mesh.m_Verts[i];
+
+        vert.m_Normal = glm::normalize( vert.m_Normal );
+        mesh.m_NormalBuffer.push_back( vert.m_Normal );
+    }
+
+    return true;
+}
+*/

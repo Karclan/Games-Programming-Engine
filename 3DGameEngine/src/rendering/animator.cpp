@@ -145,4 +145,3 @@ float ElapsedTime::GetElapsedTime() const
     return fDeltaTime;
 }
 
-
