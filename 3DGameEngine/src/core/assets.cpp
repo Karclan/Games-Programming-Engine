@@ -48,10 +48,22 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> colours;
-
+	
 	// Assimp conversion here!
 	aiMesh* loadedMesh = scene->mMeshes[0];
 
+	
+	std::map<std::string, int> boneMapping;
+
+	// Lovely bone info
+	struct BoneVertexInfo
+	{
+		int numWeights;
+		glm::ivec4 boneID; 
+		glm::vec4 boneWeight;
+	};
+
+	std::vector<BoneVertexInfo> boneInfos;
 	
 	
 	for(int i = 0; i < loadedMesh->mNumVertices; ++i)
@@ -65,6 +77,18 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
 		
 		colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+		// Push empty values into boneID and boneWeight vectors
+		BoneVertexInfo boneInfo;
+		boneInfo.numWeights = 0;
+		for(int j = 0; j < 4; ++j)
+		{
+			boneInfo.boneID[j] = 0;
+			boneInfo.boneWeight[j] = 0;
+		}
+		boneInfos.push_back(boneInfo);
+		
 	}
 	for(int i = 0; i < loadedMesh->mNumFaces; ++i)
 	{
@@ -73,7 +97,59 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
 		}
 	}
+
+
+
+
+
+	// This is where the fun starts
+	int bonesCount = 0;
+	for(int i = 0; i < loadedMesh->mNumBones; ++i)
+	{
+		std::string boneName(loadedMesh->mBones[i]->mName.data);
+
+		// Puts in map if not there
+		std::map<std::string, int>::iterator it;
+		it = boneMapping.find(boneName);
+
+		if(it == boneMapping.end()) // then it can't find it
+		{
+			boneMapping.emplace(boneName, bonesCount);
+			bonesCount ++;
+		}
+		
+		// Get bone index
+		GLint boneIndex = boneMapping.find(boneName)->second;
+
+		// Store mOffset matrix from Assimp aiBone class? If we need it...
+		// TO DO
+
+
+		// Populate BoneID and BoneWeight vectors 
+		for(int j = 0; j < loadedMesh->mBones[i]->mNumWeights; ++j)
+		{
+			int vertexID = loadedMesh->mBones[i]->mWeights[j].mVertexId;
+			int weigthNum = boneInfos[vertexID].numWeights; // the number of the weight, up to 3 (coz 4 possible)
+			if(weigthNum >= 4) continue; //too many bones!!!
+			boneInfos[vertexID].numWeights += 1; // add one to num of weights
+
+			boneInfos[vertexID].boneID[weigthNum] = boneIndex;
+			boneInfos[vertexID].boneWeight[weigthNum] = loadedMesh->mBones[i]->mWeights[j].mWeight;
+		}
+	}
+
 	
+	// This is a horrible stupid way of doing it but can change once you know it works
+	std::vector<glm::ivec4> boneIDs;
+	std::vector<glm::vec4> boneWeights;
+	for(int i = 0; i < boneInfos.size(); ++i)
+	{
+		boneIDs.push_back(boneInfos[i].boneID);
+		boneWeights.push_back(boneInfos[i].boneWeight);
+	}
+	// end horrible way of doing things
+
+
 	// Now set mesh properties via vector
 	Mesh* mesh = new Mesh();
 	mesh->generateBuffers();
@@ -82,6 +158,9 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->setNormals(normals);
 	mesh->setUvs(uvs);
 	mesh->setColours(colours);
+
+	mesh->setMap(boneMapping);
+	mesh->setBones(boneIDs, boneWeights);
 
 	return mesh;
 }

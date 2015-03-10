@@ -145,7 +145,7 @@ bool Animation::LoadAnimation( const std::string& filename )
         }
 
         file >> param;
-    } // while ( !file.eof )
+    }  //while ( !file.eof )
 
     // Make sure there are enough joints for the animated skeleton.
   //  _AnimatedSkeleton.m_Joints.assign(_iNumJoints, SkeletonJoint() );

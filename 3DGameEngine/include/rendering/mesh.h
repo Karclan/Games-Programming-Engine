@@ -2,6 +2,7 @@
 #define MESH_H
 
 #include <vector>
+#include <map>
 
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
@@ -35,10 +36,10 @@ namespace MeshAttribs
 }
 
 
-typedef std::vector<glm::vec4> WeightBuffer;
-typedef std::vector<glm::vec4> BoneIndexBuffer;
-#define BONES_PER_VERTEX 4	/************** HARD CODED - Number of bones that can affect a vertex ******************/
-
+	typedef std::vector<GLint> WeightBuffer;
+	typedef std::vector<float> BoneIndexBuffer;
+	
+//#define BONES_PER_VERTEX 4	/************** HARD CODED - Number of bones that can affect a vertex ******************/
 struct Vertex
 {
 	glm::vec3   m_Pos;
@@ -84,7 +85,7 @@ public:
 	void setNormals(std::vector<glm::vec3> &normals); //!< Fill normal data via vector
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
-	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
+	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector
 
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
@@ -97,6 +98,7 @@ public:
 	bool PrepareMesh(Mesh& mesh);
 	bool PrepareNormals( Mesh& mesh );
 	void update(float fDeltaTime);
+	void setMap(std::map<std::string, int> m);
 
 private:
 	GLuint _vao; //!< The vao holding everything together!
@@ -113,6 +115,7 @@ private:
 	glm::mat4x4 m_LocalToWorldMatrix;
 	glm::mat4x4 m_WorldToLocalMatrix;
 	
+	std::map<std::string, int> boneMap;
 };
 
 #endif

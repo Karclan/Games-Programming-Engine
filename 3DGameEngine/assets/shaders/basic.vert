@@ -28,7 +28,7 @@ void main()
 	mBoneTransform = mBones[BoneIDs[3]] * Weights[3];
 
 	vec4 animPos = mBoneTransform * vec4(pos, 1.0);
-	vec4 animNorm = mBoneTransform * vec4(normal, 0.0);
+	vec4 animNormal = mBoneTransform * vec4(normal, 0.0);
 
     colour = vec4(vertCol, 1.0);
 

@@ -113,7 +113,7 @@ void Mesh::setColours(std::vector<glm::vec3> &colours)
 	glBindVertexArray(0); // Unbind VAO
 }
 
-void Mesh::setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights)
+void Mesh::setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights)
 {
 	if(boneIds.size() == 0 || boneWeights.size()) return;
 
@@ -166,17 +166,17 @@ void Mesh::BuildBindPose( const JointList& joints )
     }
 }
 
+void Mesh::setMap(std::map<std::string, int> m)
+{
+	boneMap = m;
+}
 
 ///// Need to get the verts position based on the weights //////
 
 /*
 bool Mesh::PrepareMesh( Mesh& mesh )
 {
-    //mesh.m_PositionBuffer.clear();
-    //mesh.m_Tex2DBuffer.clear();
-    //mesh.m_BoneIndex.clear();
-    //mesh.m_BoneWeights.clear();
-    
+
 	// Compute vertex positions
     for ( unsigned int i = 0; i < mesh.m_Verts.size(); ++i )
     {
