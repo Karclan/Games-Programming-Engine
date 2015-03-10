@@ -95,6 +95,7 @@ public:
 	void BuildBindPose( const JointList& joints );
 	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	bool PrepareMesh(Mesh& mesh);
+	bool PrepareNormals( Mesh& mesh );
 	void update(float fDeltaTime);
 
 private:
