@@ -46,15 +46,21 @@ void ModelRenderer::setMesh(Mesh* mesh)
 void ModelRenderer::setMaterial(Shader* shader)
 {
 	_material.setShader(shader);
-	_material.setTexture(nullptr); // resets the texture when you set material without one
+	_material.setTexture(nullptr,Material::DIFFUSE); // resets the texture when you set material without one
+	_material.setTexture(nullptr,Material::SPECUALR); // resets the texture when you set material without one
+	_material.setTexture(nullptr,Material::NORMAL); // resets the texture when you set material without one
+	_material.setTexture(nullptr,Material::HEIGHT); // resets the texture when you set material without one
 	_material.setUVTiling(glm::vec2(1, 1)); // default value
 }
 
-void ModelRenderer::setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile, glm::vec3 diffuse, glm::vec3 specular, float specularExponent)
+void ModelRenderer::setMaterial(Shader* shader, Texture2D* textureD, Texture2D* textureS, Texture2D* textureN, Texture2D* textureH, glm::vec2 uvTile, glm::vec3 diffuse, glm::vec3 specular, float specularExponent)
 {
 
 	_material.setShader		(shader);
-	_material.setTexture	(texture);
+	_material.setTexture	(textureD,Material::DIFFUSE);
+	_material.setTexture	(textureS,Material::SPECUALR);
+	_material.setTexture	(textureN,Material::NORMAL);
+	_material.setTexture	(textureH,Material::HEIGHT);
 	_material.setUVTiling	(uvTile);
 	_material.setDiffuse	(diffuse);
 	_material.setSpecular	(specular);

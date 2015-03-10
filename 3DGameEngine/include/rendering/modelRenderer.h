@@ -25,7 +25,7 @@ public:
 	void render(GLfloat* viewMatrix, GLfloat* projMatrix); //!< Note the args are pointers to the start of the float arrays where the matrix information is stored
 	void setMesh(Mesh* mesh);
 	void setMaterial(Shader* shader);
-	void setMaterial(Shader* shader, Texture2D* texture, glm::vec2 uvTile, glm::vec3 diffuse, glm::vec3 specular, float specularExponent);
+	void setMaterial(Shader* shader, Texture2D* textureD, Texture2D* textureS, Texture2D* textureN, Texture2D* textureH, glm::vec2 uvTile, glm::vec3 diffuse, glm::vec3 specular, float specularExponent);
 
 	// Getters for info needed to write to XML / init data
 	Mesh * getMesh() { return _mesh; }

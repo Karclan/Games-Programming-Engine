@@ -16,7 +16,6 @@ namespace ComponentType
 	// a modern computer though). If we make more than 16 types of component consider changing to an unsigned long.
 	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT, SPHERE_COL, BOX_COL, MATERIAL, CUSTOM };
 
-
 }
 
 //! Different state the component can be in

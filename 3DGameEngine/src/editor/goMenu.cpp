@@ -269,16 +269,19 @@ void GoMenu::refreshTweakBar()
 			case ComponentType::MODL_REND:
 				TwAddVarRW(_myBar, &(id+"Mesh File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Model_Render label=Mesh_File_Path");
 				TwAddVarRW(_myBar, &(id+"Shader File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(1), "group=Model_Render label=Shader_File_Path");
-				TwAddVarRW(_myBar, &(id+"Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render label=Texture_File_Path");
-				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Model_Render label=UV_Tile_X");
-				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Model_Render label=UV_Tile_Y");
-				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(5), "group=Model_Render label=Diffuse_R");
-				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(6), "group=Model_Render label=Diffuse_G");
-				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(7), "group=Model_Render label=Diffuse_B");
-				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(8), "group=Model_Render label=Specular_R");
-				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(9), "group=Model_Render label=Specular_G");
-				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(10), "group=Model_Render label=Specular_B");
-				TwAddVarRW(_myBar, &(id+"Specular Exponent")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11), "group=Model_Render label=Specular_Ex");
+				TwAddVarRW(_myBar, &(id+"Diffuse Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(2), "group=Model_Render label=Diffuse_Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"Specular Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(3), "group=Model_Render label=Specular_Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"Normal Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(4), "group=Model_Render label=Normal_Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"Height Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(5), "group=Model_Render label=Height_Texture_File_Path");
+				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Model_Render label=UV_Tile_X");
+				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Model_Render label=UV_Tile_Y");
+				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(8), "group=Model_Render label=Diffuse_R");
+				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(9), "group=Model_Render label=Diffuse_G");
+				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(10), "group=Model_Render label=Diffuse_B");
+				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11), "group=Model_Render label=Specular_R");
+				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12), "group=Model_Render label=Specular_G");
+				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(13), "group=Model_Render label=Specular_B");
+				TwAddVarRW(_myBar, &(id+"Specular Exponent")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(14), "group=Model_Render label=Specular_Ex");
 				break;
 
 			case ComponentType::PHY_BODY:

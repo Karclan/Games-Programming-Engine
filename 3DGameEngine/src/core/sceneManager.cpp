@@ -179,10 +179,21 @@ void SceneManager::saveToXML(std::string filePath)
 				break;
 
 			case ComponentType::MODL_REND:
-				{
-				glm::vec3 diff(compData->getFloatAttrib(5), compData->getFloatAttrib(6), compData->getFloatAttrib(7));
-				glm::vec3 spec(compData->getFloatAttrib(8), compData->getFloatAttrib(9), compData->getFloatAttrib(10));
-				xmlAddModelRend(go, compData->getStringAttrib(0), compData->getStringAttrib(1), compData->getStringAttrib(2), diff, spec, compData->getFloatAttrib(11), compData->getFloatAttrib(3), compData->getFloatAttrib(4));
+				{				
+				xmlAddModelRend(
+					go, 
+					compData->getStringAttrib(0), 
+					compData->getStringAttrib(1), 
+					compData->getStringAttrib(2), //Texture Diffuse
+					compData->getStringAttrib(3), //Texture Specular
+					compData->getStringAttrib(4), //Texture Normal
+					compData->getStringAttrib(5), //Texture Height
+					glm::vec3 (compData->getFloatAttrib(8), compData->getFloatAttrib(9), compData->getFloatAttrib(10)), 
+					glm::vec3 (compData->getFloatAttrib(11), compData->getFloatAttrib(12), compData->getFloatAttrib(13)), 
+					compData->getFloatAttrib(14), 
+					compData->getFloatAttrib(6), 
+					compData->getFloatAttrib(7)
+					);
 				}
 				break;
 
@@ -268,23 +279,28 @@ void SceneManager::xmlAddCamera(TiXmlElement* go)
 }
 
 // Add model renderer.
-void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp) {xmlAddModelRend(go, mesh, shader, texture, diff, spec, specExp, 1, 1);}
-void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string texture, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV)
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp) {xmlAddModelRend(go, mesh, shader, textureD,textureS,textureN,textureH, diff, spec, specExp, 1, 1);}
+void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV)
 {
 	TiXmlElement* transElmnt = new TiXmlElement("COMP"); // Component Element
 	transElmnt->SetAttribute("type", ComponentType::MODL_REND); // Set type attrib
-	transElmnt->SetAttribute("mesh", mesh); // 0 Set mesh attrib
-	transElmnt->SetAttribute("shader", shader); // 1 Set material attrib
-	transElmnt->SetAttribute("texture", texture); // 2 Set texture attrib
-	transElmnt->SetDoubleAttribute("tileU", tileU); // 3 Set tile U attrib
-	transElmnt->SetDoubleAttribute("tileV", tileV); // 4 Set tile U attrib
-	transElmnt->SetDoubleAttribute("dR", diff.x); // 5 diff
-	transElmnt->SetDoubleAttribute("dG", diff.y); // 6 diff
-	transElmnt->SetDoubleAttribute("dB", diff.z); // 7 diff
-	transElmnt->SetDoubleAttribute("sR", spec.x); // 8 spec
-	transElmnt->SetDoubleAttribute("sG", spec.y); // 9 spec
-	transElmnt->SetDoubleAttribute("sB", spec.z); // 10 spec
-	transElmnt->SetDoubleAttribute("specEx", specExp); // 11 spec exp
+	transElmnt->SetAttribute("mesh", mesh);			   // 0 Set mesh attrib
+	transElmnt->SetAttribute("shader", shader);		   // 1 Set material attrib
+
+	transElmnt->SetAttribute("textureD", textureD);     // 2 Set texture attrib DIFFUSE
+	transElmnt->SetAttribute("textureS", textureS);     // 3 Set texture attrib SPECULAR
+	transElmnt->SetAttribute("textureN", textureN);     // 4 Set texture attrib NORMAL
+	transElmnt->SetAttribute("textureH", textureH);     // 5 Set texture attrib HEIGTH
+													   
+	transElmnt->SetDoubleAttribute("tileU", tileU);    // 6 Set tile U attrib
+	transElmnt->SetDoubleAttribute("tileV", tileV);    // 7 Set tile U attrib
+	transElmnt->SetDoubleAttribute("dR", diff.x);      // 8 diff
+	transElmnt->SetDoubleAttribute("dG", diff.y);      // 9 diff
+	transElmnt->SetDoubleAttribute("dB", diff.z);      // 10 diff
+	transElmnt->SetDoubleAttribute("sR", spec.x);      // 11 spec
+	transElmnt->SetDoubleAttribute("sG", spec.y);      // 12 spec
+	transElmnt->SetDoubleAttribute("sB", spec.z);      // 13 spec
+	transElmnt->SetDoubleAttribute("specEx", specExp); // 14 spec exp
 
 	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
 }
