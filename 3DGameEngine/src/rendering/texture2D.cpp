@@ -22,12 +22,27 @@ bool Texture2D::loadFromFile(std::string filePath)
 	return ok;
 }
 
-
-
 void Texture2D::bind(Shader* shader, int textureNumber)
 {
 	// Set texture
 	glActiveTexture(GL_TEXTURE0 + textureNumber);
 	glBindTexture(GL_TEXTURE_2D, _texHandle);
-	glUniform1i(shader->getTexLocation(), textureNumber);
+	switch(textureNumber)
+	{
+	case 0:
+		shader->setUniform("u_DiffuseTexture",textureNumber);
+		break;
+	case 1:
+		shader->setUniform("u_SpecularTexture",textureNumber);
+		break;
+	case 2:
+		shader->setUniform("u_NormalTexture",textureNumber);
+		break;
+	case 3:
+		shader->setUniform("u_HeightTexture",textureNumber);
+		break;
+	default:	
+		break;
+	}
+	//glUniform1i(shader->getTexLocation(), textureNumber);
 }

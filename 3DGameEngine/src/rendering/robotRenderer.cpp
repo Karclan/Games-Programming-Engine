@@ -7,7 +7,7 @@ RobotRenderer::RobotRenderer()
 
 	_material.setShader(Assets::getShader("advanced"));
 	_material.setTexture(nullptr,Material::DIFFUSE);
-	_material.setTexture(nullptr,Material::SPECUALR);
+	_material.setTexture(nullptr,Material::SPECULAR);
 	_material.setTexture(nullptr,Material::NORMAL);
 	_material.setTexture(nullptr,Material::HEIGHT);
 	generateMesh();

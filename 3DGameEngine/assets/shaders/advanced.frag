@@ -21,10 +21,8 @@ vec3 position;			//Light Position
 vec3  spotDir;			//Spotlight direction
 float spotOutCut;		//Spotlight outer cuttoff angle
 float spotInCut;		//Spotlight inner cuttoff angle
-
 vec3 diff;            	//Diffuse  light intensity
 vec3 spec;			   	//Specular light intensity
-
 float constant;       	//Distance Attenuation amounts
 float linear;       	//Distance Attenuation amounts
 float quadratic;       //Distance Attenuation amounts
@@ -60,8 +58,17 @@ uniform Material material;
 uniform mat3 NormalMatrix;
 uniform vec3 viewPos;
 
-uniform sampler2D tex;
-uniform int hasTex;
+
+layout(location=0)uniform sampler2D u_DiffuseTexture;
+layout(location=1)uniform sampler2D u_SpecularTexture;
+layout(location=2)uniform sampler2D u_NormalTexture;
+layout(location=3)uniform sampler2D u_HeightTexture;
+
+uniform int u_HasDiffuseTexture;
+uniform int u_HasSpecularTexture;
+uniform int u_HasNormalTexture;
+uniform int u_HasHeightTexture;
+
 uniform vec2 uvTile;
 
 uniform int numOfSpotLights;
@@ -79,7 +86,6 @@ vec3 CalSpotLight(SpotLight light, vec3 normal, vec3 viewDir, vec3 vertPos)
 	
 	float distance = length(light.position - vertPos);
 	float attenuation = 1.0 / (light.constant + light.linear * distance + light.quadratic * (distance * distance));
-	
 
 	if(theta > light.spotOutCut)
 	{
@@ -176,9 +182,9 @@ void main()
 
 	vec4 result=vec4(light,1.0);
 
-	if(hasTex ==1) // false
+	if(u_HasDiffuseTexture ==1) // false
 	{
-		result *= texture(tex, texCoord * uvTile);
+		result *= texture(u_DiffuseTexture, texCoord * uvTile);
 	}
 	else
 	{

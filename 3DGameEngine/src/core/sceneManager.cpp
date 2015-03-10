@@ -154,9 +154,6 @@ void SceneManager::saveToXML(std::string filePath)
 	doc.LinkEndChild(sceneElmnt);
 	xmlAddSceneLights(sceneElmnt, _rendSys->getGlobalAmbient(), _rendSys->getGlobalDiffuse(), _rendSys->getGlobalSpecular(), _rendSys->getGlobalDirection());
 
-
-
-
 	// Init table (Game Objects)
 	InitTable* init = _objMngr->getInitTable();
 	InitTableIterator it = init->begin();

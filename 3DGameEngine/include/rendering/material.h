@@ -15,12 +15,13 @@ class Material //: public Component
 public:
 	Material(); 
 
-	enum TextureTypes{DIFFUSE=0,SPECUALR=1,NORMAL=2,HEIGHT=3};
+	enum TextureTypes{DIFFUSE=0,SPECULAR=1,NORMAL=2,HEIGHT=3};
 
 	//ComponentType::Type getType();
 	//bool isOnePerObject();
 
 	void bind(glm::mat4 m, GLfloat* v, GLfloat* p);
+	void unbind();
 
 	void setShader(Shader* shader);
 	void setTexture(Texture2D* texture, int i);

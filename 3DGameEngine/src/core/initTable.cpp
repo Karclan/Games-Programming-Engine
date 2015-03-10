@@ -168,7 +168,7 @@ void CompData::setAttribsToComponents()
 			Material* mat = modelRend->getMaterial();
 			addAttribs(mat->getShaderFilePath()); // attrib 1 is shader
 			addAttribs(mat->getTextureFilePath(Material::DIFFUSE)); // attrib 2 is texture file path as string
-			addAttribs(mat->getTextureFilePath(Material::SPECUALR)); // attrib 3 is texture file path as string
+			addAttribs(mat->getTextureFilePath(Material::SPECULAR)); // attrib 3 is texture file path as string
 			addAttribs(mat->getTextureFilePath(Material::NORMAL)); // attrib 4 is texture file path as string
 			addAttribs(mat->getTextureFilePath(Material::HEIGHT)); // attrib 5 is texture file path as string
 			addAttribf(mat->getUvTile().x); // attrib 6 is tile u
