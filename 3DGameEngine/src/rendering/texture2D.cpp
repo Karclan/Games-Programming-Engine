@@ -19,7 +19,7 @@ bool Texture2D::loadFromFile(std::string filePath)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getSize().x, image.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
 	glBindTexture(GL_TEXTURE_2D, 0);	
 
-	return ok;
+	return ok; 
 }
 
 void Texture2D::bind(Shader* shader, int textureNumber)

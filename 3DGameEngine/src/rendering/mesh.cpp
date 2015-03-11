@@ -142,3 +142,35 @@ void Mesh::setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &b
 	
 	glBindVertexArray(0); // Unbind VAO
 }
+void Mesh::setTangents(std::vector<glm::vec3> &tangents)
+{
+	if(tangents.size()==0) return;
+
+	glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
+
+	glEnableVertexAttribArray(MeshAttribs::TANGENT);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::TANGENT]);
+	glVertexAttribPointer(MeshAttribs::TANGENT, 3, GL_FLOAT, GL_FALSE,0, (GLubyte*)NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::TANGENT]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT) * tangents.size(), &tangents[0], GL_STATIC_DRAW);
+	_dataSize[MeshAttribs::TANGENT] = tangents.size();
+
+	glBindVertexArray(0); // Unbind VAO
+}
+void Mesh::setBiTangents(std::vector<glm::vec3> &biTangents)
+{
+	if(biTangents.size()==0) return;
+
+	glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
+
+	glEnableVertexAttribArray(MeshAttribs::BITANGENT);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BITANGENT]);
+	glVertexAttribPointer(MeshAttribs::BITANGENT, 3, GL_FLOAT, GL_FALSE,0, (GLubyte*)NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BITANGENT]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT) * biTangents.size(), &biTangents[0], GL_STATIC_DRAW);
+	_dataSize[MeshAttribs::BITANGENT] = biTangents.size();
+
+	glBindVertexArray(0); // Unbind VAO
+}

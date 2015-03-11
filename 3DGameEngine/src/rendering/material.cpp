@@ -78,43 +78,16 @@ void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 	
 	_shader->setMVP(glm::value_ptr(m), v, p);
 	_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));
-//	glBindTexture(GL_TEXTURE_2D, NULL); // unbind texture?? This bugs out, not sure why
+	_shader->setTexTile(_uvTile);
 	return;
-	//	// Bind and draw with texture
-	//	_shader->useProgram();
-	//	_shader->setUniform("material.diff",_diffuse);
-	//	_shader->setUniform("material.spec",_specular);
-	//	_shader->setUniform("material.specEx",_specularExp);
-	//	_shader->setUniform("u_HasDiffuseTexture",1);
-	//	_shader->setMVP(glm::value_ptr(m), v, p);
-	//	_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m))));
-	//	_shader->setTexTile(_uvTile);
-	//	_textures[DIFFUSE]->bind(_shader, DIFFUSE);
-	//	if(_textures[SPECUALR]!=nullptr)
-	//	{
-	//		_shader->setUniform("u_HasSpecularTexture",1);
-	//		_textures[SPECUALR]->bind(_shader, SPECUALR);
-	//	}
-	//	else _shader->setUniform("u_HasSpecularTexture",0);
-	//	if(_textures[NORMAL]!=nullptr)
-	//	{
-	//		_shader->setUniform("u_HasNormalTexture",1);
-	//		_textures[NORMAL]->bind(_shader, NORMAL);
-	//	}
-	//	else _shader->setUniform("u_HasNormalTexture",0);
-	//	if(_textures[HEIGHT]!=nullptr)
-	//	{
-	//		_shader->setUniform("u_HasHeightTexture",1);
-	//		_textures[HEIGHT]->bind(_shader, HEIGHT);
-	//	}
-	//	else _shader->setUniform("u_HasHeightTexture",0);
-	//}
-
 }
 
 void Material::unbind()
 {
-	glBindTexture(GL_TEXTURE_2D, NULL); // unbind texture?? This bugs out, not sure why
+	glBindTexture(GL_TEXTURE0, 0); // unbind Diffuse
+	glBindTexture(GL_TEXTURE1, 0); // unbind Specular
+	glBindTexture(GL_TEXTURE2, 0); // unbind Normal
+	glBindTexture(GL_TEXTURE3, 0); // unbind Height
 }
 void Material::setShader(Shader* shader)
 {
