@@ -94,11 +94,11 @@ public:
 	bool getPrimID() { return _primID; }
 
 	void BuildBindPose( const JointList& joints );
-	void boneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	bool PrepareMesh(Mesh& mesh);
 	bool PrepareNormals( Mesh& mesh );
 	void update(float fDeltaTime);
 	void setMap(std::map<std::string, int> m);
+	std::map<std::string, int> getBoneMap() {return boneMap;}
 
 private:
 	GLuint _vao; //!< The vao holding everything together!

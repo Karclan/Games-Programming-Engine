@@ -71,6 +71,16 @@ public:
 	int getFrameRate();
 	float getFrameDuration();
 
+	int _iMD5Version;
+    int _iNumFrames;
+    int _iNumJoints;
+    int _iFramRate;
+    int _iNumAnimatedComponents;
+
+    float _fAnimDuration;
+    float _fFrameDuration;
+    float _fAnimTime;
+
 
 protected:
     JointInfoList       _JointInfos;
@@ -80,15 +90,7 @@ protected:
 
 
 private:
-    int _iMD5Version;
-    int _iNumFrames;
-    int _iNumJoints;
-    int _iFramRate;
-    int _iNumAnimatedComponents;
 
-    float _fAnimDuration;
-    float _fFrameDuration;
-    float _fAnimTime;
 };
 
 // Remove the quotes from a string

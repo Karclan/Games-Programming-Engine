@@ -5,6 +5,7 @@
 #include "rendering\shader.h"
 #include "core\transform.h"
 #include "rendering\animation.h"
+#include "rendering/mesh.h"
 
 #include <iostream>
 #include <fstream>
@@ -20,6 +21,10 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/norm.hpp>
+#include <assimp\Importer.hpp>
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
+#include <assimp/matrix4x4.h>
 
 class Animator : public Component
 {
@@ -70,11 +75,18 @@ public:
 	void UpdateMesh( float fDeltaTime );
 	void bind(Shader* shader);
 
-	
+	glm::mat4 BoneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
 	void InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate );
-	
+	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode,const aiMatrix4x4& ParentTransform);
 	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
+
+	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+    void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+    void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);    
+    GLint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+    GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+    GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 
 	void setAnimation(Animation* anim) 
 	{ 
