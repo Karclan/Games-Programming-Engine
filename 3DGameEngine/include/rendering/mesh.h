@@ -23,7 +23,7 @@ namespace MeshAttribs
 	const unsigned int TANGENT = 8;
 	const unsigned int BITANGENT =9;
 
-	const unsigned int NUM_ATTRIBS = 9; // Number may change with time if I add more attribs, but never used in shader so doesn't matter
+	const unsigned int NUM_ATTRIBS = 10; // Number may change with time if I add more attribs, but never used in shader so doesn't matter
 }
 
 struct VertexBoneData

@@ -202,6 +202,9 @@
     <ClInclude Include="include\behaviour\custom.h">
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
+    <ClInclude Include="include\rendering\particleRenderer.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -354,5 +357,10 @@
     <None Include="assets\shaders\advanced.vert">
       <Filter>Resource Files\ShaderFiles</Filter>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="assets\scenes\demo.XML">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

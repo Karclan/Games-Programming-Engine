@@ -126,6 +126,7 @@
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
     <ClInclude Include="include\rendering\modelRenderer.h" />
+    <ClInclude Include="include\rendering\particleRenderer.h" />
     <ClInclude Include="include\rendering\primitiveShapes.h" />
     <ClInclude Include="include\rendering\renderer.h" />
     <ClInclude Include="include\rendering\renderSystem.h" />
@@ -190,6 +191,9 @@
     <None Include="assets\shaders\diffuse.vert" />
     <None Include="assets\shaders\specular.frag" />
     <None Include="assets\shaders\specular.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="assets\scenes\demo.XML" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
