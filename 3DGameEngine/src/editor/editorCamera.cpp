@@ -35,12 +35,15 @@ void EditorCamera::update(float t)
 		sf::Vector2f mouseDelta = -Input::getMouseDelta();
 		if(mouseDelta != sf::Vector2f(0, 0))
 		{
-			// By translating forward by zoom before and minus that after rotation we rotate around point in front of camera
-			// This could be better implemented with "rotateAround" and "lookAt" not yet implemented in Transform class.
-			_transform->translate(_transform->getForward() * _targetDist);
-			_transform->rotate(glm::vec3(mouseDelta.y, mouseDelta.x, 0) * (t * 100));
-			_transform->translate(-_transform->getForward() * _targetDist);
+			_transform->rotateAround(t * mouseDelta.y * 100, _transform->getRight(), _targetPos); // up and down. Note relative right
+			_transform->rotateAround(t * mouseDelta.x * 100, glm::vec3(0, 1, 0), _targetPos); // left and right
+			
 		}
+	}
+
+	if(Input::getKeyPressed(sf::Keyboard::F))
+	{
+		//_transform->lookAt(_targetPos);
 	}
 	
 	// ZOOM WITH MOUSE WHEEL
@@ -58,6 +61,7 @@ void EditorCamera::update(float t)
 		{
 			_transform->translate(_transform->getUp() * mouseMove.y);
 			_transform->translate(-_transform->getRight() * mouseMove.x);
+			
 		}
 	}
 

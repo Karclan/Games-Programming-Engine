@@ -4,7 +4,7 @@
 Transform::Transform()
 {
 	_position = glm::vec3(0, 0, 0);
-	_rotation = glm::vec3(0, 0, 0);
+	_rotation = quatFromEuler(glm::vec3(0, 0, 0));
 	_scale = glm::vec3(1, 1, 1);
 }
 
@@ -43,9 +43,14 @@ void Transform::setPosition(glm::vec3 pos)
 	recalculateMatrix();
 }
 
+void Transform::setRotation(glm::quat rotation) 
+{ 
+	_rotation = rotation;
+}
+
 void Transform::setEulerAngles(glm::vec3 ang)
 {
-	_rotation = ang;
+	_rotation = quatFromEuler(ang);
 	recalculateMatrix();
 }
 
@@ -60,9 +65,14 @@ glm::vec3 Transform::getPosition()
 	return _position;
 }
 
+glm::quat Transform::getRotation() 
+{ 
+	return _rotation;
+};
+
 glm::vec3 Transform::getEulerAngles()
 {
-	return _rotation;
+	return glm::eulerAngles(_rotation);
 }
 
 glm::vec3 Transform::getScale()
@@ -76,9 +86,21 @@ void Transform::translate(glm::vec3 translation)
 	recalculateMatrix();
 }
 
-void Transform::rotate(glm::vec3 eulerAngles)
+// Note this rotates around a relative axis, not in world coordinates
+void Transform::rotate(float angle, glm::vec3 axis, Space relativeTo)
 {
-	_rotation += eulerAngles;
+	switch (relativeTo)
+	{
+	case Transform::WORLD_SPACE:
+		_rotation = glm::normalize(glm::angleAxis(glm::radians(angle), axis)) * _rotation;
+		break;
+	case Transform::OBJECT_SPACE:
+		_rotation = glm::rotate(_rotation, glm::radians(angle), axis); // works for relative axis
+		break;
+	default:
+		break;
+	}
+	
 	recalculateMatrix();
 }
 
@@ -86,13 +108,36 @@ void Transform::rotate(glm::vec3 eulerAngles)
 
 
 // These functions are not yet implemented - see class description in header file for details
-void Transform::rotateAround(glm::vec3 eulerAngles, glm::vec3 point)
+void Transform::rotateAround(float angle, glm::vec3 worldAxis, glm::vec3 point)
 {
+	glm::vec3 newPos = _position - point; // translate so point is at origin
+	_rotation = glm::normalize(glm::angleAxis(glm::radians(angle), worldAxis)) * _rotation; // rotate rotation quat
+	newPos = glm::normalize(glm::angleAxis(glm::radians(angle), worldAxis)) * newPos; // rotate translated pos
+	_position = newPos + point; // translate back to undo initial tranlate
+	recalculateMatrix();
 }
 
 void Transform::lookAt(glm::vec3 target)
 {
+	glm::quat newRot = glm::quat();
+	glm::vec3 targetDir = glm::normalize(target - _position); // direction to target, normalized
+	glm::vec3 targetXZ = glm::normalize(glm::vec3(targetDir.x, 0, targetDir.z)); // just the XZ components of direction, normailzed
 
+	// Work out y axis rotation using atan2, similar to in 2D games
+	float angY = std::atan2(-targetDir.x, -targetDir.z);
+	newRot = glm::rotate(newRot, angY, glm::vec3(0, 1, 0));
+
+	// Now use dot product to find angle between target dir and target dir with no y component, this will give x axis rotation needed
+	float angX = std::acos(glm::dot(targetDir, targetXZ));
+	
+	// Direction of rotation depends on if target is above or below current position
+	if(targetDir.y > 0)
+		newRot = glm::rotate(newRot, angX, glm::vec3(1, 0, 0));
+	else if(targetDir.y < 0)
+		newRot = glm::rotate(newRot, -angX, glm::vec3(1, 0, 0));
+
+	_rotation = newRot;
+	recalculateMatrix();
 }
 
 
@@ -124,10 +169,15 @@ glm::vec3 Transform::getUp()
 // Private functions
 glm::mat4 Transform::getRotationMatrix()
 {
-	glm::mat4 rx = glm::rotate(glm::radians(_rotation.x), glm::vec3(1, 0, 0));
-	glm::mat4 ry = glm::rotate(glm::radians(_rotation.y), glm::vec3(0, 1, 0));
-	glm::mat4 rz = glm::rotate(glm::radians(_rotation.z), glm::vec3(0, 0, 1));
-	return rz * ry * rx;
+	return glm::toMat4(_rotation);
+}
+
+glm::quat Transform::quatFromEuler(glm::vec3 euler)
+{
+	glm::mat4 rx = glm::rotate(glm::radians(euler.x), glm::vec3(1, 0, 0));
+	glm::mat4 ry = glm::rotate(glm::radians(euler.y), glm::vec3(0, 1, 0));
+	glm::mat4 rz = glm::rotate(glm::radians(euler.z), glm::vec3(0, 0, 1));
+	return glm::toQuat(rz * ry * rx);
 }
 
 void Transform::recalculateMatrix()

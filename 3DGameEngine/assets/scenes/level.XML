@@ -26,6 +26,7 @@
 <GO name="Camera">
     <COMP type="2" />
     <COMP type="0" tx="0" ty="2" tz="5" rx="-10" ry="0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="Camera" />
 </GO>
 <GO name="Vork Building">
     <COMP type="1" mesh="vorkBuilding.obj" shader="advanced" texture="vorkBuildingUV.png" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />

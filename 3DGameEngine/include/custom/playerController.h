@@ -1,10 +1,9 @@
-#ifndef CAMERA_CONTROLLER_H
-#define CAMERA_CONTROLLER_H
+#ifndef PLAYER_CONTROLLER_H
+#define PLAYER_CONTROLLER_H
 
 #include <SFML\Window.hpp>
 #include "behaviour\behaviour.h"
 #include "core\input.h"
-#include "rendering\robotRenderer.h"
 
 /*! \brief Temporary behaviour class
 
@@ -26,8 +25,6 @@ protected:
 
 private:
 	SPtr_Transform _transform; //!< Robot's transform
-	SPtr_Transform _cameraTrans; //!< Camera's transform component
-	//std::shared_ptr<RobotRenderer> _robotAnim; //!< Robot Renderer so we can control animations
 	float _speed;
 	glm::vec3 _velocity;
 	float _turn;

@@ -77,6 +77,7 @@ void PhysicsSystem::fixedUpdate(float t)
 		}
 
 		// And the floor...
+		/*
 		if(_terrainCollider != nullptr)
 		{
 			if(_terrainCollider->collides(_testNode.physColliders[i], colInfo))
@@ -91,6 +92,8 @@ void PhysicsSystem::fixedUpdate(float t)
 			}
 
 		}
+		*/
+		
 	}
 
 

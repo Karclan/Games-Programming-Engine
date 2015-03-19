@@ -6,6 +6,8 @@
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <glm\gtx\quaternion.hpp>
+#include <glm\gtx\rotate_vector.hpp>
 #include <memory>
 #include <glm/gtx/transform.hpp>
 
@@ -47,6 +49,8 @@ public:
 	ComponentType::Type getType();
 	bool isOnePerObject();
 
+	enum Space { WORLD_SPACE, OBJECT_SPACE };
+
 	// Data
 	glm::mat4 getMatrix(); //!< Returns a copy of the glm::matrix. For openGL use getFloatPointer() instead
 	GLfloat* getFloatPointer(); //!< Get matrix as a pointer to first element. Much better to pass around like this for any openGL related stuff
@@ -54,19 +58,23 @@ public:
 	// Transform functions
 	
 	void setPosition(glm::vec3 pos);
+	void setRotation(glm::quat rotation);
 	void setEulerAngles(glm::vec3 ang);
 	void setScale(glm::vec3 scale);
+
 	glm::vec3 getPosition();
+	glm::quat getRotation();
 	glm::vec3 getEulerAngles();
 	glm::vec3 getScale();
+	
 
 	void translate(glm::vec3 translation);
-	void rotate(glm::vec3 eulerAngles);
+	void rotate(float angle, glm::vec3 axis, Space relativeTo);
 
 	glm::mat4 getRotationMatrix(); //!< Public so box collider can use. May be temp
 	
-	// Unimplemented functions (see note in description)
-	void rotateAround(glm::vec3 eulerAngles, glm::vec3 point);
+
+	void rotateAround(float angle, glm::vec3 worldAxis, glm::vec3 point); //!< Axis must be world space for this one
 	void lookAt(glm::vec3 target);
 	
 	// Direction functions
@@ -80,10 +88,11 @@ private:
 	
 	
 	glm::vec3 _position; //!< Position as a vector3
-	glm::vec3 _rotation; //!< Rotation euler angles. Consider quaternions in the future!
+	//glm::vec3 _rotation; //!< Rotation euler angles. Consider quaternions in the future!
+	glm::quat _rotation;
 	glm::vec3 _scale; //!< Scale as a vec3
 	
-
+	glm::quat quatFromEuler(glm::vec3 euler);
 
 	// FUNCTIONS
 	

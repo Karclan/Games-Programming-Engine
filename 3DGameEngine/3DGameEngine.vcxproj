@@ -95,6 +95,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\custom.h" />
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\cameraController.h" />
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerController.h" />
     <ClInclude Include="include\custom\customBehaviours.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
@@ -104,8 +106,6 @@
     <ClInclude Include="include\core\initTable.h" />
     <ClInclude Include="include\behaviour\behaviour.h" />
     <ClInclude Include="include\behaviour\behaviourSystem.h" />
-    <ClInclude Include="include\behaviour\playerController.h" />
-    <ClInclude Include="include\behaviour\rotatingObject.h" />
     <ClInclude Include="include\core\assets.h" />
     <ClInclude Include="include\core\component.h" />
     <ClInclude Include="include\core\engine.h" />
@@ -140,13 +140,13 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\cameraController.cpp" />
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\playerController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
     <ClCompile Include="src\behaviour\behaviourSystem.cpp" />
-    <ClCompile Include="src\behaviour\playerController.cpp" />
-    <ClCompile Include="src\behaviour\rotatingObject.cpp" />
     <ClCompile Include="src\core\assets.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\engine.cpp" />
