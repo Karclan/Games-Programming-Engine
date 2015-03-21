@@ -3,15 +3,17 @@
 layout(location=0)in vec4 i_particleVertex;
 layout(location=1)in vec4 i_particleColour;
 
-uniform mat4 u_ModelView;
+uniform mat4 u_ModelMatrix;
+uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionView;
 
 out vec4 o_colour;
 
 void main()
 {
-	vec4 eyePosition = u_ModelView * i_particleVertex;
-	gl_Position = u_ProjectionView * eyePosition;
+	vec4 eyePosition = u_ViewMatrix * i_particleVertex;
+
+	gl_Position = u_ProjectionView  *  eyePosition;
 	
 	o_colour = i_particleColour;
 	

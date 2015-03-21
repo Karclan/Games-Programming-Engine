@@ -439,7 +439,7 @@ void CompData::initializeComponent()
 		{
 			SPtr_ParticleRend particleRend = std::static_pointer_cast<ParticleRenderer>(getComp());
 			//GENERATE PARTICLES
-			particleRend->generate(100);
+			particleRend->generate(10000);
 		}
 		break;
 
