@@ -7,15 +7,47 @@ PhysicsSystem::PhysicsSystem()
 	_terrainCollider = nullptr;
 }
 
+void PhysicsSystem::init()
+{
+	// Ensure all colliders are in unsorted colliders
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+		_unsortedColliders.push_back(_dynamicColliders[i]);
+
+	for(int i = 0; i < _staticColliders.size(); ++i) 
+		_unsortedColliders.push_back(_staticColliders[i]);
+
+	// Clear dynamic and static colliders
+	_dynamicColliders.clear();
+	_staticColliders.clear();
+
+	// Sort and init colliders
+	for(int i = 0; i < _unsortedColliders.size(); ++i)
+	{
+		// init
+		_unsortedColliders[i]->calculateBounds();
+
+		// Sort
+		if(_unsortedColliders[i]->hasPhysicsBody())
+			_dynamicColliders.push_back(_unsortedColliders[i]);
+		else
+			_staticColliders.push_back(_unsortedColliders[i]);
+	}
+
+	// Clear init list
+	_unsortedColliders.clear();
+}
+
 void PhysicsSystem::clear()
 {
 	_terrainCollider = nullptr;
-	_colliders.clear();
+	_unsortedColliders.clear();
+	_dynamicColliders.clear();
+	_staticColliders.clear();
 }
 
 void PhysicsSystem::addCollider(SPtr_Collider collider)
 {
-	_colliders.push_back(collider);
+	_unsortedColliders.push_back(collider);
 }
 
 void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
@@ -25,6 +57,15 @@ void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
 
 void PhysicsSystem::fixedUpdate(float t)
 {
+	// Do the integration
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+	{
+		_dynamicColliders[i]->getPhysicsBody()->fixedUpdate(t);
+		_dynamicColliders[i]->calculateBounds();
+	}
+
+
+
 	// For each collider
 
 
@@ -39,14 +80,14 @@ void PhysicsSystem::fixedUpdate(float t)
 	// FOR TESTING - Adds colliders to single test node - this would be a leaf node in finished version
 	_testNode.clear();
 
-	for(int i = 0; i < _colliders.size(); ++i)
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
 	{
-		if(_colliders[i]->hasPhysicsBody())
-		{
-			_testNode.physColliders.push_back(_colliders[i]);
-			continue;
-		}
-		_testNode.regColliders.push_back(_colliders[i]);
+		_testNode.physColliders.push_back(_dynamicColliders[i]);
+	}
+
+	for(int i = 0; i < _staticColliders.size(); ++i)
+	{
+		_testNode.regColliders.push_back(_staticColliders[i]);
 	}
 
 	// Now, in each leaf node check collisions
@@ -61,7 +102,7 @@ void PhysicsSystem::fixedUpdate(float t)
 			if(_testNode.physColliders[i]->collides(_testNode.physColliders[pc], colInfo))
 			{
 				//std::cout << "I collider! " << colInfo.penDepth << "\n";
-				_testNode.physColliders[i]->getPhysicsBody()->resolve(colInfo);
+				colInfo.resolve();
 
 				std::cout << "Pen Depth " << colInfo.penDepth << "\n";
 				std::cout << "Normal " << colInfo.normal.x << ", " << colInfo.normal.y << ", " << colInfo.normal.z << "\n\n";
@@ -73,7 +114,9 @@ void PhysicsSystem::fixedUpdate(float t)
 		for(int rc = 0; rc < _testNode.regColliders.size(); ++rc)
 		{
 			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc], colInfo))
-				std::cout << "I collider! " << colInfo.penDepth << "\n";
+			{
+				colInfo.resolve();
+			}
 		}
 
 		// And the floor...
@@ -105,26 +148,39 @@ void PhysicsSystem::fixedUpdate(float t)
 
 void PhysicsSystem::renderColliders(Camera* camera)
 {
-	for(int i = 0; i < _colliders.size(); ++i)
-	{
-		switch(_colliders[i]->getType())
-		{
-		case ComponentType::SPHERE_COL:
-			{
-				SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_colliders[i]);
-				renderSphere(camera, sphereCol->getRadius(), sphereCol->getCentre());
-			}
-			break;
+	for(int i = 0; i < _unsortedColliders.size(); ++i)
+		renderCollider(_unsortedColliders[i], camera);
 
-		case ComponentType::BOX_COL:
-			{
-				SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_colliders[i]);
-				renderBox(camera, boxCol->getTransformMatrix());
-			}
-			break;
-		}
-	}
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+		renderCollider(_dynamicColliders[i], camera);
 	
+	for(int i = 0; i < _staticColliders.size(); ++i)
+		renderCollider(_staticColliders[i], camera);
+}
+
+
+
+
+
+// Render me a loively collider
+void PhysicsSystem::renderCollider(SPtr_Collider collider, Camera* camera)
+{
+	switch(collider->getType())
+	{
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(collider);
+			renderSphere(camera, sphereCol->getRadius(), sphereCol->getCentre());
+		}
+		break;
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(collider);
+			renderBox(camera, boxCol->getTransformMatrix());
+		}
+		break;
+	}
 }
 
 

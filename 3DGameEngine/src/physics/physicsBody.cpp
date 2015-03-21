@@ -5,6 +5,12 @@ PhysicsBody::PhysicsBody()
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
 	setOptionalDepFlag(ComponentType::SPHERE_COL); // cache collider if it exists
+
+	_mass = 1.0f; // important - mass of zero would give divide by zero error...
+	_drag = 8.2f;
+	_gravity = -36; // probably has to be stupid high coz drag high. Friction?
+	_accel = glm::vec3();
+	_velocity = glm::vec3();
 }
 
 ComponentType::Type PhysicsBody::getType()
@@ -29,7 +35,23 @@ void PhysicsBody::linkDependency(SPtr_Component component)
 }
 
 
-void PhysicsBody::resolve(Collision &collision)
+void PhysicsBody::fixedUpdate(float t)
 {
-	_transform->translate(collision.normal * -collision.penDepth);
+	_transform->translate(_velocity * t);
+
+	_accel += glm::vec3(0, _gravity, 0);
+	_velocity += (_accel - (_velocity * _drag)) * t;
+	
+	_accel = glm::vec3(); // reset to zero, the idea being you must add force every frame
+
+	
+}
+
+void PhysicsBody::addForce(glm::vec3 force)
+{
+	_accel += force;
+}
+void PhysicsBody::addImpulse(glm::vec3 impulse)
+{
+	_velocity += impulse;
 }

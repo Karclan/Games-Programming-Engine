@@ -1,10 +1,10 @@
 #include "editor\editor.h"
 
-void Editor::startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr, EditorCamera* editorCam)
+void Editor::startup(HINSTANCE hInstance, Engine* engine, EditorCamera* editorCam)
 {
 	_hInstance = hInstance;
-	_menuBar.initialize(hInstance, _goMenu, sceneMngr);
-	_goMenu.initialize(objectMngr, sceneMngr, editorCam);
+	_menuBar.initialize(hInstance, _goMenu, engine);
+	_goMenu.initialize(engine->getObjectManager(), engine->getSceneManager(), editorCam);
 	initConsole();
 
 	_processTwEvents = false; // must be false at start as it crashes for some reason (something to do with premature handling of mouse move event)

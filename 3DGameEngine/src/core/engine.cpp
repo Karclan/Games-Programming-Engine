@@ -87,6 +87,12 @@ void Engine::startup()
 	_fixedTime = 0; //fixed delta time
 }
 
+void Engine::initGame()
+{
+	_sceneMngr.initFromInitTable(); // resets all objects as per scene setup
+	_rendSys.activateLights(); // activate lights
+	_physicsSys.init(); // init physics system
+}
 
 void Engine::processEvent(sf::Event e)
 {
@@ -103,19 +109,22 @@ void Engine::updateInput(float t)
 void Engine::update(float t)
 {
 	// Add time to fixed time
-	_fixedTime += t;
+	_fixedTime += t; // the accumulator
 
 	// Update
 	_behvrSys.update(t);
 
 	// Fixed update
-	if(_fixedTime >= _refreshRate)
+	while(_fixedTime > _refreshRate)
 	{
 		// fixed update here
-		_behvrSys.fixedUpdate(_fixedTime);
-		_physicsSys.fixedUpdate(_fixedTime);
-		_fixedTime = 0;
+		_behvrSys.fixedUpdate(_refreshRate);
+		_physicsSys.fixedUpdate(_refreshRate);
+		_fixedTime -= _refreshRate;
 	}
+
+	// Late update, for things that need to be last thing before rendering (e.g. Camera movement)
+	_behvrSys.lateUpdate(t);
 
 	// Animate
 	_rendSys.animate(t);

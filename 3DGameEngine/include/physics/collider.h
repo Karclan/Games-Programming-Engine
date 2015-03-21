@@ -24,6 +24,12 @@ typedef std::shared_ptr<Collider> SPtr_Collider;
 typedef std::shared_ptr<SphereCollider> SPtr_SphereCol;
 typedef std::shared_ptr<BoxCollider> SPtr_BoxCol;
 
+struct AABB
+{
+	glm::vec3 min;
+	glm::vec3 max;
+};
+
 /*! \brief Collider
 
 
@@ -42,9 +48,14 @@ public:
 
 	virtual bool collides(SPtr_Collider other, Collision &collInfo)=0;
 
+	virtual void calculateBounds() = 0; //!< Should be called on init and every frame if has a physics body
+	AABB getBounds() { return _bounds; }
+
 protected:
 	SPtr_Transform _transform; //!< Pointer to transform
 	SPtr_PhysBody _physicsBody; //!< Optional pointer to physics body
+
+	AABB _bounds; //!< Bounding box in world coordinates
 };
 
 
@@ -59,6 +70,7 @@ public:
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
+	void calculateBounds();
 	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
 
 	float getRadius();
@@ -87,7 +99,7 @@ public:
 	BoxCollider();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
-
+	void calculateBounds();
 	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
 
 
@@ -101,12 +113,12 @@ public:
 	void setOffset(glm::vec3 offset) { _offset = offset; }
 
 	void test();
-	void getWorldVerts(glm::vec3 verts[]);
+	const glm::vec3* getWorldVerts();
 
 private:
 	glm::vec3 _extents; //!< Width, height and depth of box. Note - not half extents!
 	glm::vec3 _offset;
-
+	glm::vec3 _worldVerts[8]; //!< Position of each corner in world space
 	
 };
 

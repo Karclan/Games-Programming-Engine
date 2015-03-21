@@ -44,6 +44,12 @@ ComponentType::Type SphereCollider::getType()
 	return ComponentType::SPHERE_COL;
 }
 
+void SphereCollider::calculateBounds()
+{
+	_bounds.min = getCentre() - glm::vec3(_radius, _radius, _radius);
+	_bounds.max = getCentre() + glm::vec3(_radius, _radius, _radius);
+}
+
 
 // Wonderful collision logic!
 bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
@@ -59,7 +65,16 @@ bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 			float squareRadSum = radSum * radSum;
 
 
-			return squareDist < squareRadSum; // they're colliding if the distance is less than the sum of the radii
+			if(squareDist < squareRadSum)
+			{
+				float distMag = std::sqrt(squareDist);
+				collInfo.bodyA = _physicsBody;
+				collInfo.bodyB = other->getPhysicsBody();
+				collInfo.penDepth = radSum - distMag;
+				collInfo.normal = aToB / distMag;
+				return true;
+			}
+			return false;
 		}
 
 	case ComponentType::BOX_COL:
@@ -68,8 +83,7 @@ bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
 
 			// Get other's verts in world space
-			glm::vec3 otherVerts[8];
-			otherB->getWorldVerts(otherVerts);
+			const glm::vec3* otherVerts = otherB->getWorldVerts();
 
 			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
 			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
@@ -161,6 +175,8 @@ bool SphereCollider::collides(SPtr_Collider other, Collision &collInfo)
 			if(squareDistToEdge < squareRad)
 			{
 				float distMag = std::sqrt(squareDistToEdge);
+				collInfo.bodyA = _physicsBody;
+				collInfo.bodyB = other->getPhysicsBody();
 				collInfo.penDepth = _radius - distMag;
 				collInfo.normal = vecToEdge / distMag;
 				return true;
@@ -201,6 +217,37 @@ ComponentType::Type BoxCollider::getType()
 	return ComponentType::BOX_COL;
 }
 
+void BoxCollider::calculateBounds()
+{
+	glm::mat4 transMat = getTransformMatrix();
+
+	// near face
+	_worldVerts[0] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, 0.5f, 1.0)); // tl
+	_worldVerts[1] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, 0.5f, 1.0)); // tr
+	_worldVerts[2] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, 0.5f, 1.0)); // bl
+	_worldVerts[3] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, 0.5f, 1.0)); // br
+	
+	// far face
+	_worldVerts[4] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, -0.5f, 1.0)); // tl
+	_worldVerts[5] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, -0.5f, 1.0)); // tr
+	_worldVerts[6] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, -0.5f, 1.0)); // bl
+	_worldVerts[7] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, -0.5f, 1.0)); // br
+
+	// Calc bounds
+	_bounds.min = _worldVerts[0];
+	_bounds.max = _worldVerts[0];
+	for(int i = 1; i < 8; ++i)
+	{
+		_bounds.min.x = std::min(_bounds.min.x, _worldVerts[i].x);
+		_bounds.min.y = std::min(_bounds.min.y, _worldVerts[i].y);
+		_bounds.min.z = std::min(_bounds.min.z, _worldVerts[i].z);
+
+		_bounds.max.x = std::max(_bounds.min.x, _worldVerts[i].x);
+		_bounds.max.y = std::max(_bounds.min.y, _worldVerts[i].y);
+		_bounds.max.z = std::max(_bounds.min.z, _worldVerts[i].z);
+	}
+}
+
 
 // Wonderful collision logic!
 bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
@@ -212,17 +259,14 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 			SPtr_BoxCol otherB = std::static_pointer_cast<BoxCollider>(other);
 			
 			// Get verts in world space
-			glm::vec3 myVerts[8];
-			glm::vec3 otherVerts[8];
-			getWorldVerts(myVerts);
-			otherB->getWorldVerts(otherVerts);
+			const glm::vec3* otherVerts = otherB->getWorldVerts();
 
 			// Work out all 15 axes we need to check - if it can be done neatly, would be better to calc as we go to avoid calcs not needed
 			// Also might be faster to transform unit fwd, right, up by matrix (omitting scale) assuming normalize uses sqrt
 			glm::vec3 axes[15];
-			axes[0] = myVerts[1] - myVerts[0]; // axis myRight
-			axes[1] = myVerts[0] - myVerts[2]; // axis myUp
-			axes[2] = myVerts[0] - myVerts[4]; // axis myBack (Z+, towards us)
+			axes[0] = _worldVerts[1] - _worldVerts[0]; // axis myRight
+			axes[1] = _worldVerts[0] - _worldVerts[2]; // axis myUp
+			axes[2] = _worldVerts[0] - _worldVerts[4]; // axis myBack (Z+, towards us)
 			axes[3] = otherVerts[1] - otherVerts[0]; // axis otherRight
 			axes[4] = otherVerts[0] - otherVerts[2]; // axis otherUp
 			axes[5] = otherVerts[0] - otherVerts[4]; // axis otherBack (Z+, towards us)
@@ -249,7 +293,7 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 				axes[a] = glm::normalize(axes[a]);
 
 				// Floats to store min and max distances across axes of each vert, init to dist on axes of vert 0 (see loop for details)
-				float myMin = glm::dot(myVerts[0], axes[a]);
+				float myMin = glm::dot(_worldVerts[0], axes[a]);
 				float myMax = myMin;
 				float otherMin = glm::dot(otherVerts[0], axes[a]);
 				float otherMax = otherMin;
@@ -258,7 +302,7 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 				for(int v = 1; v < 8; ++v)
 				{
 					// Note that the dot product gives you distance from origin of vert projected on axis
-					float myProjDist = glm::dot(myVerts[v], axes[a]);
+					float myProjDist = glm::dot(_worldVerts[v], axes[a]);
 					float otherProjDist = glm::dot(otherVerts[v], axes[a]); 
 					myMin = std::min(myProjDist, myMin);
 					myMax = std::max(myProjDist, myMax);
@@ -272,6 +316,9 @@ bool BoxCollider::collides(SPtr_Collider other, Collision &collInfo)
 
 				float overlap = myMax - otherMin;
 				float invOverlap = otherMax - myMin;
+
+				collInfo.bodyA = _physicsBody;
+				collInfo.bodyB = other->getPhysicsBody();
 
 				if(overlap < invOverlap) // then I am on "left" so collision normal positive
 				{
@@ -317,30 +364,16 @@ glm::mat4 BoxCollider::getTransformMatrix()
 }
 
 
-void BoxCollider::getWorldVerts(glm::vec3 verts[])
-{
-	glm::mat4 transMat = getTransformMatrix();
 
-	
-	// near face
-	verts[0] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, 0.5f, 1.0)); // tl
-	verts[1] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, 0.5f, 1.0)); // tr
-	verts[2] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, 0.5f, 1.0)); // bl
-	verts[3] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, 0.5f, 1.0)); // br
-	
-	// far face
-	verts[4] = glm::vec3(transMat * glm::vec4(0.5f, 0.5f, -0.5f, 1.0)); // tl
-	verts[5] = glm::vec3(transMat * glm::vec4(-0.5f, 0.5f, -0.5f, 1.0)); // tr
-	verts[6] = glm::vec3(transMat * glm::vec4(0.5f, -0.5f, -0.5f, 1.0)); // bl
-	verts[7] = glm::vec3(transMat * glm::vec4(-0.5f, -0.5f, -0.5f, 1.0)); // br
-	
+const glm::vec3* BoxCollider::getWorldVerts()
+{
+	return &_worldVerts[0];
 }
 
 void BoxCollider::test()
 {
 	// Debug
-	glm::vec3 verts[8];
-	getWorldVerts(verts);
+	const glm::vec3* verts = getWorldVerts();
 
 	std::cout << "WORLD VERTS:\n";
 	for(int i = 0; i < 8; ++i)

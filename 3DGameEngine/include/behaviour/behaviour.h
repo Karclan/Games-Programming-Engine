@@ -7,7 +7,7 @@
 //! Event types
 enum EventType
 {
-	UPDATE, FIXED_UPDATE
+	UPDATE, FIXED_UPDATE, LATE_UPDATE
 };
 
 
@@ -45,6 +45,7 @@ protected:
 	virtual void initialize() = 0; //!< Children override. Called at start of first update
 	virtual void update(float t){}; //!< Children overide with unique logic.
 	virtual void fixedUpdate(float t){} //!< Children overide with unique logic.
+	virtual void lateUpdate(float t){} //!< Children overide with unique logic.
 	SPtr_Component getComponent(ComponentType::Type type);
 	int getGameObjectId();
 

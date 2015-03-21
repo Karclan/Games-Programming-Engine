@@ -104,10 +104,15 @@ void Transform::rotate(float angle, glm::vec3 axis, Space relativeTo)
 	recalculateMatrix();
 }
 
-//--------------------------------------
+// linear interpolation to target
+void Transform::lerpPosition(glm::vec3 target, float t)
+{
+	if(t < 0) t = 0;
+	if(t > 1) t = 1;
+	_position = _position + (target - _position) * t;
+	recalculateMatrix();
+}
 
-
-// These functions are not yet implemented - see class description in header file for details
 void Transform::rotateAround(float angle, glm::vec3 worldAxis, glm::vec3 point)
 {
 	glm::vec3 newPos = _position - point; // translate so point is at origin
@@ -146,20 +151,17 @@ void Transform::lookAt(glm::vec3 target)
 // Direction functions
 glm::vec3 Transform::getForward()
 {
-	glm::vec4 fwd(Direction::FORWARD, 1.0f);
-	return glm::vec3(getRotationMatrix() * fwd);
+	return _rotation * Direction::FORWARD;
 }
 
 glm::vec3 Transform::getRight()
 {
-	glm::vec4 right(Direction::RIGHT, 1.0f);
-	return glm::vec3(getRotationMatrix() * right);
+	return _rotation * Direction::RIGHT;
 }
 
 glm::vec3 Transform::getUp()
 {
-	glm::vec4 up(Direction::UP, 1.0f);
-	return glm::vec3(getRotationMatrix() * up);
+	return _rotation * Direction::UP;
 }
 
 

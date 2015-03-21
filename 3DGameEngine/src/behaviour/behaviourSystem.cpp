@@ -64,6 +64,7 @@ void BehaviourSystem::update(float t)
 			{
 			case EventType::UPDATE: _updateList.push_back(behaviour);				 break;
 			case EventType::FIXED_UPDATE: _fixedUpdateList.push_back(behaviour);	 break;
+			case EventType::LATE_UPDATE: _lateUpdateList.push_back(behaviour);		 break;
 			}
 		};
 
@@ -140,6 +141,14 @@ void BehaviourSystem::removeBehaviour(SPtr_Behaviour behaviour)
 			continue;
 		}
 	}
+	for(int i = 0; i < _lateUpdateList.size(); ++i)
+	{
+		if(behaviour == _lateUpdateList[i])
+		{
+			_lateUpdateList.erase(_lateUpdateList.begin()+i);
+			continue;
+		}
+	}
 
 }
 
@@ -150,6 +159,17 @@ void BehaviourSystem::fixedUpdate(float t)
 	for(unsigned int i = 0; i < _fixedUpdateList.size(); ++i)
 	{
 		_fixedUpdateList[i]->fixedUpdate(t);
+	}
+
+}
+
+
+void BehaviourSystem::lateUpdate(float t)
+{
+	// Call late update on any behaviours in the update list
+	for(unsigned int i = 0; i < _lateUpdateList.size(); ++i)
+	{
+		_lateUpdateList[i]->lateUpdate(t);
 	}
 
 }

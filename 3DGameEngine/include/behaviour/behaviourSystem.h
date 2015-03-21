@@ -27,6 +27,7 @@ public:
 	void clear();
 	void update(float t); //!< Call update on all in update list and intialize on new behaviours. t = deltat time
 	void fixedUpdate(float t); // t = fixed delta time
+	void lateUpdate(float t); // t = delta time
 
 private:
 	void loadBehaviour(SPtr_Custom custom); //!< Load behaviour requested by custom components
@@ -38,7 +39,7 @@ private:
 	std::vector<SPtr_Behaviour> _initializeList; //!< List of behaviours to initialize
 	std::vector<SPtr_Behaviour> _updateList; //!< List of behaviours that want update event
 	std::vector<SPtr_Behaviour> _fixedUpdateList; //!< List of behaviours that want fixed update event
-
+	std::vector<SPtr_Behaviour> _lateUpdateList; //!< List of behaviours that want late update event
 };
 
 

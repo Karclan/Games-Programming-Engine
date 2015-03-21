@@ -20,7 +20,6 @@ void SceneManager::initFromInitTable()
 			comp->initializeComponent();
 		}
 	}
-	_rendSys->activateLights();
 }
 
 

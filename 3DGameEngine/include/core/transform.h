@@ -70,12 +70,15 @@ public:
 
 	void translate(glm::vec3 translation);
 	void rotate(float angle, glm::vec3 axis, Space relativeTo);
+	void lerpPosition(glm::vec3 target, float t);
+	void rotateAround(float angle, glm::vec3 worldAxis, glm::vec3 point); //!< Axis must be world space for this one
+	void lookAt(glm::vec3 target);
+
 
 	glm::mat4 getRotationMatrix(); //!< Public so box collider can use. May be temp
 	
 
-	void rotateAround(float angle, glm::vec3 worldAxis, glm::vec3 point); //!< Axis must be world space for this one
-	void lookAt(glm::vec3 target);
+	
 	
 	// Direction functions
 	glm::vec3 getForward();

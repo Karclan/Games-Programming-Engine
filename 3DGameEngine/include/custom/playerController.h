@@ -3,6 +3,7 @@
 
 #include <SFML\Window.hpp>
 #include "behaviour\behaviour.h"
+#include "physics\physicsBody.h"
 #include "core\input.h"
 
 /*! \brief Temporary behaviour class
@@ -25,14 +26,14 @@ protected:
 
 private:
 	SPtr_Transform _transform; //!< Robot's transform
-	float _speed;
-	glm::vec3 _velocity;
-	float _turn;
+	SPtr_PhysBody _physBody; //!< Robot's physics body component
+	float _accelSpeed;
+	float _turnSpeed;
+
+	glm::vec3 _move; //!< Amount of force to add next fixed update
+	float _turn; //!< Amount to turn next fixed update
 
 	// Basic jump implemented - in final version this would probably be handled by the physics subsystem to take care of collisions etc. This is just a demo
-	bool _jumping; //!< Is the robot jumping or not?
-	float _groundHeight; //!< When the robot's middle is at this point, he's hit the ground
-	float _gravitationalPull; //!< How fast he falls back to earth after jumping
 	float _jumpStrength; //!< How much velocity in up direction is set to when you jump
 };
 

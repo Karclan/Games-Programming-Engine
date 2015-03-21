@@ -6,15 +6,17 @@ void PlayerController::initialize()
 	addEventListener(EventType::FIXED_UPDATE);
 
 	// Get Transform
-	SPtr_Component comp = getComponent(ComponentType::TRANSFORM);
-	_transform = std::static_pointer_cast<Transform>(comp); // cache transform so it can be manipulated in update
+	SPtr_Component transComp = getComponent(ComponentType::TRANSFORM);
+	_transform = std::static_pointer_cast<Transform>(transComp); // cache transform so it can be manipulated in update
 
-	_speed = 2;
+	// Get Physics Body
+	SPtr_Component physComp = getComponent(ComponentType::PHY_BODY);
+	_physBody = std::static_pointer_cast<PhysicsBody>(physComp);
+
+	_accelSpeed = 40;
+	_turnSpeed = 120;
 	_turn = 0;
-	_jumping = false;
-	_groundHeight = 0.8f;
-	_gravitationalPull = 10;
-	_jumpStrength = 5;
+	_jumpStrength = 15;
 }
 
 void PlayerController::update(float t)
@@ -34,22 +36,17 @@ void PlayerController::update(float t)
 
 
 	// Calculate move vector based on fwd/back input axis
-	glm::vec3 move  = _transform->getForward() * axisZ * _speed;
-	_velocity.x = move.x;
-	_velocity.y = axisY * _speed;
-	_velocity.z = move.z;
+	_move  = _transform->getForward() * axisZ * _accelSpeed;
+	
 
 	// Set angular velocity (turn) based on left/right axis
-	_turn = -axisX * _speed * 60;
+	_turn = -axisX * _turnSpeed;
 
 	// If press space, jump
-	/*
-	if(!_jumping && Input::getKeyPressed(sf::Keyboard::J)) 
+	if(Input::getKeyPressed(sf::Keyboard::J)) 
 	{
-		_jumping = true;
-		_velocity.y = _jumpStrength;
+		_physBody->addImpulse(glm::vec3(0, _jumpStrength, 0));
 	}
-	*/
 
 	// Animation
 	//if(axisV == 0) _robotAnim->stop();
@@ -60,20 +57,8 @@ void PlayerController::update(float t)
 
 void PlayerController::fixedUpdate(float t)
 {
-	// Update position
-	_transform->translate(_velocity * t);
-
-	/*
-	if(_jumping) _velocity.y -= _gravitationalPull * t; // If jumping, fall
-	if(_transform->getPosition().y < _groundHeight) // if lower than ground, snap to ground and make not jumping
-	{
-		_jumping = false;
-		_velocity.y = 0;
-		glm::vec3 newPos = _transform->getPosition();
-		newPos.y = _groundHeight;
-		_transform->setPosition(newPos);
-	}
-	*/
+	// Update movement
+	_physBody->addForce(_move);
 
 	// Update rotation
 	_transform->rotate(_turn * t, glm::vec3(0, 1, 0), Transform::WORLD_SPACE);
