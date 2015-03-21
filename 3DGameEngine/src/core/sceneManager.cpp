@@ -202,6 +202,9 @@ void SceneManager::saveToXML(std::string filePath)
 				xmlAddRobot(go);
 				break;
 
+			case ComponentType::PARTICLE_REND:
+				xmlAddParticleRend(go);
+
 			case ComponentType::PHY_BODY:
 				xmlAddPhysBody(go);
 				break;
@@ -320,6 +323,12 @@ void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::
 	go->LinkEndChild(lightElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
+void SceneManager::xmlAddParticleRend(TiXmlElement* go)
+{
+	TiXmlElement* particleElement = new TiXmlElement("COMP");
+	
+	go->LinkEndChild(particleElement);
+}
 
 void SceneManager::xmlAddRobot(TiXmlElement* go)
 {

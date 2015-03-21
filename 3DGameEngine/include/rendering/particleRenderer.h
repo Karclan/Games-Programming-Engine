@@ -21,14 +21,15 @@ namespace
 class ParticleRenderer: public Renderer
 { 
 public:
-	ParticleRenderer(size_t particlePool);
-	~ParticleRenderer();
+	ParticleRenderer();
+	~ParticleRenderer(){}
 	ComponentType::Type getType();
 
 	bool isOnePerObject();
 
 	void linkDependency(SPtr_Component);
 
+	void generate(size_t particlePool);
 	void render(GLfloat* viewMatrix, GLfloat* projectionMatrix);
 	
 	void animate(float t);

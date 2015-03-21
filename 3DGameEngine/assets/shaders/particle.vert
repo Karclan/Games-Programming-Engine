@@ -8,9 +8,9 @@ uniform mat4 u_ProjectionView;
 
 out vec4 o_colour;
 
-void Main()
+void main()
 {
-	vec4 eyePosition = u_ModelView * gl_Vertex;
+	vec4 eyePosition = u_ModelView * i_particleVertex;
 	gl_Position = u_ProjectionView * eyePosition;
 	
 	o_colour = i_particleColour;

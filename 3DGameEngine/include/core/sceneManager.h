@@ -46,6 +46,8 @@ private:
 	void xmlAddCamera(TiXmlElement* go);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV);
+	void xmlAddParticleRend(TiXmlElement* go);
+
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset);

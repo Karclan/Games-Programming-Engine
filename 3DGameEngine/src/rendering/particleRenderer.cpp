@@ -1,12 +1,37 @@
 #include "rendering\particleRenderer.h"
 
-ParticleRenderer::ParticleRenderer(size_t particlePool)
+ParticleRenderer::ParticleRenderer()
 {
 	setDepFlag(ComponentType::TRANSFORM);
 	_playFlag=false;
 	_loopFlag=false;
 
+	std::cout<<"Made Particle Renderer!\n";
 	_shader = Assets::getShader("particle");
+}
+
+ComponentType::Type ParticleRenderer::getType()
+{
+	return ComponentType::PARTICLE_REND;
+}
+
+bool ParticleRenderer::isOnePerObject()
+{
+	return true;
+}
+
+void ParticleRenderer::linkDependency(SPtr_Component c)
+{
+	switch(c->getType())
+	{
+	case ComponentType::TRANSFORM:
+		_transform = std::static_pointer_cast<Transform>(c);
+		break;
+	}
+}
+
+void ParticleRenderer::generate(size_t particlePool)
+{
 	_particleSystem = new Particles::ParticleSystem(particlePool);
 
 	auto particleEmitter = std::make_shared<Particles::ParticleEmitter>();
@@ -75,27 +100,6 @@ ParticleRenderer::ParticleRenderer(size_t particlePool)
 
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 }
-
-ComponentType::Type ParticleRenderer::getType()
-{
-	return ComponentType::PARTICLE_REND;
-}
-
-bool ParticleRenderer::isOnePerObject()
-{
-	return true;
-}
-
-void ParticleRenderer::linkDependency(SPtr_Component c)
-{
-	switch(c->getType())
-	{
-	case ComponentType::TRANSFORM:
-		_transform = std::static_pointer_cast<Transform>(c);
-		break;
-	}
-}
-
 void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
 	glEnable(GL_PROGRAM_POINT_SIZE);

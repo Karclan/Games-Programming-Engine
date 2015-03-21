@@ -187,6 +187,12 @@ void CompData::setAttribsToComponents()
 	case ComponentType::ROB_REND:
 		break;
 
+	case ComponentType::PARTICLE_REND:
+		{
+			SPtr_ParticleRend particleRender = std::static_pointer_cast<ParticleRenderer>(_comp);
+			//ATTRIBUTES TO ADD SO I CAN MAKE CUSTOM PARTICLE STUFF
+			break;
+		}
 	case ComponentType::PHY_BODY:
 		{
 			SPtr_PhysBody physBody = std::static_pointer_cast<PhysicsBody>(_comp);
@@ -303,6 +309,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		}
 
 	case ComponentType::ROB_REND:
+		break;
+
+	case ComponentType::PARTICLE_REND:
 		break;
 
 	case ComponentType::PHY_BODY:
@@ -423,6 +432,14 @@ void CompData::initializeComponent()
 		{
 			std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(getComp());
 			robot->reset();
+		}
+		break;
+
+	case ComponentType::PARTICLE_REND:
+		{
+			SPtr_ParticleRend particleRend = std::static_pointer_cast<ParticleRenderer>(getComp());
+			//GENERATE PARTICLES
+			particleRend->generate(100);
 		}
 		break;
 

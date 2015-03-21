@@ -11,7 +11,7 @@
     <COMP type="1" mesh="HexagonPrism.obj" shader="advanced" textureD="ogre_diffuse.png" textureS="ogre_normalmap.png" textureN="" textureH="" tileU="1" tileV="1" dR="0.7" dG="0.6" dB="0.7" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="0" tx="-5" ty="1" tz="-5" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
-	<COMP type="10" />
+	<COMP type="10" shader="particle"/>
 </GO>
 <GO name="Robot">
     <COMP type="6" radius="1" ox="0" oy="0" oz="0" />
