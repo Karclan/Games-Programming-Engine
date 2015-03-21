@@ -205,6 +205,18 @@
     <ClInclude Include="include\rendering\particleRenderer.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\rendering\particle.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleGenerators.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\ParticleUpdaters.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\ParticleEmitters.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -330,6 +342,18 @@
     <ClCompile Include="src\behaviour\custom.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\particleRenderer.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particle.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particleGenerators.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\ParticleUpdaters.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
@@ -355,6 +379,12 @@
       <Filter>Resource Files\ShaderFiles</Filter>
     </None>
     <None Include="assets\shaders\advanced.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\particle.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\particle.vert">
       <Filter>Resource Files\ShaderFiles</Filter>
     </None>
   </ItemGroup>

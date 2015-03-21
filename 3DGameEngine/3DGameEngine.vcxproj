@@ -126,7 +126,11 @@
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
     <ClInclude Include="include\rendering\modelRenderer.h" />
+    <ClInclude Include="include\rendering\particle.h" />
+    <ClInclude Include="include\rendering\ParticleEmitters.h" />
+    <ClInclude Include="include\rendering\particleGenerators.h" />
     <ClInclude Include="include\rendering\particleRenderer.h" />
+    <ClInclude Include="include\rendering\ParticleUpdaters.h" />
     <ClInclude Include="include\rendering\primitiveShapes.h" />
     <ClInclude Include="include\rendering\renderer.h" />
     <ClInclude Include="include\rendering\renderSystem.h" />
@@ -169,6 +173,10 @@
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />
+    <ClCompile Include="src\rendering\particle.cpp" />
+    <ClCompile Include="src\rendering\particleGenerators.cpp" />
+    <ClCompile Include="src\rendering\particleRenderer.cpp" />
+    <ClCompile Include="src\rendering\ParticleUpdaters.cpp" />
     <ClCompile Include="src\rendering\primitiveShapes.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\renderSystem.cpp" />
@@ -189,6 +197,8 @@
     <None Include="assets\shaders\basic.vert" />
     <None Include="assets\shaders\diffuse.frag" />
     <None Include="assets\shaders\diffuse.vert" />
+    <None Include="assets\shaders\particle.frag" />
+    <None Include="assets\shaders\particle.vert" />
     <None Include="assets\shaders\specular.frag" />
     <None Include="assets\shaders\specular.vert" />
   </ItemGroup>
