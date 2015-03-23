@@ -43,7 +43,7 @@ private:
 	std::vector<SPtr_Collider> _staticColliders;
 
 	OctTree _dynamicOctTree; //!< Oct Tree for testing dynamic colliders
-
+	OctTree _staticOctTree; //!< Oct Tree for static colliders
 
 	// Draw debug shapes - would be nicer to outsource this to dedicated debug class or something but this works for now 
 	void renderCollider(SPtr_Collider collider, Camera* camera);

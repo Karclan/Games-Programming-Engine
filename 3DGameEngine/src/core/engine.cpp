@@ -92,6 +92,7 @@ void Engine::initGame()
 	_sceneMngr.initFromInitTable(); // resets all objects as per scene setup
 	_rendSys.activateLights(); // activate lights
 	_physicsSys.init(); // init physics system
+	_objMngr.initGame();
 }
 
 void Engine::processEvent(sf::Event e)
@@ -113,6 +114,7 @@ void Engine::update(float t)
 
 	// Update
 	_behvrSys.update(t);
+	_objMngr.initDynamicObjects(); // init any dynamic objects that may have been created
 
 	// Fixed update
 	while(_fixedTime > _refreshRate)

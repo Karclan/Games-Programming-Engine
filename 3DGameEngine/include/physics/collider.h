@@ -54,7 +54,7 @@ public:
 	Collider();
 
 	ComponentType::Type getType()=0; //!< Required implementation. Return type of component
-	bool isOnePerObject() { return true; } //!< Currently can only have 1 of each type of collider
+	bool isOnePerObject() { return false; } //!< Can have numerous colliders, BUT only first found will work with physics body. So use 1 for dynamic objects, many for static objects
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 
 	bool hasPhysicsBody() { return _physicsBody; } //!< Returns true if physics body exists

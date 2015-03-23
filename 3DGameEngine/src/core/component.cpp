@@ -4,8 +4,7 @@
 Component::Component()
 {
 	_dependencyFlags = 0;
-	_lifeCycleState = ComponentState::DESTROYED;
-	//std::cout << "Component Created!\n";
+	_lifeCycleState = ComponentState::ACTIVE;
 }
 
 Component::~Component()
@@ -27,7 +26,7 @@ BITMASK Component::getOptionalDepFlags()
 
 void Component::destroy()
 {
-
+	_lifeCycleState = ComponentState::DESTROYED;
 }
 
 

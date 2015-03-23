@@ -42,10 +42,38 @@ void PlayerController::update(float t)
 	// Set angular velocity (turn) based on left/right axis
 	_turn = -axisX * _turnSpeed;
 
-	// If press space, jump
+	// If press J, jump
 	if(Input::getKeyPressed(sf::Keyboard::J)) 
 	{
 		_physBody->addImpulse(glm::vec3(0, _jumpStrength, 0));
+	}
+
+	// If press S, shoot (I'm such a troll...)
+	if(Input::getKeyPressed(sf::Keyboard::S)) 
+	{
+		SPtr_GameObject bullet(new GameObject(0, "Bullet"));
+
+		SPtr_Transform bulletTransform(new Transform());
+		bulletTransform->setPosition(_transform->getPosition() + glm::vec3(0, 1, 0));
+		bulletTransform->setScale(glm::vec3(0.5f, 0.5f, 0.5f));
+		bullet->addComponent(bulletTransform);
+
+		SPtr_ModelRend bulletRenderer(new ModelRenderer());
+		bulletRenderer->setMesh(Assets::getMesh("sphere"));
+		bulletRenderer->setMaterial(Assets::getShader("advanced"));
+		bullet->addComponent(bulletRenderer);
+
+		SPtr_SphereCol bulletCollider(new SphereCollider());
+		bullet->addComponent(bulletCollider);
+
+		SPtr_PhysBody bulletPhysBody(new PhysicsBody());
+		bulletPhysBody->addImpulse((_transform->getForward() * 20.0f) + glm::vec3(0, 10, 0));
+		bullet->addComponent(bulletPhysBody);
+
+		
+
+		// Now send to main system
+		addNewGameObject(bullet);
 	}
 
 	// Animation

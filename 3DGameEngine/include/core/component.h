@@ -41,6 +41,8 @@ public:
 	virtual ComponentType::Type getType() = 0; //!< Pure virtual forces children to implement function returning whatever type the component is
 	virtual bool isOnePerObject() = 0; //!< Pure virtual forces children to implement function specifying if more than one of these can be added to a game object
 	
+	ComponentState::State getState() { return _lifeCycleState; }
+
 	virtual void linkDependency(SPtr_Component component){}; //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 	virtual void init(){}; // override if any specific init logic is required (other than setting dynamic init variables)
 

@@ -172,9 +172,6 @@
     <ClInclude Include="include\core\globals.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
-    <ClInclude Include="include\core\objectFinder.h">
-      <Filter>Header Files\core</Filter>
-    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -207,6 +204,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\cameraController.h">
       <Filter>Header Files\custom</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\objectMngrInterface.h">
+      <Filter>Header Files\behaviour</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -309,9 +309,6 @@
     <ClCompile Include="src\rendering\FTInterface.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
-    <ClCompile Include="src\core\objectFinder.cpp">
-      <Filter>Source Files\core</Filter>
-    </ClCompile>
     <ClCompile Include="src\physics\collider.cpp">
       <Filter>Source Files\physics</Filter>
     </ClCompile>
@@ -338,6 +335,9 @@
     </ClCompile>
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\physics\octTree.cpp">
       <Filter>Source Files\physics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\behaviour\objectMngrInterface.cpp">
+      <Filter>Source Files\behaviour</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

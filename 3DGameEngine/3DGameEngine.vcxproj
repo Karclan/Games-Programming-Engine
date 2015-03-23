@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\custom.h" />
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\behaviour\objectMngrInterface.h" />
     <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\cameraController.h" />
     <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerController.h" />
     <ClInclude Include="include\custom\customBehaviours.h" />
@@ -111,7 +112,6 @@
     <ClInclude Include="include\core\engine.h" />
     <ClInclude Include="include\core\gameObject.h" />
     <ClInclude Include="include\core\input.h" />
-    <ClInclude Include="include\core\objectFinder.h" />
     <ClInclude Include="include\core\objectManager.h" />
     <ClInclude Include="include\core\sceneManager.h" />
     <ClInclude Include="include\core\transform.h" />
@@ -140,6 +140,7 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\behaviour\objectMngrInterface.cpp" />
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\cameraController.cpp" />
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\playerController.cpp" />
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\physics\octTree.cpp" />
@@ -153,7 +154,6 @@
     <ClCompile Include="src\core\engine.cpp" />
     <ClCompile Include="src\core\gameObject.cpp" />
     <ClCompile Include="src\core\input.cpp" />
-    <ClCompile Include="src\core\objectFinder.cpp" />
     <ClCompile Include="src\core\objectManager.cpp" />
     <ClCompile Include="src\core\sceneManager.cpp" />
     <ClCompile Include="src\core\transform.cpp" />

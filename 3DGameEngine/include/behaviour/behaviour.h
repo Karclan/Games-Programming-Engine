@@ -2,7 +2,7 @@
 #define BEHAVIOUR_H
 
 #include "core\gameObject.h"
-#include "core\objectFinder.h"
+#include "behaviour\objectMngrInterface.h"
 
 //! Event types
 enum EventType
@@ -37,7 +37,7 @@ public:
 	
 
 	void linkToObject(SPtr_GameObject gameObject);
-	void linkToObjectFinder(ObjectFinder &finder);
+	void linkToObjectMngrInt(ObjectMngrInterface &objMngrInt);
 	void reset(); //!< Recalls initialize without having to go through the inital process of adding to init list etc
 	
 protected:
@@ -52,11 +52,12 @@ protected:
 	// Interface functions allow access to object finder
 	SPtr_GameObject findGameObject(unsigned int objectID); //!< Returns an object by unique ID number
 	SPtr_GameObject findGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found
+	void addNewGameObject(SPtr_GameObject newObject); //!< Add a dynamically created Game Object to the system.
 
 
 private:
 	SPtr_GameObject _gameObject;
-	ObjectFinder* _objFinder;
+	ObjectMngrInterface* _objMngrInt;
 	bool _initialized;
 	std::vector<EventType> _requestedEvents;
 

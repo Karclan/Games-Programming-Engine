@@ -20,22 +20,27 @@ typedef std::shared_ptr<Behaviour> SPtr_Behaviour;
 class GameObject
 {
 public:
-	GameObject(int id, std::string name);
+	GameObject(unsigned int id, std::string name);
 	~GameObject();
 
 	SPtr_Component addComponent(SPtr_Component component); //!< Adds component then returns it. If failed, the return pointer will be null
 	SPtr_Component getComponent(ComponentType::Type type); //!< Returns first component of 'type' it finds, null_ptr if can't find one
 	bool checkForComponent(ComponentType::Type type);
-	int getId();
+	unsigned int getId();
 	std::string getName();
 	void setName(std::string name);
 
+	void setId(unsigned int id) { _id = id; _createdDyn = true;} //!< Because each ID should be unique, this should only be set by object manager
+	bool getCreatedDyn() { return _createdDyn; }
+	void removeFromSystem();
+
+	const std::vector<SPtr_Component>* getComponents() { return &_components; }
 
 private:
-	int _id; //!< Unique identifier for game object
+	unsigned int _id; //!< Unique identifier for game object
 	std::string _name; //!< Not guaranteed to be unique but can be easier to identify object if ID is unknown
 	std::vector<SPtr_Component> _components; //!< Vector storing all the components attached to this object
-
+	bool _createdDyn;
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

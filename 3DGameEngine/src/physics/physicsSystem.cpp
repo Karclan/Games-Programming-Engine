@@ -5,6 +5,8 @@ PhysicsSystem::PhysicsSystem()
 {
 	_maxIterations = 5;
 	_terrainCollider = nullptr;
+
+	_staticOctTree.setMaxDepth(0); // i think the oct tree makes static stuff worse! Uniform grid would be better (probs because only a handful of static colliders atm so oct tree has adverse affect)
 }
 
 void PhysicsSystem::init()
@@ -35,6 +37,9 @@ void PhysicsSystem::init()
 
 	// Clear init list
 	_unsortedColliders.clear();
+
+	// Now construct oct tree with static colliders
+	_staticOctTree.createTree(_staticColliders);
 }
 
 void PhysicsSystem::clear()
@@ -57,14 +62,32 @@ void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
 
 void PhysicsSystem::fixedUpdate(float t)
 {
+	// If dynamically created object
+	if(_unsortedColliders.size() != 0)
+	{
+		for(int i = 0; i < _unsortedColliders.size(); ++i)
+		{
+			// Sort
+			if(_unsortedColliders[i]->hasPhysicsBody())
+				_dynamicColliders.push_back(_unsortedColliders[i]);
+			else
+			{
+				_staticColliders.push_back(_unsortedColliders[i]);
+				_staticOctTree.createTree(_staticColliders);
+			}
+		}
+
+		// Clear init list
+		_unsortedColliders.clear();
+	}
+
+
 	// Do the integration
 	for(int i = 0; i < _dynamicColliders.size(); ++i)
 	{
 		_dynamicColliders[i]->getPhysicsBody()->fixedUpdate(t);
 		_dynamicColliders[i]->calculateBounds();
 	}
-
-	
 
 	// Do the oct tree
 	_dynamicOctTree.createTree(_dynamicColliders);
@@ -78,10 +101,36 @@ void PhysicsSystem::fixedUpdate(float t)
 	bool invResolution = false; // if true, pushes B out of collision rather than A.
 	for(int i = 0; i < _maxIterations; ++i)
 	{
+		bool collided;
+		// STATIC COLLISIONS! ##
+		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
+		{
+			collided = false;
+			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
+			std::set<SPtr_Collider> staticCols;
+			_staticOctTree.getCollidersFromAABB(_dynamicColliders[dc]->getBounds(), staticCols);
+			for(setIt = staticCols.begin(); setIt != staticCols.end(); ++setIt)
+			{
+				if(_dynamicColliders[dc]->collides(setIt->get(), colInfoS))
+				{
+					collided = true;
+				}
+			}
+
+			if(collided)
+			{
+				colInfoS.resolve();
+				_dynamicColliders[dc]->calculateBounds();
+				checkAgain = true;
+			}
+		}
+
+
+		// DYNAMIC COLLISIONS!
 		for(mapIt = collisionMatrix.begin(); mapIt != collisionMatrix.end(); ++mapIt) // for each collidable...
 		{
 			Collision colInfoD = Collision();
-			bool collided = false;
+			collided = false;
 			SPtr_Collider resolvedCollider; // the collider pushed out of the collision and will need bounds recalculating
 
 			// Check dynamic collisions
@@ -110,20 +159,7 @@ void PhysicsSystem::fixedUpdate(float t)
 			}
 		}
 
-		// Check static collisions
-		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
-		{
-			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
-			for(int sc = 0; sc < _staticColliders.size(); ++sc)
-			{
-				if(_dynamicColliders[dc]->collides(_staticColliders[sc].get(), colInfoS))
-				{
-					colInfoS.resolve();
-					_dynamicColliders[dc]->calculateBounds();
-					checkAgain = true;
-				}
-			}
-		}
+		
 		
 
 		if(!checkAgain) break;
@@ -266,3 +302,5 @@ void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 	glBindVertexArray(NULL);
 
 }
+
+

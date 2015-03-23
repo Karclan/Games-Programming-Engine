@@ -131,6 +131,81 @@ void OctTreeNode::addToColMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>
 
 
 
+void OctTreeNode::addToColliders(const AABB &aabb, std::set<SPtr_Collider> &colliders)
+{
+	// If leaf
+	if(_children[0] == nullptr)
+	{
+		for(int i = 0 ; i < _colliders.size(); ++i)
+		{
+			colliders.insert(_colliders[i]);
+		}
+		return;
+	}
+
+	// Not leaf
+	if(aabb.max.x > _bounds.min.x && aabb.min.x < _centre.x) // falls into left
+	{
+		if(aabb.max.y > _bounds.min.y && aabb.min.y < _centre.y) // falls into bottom
+		{
+			if(aabb.max.z > _bounds.min.z && aabb.min.z < _centre.z) // falls into back
+			{
+				_children[BLB]->addToColliders(aabb, colliders);// Bottom Left Back
+			}
+
+			if(aabb.max.z > _centre.z && aabb.min.z < _bounds.max.z) // falls into front
+			{
+				_children[BLF]->addToColliders(aabb, colliders);// Bottom Left Front
+			}
+		}
+
+		if(aabb.max.y > _centre.y && aabb.min.y < _bounds.max.y) // falls into top
+		{
+			if(aabb.max.z > _bounds.min.z && aabb.min.z < _centre.z) // falls into back
+			{
+				_children[TLB]->addToColliders(aabb, colliders);// Top Left Back
+			}
+
+			if(aabb.max.z > _centre.z && aabb.min.z < _bounds.max.z) // falls into front
+			{
+				_children[TLF]->addToColliders(aabb, colliders);// Top Left Front
+			}
+		}
+	}
+
+	if(aabb.max.x > _centre.x && aabb.min.x < _bounds.max.x) // falls into right
+	{
+		if(aabb.max.y > _bounds.min.y && aabb.min.y < _centre.y) // falls into bottom
+		{
+			if(aabb.max.z > _bounds.min.z && aabb.min.z < _centre.z) // falls into back
+			{
+				_children[BRB]->addToColliders(aabb, colliders);// Bottom Right Back
+			}
+
+			if(aabb.max.z > _centre.z && aabb.min.z < _bounds.max.z) // falls into front
+			{
+				_children[BRF]->addToColliders(aabb, colliders);// Bottom Right Front
+			}
+		}
+
+		if(aabb.max.y > _centre.y && aabb.min.y < _bounds.max.y) // falls into top
+		{
+			if(aabb.max.z > _bounds.min.z && aabb.min.z < _centre.z) // falls into back
+			{
+				_children[TRB]->addToColliders(aabb, colliders);// Top Right Back
+			}
+
+			if(aabb.max.z > _centre.z && aabb.min.z < _bounds.max.z) // falls into front
+			{
+				_children[TRF]->addToColliders(aabb, colliders);// Top Right Front
+			}
+		}
+	}
+
+}
+
+
+
 void OctTreeNode::createChildNodes()
 {
 	for(int i = 0; i < 8; ++i)
@@ -266,4 +341,10 @@ void OctTree::getCollisionMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>
 {
 	if(_root == nullptr) return;
 	_root->addToColMatrix(matrix);
+}
+
+void OctTree::getCollidersFromAABB(const AABB &aabb, std::set<SPtr_Collider> &colliders)
+{
+	if(_root == nullptr) return;
+	_root->addToColliders(aabb, colliders);
 }
