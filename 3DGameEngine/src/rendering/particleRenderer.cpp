@@ -45,15 +45,15 @@ void ParticleRenderer::generate(size_t particlePool)
 		particleEmitter->addGenerator(posGenerator);
 
 		auto colGenerator = std::make_shared<Particles::Generators::BasicColourGen>();
-		colGenerator->_minStartColour	= glm::vec4( 0.7, 0.0, 0.7, 1.0 );
-		colGenerator->_maxStartColour	= glm::vec4( 1.0, 1.0, 1.0, 1.0 );
-		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.6, 0.0 );
-		colGenerator->_maxStartColour	= glm::vec4( 0.7, 1.0, 1.0, 0.0 );
+		colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
+		colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
+		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.5 );
+		colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.5 );
 		particleEmitter->addGenerator(colGenerator);
 
 		auto velGenerator = std::make_shared<Particles::Generators::BasicVelGen>();
 		velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
-		velGenerator->_maxStartVel = glm::vec4( 0.0f, 0.0f, 0.45f, 0.0f );
+		velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
 		particleEmitter->addGenerator(velGenerator);
 
 		auto timeGenerator = std::make_shared<Particles::Generators::BasicTimeGen>();
@@ -105,8 +105,8 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 	_shader->useProgram();
 
 	glEnable(GL_PROGRAM_POINT_SIZE);
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA,GL_ONE);
+	//glEnable(GL_BLEND);
+	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
 
 
 	_shader->setUniform("u_ModelMatrix",_transform->getMatrix());
@@ -123,7 +123,7 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 
 	glBindVertexArray(0);
 
-	glDisable(GL_BLEND);
+	//glDisable(GL_BLEND);
 	glDisable(GL_PROGRAM_POINT_SIZE);
 }
 

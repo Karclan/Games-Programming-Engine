@@ -46,7 +46,6 @@ void RenderSystem::render(Camera* camera)
 	//pass 2
 
 
-	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 
 }
 

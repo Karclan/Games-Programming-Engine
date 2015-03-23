@@ -18,7 +18,6 @@
     <COMP type="1" mesh="leg.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="0.8" dG="0.8" dB="0.8" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="0" ty="1.8" tz="0" rx="0" ry="0" rz="0" sx="0.5" sy="0.5" sz="0.5" />
     <COMP type="9" behvr="Player" />
-	<COMP type="10" shader="particle"/>
 </GO>
 <GO name="Floor">
     <COMP type="0" tx="0" ty="-0.005" tz="0" rx="0" ry="0" rz="0" sx="40" sy="0.01" sz="40" />

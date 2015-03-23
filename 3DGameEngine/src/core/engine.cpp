@@ -144,7 +144,7 @@ void Engine::renderEditorMode(Camera* camera)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
 	
 	_rendSys.render(camera); // render everything to back buffer
-
+	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 	_physicsSys.renderColliders(camera); // render debug colliders in physics
 	TwDraw();  // draw the tweak bar(s)
 	_window.display(); // switch buffers
