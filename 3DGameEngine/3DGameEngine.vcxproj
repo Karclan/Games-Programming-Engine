@@ -174,6 +174,7 @@
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />
     <ClCompile Include="src\rendering\particle.cpp" />
+    <ClCompile Include="src\rendering\ParticleEmitters.cpp" />
     <ClCompile Include="src\rendering\particleGenerators.cpp" />
     <ClCompile Include="src\rendering\particleRenderer.cpp" />
     <ClCompile Include="src\rendering\ParticleUpdaters.cpp" />

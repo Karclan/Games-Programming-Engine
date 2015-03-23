@@ -354,6 +354,9 @@
     <ClCompile Include="src\rendering\ParticleUpdaters.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\rendering\ParticleEmitters.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\doc\ClassDiagram.cd" />
