@@ -1,7 +1,6 @@
 #include "rendering\particle.h"
 
-namespace Particles
-{
+
 	void ParticleData::generate(size_t maxSize)
 	{
 		_particleCount = maxSize;
@@ -104,4 +103,3 @@ namespace Particles
 	//{
 	//	//return 2 * ParticleData::computeMemoryUsage(p._particles);
 	//}
-}

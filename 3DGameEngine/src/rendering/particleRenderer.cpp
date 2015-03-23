@@ -32,44 +32,44 @@ void ParticleRenderer::linkDependency(SPtr_Component c)
 
 void ParticleRenderer::generate(size_t particlePool)
 {
-	_particleSystem = new Particles::ParticleSystem(particlePool);
+	_particleSystem = new ParticleSystem(particlePool);
 
-	auto particleEmitter = std::make_shared<Particles::ParticleEmitter>();
+	auto particleEmitter = std::make_shared<ParticleEmitter>();
 	{
 		particleEmitter->_emitRate=(float)particlePool*0.45f;
 
-		auto posGenerator = std::make_shared<Particles::Generators::RoundPosGen>();
+		auto posGenerator = std::make_shared<RoundPosGen>();
 		posGenerator->_center = glm::vec4(_transform->getPosition(),1.0);
 		posGenerator->_radiusX=0.15f;
 		posGenerator->_radiusY=0.15f;
 		particleEmitter->addGenerator(posGenerator);
 
-		auto colGenerator = std::make_shared<Particles::Generators::BasicColourGen>();
+		auto colGenerator = std::make_shared<BasicColourGen>();
 		colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
 		colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
-		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.5 );
-		colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.5 );
+		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.0 );
+		colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.0 );
 		particleEmitter->addGenerator(colGenerator);
 
-		auto velGenerator = std::make_shared<Particles::Generators::BasicVelGen>();
+		auto velGenerator = std::make_shared<BasicVelGen>();
 		velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
 		velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
 		particleEmitter->addGenerator(velGenerator);
 
-		auto timeGenerator = std::make_shared<Particles::Generators::BasicTimeGen>();
+		auto timeGenerator = std::make_shared<BasicTimeGen>();
 		timeGenerator->_minTime = 1.0;
 		timeGenerator->_maxTime = 3.5;
 		particleEmitter->addGenerator(timeGenerator);
 	}
 	_particleSystem->addEmitter(particleEmitter);
 
-	auto timeUpdater = std::make_shared<Particles::Updaters::BasicTimeUpdater>();
+	auto timeUpdater = std::make_shared<BasicTimeUpdater>();
 	_particleSystem->addUpdater(timeUpdater);
 
-	auto colourUpdater = std::make_shared<Particles::Updaters::BasicColourUpdater>();
+	auto colourUpdater = std::make_shared<BasicColourUpdater>();
 	_particleSystem->addUpdater(colourUpdater);
 
-	_eulerUpdater = std::make_shared<Particles::Updaters::EulerUpdater>();
+	_eulerUpdater = std::make_shared<EulerUpdater>();
 	{
 		_eulerUpdater->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
 	}

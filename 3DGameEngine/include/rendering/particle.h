@@ -5,8 +5,7 @@
 #include <memory>
 #include <vector>
 
-namespace Particles
-{
+
 	class ParticleData
 	{
 	public:
@@ -106,5 +105,5 @@ namespace Particles
 
 		//static size_t computeMemoryUsage(const ParticleSystem &p);
 	};
-}
+
 #endif

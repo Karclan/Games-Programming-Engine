@@ -9,81 +9,89 @@
 #define _USE_MATH_DEFINES
 #include <math.h>
 
-namespace Particles
+
+class BoxPosGen :public ParticleGenerator
 {
-	namespace Generators
-	{
-		class BoxPosGen :public ParticleGenerator
-		{
-		public:
-			glm::vec4 _position;
-			glm::vec4 _maxStartPositionOffset;
+public:
+	glm::vec4 _position;
+	glm::vec4 _maxStartPositionOffset;
 
-			BoxPosGen(){_position=glm::vec4(0.0); _maxStartPositionOffset = glm::vec4(0.0);}
+	BoxPosGen(){_position=glm::vec4(0.0); _maxStartPositionOffset = glm::vec4(0.0);}
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
 
-		class RoundPosGen : public ParticleGenerator
-		{
-		public:
-			glm::vec4 _center;
-			float _radiusX;
-			float _radiusY;
+typedef std::shared_ptr<BoxPosGen> SP_BoxPosGen;
 
-			RoundPosGen(){_center=glm::vec4(0.f);_radiusX=0.f;_radiusY=0.f;}
+class RoundPosGen : public ParticleGenerator
+{
+public:
+	glm::vec4 _center;
+	float _radiusX;
+	float _radiusY;
 
-			RoundPosGen(const glm::vec4 &center, float radX, float radY)
-				: _center(center) , _radiusX(radX), _radiusY(radY){}
+	RoundPosGen(){_center=glm::vec4(0.f);_radiusX=0.f;_radiusY=0.f;}
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
+	RoundPosGen(const glm::vec4 &center, float radX, float radY)
+		: _center(center) , _radiusX(radX), _radiusY(radY){}
 
-		class BasicColourGen : public ParticleGenerator
-		{
-		public:
-			glm::vec4 _minStartColour;
-			glm::vec4 _maxStartColour;
-			glm::vec4 _minEndColour;
-			glm::vec4 _maxEndColour;
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
 
-			BasicColourGen(){_minStartColour=glm::vec4(0.f); _maxStartColour=glm::vec4(0.f); _minEndColour=glm::vec4(0.f); _maxEndColour=glm::vec4(0.f);}
+typedef std::shared_ptr<RoundPosGen> SP_RoundPosGen;
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
+class BasicColourGen : public ParticleGenerator
+{
+public:
+	glm::vec4 _minStartColour;
+	glm::vec4 _maxStartColour;
+	glm::vec4 _minEndColour;
+	glm::vec4 _maxEndColour;
 
-		class BasicVelGen : public ParticleGenerator
-		{
-		public:
-			glm::vec4 _minStartVel;
-			glm::vec4 _maxStartVel;
+	BasicColourGen(){_minStartColour=glm::vec4(0.f); _maxStartColour=glm::vec4(0.f); _minEndColour=glm::vec4(0.f); _maxEndColour=glm::vec4(0.f);}
 
-			BasicVelGen(){_minStartVel=glm::vec4(0.f); _maxStartVel=glm::vec4(0.f);}
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
+typedef std::shared_ptr<BasicColourGen> SP_BasicColourGen;
 
-		class SphereVelGen : public ParticleGenerator
-		{
-		public:
-			float _minVelocity;
-			float _maxVelocity;
+class BasicVelGen : public ParticleGenerator
+{
+public:
+	glm::vec4 _minStartVel;
+	glm::vec4 _maxStartVel;
 
-			SphereVelGen(){_minVelocity=0.f;_maxVelocity=0.f;}
+	BasicVelGen(){_minStartVel=glm::vec4(0.f); _maxStartVel=glm::vec4(0.f);}
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
 
-		class BasicTimeGen : public ParticleGenerator
-		{
-		public:
-			float _minTime;
-			float _maxTime;
+typedef std::shared_ptr<BasicVelGen> SP_BasicVelGen;
 
-			BasicTimeGen(){_minTime=0.f;_maxTime=0.f;}
+class SphereVelGen : public ParticleGenerator
+{
+public:
+	float _minVelocity;
+	float _maxVelocity;
 
-			virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
-		};
-	}
-}
+	SphereVelGen(){_minVelocity=0.f;_maxVelocity=0.f;}
+
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
+
+typedef std::shared_ptr<SphereVelGen> SP_SphereVelGen;
+
+class BasicTimeGen : public ParticleGenerator
+{
+public:
+	float _minTime;
+	float _maxTime;
+
+	BasicTimeGen(){_minTime=0.f;_maxTime=0.f;}
+
+	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId) override;
+};
+
+typedef std::shared_ptr<BasicTimeGen> SP_BasicTimeGen;
+
 #endif
