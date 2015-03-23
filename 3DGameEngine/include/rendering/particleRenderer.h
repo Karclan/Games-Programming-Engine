@@ -4,8 +4,9 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+#include "rendering\particleEmitters.h"
 #include "rendering\particleGenerators.h"
-#include "rendering\ParticleUpdaters.h"
+#include "rendering\particleUpdaters.h"
 #include "rendering\particle.h"
 
 #include "rendering\renderer.h"
@@ -49,6 +50,8 @@ private:
 
 	std::shared_ptr<EulerUpdater> _eulerUpdater;
 	ParticleSystem* _particleSystem;
+
+	TestCircleEmitter* ab;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };

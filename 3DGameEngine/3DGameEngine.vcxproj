@@ -122,6 +122,7 @@
     <ClInclude Include="include\physics\physicsSystem.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
+    <ClInclude Include="include\rendering\particleEmitters.h" />
     <ClInclude Include="include\rendering\light.h" />
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
@@ -129,7 +130,7 @@
     <ClInclude Include="include\rendering\particle.h" />
     <ClInclude Include="include\rendering\particleGenerators.h" />
     <ClInclude Include="include\rendering\particleRenderer.h" />
-    <ClInclude Include="include\rendering\ParticleUpdaters.h" />
+    <ClInclude Include="include\rendering\particleUpdaters.h" />
     <ClInclude Include="include\rendering\primitiveShapes.h" />
     <ClInclude Include="include\rendering\renderer.h" />
     <ClInclude Include="include\rendering\renderSystem.h" />
@@ -173,9 +174,10 @@
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />
     <ClCompile Include="src\rendering\particle.cpp" />
+    <ClCompile Include="src\rendering\particleEmitters.cpp" />
     <ClCompile Include="src\rendering\particleGenerators.cpp" />
     <ClCompile Include="src\rendering\particleRenderer.cpp" />
-    <ClCompile Include="src\rendering\ParticleUpdaters.cpp" />
+    <ClCompile Include="src\rendering\particleUpdaters.cpp" />
     <ClCompile Include="src\rendering\primitiveShapes.cpp" />
     <ClCompile Include="src\rendering\renderer.cpp" />
     <ClCompile Include="src\rendering\renderSystem.cpp" />

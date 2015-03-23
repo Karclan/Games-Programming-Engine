@@ -58,6 +58,12 @@
     <Filter Include="Source Files\custom">
       <UniqueIdentifier>{14768d7d-b2b7-4851-9840-812a395e6495}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\rendering\particles">
+      <UniqueIdentifier>{1f18fbb8-5be9-4029-ad12-7ef4489d3ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\particles">
+      <UniqueIdentifier>{9607bd87-760b-4be0-9e00-b0884b8d2f55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -202,17 +208,20 @@
     <ClInclude Include="include\behaviour\custom.h">
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering\particleRenderer.h">
-      <Filter>Header Files\rendering</Filter>
-    </ClInclude>
     <ClInclude Include="include\rendering\particle.h">
-      <Filter>Header Files\rendering</Filter>
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
     <ClInclude Include="include\rendering\particleGenerators.h">
-      <Filter>Header Files\rendering</Filter>
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering\ParticleUpdaters.h">
-      <Filter>Header Files\rendering</Filter>
+    <ClInclude Include="include\rendering\particleRenderer.h">
+      <Filter>Header Files\rendering\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleEmitters.h">
+      <Filter>Header Files\rendering\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleUpdaters.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -339,17 +348,20 @@
     <ClCompile Include="src\behaviour\custom.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\particleRenderer.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering\particle.cpp">
-      <Filter>Source Files\rendering</Filter>
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\particleGenerators.cpp">
-      <Filter>Source Files\rendering</Filter>
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\ParticleUpdaters.cpp">
-      <Filter>Source Files\rendering</Filter>
+    <ClCompile Include="src\rendering\particleRenderer.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particleUpdaters.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particleEmitters.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

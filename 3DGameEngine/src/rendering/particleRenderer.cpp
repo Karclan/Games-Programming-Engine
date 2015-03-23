@@ -38,29 +38,31 @@ void ParticleRenderer::generate(size_t particlePool)
 	{
 		particleEmitter->_emitRate=(float)particlePool*0.45f;
 
-		auto posGenerator = std::make_shared<RoundPosGen>();
+		SP_RoundPosGen posGenerator = std::make_shared<RoundPosGen>();
 		posGenerator->_center = glm::vec4(_transform->getPosition(),1.0);
 		posGenerator->_radiusX=0.15f;
 		posGenerator->_radiusY=0.15f;
 		particleEmitter->addGenerator(posGenerator);
 
-		auto colGenerator = std::make_shared<BasicColourGen>();
+		SP_BasicColourGen colGenerator = std::make_shared<BasicColourGen>();
 		colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
 		colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
 		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.0 );
 		colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.0 );
 		particleEmitter->addGenerator(colGenerator);
 
-		auto velGenerator = std::make_shared<BasicVelGen>();
+		SP_BasicVelGen velGenerator = std::make_shared<BasicVelGen>();
 		velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
 		velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
 		particleEmitter->addGenerator(velGenerator);
 
-		auto timeGenerator = std::make_shared<BasicTimeGen>();
+		SP_BasicTimeGen timeGenerator = std::make_shared<BasicTimeGen>();
 		timeGenerator->_minTime = 1.0;
 		timeGenerator->_maxTime = 3.5;
 		particleEmitter->addGenerator(timeGenerator);
 	}
+
+	//ab = new TestCircleEmitter();
 
 	_particleSystem->addEmitter(particleEmitter);
 
