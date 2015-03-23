@@ -13,7 +13,7 @@ void PlayerController::initialize()
 	SPtr_Component physComp = getComponent(ComponentType::PHY_BODY);
 	_physBody = std::static_pointer_cast<PhysicsBody>(physComp);
 
-	_accelSpeed = 40;
+	_accelSpeed = 20;
 	_turnSpeed = 120;
 	_turn = 0;
 	_jumpStrength = 15;

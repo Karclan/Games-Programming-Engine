@@ -7,9 +7,33 @@
         <DIR x="0.2" y="0.2" z="0.2" />
     </LIGHTS>
 </SCENE>
+<GO name="DynamicBox">
+    <COMP type="1" mesh="cube" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="4" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
+    <COMP type="4" />
+</GO>
+<GO name="DynamicBox03">
+    <COMP type="1" mesh="cube" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
+    <COMP type="4" />
+</GO>
+<GO name="DynamicSphere02">
+    <COMP type="1" mesh="sphere" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="3" ty="2" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="6" radius="0.5" ox="0" oy="0" oz="0" />
+    <COMP type="4" />
+</GO>
+<GO name="DynamicBox02">
+    <COMP type="1" mesh="cube" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="2" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
+    <COMP type="4" />
+</GO>
 <GO name="Robot">
     <COMP type="1" mesh="legs.obj" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
-    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+    <COMP type="0" tx="0" ty="0" tz="7" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
     <COMP type="9" behvr="Player" />
     <COMP type="7" ex="3" ey="7" ez="3" ox="0" oy="-0.25" oz="0" />
     <COMP type="4" />
@@ -31,16 +55,4 @@
 <GO name="Vork Building">
     <COMP type="1" mesh="vorkBuilding.obj" shader="advanced" texture="vorkBuildingUV.png" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
     <COMP type="0" tx="-6" ty="-0.7" tz="0" rx="0" ry="45" rz="0" sx="1" sy="1" sz="1" />
-</GO>
-<GO name="DynamicSphere">
-    <COMP type="1" mesh="sphere" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
-    <COMP type="0" tx="2" ty="0" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
-    <COMP type="6" radius="0.5" ox="0" oy="0" oz="0" />
-    <COMP type="4" />
-</GO>
-<GO name="DynamicBox">
-    <COMP type="1" mesh="cube" shader="advanced" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
-    <COMP type="0" tx="0" ty="0" tz="-4" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
-    <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
-    <COMP type="4" />
 </GO>

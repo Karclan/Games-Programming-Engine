@@ -3,7 +3,7 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	tested = false;
+	_maxIterations = 5;
 	_terrainCollider = nullptr;
 }
 
@@ -64,63 +64,89 @@ void PhysicsSystem::fixedUpdate(float t)
 		_dynamicColliders[i]->calculateBounds();
 	}
 
-
-
-	// For each collider
-
-
-	// Put in tree, separate ones with physics bodies
-
-	// Need to consider tree limit - how many physics bodies colliders, how many without?
-	// E.g. Must have between 1 and 3 physics bodies in leaf (0 bodies can be ignored)
-	// What is max number of regular colliders? Division is surely effectively AABB collision anyway, right?
-
 	
 
-	// FOR TESTING - Adds colliders to single test node - this would be a leaf node in finished version
-	_testNode.clear();
+	// Do the oct tree
+	_dynamicOctTree.createTree(_dynamicColliders);
+	std::map<SPtr_Collider, std::set<SPtr_Collider>> collisionMatrix;
+	_dynamicOctTree.getCollisionMatrix(collisionMatrix);
 
-	for(int i = 0; i < _dynamicColliders.size(); ++i)
+	// Use collsion matrix to determine possible collisions
+	std::map<SPtr_Collider, std::set<SPtr_Collider>>::iterator mapIt;
+	std::set<SPtr_Collider>::iterator setIt;
+	bool checkAgain = false; // should collisions be checked again after iteration? (provided not reached max iters)
+	bool invResolution = false; // if true, pushes B out of collision rather than A.
+	for(int i = 0; i < _maxIterations; ++i)
 	{
-		_testNode.physColliders.push_back(_dynamicColliders[i]);
-	}
-
-	for(int i = 0; i < _staticColliders.size(); ++i)
-	{
-		_testNode.regColliders.push_back(_staticColliders[i]);
-	}
-
-	// Now, in each leaf node check collisions
-	// If multiple "resolve" type collisions on same object, prioritize
-	// Resolve and then remove physic colliders that moved and re-add them to tree
-	Collision colInfo;
-
-	for(int i = 0; i < _testNode.physColliders.size(); ++i)
-	{
-		for(int pc = i+1; pc < _testNode.physColliders.size(); ++pc) // start at i+1 so don't duplicate collision tests
+		for(mapIt = collisionMatrix.begin(); mapIt != collisionMatrix.end(); ++mapIt) // for each collidable...
 		{
-			if(_testNode.physColliders[i]->collides(_testNode.physColliders[pc], colInfo))
+			Collision colInfoD = Collision();
+			bool collided = false;
+			SPtr_Collider resolvedCollider; // the collider pushed out of the collision and will need bounds recalculating
+
+			// Check dynamic collisions
+			for(setIt = mapIt->second.begin(); setIt != mapIt->second.end(); ++setIt)
 			{
-				//std::cout << "I collider! " << colInfo.penDepth << "\n";
-				colInfo.resolve();
+				// Because will only set col info if pen depth larger than current, we will end up with most significant collision
+				if(!invResolution && mapIt->first->collides(setIt->get(), colInfoD))
+				{
+					collided = true;
+					resolvedCollider = mapIt->first;
+				}
+				else if(invResolution && setIt->get()->collides(mapIt->first.get(), colInfoD))
+				{
+					collided = true;
+					resolvedCollider = *setIt;
+				}
 
-				std::cout << "Pen Depth " << colInfo.penDepth << "\n";
-				std::cout << "Normal " << colInfo.normal.x << ", " << colInfo.normal.y << ", " << colInfo.normal.z << "\n\n";
+			}
 
-
+			// Resolve collision
+			if(collided)
+			{
+				colInfoD.resolve();
+				resolvedCollider->calculateBounds(); // this would hsve to be done to both this and "other" if used better resolution.
+				checkAgain = true;
 			}
 		}
 
-		for(int rc = 0; rc < _testNode.regColliders.size(); ++rc)
+		// Check static collisions
+		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
 		{
-			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc], colInfo))
+			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
+			for(int sc = 0; sc < _staticColliders.size(); ++sc)
+			{
+				if(_dynamicColliders[dc]->collides(_staticColliders[sc].get(), colInfoS))
+				{
+					colInfoS.resolve();
+					_dynamicColliders[dc]->calculateBounds();
+					checkAgain = true;
+				}
+			}
+		}
+		
+
+		if(!checkAgain) break;
+		invResolution = !invResolution;
+	}
+
+	
+
+	// Temp Static collision stuff
+	/*
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+	{
+		Collision colInfo; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
+		for(int rc = 0; rc < _staticColliders.size(); ++rc)
+		{
+			if(_dynamicColliders[i]->collides(_staticColliders[rc].get(), colInfo))
 			{
 				colInfo.resolve();
 			}
 		}
 
 		// And the floor...
-		/*
+		
 		if(_terrainCollider != nullptr)
 		{
 			if(_terrainCollider->collides(_testNode.physColliders[i], colInfo))
@@ -135,10 +161,10 @@ void PhysicsSystem::fixedUpdate(float t)
 			}
 
 		}
-		*/
+		
 		
 	}
-
+	*/
 
 
 	// Repeat x times or until no more collisions

@@ -28,6 +28,16 @@ struct AABB
 {
 	glm::vec3 min;
 	glm::vec3 max;
+
+	// for debug yo
+	void print()
+	{
+		std::cout << "X: " << min.x << " to " << max.x << "\n";
+		std::cout << "Y: " << min.y << " to " << max.y << "\n";
+		std::cout << "Z: " << min.z << " to " << max.z << "\n";
+	}
+
+	bool intersects(AABB &other);
 };
 
 /*! \brief Collider
@@ -36,6 +46,10 @@ struct AABB
 */
 class Collider : public Component
 {
+	// Friends means can access things like bounds faster
+	friend class SphereCollider;
+	friend class BoxCollider;
+
 public:
 	Collider();
 
@@ -46,7 +60,11 @@ public:
 	bool hasPhysicsBody() { return _physicsBody; } //!< Returns true if physics body exists
 	SPtr_PhysBody getPhysicsBody() { return _physicsBody; }
 
-	virtual bool collides(SPtr_Collider other, Collision &collInfo)=0;
+	virtual bool collides(Collider* other, Collision &collInfo)=0;
+
+	glm::vec3 getRight() { return _transform->getForward(); }
+	glm::vec3 getUp() { return _transform->getUp(); }
+	glm::vec3 getForward() { return _transform->getForward(); }
 
 	virtual void calculateBounds() = 0; //!< Should be called on init and every frame if has a physics body
 	AABB getBounds() { return _bounds; }
@@ -65,13 +83,14 @@ protected:
 // SPhere Collider
 class SphereCollider : public Collider
 {
+
 public:
 	SphereCollider();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
 	void calculateBounds();
-	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
+	bool collides(Collider* other, Collision &collInfo); //!< Collision logic
 
 	float getRadius();
 	glm::vec3 getOffset() { return _offset; }
@@ -95,12 +114,13 @@ private:
 // Box Collider
 class BoxCollider : public Collider
 {
+
 public:
 	BoxCollider();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	void calculateBounds();
-	bool collides(SPtr_Collider other, Collision &collInfo); //!< Collision logic
+	bool collides(Collider* other, Collision &collInfo); //!< Collision logic
 
 
 	glm::mat4 getRotationMatrix() { return _transform->getRotationMatrix(); }

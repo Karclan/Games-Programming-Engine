@@ -6,6 +6,7 @@
 #include "physics\physicsBody.h"
 #include "physics\collider.h"
 #include "physics\octTree.h"
+#include "core\input.h" // for debug purposes
 
 // For debug shapes
 #include "core\assets.h"
@@ -33,8 +34,7 @@ public:
 	
 
 private:
-	// debug only
-	bool tested;
+	unsigned int _maxIterations; // maximum number of iterations through collision algorithm per frame
 
 	SPtr_TerrainCol _terrainCollider; // terrain collider if any
 	
@@ -42,7 +42,7 @@ private:
 	std::vector<SPtr_Collider> _dynamicColliders;
 	std::vector<SPtr_Collider> _staticColliders;
 
-	OctTreeNode _testNode;
+	OctTree _dynamicOctTree; //!< Oct Tree for testing dynamic colliders
 
 
 	// Draw debug shapes - would be nicer to outsource this to dedicated debug class or something but this works for now 

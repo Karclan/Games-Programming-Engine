@@ -7,8 +7,8 @@ PhysicsBody::PhysicsBody()
 	setOptionalDepFlag(ComponentType::SPHERE_COL); // cache collider if it exists
 
 	_mass = 1.0f; // important - mass of zero would give divide by zero error...
-	_drag = 8.2f;
-	_gravity = -36; // probably has to be stupid high coz drag high. Friction?
+	_drag = 3.0f;
+	_gravity = -34; // probably has to be stupid high coz drag high. Friction?
 	_accel = glm::vec3();
 	_velocity = glm::vec3();
 }

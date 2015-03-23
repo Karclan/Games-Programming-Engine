@@ -1,6 +1,14 @@
 #include "physics\collision.h"
 
 
+Collision::Collision()
+{
+	normal = glm::vec3();
+	penDepth = 0;
+	bodyA = nullptr;
+	bodyB = nullptr;
+}
+
 void Collision::resolve()
 {
 	// Body A should be the body being checked, so if it's null then something's gone wrong!

@@ -142,6 +142,7 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\cameraController.cpp" />
     <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\custom\playerController.cpp" />
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\src\physics\octTree.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />

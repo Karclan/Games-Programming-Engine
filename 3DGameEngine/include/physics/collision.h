@@ -13,13 +13,7 @@
 class Collision
 {
 public:
-	Collision()
-	{
-		normal = glm::vec3();
-		penDepth = 0;
-		bodyA = nullptr;
-		bodyB = nullptr;
-	}
+	Collision();
 
 	glm::vec3 normal;
 	float penDepth;
