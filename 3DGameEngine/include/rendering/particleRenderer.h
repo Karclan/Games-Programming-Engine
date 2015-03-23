@@ -4,10 +4,9 @@
 #include <vector>
 #include <glm\glm.hpp>
 
-#include "rendering\particle.h"
-#include "rendering\ParticleEmitters.h"
-#include "rendering\ParticleUpdaters.h"
 #include "rendering\particleGenerators.h"
+#include "rendering\ParticleUpdaters.h"
+#include "rendering\particle.h"
 
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
@@ -48,8 +47,8 @@ private:
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
-	std::shared_ptr<Particles::Updaters::EulerUpdater> _eulerUpdater;
-	Particles::ParticleSystem* _particleSystem;
+	std::shared_ptr<EulerUpdater> _eulerUpdater;
+	ParticleSystem* _particleSystem;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };

@@ -127,7 +127,6 @@
     <ClInclude Include="include\rendering\mesh.h" />
     <ClInclude Include="include\rendering\modelRenderer.h" />
     <ClInclude Include="include\rendering\particle.h" />
-    <ClInclude Include="include\rendering\ParticleEmitters.h" />
     <ClInclude Include="include\rendering\particleGenerators.h" />
     <ClInclude Include="include\rendering\particleRenderer.h" />
     <ClInclude Include="include\rendering\ParticleUpdaters.h" />
@@ -174,7 +173,6 @@
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />
     <ClCompile Include="src\rendering\particle.cpp" />
-    <ClCompile Include="src\rendering\ParticleEmitters.cpp" />
     <ClCompile Include="src\rendering\particleGenerators.cpp" />
     <ClCompile Include="src\rendering\particleRenderer.cpp" />
     <ClCompile Include="src\rendering\ParticleUpdaters.cpp" />

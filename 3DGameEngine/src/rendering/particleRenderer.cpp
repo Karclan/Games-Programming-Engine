@@ -61,6 +61,7 @@ void ParticleRenderer::generate(size_t particlePool)
 		timeGenerator->_maxTime = 3.5;
 		particleEmitter->addGenerator(timeGenerator);
 	}
+
 	_particleSystem->addEmitter(particleEmitter);
 
 	auto timeUpdater = std::make_shared<BasicTimeUpdater>();
