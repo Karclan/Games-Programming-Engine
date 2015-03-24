@@ -30,7 +30,7 @@ public:
 	void addCamera(SPtr_Camera camera); //!< Add a new camera to the system
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
-	
+
 	void setLightDefaults(); //!< Set default values for the global light params
 
 	void setGlobalAmbient	(glm::vec3 ambient  );
@@ -60,6 +60,7 @@ private:
 
 	std::vector<SPtr_Camera>   _cameras; //!< All cameras in scene. Currently set to simply render through camera at index 0.
 	std::vector<SPtr_Renderer> _models; //!< All the models to be rendered each frame
+	std::vector<SPtr_Renderer> _particles; //!< All the particle systems to be renderered each frame, these are done after all other renderering to allow for correct transparency
 	std::vector<SPtr_Renderer> _animations; //!< All the models to be animated each frame
 	std::vector<SPtr_Light>    _pointLights; //!< All the lights in the scene
 	std::vector<SPtr_Light>    _spotLights;
@@ -67,6 +68,7 @@ private:
 	// NOTE: Having a pointer to the map of assets isn't that elegant but it'll do for the moment. It's relatively safe as the map exists for the duration of the program (no null pointers) and quicker than cycling throgh materials (which may have the same shader - why update uniforms in the same shader more than once??)
 	const std::map<std::string, Shader*>* _loadedShaders; //!< Pointer to map of shaders in assets. Rendering system needs to be able to update uniforms in all shaders (e.g. for lighting).
 
+	//UNUSED SHADOWMAP STUFF
 	GLuint _pass1Index, _pass2Index, _shadowFBO;
 	glm::mat4 _lightPV ,_shadowView, _shadowModel, _shadowProjection, _shadowMapBias;
 	int _shadowMapWidth, _shadowMapHeight;

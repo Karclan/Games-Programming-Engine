@@ -30,22 +30,27 @@ void RenderSystem::render(Camera* camera)
 
 	//if(_unsortedLights.size() != 0) activateLights(); // activate lights if any added
 
+
+	//pass 1
+	
+	//pass 2
 	camera->preRender();
 	activateLights();
 
-	//pass 1
 
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
 		camera->render(*_models[i]);
 	}
+
+	for(unsigned int i = 0; i < _particles.size(); ++i)
+	{
+		camera->render(*_particles[i]);
+	}
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);
 	
-	//pass 2
-
-
 
 }
 
@@ -69,13 +74,20 @@ void RenderSystem::addCamera(std::shared_ptr<Camera> camera )
 void RenderSystem::addRenderObject(SPtr_Renderer renderer)
 {
 	if(!renderer)return;
-	_models.push_back(renderer);
+
+	if(renderer->getType()==ComponentType::PARTICLE_REND)
+	{
+		_particles.push_back(renderer);
+	}
+	else
+	{
+	    _models.push_back(renderer);
+	}
 }
 
 void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
 {
 	if(!renderer)return;
-	_models.push_back(renderer);
 	_animations.push_back(renderer);
 }
 

@@ -63,9 +63,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	TwWindowSize(engine.getWidth(), engine.getHeight());
 	editorCamera.init(); // must init before init tweak bars
 	editor.initTweakBars();
-
 	
-
 	// To capture and dispatch windows message
 	MSG msg;
 
@@ -135,6 +133,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 #else//-----------------------------MAIN LOOP FOR EDITOR MODE
 			// Call main loop function in engine
 			engine.updateInput(deltaTime);
+	
 			editor.update();
 			
 			// Update differently based on if in play mode or stop mode

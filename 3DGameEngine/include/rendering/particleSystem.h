@@ -8,26 +8,31 @@
 
 class ParticleSystem
 {
-protected:
+public:
 	ParticleData _particles;
 
 	size_t _particleCount;
 
-	std::vector<SP_ParticleEmitter> _emitters; 
-	std::vector<SP_ParticleUpdater> _updaters;
+	std::vector<ParticleEmitter*> _emitters; 
+	std::vector<ParticleUpdater*> _updaters;
 
 public:
 	ParticleSystem(size_t maxCount);
-	virtual ~ParticleSystem(){}
+	virtual ~ParticleSystem()
+	{
+		_emitters.clear();
+		_updaters.clear();
+	}
 
-	virtual void update(float t);
+	void clear();
+    virtual void update(float t);
 	virtual void reset();
-	virtual size_t getParticleCount()const{return _particles._particleCount;}
+	virtual size_t getParticleCount(){return _particles._particleCount;}
 
-	void addEmitter(SP_ParticleEmitter emitter){_emitters.push_back(emitter);}
-	void addUpdater(SP_ParticleUpdater updater){_updaters.push_back(updater);}
-	SP_ParticleEmitter getEmitter(Emitters::type type);
-	SP_ParticleUpdater getUpdater(Updaters::type type);
+	void addEmitter(ParticleEmitter* emitter){_emitters.push_back(emitter);}
+	void addUpdater(ParticleUpdater* updater){_updaters.push_back(updater);}
+	ParticleEmitter* getEmitter(Emitters::type type);
+	ParticleUpdater* getUpdater(Updaters::type type);
 
 	ParticleData *getFinalData(){return &_particles;}
 

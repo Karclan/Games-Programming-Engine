@@ -14,7 +14,7 @@ namespace Emitters
 class ParticleEmitter
 {
 protected:
-	std::vector<SP_ParticleGenerator> _generators;
+	std::vector<ParticleGenerator*> _generators;
 	float _emitRate;
 
 public:
@@ -23,30 +23,30 @@ public:
 
 	virtual Emitters::type getType()=0;
 
-	virtual void init(size_t particlePool)=0;
 	virtual void emit(float t, ParticleData *p);
 
-	void addGenerator(SP_ParticleGenerator gen){ _generators.push_back(gen);}
-	SP_ParticleGenerator getGenerator(Generators::type type);
+	virtual void init(size_t particlePool)=0;
+	virtual void clear();
+
+	void addGenerator(ParticleGenerator* gen){ _generators.push_back(gen);}
+	ParticleGenerator* getGenerator(Generators::type type);
 
 };
-
-typedef std::shared_ptr<ParticleEmitter> SP_ParticleEmitter;
 
 class TestCircleEmitter : public ParticleEmitter
 {
 public:
 	TestCircleEmitter(){};
+	TestCircleEmitter(size_t particlePool){_poolSize=particlePool;}
 
 	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
 
 	void init(size_t particlePool);
-	SP_RoundPosGen		posGenerator;
-	SP_BasicColourGen	colGenerator;
-	SP_BasicVelGen		velGenerator;
-	SP_BasicTimeGen		timeGenerator;
+	size_t _poolSize;
+	RoundPosGen*		posGenerator;
+	BasicColourGen*	    colGenerator;
+	BasicVelGen*		velGenerator;
+	BasicTimeGen*		timeGenerator;
 };
-
-typedef std::shared_ptr<TestCircleEmitter> SP_CircleEmitter;
 
 #endif

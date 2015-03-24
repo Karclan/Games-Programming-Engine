@@ -23,8 +23,6 @@ public:
 	virtual Generators::type getType()=0;
 };
 
-typedef std::shared_ptr<ParticleGenerator> SP_ParticleGenerator;
-
 class BoxPosGen :public ParticleGenerator
 {
 public:

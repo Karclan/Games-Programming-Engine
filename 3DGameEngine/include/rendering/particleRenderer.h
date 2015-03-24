@@ -39,16 +39,14 @@ public:
 private:
 
 	bool _playFlag;
+	bool _generatedFlag;
 
 	GLuint _vao;
 	GLuint _particlePositionBuffer;
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
-	std::shared_ptr<EulerUpdater> _eulerUpdater;
 	ParticleSystem* _particleSystem;
-
-	TestCircleEmitter ab;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };

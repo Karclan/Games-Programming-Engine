@@ -11,6 +11,19 @@ ParticleSystem::ParticleSystem(size_t maxCount)
 	}
 }
 
+void ParticleSystem::clear()
+{
+	for(auto it: _emitters)
+	{
+		it->clear();
+		delete it;
+	}
+	for(auto it: _updaters)
+	{
+		delete it;
+	}
+}
+
 void ParticleSystem::update(float dt)
 {
 	for(auto & emitters: _emitters)
@@ -27,22 +40,22 @@ void ParticleSystem::update(float dt)
 	}
 }
 
-SP_ParticleEmitter ParticleSystem::getEmitter(Emitters::type type)
+ParticleEmitter* ParticleSystem::getEmitter(Emitters::type type)
 {
 	for(unsigned int i = 0; i < _emitters.size(); ++i)
 	{
 		if(_emitters[i]->getType() == type) return _emitters[i];
 	}
-	return SP_ParticleEmitter();
+	return nullptr;
 }
 
-SP_ParticleUpdater ParticleSystem::getUpdater(Updaters::type type)
+ParticleUpdater* ParticleSystem::getUpdater(Updaters::type type)
 {
 	for(unsigned int i = 0; i < _updaters.size(); ++i)
 	{
 		if(_updaters[i]->getType() == type) return _updaters[i];
 	}
-	return SP_ParticleUpdater();
+	return nullptr;
 }
 
 void ParticleSystem::reset()

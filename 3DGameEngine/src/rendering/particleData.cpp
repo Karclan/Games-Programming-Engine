@@ -1,6 +1,5 @@
 #include "rendering\particleData.h"
 
-
 void ParticleData::generate(size_t maxSize)
 {
 	_particleCount = maxSize;
