@@ -219,6 +219,10 @@ void SceneManager::saveToXML(std::string filePath)
 			case ComponentType::TERRAIN_COL:
 				xmlAddTerrainCol(go);
 				break;
+
+			case ComponentType::ANIMATION:
+				xmlAddAnimator(go, compData->getStringAttrib(0));
+				break;
 			}
 		}
 	}
@@ -366,6 +370,14 @@ void SceneManager::xmlAddTerrainCol(TiXmlElement* go)
 	terrainColElmnt->SetAttribute("type", ComponentType::TERRAIN_COL); // Set type attrib
 	go->LinkEndChild(terrainColElmnt); // Add element to file, this auto cleans up pointer as well
 
+}
+
+void SceneManager::xmlAddAnimator(TiXmlElement* go, std::string animationPath)
+{
+	TiXmlElement* animatorElmnt = new TiXmlElement("COMP"); // Component Element
+	animatorElmnt->SetAttribute("type", ComponentType::ANIMATION); // Set type attrib
+	animatorElmnt->SetAttribute("animation", animationPath); // 0 Set anim attrib
+	go->LinkEndChild(animatorElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
 

@@ -4,6 +4,7 @@
 #include "rendering\renderer.h"
 #include "rendering\mesh.h"
 #include "rendering\material.h"
+#include "rendering\animator.h"
 
 #include "rendering\FTInterface.h"
 
@@ -33,6 +34,7 @@ public:
 
 private:
 	Mesh* _mesh; //!< Pointer to mesh used for rendering
+	SPtr_Animator _anim; //!< My lovely animation
 	Material _material; //!< Material used for this object. Not a pointer as pretty lightweight, just a pointer to a shader and a pointer to a texture
 	
 };
