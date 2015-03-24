@@ -28,6 +28,7 @@ void main()
 	mBoneTransform = mBones[BoneIDs[2]] * Weights[2];
 	mBoneTransform = mBones[BoneIDs[3]] * Weights[3];
 
+
 	vec4 animPos = mBoneTransform * vec4(pos, 1.0);
 	gl_Position = mProjection * mView * mModel * vec4(animPos.xyz, 1.0);
 
