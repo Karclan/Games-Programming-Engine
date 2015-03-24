@@ -3,10 +3,8 @@
 ParticleRenderer::ParticleRenderer()
 {
 	setDepFlag(ComponentType::TRANSFORM);
-	_playFlag=false;
-	_loopFlag=false;
+	_playFlag=true;
 
-	std::cout<<"Made Particle Renderer!\n";
 	_shader = Assets::getShader("particle");
 }
 
@@ -33,38 +31,9 @@ void ParticleRenderer::linkDependency(SPtr_Component c)
 void ParticleRenderer::generate(size_t particlePool)
 {
 	_particleSystem = new ParticleSystem(particlePool);
+	ab.init(particlePool);
 
-	auto particleEmitter = std::make_shared<ParticleEmitter>();
-	{
-		particleEmitter->_emitRate=(float)particlePool*0.45f;
-
-		SP_RoundPosGen posGenerator = std::make_shared<RoundPosGen>();
-		posGenerator->_center = glm::vec4(_transform->getPosition(),1.0);
-		posGenerator->_radiusX=0.15f;
-		posGenerator->_radiusY=0.15f;
-		particleEmitter->addGenerator(posGenerator);
-
-		SP_BasicColourGen colGenerator = std::make_shared<BasicColourGen>();
-		colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
-		colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
-		colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.0 );
-		colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.0 );
-		particleEmitter->addGenerator(colGenerator);
-
-		SP_BasicVelGen velGenerator = std::make_shared<BasicVelGen>();
-		velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
-		velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
-		particleEmitter->addGenerator(velGenerator);
-
-		SP_BasicTimeGen timeGenerator = std::make_shared<BasicTimeGen>();
-		timeGenerator->_minTime = 1.0;
-		timeGenerator->_maxTime = 3.5;
-		particleEmitter->addGenerator(timeGenerator);
-	}
-
-	//ab = new TestCircleEmitter();
-
-	_particleSystem->addEmitter(particleEmitter);
+	_particleSystem->addEmitter(SP_CircleEmitter(&ab));
 
 	auto timeUpdater = std::make_shared<BasicTimeUpdater>();
 	_particleSystem->addUpdater(timeUpdater);
@@ -88,7 +57,7 @@ void ParticleRenderer::generate(size_t particlePool)
 	glBindBuffer(GL_ARRAY_BUFFER, _particlePositionBuffer);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(float)*4*count,nullptr,GL_STREAM_DRAW);
 	glEnableVertexAttribArray(0);
-	
+
 	glVertexAttribPointer(0,4,GL_FLOAT,GL_FALSE,(4)*sizeof(float),(void*)((0)*sizeof(float)));
 
 
@@ -106,11 +75,9 @@ void ParticleRenderer::generate(size_t particlePool)
 void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
 	_shader->useProgram();
+	ab.posGenerator->_center=glm::vec4(_transform->getPosition(),1.0);
 
 	glEnable(GL_PROGRAM_POINT_SIZE);
-	//glEnable(GL_BLEND);
-	//glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-
 
 	_shader->setUniform("u_ModelMatrix",_transform->getMatrix());
 	_shader->setUniform("u_ViewMatrix",viewMatrix);
@@ -118,7 +85,7 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 
 	glBindVertexArray(_vao);
 
-	const size_t count = _particleSystem->getAliveParticleCount();
+	const size_t count = _particleSystem->getParticleCount();
 	if(count > 0)
 	{
 		glDrawArrays(GL_POINTS , 0 , count);
@@ -126,26 +93,28 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 
 	glBindVertexArray(0);
 
-	//glDisable(GL_BLEND);
 	glDisable(GL_PROGRAM_POINT_SIZE);
 }
 
 void ParticleRenderer::animate(float t)
 {
-	_particleSystem->update(t);
-
-	const size_t count = _particleSystem->getAliveParticleCount();
-	if(count > 0)
+	if(_playFlag)
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, _particlePositionBuffer);
-		float *ptr = (float *)(_particleSystem->getFinalData()->_particlePositions.get());
-		glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float)*4, ptr);
+		_particleSystem->update(t);
 
-		glBindBuffer(GL_ARRAY_BUFFER, _particleColourBuffer);
-		ptr = (float *)(_particleSystem->getFinalData()->_particleColours.get());
-		glBufferSubData(GL_ARRAY_BUFFER, 0, count*sizeof(float)*4,ptr);
+		const size_t count = _particleSystem->getParticleCount();
+		if(count > 0)
+		{
+			glBindBuffer(GL_ARRAY_BUFFER, _particlePositionBuffer);
+			float *ptr = (float *)(_particleSystem->getFinalData()->_particlePositions.get());
+			glBufferSubData(GL_ARRAY_BUFFER, 0, count * sizeof(float)*4, ptr);
 
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, _particleColourBuffer);
+			ptr = (float *)(_particleSystem->getFinalData()->_particleColours.get());
+			glBufferSubData(GL_ARRAY_BUFFER, 0, count*sizeof(float)*4,ptr);
+
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+		}
 	}
 }
 
@@ -157,9 +126,4 @@ void ParticleRenderer::play()
 void ParticleRenderer::stop()
 {
 	_playFlag=false;
-}
-
-void ParticleRenderer::loop(bool l)
-{
-	_loopFlag=l;
 }

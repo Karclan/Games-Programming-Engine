@@ -4,10 +4,11 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+#include "rendering\particleData.h"
 #include "rendering\particleEmitters.h"
 #include "rendering\particleGenerators.h"
 #include "rendering\particleUpdaters.h"
-#include "rendering\particle.h"
+#include "rendering\particleSystem.h"
 
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
@@ -28,21 +29,17 @@ public:
 	bool isOnePerObject();
 
 	void linkDependency(SPtr_Component);
-
 	void generate(size_t particlePool);
 	void render(GLfloat* viewMatrix, GLfloat* projectionMatrix);
-	
 	void animate(float t);
 	void destory();
-
 	void play();
 	void stop();
-	void loop(bool l);
-
 
 private:
-	bool _loopFlag;
+
 	bool _playFlag;
+
 	GLuint _vao;
 	GLuint _particlePositionBuffer;
 	GLuint _particleColourBuffer;
@@ -51,12 +48,10 @@ private:
 	std::shared_ptr<EulerUpdater> _eulerUpdater;
 	ParticleSystem* _particleSystem;
 
-	TestCircleEmitter* ab;
+	TestCircleEmitter ab;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };
-
-
 
 
 typedef std::shared_ptr<ParticleRenderer> SPtr_ParticleRend;

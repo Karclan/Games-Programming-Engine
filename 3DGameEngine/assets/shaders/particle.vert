@@ -13,7 +13,7 @@ void main()
 {
 	vec4 eyePosition = u_ViewMatrix * i_particleVertex;
 
-	gl_Position = u_ProjectionView  *  eyePosition;
+	gl_Position = u_ProjectionView * u_ViewMatrix * u_ModelMatrix * i_particleVertex;
 	
 	o_colour = i_particleColour;
 	

@@ -35,7 +35,6 @@ void AttractorUpdater::update(float dt, ParticleData *p)
 			off.z = _attractors[a].z - p->_particlePositions[i].z;
 			dist = glm::dot(off, off);
 
-			//if (fabs(dist) > 0.00001)
 			dist = _attractors[a].w / dist;
 
 			p->_particleAccelerations[i] += off * dist;

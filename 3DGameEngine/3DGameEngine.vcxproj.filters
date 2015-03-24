@@ -208,9 +208,6 @@
     <ClInclude Include="include\behaviour\custom.h">
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering\particle.h">
-      <Filter>Header Files\rendering\particles</Filter>
-    </ClInclude>
     <ClInclude Include="include\rendering\particleGenerators.h">
       <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
@@ -221,6 +218,12 @@
       <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
     <ClInclude Include="include\rendering\particleUpdaters.h">
+      <Filter>Header Files\rendering\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleSystem.h">
+      <Filter>Header Files\rendering\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleData.h">
       <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
   </ItemGroup>
@@ -348,9 +351,6 @@
     <ClCompile Include="src\behaviour\custom.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\particle.cpp">
-      <Filter>Source Files\rendering\particles</Filter>
-    </ClCompile>
     <ClCompile Include="src\rendering\particleGenerators.cpp">
       <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
@@ -361,6 +361,12 @@
       <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\particleEmitters.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particleData.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\particleSystem.cpp">
       <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
   </ItemGroup>
