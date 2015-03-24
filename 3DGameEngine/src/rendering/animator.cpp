@@ -145,9 +145,13 @@ float ElapsedTime::GetElapsedTime() const
     return fDeltaTime;
 }
 
+/*
 glm::mat4 Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms)
 {
-    glm::mat4 Identity;
+	glm::mat4 Identity; Identity= glm::mat4	(0.0f, 0.0f, 0.0f, 0.0f,
+											0.0f, 0.0f, 0.0f, 0.0f,
+											0.0f, 0.0f, 0.0f, 0.0f,
+											0.0f, 0.0f, 0.0f, 0.0f);
     //Identity.InitIdentity();
 
     float TicksPerSecond = _animation->_iFramRate != 0 ? 
@@ -164,7 +168,7 @@ glm::mat4 Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& T
     }
 }
 
-void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
+void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform)
 { 
     std::string NodeName(pNode->mName.data);
 
@@ -269,3 +273,4 @@ void Animator::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, con
     aiVector3D Delta = End - Start;
     Out = Start + Factor * Delta;
 }
+*/

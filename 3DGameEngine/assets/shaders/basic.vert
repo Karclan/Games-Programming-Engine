@@ -16,6 +16,7 @@ uniform mat4 mProjection;
 const int _maxBones = 4;
 uniform mat4 mBones[_maxBones];
 
+out vec4 normal0;
 out vec4 colour; // note this MUST be same name as input of frag shader
 
 void main()
@@ -28,10 +29,12 @@ void main()
 	mBoneTransform = mBones[BoneIDs[3]] * Weights[3];
 
 	vec4 animPos = mBoneTransform * vec4(pos, 1.0);
-	vec4 animNormal = mBoneTransform * vec4(normal, 0.0);
+	gl_Position = mProjection * mView * mModel * vec4(animPos.xyz, 1.0);
 
+	vec4 animNormal = mBoneTransform * vec4(normal, 0.0);
+	normal0 = mView * mModel * animNormal;
     colour = vec4(vertCol, 1.0);
 
-    gl_Position = mProjection * mView * mModel * vec4(pos, 1.0);
+    //gl_Position = mProjection * mView * mModel * vec4(pos, 1.0);
 
 }
