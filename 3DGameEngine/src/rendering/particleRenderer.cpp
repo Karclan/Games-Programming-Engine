@@ -42,9 +42,10 @@ void ParticleRenderer::generate(size_t particlePool)
 		
 		//_particleSystem = nullptr;
 	}
-
 	_particleSystem = new ParticleSystem(particlePool);
 	_generatedFlag=true;
+	_particleSystem->addEmitter(particleEmitter);
+
 
 	ab=new TestCircleEmitter();
 	ab->init(particlePool);

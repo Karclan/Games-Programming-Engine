@@ -127,7 +127,12 @@
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
     <ClInclude Include="include\rendering\modelRenderer.h" />
+<<<<<<< HEAD
     <ClInclude Include="include\rendering\particleData.h" />
+=======
+    <ClInclude Include="include\rendering\particle.h" />
+    <ClInclude Include="include\rendering\ParticleEmitters.h" />
+>>>>>>> parent of 66765ae... Particle System having issues
     <ClInclude Include="include\rendering\particleGenerators.h" />
     <ClInclude Include="include\rendering\particleRenderer.h" />
     <ClInclude Include="include\rendering\particleSystem.h" />
@@ -174,8 +179,13 @@
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />
     <ClCompile Include="src\rendering\modelRenderer.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="src\rendering\particleData.cpp" />
     <ClCompile Include="src\rendering\particleEmitters.cpp" />
+=======
+    <ClCompile Include="src\rendering\particle.cpp" />
+    <ClCompile Include="src\rendering\ParticleEmitters.cpp" />
+>>>>>>> parent of 66765ae... Particle System having issues
     <ClCompile Include="src\rendering\particleGenerators.cpp" />
     <ClCompile Include="src\rendering\particleRenderer.cpp" />
     <ClCompile Include="src\rendering\particleSystem.cpp" />

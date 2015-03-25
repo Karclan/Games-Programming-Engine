@@ -4,11 +4,13 @@
 #include <vector>
 #include <glm\glm.hpp>
 
+
 #include "rendering\particleData.h"
 #include "rendering\particleEmitters.h"
 #include "rendering\particleGenerators.h"
 #include "rendering\particleUpdaters.h"
 #include "rendering\particleSystem.h"
+
 
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
@@ -51,8 +53,9 @@ private:
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
-	size_t			_particlePool;
-	ParticleSystem* _particleSystem;
+	std::shared_ptr<Particles::Updaters::EulerUpdater> _eulerUpdater;
+	Particles::ParticleSystem* _particleSystem;
+
 
 	SP_ParticleEmitter _emitter;
 	std::vector<SP_ParticleUpdater> _updaters;
