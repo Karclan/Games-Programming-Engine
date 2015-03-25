@@ -438,7 +438,148 @@ void CompData::initializeComponent()
 	case ComponentType::PARTICLE_REND:
 		{
 			SPtr_ParticleRend particleRend = std::static_pointer_cast<ParticleRenderer>(getComp());
-			//GENERATE PARTICLES
+			//--------------------KEY--------------------//
+			//ORDER:
+			//PARTICLE DATA	-- Particle Pool size
+			//GENERATORS	-- The Emitter
+			//UPDATERS		-- The Particle Update system
+			//----------------END  OF KEY----------------//
+
+			//____________START OF ATTRIBUTES____________//
+
+
+			//poolSize			| attrib: 0
+			//===BOX POSITION GENERATOR===//
+			//boxPosGenActive	| attrib: 1
+			//boxPosOffX		| attrib: 2
+			//boxPosOffY		| attrib: 3
+			//boxPosOffZ		| attrib: 4
+			//boxPosOffW		| attrib: 5
+
+			//===ROUND POSITION GENERATOR===//
+			//roundPosGenActive | attrib: 6
+			//roundPosOffX		| attrib: 7
+			//roundPosOffY		| attrib: 8
+			//roundPosOff		| attrib: 9
+			//roundPosOffW		| attrib: 10
+
+			//===BASIC COLOUR GENERATOR===//
+			//bColourGenActive	| attrib: 11
+
+			//bMinStColX		| attrib: 12
+			//bMinStColY		| attrib: 13
+			//bMinStColZ		| attrib: 14
+			//bMinStColW		| attrib: 15
+
+			//bMaxStColX		| attrib: 16
+			//bMaxStColY		| attrib: 17
+			//bMaxStColZ		| attrib: 18
+			//bMaxStColW		| attrib: 19
+
+			//bMinEndColX		| attrib: 20
+			//bMinEndColY		| attrib: 21
+			//bMinEndColZ		| attrib: 22
+			//bMinEndColW		| attrib: 23
+
+			//bMaxEndColX		| attrib: 24
+			//bMaxEndColY		| attrib: 25
+			//bMaxEndColZ		| attrib: 26
+			//bMaxEndColW		| attrib: 27
+
+			//===BASIC VELOCITY GENERATOR===//
+			//basicVelGenActive | attrib: 28
+
+			//bMinVelX			| attrib: 29
+			//bMinVelY			| attrib: 30
+			//bMinVelZ			| attrib: 31
+			//bMinVelW			| attrib: 32
+
+			//bMaxVelX			| attrib: 33
+			//bMaxVelY			| attrib: 34
+			//bMaxVelZ			| attrib: 35
+			//bMaxVelW			| attrib: 36
+
+			//===SPHERE VELOCITY GENERATOR===//
+			//bSphereGenActive	| attrib: 37
+
+			//bSMinVelX			| attrib: 38
+			//bSMinVelY			| attrib: 39
+			//bSMinVelZ			| attrib: 40
+			//bSMinVelW			| attrib: 41
+
+			//bSMaxVelX			| attrib: 42
+			//bSMaxVelY			| attrib: 43
+			//bSMaxVelZ			| attrib: 44
+			//bSMaxVelW			| attrib: 45
+
+			//===BASIC TIME GENERATOR===//
+			//bTimeGenActive	| attrib: 46
+			//minTime			| attrib: 47
+			//maxTime			| attrib: 48
+
+			//===EULER UPDATER===//
+			//eulUpdActive		| attrib: 49
+			//globalAccX		| attrib: 50
+			//globalAccY		| attrib: 51
+			//globalAccZ		| attrib: 52
+			//globalAccW		| attrib: 53
+
+			//==ATTRACTOR UPDATER==//
+			//attUpdActive		| attrib: 54
+			//att1Act			| attrib: 55
+			//att1X				| attrib: 56
+			//att1Y				| attrib: 57
+			//att1Z				| attrib: 58
+			//att1W				| attrib: 59
+
+			//att2Act			| attrib: 60
+			//att2X				| attrib: 61
+			//att2Y				| attrib: 62
+			//att2Z				| attrib: 63
+			//att2W				| attrib: 64
+
+			//att3Act			| attrib: 65
+			//att3X				| attrib: 66
+			//att3Y				| attrib: 67
+			//att3Z				| attrib: 68
+			//att3W				| attrib: 69
+
+			//att4Act			| attrib: 70
+			//att4X				| attrib: 71
+			//att4Y				| attrib: 72
+			//att4Z				| attrib: 73
+			//att4W				| attrib: 74
+
+			//===BASIC COLOUR UPDATER===//
+			//bColUpdActive		| attrib: 75
+
+			//===POSITION COLOUR UPDATER===//
+			//pColUpdActive		| attrib: 76
+			//minPosColX		| attrib: 77
+			//minPosColY		| attrib: 78
+			//minPosColZ		| attrib: 79
+			//minPosColW		| attrib: 80
+
+			//maxPosColX		| attrib: 81
+			//maxPosColY		| attrib: 82
+			//maxPosColZ		| attrib: 83
+			//maxPosColW		| attrib: 84
+
+			//===VELOCITY COLOUR UPDATER===//
+			//velColUpdActive	| attrib: 85
+			//minVelColX		| attrib: 86
+			//minVelColY		| attrib: 87
+			//minVelColZ		| attrib: 88
+			//minVelColW		| attrib: 89
+
+			//maxVelColX		| attrib: 90
+			//maxVelColY		| attrib: 91
+			//maxVelColZ		| attrib: 92
+			//maxVelColW		| attrib: 93
+
+			//===TIME UPDATER===///
+			//tUpdActive | attrib: 94
+
 			particleRend->generate(10000);
 		}
 		break;

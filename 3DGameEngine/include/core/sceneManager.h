@@ -46,7 +46,20 @@ private:
 	void xmlAddCamera(TiXmlElement* go);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp);
 	void xmlAddModelRend(TiXmlElement* go, std::string mesh, std::string shader, std::string textureD, std::string textureS, std::string textureN, std::string textureH, glm::vec3 diff, glm::vec3 spec, float specExp, float tileU, float tileV);
-	void xmlAddParticleRend(TiXmlElement* go);
+	void xmlAddParticleRend(TiXmlElement* go, 
+		size_t poolSize, 
+		bool boxPosGenActive,	glm::vec4 boxPosOffset, 
+		bool roundPosGenActive, glm::vec4 roundPosOffset, 
+		bool bColourGenActive,	glm::vec4 bMinStCol, glm::vec4 bMaxStCol, glm::vec4 bMinEndCol, glm::vec4 bMaxEndCol,
+		bool bVelGenActive,		glm::vec4 bMinVel, glm::vec4 bMaxVel, 
+		bool bSphereGenActive,	glm::vec4 bSMinVel, glm::vec4 bSMaxVel,
+		bool bTimeGenActive,	float minTime, float maxTime,
+		bool eulUpdActive,		glm::vec4 globalAcc,
+		bool attUpdActive,		bool att1Act, glm::vec4 att1, bool att2Act, glm::vec4 att2, bool att3Act, glm::vec4 att3, bool att4Act, glm::vec4 att4,
+		bool bColUpdActive,
+		bool pColUpdActive,		glm::vec4 minPosCol, glm::vec4 maxPosCol,
+		bool velColUpdActive,   glm::vec4 minVelCol, glm::vec4 maxVelCol,
+		bool tUpdActive);
 
 	void xmlAddRobot(TiXmlElement* go);
 	void xmlAddPhysBody(TiXmlElement* go);

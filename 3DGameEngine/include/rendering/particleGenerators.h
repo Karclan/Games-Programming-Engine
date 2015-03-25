@@ -23,6 +23,8 @@ public:
 	virtual Generators::type getType()=0;
 };
 
+typedef std::shared_ptr<ParticleGenerator> SP_ParticleGenerator;
+
 class BoxPosGen :public ParticleGenerator
 {
 public:
@@ -46,8 +48,7 @@ public:
 
 	RoundPosGen(){_center=glm::vec4(0.f);_radiusX=0.f;_radiusY=0.f;}
 
-	RoundPosGen(const glm::vec4 &center, float radX, float radY)
-		: _center(center) , _radiusX(radX), _radiusY(radY){}
+	RoundPosGen(const glm::vec4 &center, float radX, float radY){_center = center, _radiusX = radX, _radiusY = radY;}
 
 	virtual void generate(float t, ParticleData *p, size_t startId, size_t endId);
 	Generators::type getType(){return Generators::ROUNDPOSGEN;}

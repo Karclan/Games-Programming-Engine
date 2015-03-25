@@ -28,16 +28,18 @@ public:
 	virtual void init(size_t particlePool)=0;
 	virtual void clear();
 
+	bool alreadyOwn(Generators::type type);
 	void addGenerator(ParticleGenerator* gen){ _generators.push_back(gen);}
 	ParticleGenerator* getGenerator(Generators::type type);
 
 };
 
-class TestCircleEmitter : public ParticleEmitter
+typedef std::shared_ptr<ParticleEmitter> SP_ParticleEmitter;
+
+class CircleEmitter : public ParticleEmitter
 {
 public:
-	TestCircleEmitter(){};
-	TestCircleEmitter(size_t particlePool){_poolSize=particlePool;}
+	CircleEmitter(){};
 
 	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
 
@@ -48,5 +50,7 @@ public:
 	BasicVelGen*		velGenerator;
 	BasicTimeGen*		timeGenerator;
 };
+
+typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
 
 #endif

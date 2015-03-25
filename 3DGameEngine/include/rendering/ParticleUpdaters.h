@@ -22,6 +22,8 @@ public:
 	virtual void update(float t, ParticleData *p)=0;
 };
 
+typedef std::shared_ptr<ParticleUpdater> SP_ParticleUpdater;
+
 class EulerUpdater : public ParticleUpdater
 {
 public:
@@ -35,6 +37,8 @@ public:
 
 	virtual void update(float dt, ParticleData *p);
 };
+
+typedef std::shared_ptr<EulerUpdater> SP_EulerUpdater;
 
 class AttractorUpdater : public ParticleUpdater
 {
@@ -50,6 +54,8 @@ public:
 	glm::vec4 &getAttractor(size_t id){return _attractors[id];}
 };
 
+typedef std::shared_ptr<AttractorUpdater> SP_AttractorUpdater;
+
 class BasicColourUpdater : public ParticleUpdater
 {
 public:
@@ -57,6 +63,8 @@ public:
 
 	virtual void update(float dt, ParticleData *p);
 };
+
+typedef std::shared_ptr<BasicColourUpdater> SP_BasicColourUpdater;
 
 class PositionColourUpdater : ParticleUpdater
 {
@@ -69,6 +77,8 @@ public:
 	virtual void update(float dt, ParticleData *p);
 };
 
+typedef std::shared_ptr<PositionColourUpdater> SP_PositionColourUpdater;
+
 class VelocityColourUpdater : public ParticleUpdater
 {
 	glm::vec4 _minVelocity;
@@ -79,6 +89,8 @@ class VelocityColourUpdater : public ParticleUpdater
 	virtual void update(float dt, ParticleData *p);
 };
 
+typedef std::shared_ptr<VelocityColourUpdater> SP_VelocityColourUpdater;
+
 class BasicTimeUpdater : public ParticleUpdater
 {
 public:
@@ -86,5 +98,7 @@ public:
 
 	virtual void update(float dt, ParticleData *p);
 };
+
+typedef std::shared_ptr<BasicTimeUpdater> SP_BasicTimeUpdater;
 
 #endif

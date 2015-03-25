@@ -28,7 +28,7 @@ void ParticleEmitter::emit(float dt, ParticleData *p)
 }
 
 
-void TestCircleEmitter::init(size_t particlePool)
+void CircleEmitter::init(size_t particlePool)
 {
 	_emitRate=(float)particlePool*0.45f;
 

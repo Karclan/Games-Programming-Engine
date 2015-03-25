@@ -203,7 +203,48 @@ void SceneManager::saveToXML(std::string filePath)
 				break;
 
 			case ComponentType::PARTICLE_REND:
-				xmlAddParticleRend(go);
+				xmlAddParticleRend(go, 
+					compData->getIntAttrib(0), //Particle Pool Size
+					compData->getIntAttrib(1), //Box Position Generator
+						glm::vec4(compData->getFloatAttrib(2),compData->getFloatAttrib(3),compData->getFloatAttrib(4),compData->getFloatAttrib(5)),
+					compData->getIntAttrib(6), //Round Position Generator
+						glm::vec4(compData->getFloatAttrib(7),compData->getFloatAttrib(8),compData->getFloatAttrib(9),compData->getFloatAttrib(10)),
+					compData->getIntAttrib(11), //Basic Colour Generator
+						glm::vec4(compData->getFloatAttrib(12),compData->getFloatAttrib(13),compData->getFloatAttrib(14),compData->getFloatAttrib(15)),
+						glm::vec4(compData->getFloatAttrib(16),compData->getFloatAttrib(17),compData->getFloatAttrib(18),compData->getFloatAttrib(19)),
+						glm::vec4(compData->getFloatAttrib(20),compData->getFloatAttrib(21),compData->getFloatAttrib(22),compData->getFloatAttrib(23)),
+						glm::vec4(compData->getFloatAttrib(24),compData->getFloatAttrib(25),compData->getFloatAttrib(26),compData->getFloatAttrib(27)),
+					compData->getIntAttrib(28), //Basic Velocity Generator
+						glm::vec4(compData->getFloatAttrib(29),compData->getFloatAttrib(30),compData->getFloatAttrib(31),compData->getFloatAttrib(32)),
+						glm::vec4(compData->getFloatAttrib(33),compData->getFloatAttrib(34),compData->getFloatAttrib(35),compData->getFloatAttrib(36)),
+					compData->getIntAttrib(37), //Sphere Velocity Generator
+						glm::vec4(compData->getFloatAttrib(38),compData->getFloatAttrib(39),compData->getFloatAttrib(40),compData->getFloatAttrib(41)),
+						glm::vec4(compData->getFloatAttrib(42),compData->getFloatAttrib(43),compData->getFloatAttrib(44),compData->getFloatAttrib(45)),
+					compData->getIntAttrib(46), //Basic Time Generator
+						compData->getFloatAttrib(47),
+						compData->getFloatAttrib(48),
+					compData->getIntAttrib(49), //Euler updater
+						glm::vec4(compData->getFloatAttrib(50),compData->getFloatAttrib(51),compData->getFloatAttrib(52),compData->getFloatAttrib(53)),
+					compData->getIntAttrib(54),//Attractor Updater	
+						compData->getIntAttrib(55),
+						glm::vec4(compData->getFloatAttrib(56),compData->getFloatAttrib(57),compData->getFloatAttrib(58),compData->getFloatAttrib(59)),
+						compData->getIntAttrib(60),
+						glm::vec4(compData->getFloatAttrib(61),compData->getFloatAttrib(62),compData->getFloatAttrib(63),compData->getFloatAttrib(64)),
+						compData->getIntAttrib(65),
+						glm::vec4(compData->getFloatAttrib(66),compData->getFloatAttrib(67),compData->getFloatAttrib(68),compData->getFloatAttrib(69)),
+						compData->getIntAttrib(70),
+						glm::vec4(compData->getFloatAttrib(71),compData->getFloatAttrib(72),compData->getFloatAttrib(73),compData->getFloatAttrib(74)),
+					compData->getIntAttrib(75),//Basic Colour Updater
+					compData->getIntAttrib(76),//Position Colour Updater
+						glm::vec4(compData->getFloatAttrib(77),compData->getFloatAttrib(78),compData->getFloatAttrib(79),compData->getFloatAttrib(80)),
+						glm::vec4(compData->getFloatAttrib(81),compData->getFloatAttrib(82),compData->getFloatAttrib(83),compData->getFloatAttrib(84)),
+					compData->getIntAttrib(85),//Velocity Colour Updater
+						glm::vec4(compData->getFloatAttrib(86),compData->getFloatAttrib(87),compData->getFloatAttrib(88),compData->getFloatAttrib(89)),
+						glm::vec4(compData->getFloatAttrib(90),compData->getFloatAttrib(91),compData->getFloatAttrib(92),compData->getFloatAttrib(93)),
+					compData->getIntAttrib(94)//Timer Updater
+					);
+
+				break;
 
 			case ComponentType::PHY_BODY:
 				xmlAddPhysBody(go);
@@ -323,10 +364,148 @@ void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::
 	go->LinkEndChild(lightElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
-void SceneManager::xmlAddParticleRend(TiXmlElement* go)
+void SceneManager::xmlAddParticleRend(TiXmlElement* go, 
+		size_t poolSize, 
+/*X*/	bool boxPosGenActive,	glm::vec4 boxPosOffset, 
+/*X*/	bool roundPosGenActive, glm::vec4 roundPosOffset, 
+/*X*/	bool bColourGenActive,	glm::vec4 bMinStCol, glm::vec4 bMaxStCol, glm::vec4 bMinEndCol, glm::vec4 bMaxEndCol, 
+/*X*/	bool bVelGenActive,		glm::vec4 bMinVel, glm::vec4 bMaxVel, 
+/*X*/	bool bSphereGenActive,	glm::vec4 bSMinVel, glm::vec4 bSMaxVel,
+/*X*/	bool bTimeGenActive,	float minTime, float maxTime,
+/*X*/	bool eulUpdActive,		glm::vec4 globalAcc,
+/*X*/	bool attUpdActive,		bool att1Act, glm::vec4 att1, 
+								bool att2Act, glm::vec4 att2, 
+								bool att3Act, glm::vec4 att3, 
+								bool att4Act, glm::vec4 att4,
+/*X*/	bool bColUpdActive,
+/*X*/	bool pColUpdActive,		glm::vec4 minPosCol, glm::vec4 maxPosCol,
+/*X*/	bool velColUpdActive,   glm::vec4 minVelCol, glm::vec4 maxVelCol,
+/*X*/	bool tUpdActive)
 {
 	TiXmlElement* particleElement = new TiXmlElement("COMP");
-	
+
+	particleElement->SetAttribute("poolSize",poolSize);
+
+	//Box Position Generator
+	particleElement->SetAttribute("boxPosGenActive", boxPosGenActive);
+	particleElement->SetDoubleAttribute("boxPosOffX",boxPosOffset.x);
+	particleElement->SetDoubleAttribute("boxPosOffY",boxPosOffset.y);
+	particleElement->SetDoubleAttribute("boxPosOffZ",boxPosOffset.z);
+	particleElement->SetDoubleAttribute("boxPosOffW",boxPosOffset.w);
+	//Round Position Generator
+	particleElement->SetAttribute("roundPosGenActive", roundPosGenActive);
+	particleElement->SetDoubleAttribute("roundPosOffX",roundPosOffset.x);
+	particleElement->SetDoubleAttribute("roundPosOffY",roundPosOffset.y);
+	particleElement->SetDoubleAttribute("roundPosOffZ",roundPosOffset.z);
+	particleElement->SetDoubleAttribute("roundPosOffW",roundPosOffset.w);
+	//Basic Colour Generator
+	particleElement->SetAttribute("bColourGenActive", bColourGenActive);
+	particleElement->SetDoubleAttribute("bMinStColX",bMinStCol.x);
+	particleElement->SetDoubleAttribute("bMinStColY",bMinStCol.y);
+	particleElement->SetDoubleAttribute("bMinStColZ",bMinStCol.z);
+	particleElement->SetDoubleAttribute("bMinStColW",bMinStCol.w);
+
+	particleElement->SetDoubleAttribute("bMaxStColX",bMaxStCol.x);
+	particleElement->SetDoubleAttribute("bMaxStColY",bMaxStCol.y);
+	particleElement->SetDoubleAttribute("bMaxStColZ",bMaxStCol.z);
+	particleElement->SetDoubleAttribute("bMaxStColW",bMaxStCol.w);
+
+	particleElement->SetDoubleAttribute("bMinEndColX",bMinEndCol.x);
+	particleElement->SetDoubleAttribute("bMinEndColY",bMinEndCol.y);
+	particleElement->SetDoubleAttribute("bMinEndColZ",bMinEndCol.z);
+	particleElement->SetDoubleAttribute("bMinEndColW",bMinEndCol.w);
+
+	particleElement->SetDoubleAttribute("bMaxEndColX",bMaxEndCol.x);
+	particleElement->SetDoubleAttribute("bMaxEndColY",bMaxEndCol.y);
+	particleElement->SetDoubleAttribute("bMaxEndColZ",bMaxEndCol.z);
+	particleElement->SetDoubleAttribute("bMaxEndColW",bMaxEndCol.w);
+	//Basic Velocity Generator
+	particleElement->SetAttribute("bVelGenActive", bVelGenActive);
+	particleElement->SetDoubleAttribute("bMinVelX",bMinVel.x);
+	particleElement->SetDoubleAttribute("bMinVelY",bMinVel.y);
+	particleElement->SetDoubleAttribute("bMinVelZ",bMinVel.z);
+	particleElement->SetDoubleAttribute("bMinVelW",bMinVel.w);
+
+	particleElement->SetDoubleAttribute("bMaxVelX",bMaxVel.x);
+	particleElement->SetDoubleAttribute("bMaxVelY",bMaxVel.y);
+	particleElement->SetDoubleAttribute("bMaxVelZ",bMaxVel.z);
+	particleElement->SetDoubleAttribute("bMaxVelW",bMaxVel.w);
+	//Basic Sphere Generator
+	particleElement->SetAttribute("bSphereGenActive", bSphereGenActive);
+	particleElement->SetDoubleAttribute("bSMinVelX",bSMinVel.x);
+	particleElement->SetDoubleAttribute("bSMinVelY",bSMinVel.y);
+	particleElement->SetDoubleAttribute("bSMinVelZ",bSMinVel.z);
+	particleElement->SetDoubleAttribute("bSMinVelW",bSMinVel.w);
+
+	particleElement->SetDoubleAttribute("bSMaxVelX",bSMaxVel.x);
+	particleElement->SetDoubleAttribute("bSMaxVelY",bSMaxVel.y);
+	particleElement->SetDoubleAttribute("bSMaxVelZ",bSMaxVel.z);
+	particleElement->SetDoubleAttribute("bSMaxVelW",bSMaxVel.w);
+	//Basic Time Generator
+	particleElement->SetAttribute("bTimeGenActive", bTimeGenActive);
+	particleElement->SetAttribute("minTime", minTime);
+	particleElement->SetAttribute("maxTime", maxTime);
+	//Euler Updater
+	particleElement->SetAttribute("eulUpdActive", eulUpdActive);
+	particleElement->SetDoubleAttribute("globalAccX",globalAcc.x);
+	particleElement->SetDoubleAttribute("globalAccY",globalAcc.y);
+	particleElement->SetDoubleAttribute("globalAccZ",globalAcc.z);
+	particleElement->SetDoubleAttribute("globalAccW",globalAcc.w);
+	//Attractor Updater
+	particleElement->SetAttribute("attUpdActive", attUpdActive);
+
+	particleElement->SetAttribute("att1Act", att1Act);
+	particleElement->SetDoubleAttribute("att1X",att1.x);
+	particleElement->SetDoubleAttribute("att1Y",att1.y);
+	particleElement->SetDoubleAttribute("att1Z",att1.z);
+	particleElement->SetDoubleAttribute("att1W",att1.w);
+
+	particleElement->SetAttribute("att2Act", att2Act);
+	particleElement->SetDoubleAttribute("att2X",att2.x);
+	particleElement->SetDoubleAttribute("att2Y",att2.y);
+	particleElement->SetDoubleAttribute("att2Z",att2.z);
+	particleElement->SetDoubleAttribute("att2W",att2.w);
+
+	particleElement->SetAttribute("att3Act", att3Act);
+	particleElement->SetDoubleAttribute("att3X",att3.x);
+	particleElement->SetDoubleAttribute("att3Y",att3.y);
+	particleElement->SetDoubleAttribute("att3Z",att3.z);
+	particleElement->SetDoubleAttribute("att3W",att3.w);
+
+	particleElement->SetAttribute("att4Act", att4Act);
+	particleElement->SetDoubleAttribute("att4X",att4.x);
+	particleElement->SetDoubleAttribute("att4Y",att4.y);
+	particleElement->SetDoubleAttribute("att4Z",att4.z);
+	particleElement->SetDoubleAttribute("att4W",att4.w);
+	//Basic Colour Updater
+	particleElement->SetAttribute("bColUpdActive", bColUpdActive);
+	//Position Colour Updater
+	particleElement->SetAttribute("pColUpdActive", pColUpdActive);
+
+	particleElement->SetDoubleAttribute("minPosColX",minPosCol.x);
+	particleElement->SetDoubleAttribute("minPosColY",minPosCol.y);
+	particleElement->SetDoubleAttribute("minPosColZ",minPosCol.z);
+	particleElement->SetDoubleAttribute("minPosColW",minPosCol.w);
+
+	particleElement->SetDoubleAttribute("maxPosColX",maxPosCol.x);
+	particleElement->SetDoubleAttribute("maxPosColY",maxPosCol.y);
+	particleElement->SetDoubleAttribute("maxPosColZ",maxPosCol.z);
+	particleElement->SetDoubleAttribute("maxPosColW",maxPosCol.w);
+	//Velocity Colour Updater
+	particleElement->SetAttribute("velColUpdActive", velColUpdActive);
+
+	particleElement->SetDoubleAttribute("minVelColX",minVelCol.x);
+	particleElement->SetDoubleAttribute("minVelColY",minVelCol.y);
+	particleElement->SetDoubleAttribute("minVelColZ",minVelCol.z);
+	particleElement->SetDoubleAttribute("minVelColW",minVelCol.w);
+
+	particleElement->SetDoubleAttribute("maxVelColX",maxVelCol.x);
+	particleElement->SetDoubleAttribute("maxVelColY",maxVelCol.y);
+	particleElement->SetDoubleAttribute("maxVelColZ",maxVelCol.z);
+	particleElement->SetDoubleAttribute("maxVelColW",maxVelCol.w);
+	//Timer Updater
+	particleElement->SetAttribute("tUpdActive", tUpdActive);
+
 	go->LinkEndChild(particleElement);
 }
 

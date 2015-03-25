@@ -46,10 +46,10 @@ void ParticleRenderer::generate(size_t particlePool)
 	_particleSystem = new ParticleSystem(particlePool);
 	_generatedFlag=true;
 
-	//ab=new TestCircleEmitter();
-	//ab->init(particlePool);
+	ab=new TestCircleEmitter();
+	ab->init(particlePool);
 
-	_particleSystem->addEmitter(new TestCircleEmitter());
+	_particleSystem->addEmitter(ab);
 
 	auto timeUpdater = new BasicTimeUpdater();
 	_particleSystem->addUpdater(timeUpdater);
@@ -61,7 +61,12 @@ void ParticleRenderer::generate(size_t particlePool)
 	//{
 	//	_eulerUpdater->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
 	//}
-	_particleSystem->addUpdater(new EulerUpdater(glm::vec4(0.0,15.0,0.0,0.0)));
+	_particleSystem->addUpdater(Updaters::EULERUPDATER);
+	EulerUpdater* e = (EulerUpdater*)_particleSystem->getUpdater(Updaters::EULERUPDATER);
+	if(e!=nullptr)
+	{
+	e->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
+	}
 
 	size_t count = _particleSystem->getParticleCount();
 

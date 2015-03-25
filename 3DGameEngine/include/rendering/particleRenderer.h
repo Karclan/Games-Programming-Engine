@@ -32,9 +32,14 @@ public:
 	void generate(size_t particlePool);
 	void render(GLfloat* viewMatrix, GLfloat* projectionMatrix);
 	void animate(float t);
-	void destory();
+
 	void play();
 	void stop();
+
+	void setPoolSize(size_t poolSize);
+	void addEmitter(SP_ParticleEmitter emitter);
+	void addGenerator(SP_ParticleGenerator generator);
+	void addUpdater(SP_ParticleUpdater updater);
 
 private:
 
@@ -46,7 +51,12 @@ private:
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
+	size_t			_particlePool;
 	ParticleSystem* _particleSystem;
+
+	SP_ParticleEmitter _emitter;
+	std::vector<SP_ParticleUpdater> _updaters;
+	std::vector<SP_ParticleGenerator> _generators;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };

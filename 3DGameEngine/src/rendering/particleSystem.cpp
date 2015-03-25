@@ -40,6 +40,51 @@ void ParticleSystem::update(float dt)
 	}
 }
 
+void ParticleSystem::addUpdater(Updaters::type type)
+{
+	/*switch (type)
+	{
+	case Updaters::EULERUPDATER:
+		EulerUpdater *e = new EulerUpdater();
+		_updaters.push_back(e);
+		break;
+	case Updaters::ATTRACTORUPDATER:
+		AttractorUpdater *a = new AttractorUpdater();
+		_updaters.push_back(a);
+		break;
+	case Updaters::BASICCOLOURUPDATER:
+		BasicColourUpdater *c = new BasicColourUpdater();
+		_updaters.push_back(c);
+		break;
+	case Updaters::POSITIONCOLOURUPDATER:
+		PositionColourUpdater *p = new PositionColourUpdater();
+		_updaters.push_back(p);
+		break;
+	case Updaters::VELOCITYCOLOURUPDATER:
+		VelocityColourUpdater *v = new VelocityColourUpdater();
+		_updaters.push_back(v);
+		break;
+	case Updaters::BASICTIMEUPDATER:
+		BasicTimeUpdater *t = new BasicTimeUpdater();
+		_updaters.push_back(t);
+		break;
+	}	*/
+}
+
+void ParticleSystem::addEmitter(Emitters::type type)
+{
+	switch (type)
+	{
+	case Emitters::CIRCLEEMITTER:
+		TestCircleEmitter *e = new TestCircleEmitter();
+		_emitters.push_back(e);
+		break;
+	default:
+		break;
+	}
+}
+
+
 ParticleEmitter* ParticleSystem::getEmitter(Emitters::type type)
 {
 	for(unsigned int i = 0; i < _emitters.size(); ++i)

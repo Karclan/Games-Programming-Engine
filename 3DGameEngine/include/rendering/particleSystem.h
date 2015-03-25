@@ -13,29 +13,28 @@ public:
 
 	size_t _particleCount;
 
-	std::vector<ParticleEmitter*> _emitters; 
+	ParticleEmitter* _emitter; 
 	std::vector<ParticleUpdater*> _updaters;
 
 public:
 	ParticleSystem(size_t maxCount);
 	virtual ~ParticleSystem()
 	{
-		_emitters.clear();
+		delete _emitter;
 		_updaters.clear();
 	}
-
+	 
 	void clear();
     virtual void update(float t);
 	virtual void reset();
 	virtual size_t getParticleCount(){return _particles._particleCount;}
 
-	void addEmitter(ParticleEmitter* emitter){_emitters.push_back(emitter);}
-	void addUpdater(ParticleUpdater* updater){_updaters.push_back(updater);}
+	void addEmitter(SP_ParticleEmitter emitter);
+	void addUpdater(SP_ParticleUpdater updater);
 	ParticleEmitter* getEmitter(Emitters::type type);
 	ParticleUpdater* getUpdater(Updaters::type type);
 
 	ParticleData *getFinalData(){return &_particles;}
-
 };
 
 #endif
