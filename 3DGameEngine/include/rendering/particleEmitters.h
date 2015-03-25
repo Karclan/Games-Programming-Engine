@@ -8,49 +8,50 @@
 
 namespace Emitters
 {
-	enum type{CIRCLEEMITTER, EMITTERS};
+	enum type{BASEEMITTER, CIRCLEEMITTER, EMITTERS};
 }
 
 class ParticleEmitter
 {
 protected:
-	std::vector<ParticleGenerator*> _generators;
+	std::vector<SP_ParticleGenerator> _generators;
 	float _emitRate;
-
+	float _emitScalar;
 public:
-	ParticleEmitter(){_emitRate=0.0f;}
-	virtual ~ParticleEmitter(){}
+	ParticleEmitter(){_emitRate=0.0f;_emitScalar=0.0f;}
 
-	virtual Emitters::type getType()=0;
+	virtual ~ParticleEmitter(){}
+	virtual Emitters::type getType(){return Emitters::BASEEMITTER;}
 
 	virtual void emit(float t, ParticleData *p);
+	virtual void init(size_t particlePool);
+	virtual void init(size_t particlePool,float emitScalar);
 
-	virtual void init(size_t particlePool)=0;
-	virtual void clear();
-
-	bool alreadyOwn(Generators::type type);
-	void addGenerator(ParticleGenerator* gen){ _generators.push_back(gen);}
-	ParticleGenerator* getGenerator(Generators::type type);
-
+	void addGenerator(SP_ParticleGenerator gen);
+	SP_ParticleGenerator getGenerator(Generators::type type);
+	
+	float getEmitScalar(){return _emitScalar;}
+	float getEmitRate(){return _emitRate;}
+	void setEmitScalar(float scalar){_emitScalar=scalar;}
 };
 
 typedef std::shared_ptr<ParticleEmitter> SP_ParticleEmitter;
 
-class CircleEmitter : public ParticleEmitter
-{
-public:
-	CircleEmitter(){};
-
-	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
-
-	void init(size_t particlePool);
-	size_t _poolSize;
-	RoundPosGen*		posGenerator;
-	BasicColourGen*	    colGenerator;
-	BasicVelGen*		velGenerator;
-	BasicTimeGen*		timeGenerator;
-};
-
-typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
+//class CircleEmitter : public ParticleEmitter
+//{
+//public:
+//	CircleEmitter(){};
+//
+//	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
+//
+//	void init(size_t particlePool);
+//	size_t _poolSize;
+//	RoundPosGen*		posGenerator;
+//	BasicColourGen*	    colGenerator;
+//	BasicVelGen*		velGenerator;
+//	BasicTimeGen*		timeGenerator;
+//};
+//
+//typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
 
 #endif

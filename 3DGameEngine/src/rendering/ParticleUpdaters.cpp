@@ -22,7 +22,7 @@ void AttractorUpdater::update(float dt, ParticleData *p)
 	const float localDT = (float)dt;
 
 	const size_t endId = p->_aliveParticleCount;
-	const size_t countAttractors = _attractors.size();
+	const size_t countAttractors = collectionSize();
 	glm::vec4 off;
 	float dist;
 	size_t a;

@@ -60,7 +60,12 @@ static void TW_CALL addRobotRenderComponent(void *clientData)
 
 	goMenu->addComponent(ComponentType::ROB_REND);
 }
+static void TW_CALL addParticleRenderer(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
 
+	goMenu->addComponent(ComponentType::PARTICLE_REND);
+}
 static void TW_CALL addSphereColComponent(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
@@ -205,6 +210,7 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "addModelRender", addModelRenderComponent, this, "");
 		TwAddButton(_addCompBar, "addPhysicsBody", addPhysicsBodyComponent, this, "");
 		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
+		TwAddButton(_addCompBar, "addParticleRender", addParticleRenderer, this, "");
 		TwAddButton(_addCompBar, "addSphereCol", addSphereColComponent, this, "");
 		TwAddButton(_addCompBar, "addTransform", addTransformComponent, this, "");
 		TwAddButton(_addCompBar, "addCustom", addCustomComponent, this, "");
@@ -297,7 +303,12 @@ void GoMenu::refreshTweakBar()
 				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render label=placeholder");
 
 				break;
+			case ComponentType::PARTICLE_REND:
 
+				TwAddVarRW(_myBar, &(id+"Particle Pool Size")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Particle_Renderer label=Particle_Pool_Size");
+				TwAddVarRW(_myBar, &(id+"Emit Scalar")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(87), "group=Particle_Renderer label=Emit_Scalar");
+		
+				break; 
 			case ComponentType::SPHERE_COL:
 				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
 				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col label=X_offset");

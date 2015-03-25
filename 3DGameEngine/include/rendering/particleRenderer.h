@@ -37,9 +37,34 @@ public:
 	void stop();
 
 	void setPoolSize(size_t poolSize);
-	void addEmitter(SP_ParticleEmitter emitter);
-	void addGenerator(SP_ParticleGenerator generator);
-	void addUpdater(SP_ParticleUpdater updater);
+	int getPoolSize(){return _particlePool;}
+	//void addEmitter(SP_ParticleEmitter emitter);
+	//void addGenerator(SP_ParticleGenerator generator);
+	//void addUpdater(SP_ParticleUpdater updater);
+	
+	void activateEmitter(Emitters::type type);
+	void activateGenerator(Generators::type type);
+	void activateUpdater(Updaters::type type);
+
+	ParticleEmitter&  getEmitter(){return _emitter;}
+	SP_ParticleGenerator getGenerator(Generators::type type);
+	SP_ParticleUpdater	 getUpdater(Updaters::type type);
+
+	ParticleEmitter _emitter;
+	//Generators
+	BoxPosGen _boxPosGen;
+	RoundPosGen _roundPosGen;
+	BasicColourGen _basicColourGen;
+	BasicVelGen _basicVelGen;
+	SphereVelGen _sphereVelGen;
+	BasicTimeGen _basicTimeGen;
+	//Updaters
+	EulerUpdater _eulerUpdater;
+	AttractorUpdater _attractorUpdater;
+	BasicColourUpdater _basicColourUpdater;
+	PositionColourUpdater _positionColourUpdater;
+	VelocityColourUpdater _velocityColourUpdater;
+	BasicTimeUpdater _basicTimeUpdate;
 
 private:
 
@@ -51,12 +76,10 @@ private:
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
-	size_t			_particlePool;
+	int				_particlePool;
 	ParticleSystem* _particleSystem;
 
-	SP_ParticleEmitter _emitter;
-	std::vector<SP_ParticleUpdater> _updaters;
-	std::vector<SP_ParticleGenerator> _generators;
+	std::vector<SP_ParticleUpdater>	  _updaters;
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };

@@ -13,14 +13,13 @@ public:
 
 	size_t _particleCount;
 
-	ParticleEmitter* _emitter; 
-	std::vector<ParticleUpdater*> _updaters;
+	SP_ParticleEmitter _emitter; 
+	std::vector<SP_ParticleUpdater> _updaters;
 
 public:
 	ParticleSystem(size_t maxCount);
 	virtual ~ParticleSystem()
 	{
-		delete _emitter;
 		_updaters.clear();
 	}
 	 
@@ -31,8 +30,8 @@ public:
 
 	void addEmitter(SP_ParticleEmitter emitter);
 	void addUpdater(SP_ParticleUpdater updater);
-	ParticleEmitter* getEmitter(Emitters::type type);
-	ParticleUpdater* getUpdater(Updaters::type type);
+	SP_ParticleEmitter getEmitter();
+	SP_ParticleUpdater getUpdater(Updaters::type type);
 
 	ParticleData *getFinalData(){return &_particles;}
 };

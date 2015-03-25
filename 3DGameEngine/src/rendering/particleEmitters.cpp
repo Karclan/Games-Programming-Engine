@@ -1,13 +1,13 @@
 #include "rendering\particleEmitters.h"
 
 
-ParticleGenerator* ParticleEmitter::getGenerator(Generators::type type)
+SP_ParticleGenerator ParticleEmitter::getGenerator(Generators::type type)
 {
 	for(unsigned int i = 0; i < _generators.size(); ++i)
 	{
 		if(_generators[i]->getType() == type) return _generators[i];
 	}
-	return nullptr;
+	return SP_ParticleGenerator();
 }
 
 void ParticleEmitter::emit(float dt, ParticleData *p)
@@ -26,41 +26,52 @@ void ParticleEmitter::emit(float dt, ParticleData *p)
 		p->wake(i);
 	}
 }
-
-
-void CircleEmitter::init(size_t particlePool)
+void ParticleEmitter::init(size_t particlePool,float emitScalar)
 {
-	_emitRate=(float)particlePool*0.45f;
-
-	posGenerator = new RoundPosGen();
-	posGenerator->_center = glm::vec4(0.0,0.0,0.0,1.0);
-	posGenerator->_radiusX=0.15f;
-	posGenerator->_radiusY=0.15f;
-	addGenerator(posGenerator);
-
-	colGenerator = new BasicColourGen();
-	colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
-	colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
-	colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.0 );
-	colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.0 );
-	addGenerator(colGenerator);
-
-	velGenerator = new BasicVelGen();
-	velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
-	velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
-	addGenerator(velGenerator);
-
-	timeGenerator = new BasicTimeGen();
-	timeGenerator->_minTime = 1.0;
-	timeGenerator->_maxTime = 3.5;
-	addGenerator(timeGenerator);
+	_emitScalar=emitScalar;
+	init(particlePool);
+}
+void ParticleEmitter::init(size_t particlePool)
+{
+	_emitRate=(float)particlePool*_emitScalar;
+}
+void ParticleEmitter::addGenerator(SP_ParticleGenerator gen)
+{
+	_generators.push_back(gen);
 }
 
-void ParticleEmitter::clear()
-{
-	for(auto it: _generators)
-	{
-		delete it;
-	}
-}
+//void CircleEmitter::init(size_t particlePool)
+//{
+//	_emitRate=(float)particlePool*0.45f;
+//
+//	posGenerator = new RoundPosGen();
+//	posGenerator->_center = glm::vec4(0.0,0.0,0.0,1.0);
+//	posGenerator->_radiusX=0.15f;
+//	posGenerator->_radiusY=0.15f;
+//	addGenerator(posGenerator);
+//
+//	colGenerator = new BasicColourGen();
+//	colGenerator->_minStartColour	= glm::vec4( 0.0, 0.5, 0.0, 1.0 );
+//	colGenerator->_maxStartColour	= glm::vec4( 0.0, 1.0, 0.0, 1.0 );
+//	colGenerator->_minEndColour		= glm::vec4( 0.5, 0.0, 0.0, 0.0 );
+//	colGenerator->_maxEndColour	    = glm::vec4( 1.0, 0.0, 0.0, 0.0 );
+//	addGenerator(colGenerator);
+//
+//	velGenerator = new BasicVelGen();
+//	velGenerator->_minStartVel = glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f );
+//	velGenerator->_maxStartVel = glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f );
+//	addGenerator(velGenerator);
+//
+//	timeGenerator = new BasicTimeGen();
+//	timeGenerator->_minTime = 1.0;
+//	timeGenerator->_maxTime = 3.5;
+//	addGenerator(timeGenerator);
+//}
+//void ParticleEmitter::clear()
+//{
+//	for(auto it: _generators)
+//	{
+//		delete it;
+//	}
+//}
 

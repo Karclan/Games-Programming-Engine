@@ -13,23 +13,17 @@ ParticleSystem::ParticleSystem(size_t maxCount)
 
 void ParticleSystem::clear()
 {
-	for(auto it: _emitters)
-	{
-		it->clear();
-		delete it;
-	}
 	for(auto it: _updaters)
 	{
-		delete it;
+		it=nullptr;
 	}
+	_emitter=nullptr;
 }
 
 void ParticleSystem::update(float dt)
 {
-	for(auto & emitters: _emitters)
-	{
-		emitters->emit(dt,&_particles);
-	}
+	_emitter->emit(dt,&_particles);
+	
 	for(size_t i = 0; i < _particleCount; ++i)
 	{
 		_particles._particleAccelerations[i]=glm::vec4(0.0f);
@@ -40,67 +34,30 @@ void ParticleSystem::update(float dt)
 	}
 }
 
-void ParticleSystem::addUpdater(Updaters::type type)
+void ParticleSystem::addUpdater(SP_ParticleUpdater updater)
 {
-	/*switch (type)
-	{
-	case Updaters::EULERUPDATER:
-		EulerUpdater *e = new EulerUpdater();
-		_updaters.push_back(e);
-		break;
-	case Updaters::ATTRACTORUPDATER:
-		AttractorUpdater *a = new AttractorUpdater();
-		_updaters.push_back(a);
-		break;
-	case Updaters::BASICCOLOURUPDATER:
-		BasicColourUpdater *c = new BasicColourUpdater();
-		_updaters.push_back(c);
-		break;
-	case Updaters::POSITIONCOLOURUPDATER:
-		PositionColourUpdater *p = new PositionColourUpdater();
-		_updaters.push_back(p);
-		break;
-	case Updaters::VELOCITYCOLOURUPDATER:
-		VelocityColourUpdater *v = new VelocityColourUpdater();
-		_updaters.push_back(v);
-		break;
-	case Updaters::BASICTIMEUPDATER:
-		BasicTimeUpdater *t = new BasicTimeUpdater();
-		_updaters.push_back(t);
-		break;
-	}	*/
+	_updaters.push_back(updater);
 }
 
-void ParticleSystem::addEmitter(Emitters::type type)
+void ParticleSystem::addEmitter(SP_ParticleEmitter emitter)
 {
-	switch (type)
-	{
-	case Emitters::CIRCLEEMITTER:
-		TestCircleEmitter *e = new TestCircleEmitter();
-		_emitters.push_back(e);
-		break;
-	default:
-		break;
-	}
+	_emitter = emitter;
 }
 
-
-ParticleEmitter* ParticleSystem::getEmitter(Emitters::type type)
+SP_ParticleEmitter ParticleSystem::getEmitter()
 {
-	for(unsigned int i = 0; i < _emitters.size(); ++i)
-	{
-		if(_emitters[i]->getType() == type) return _emitters[i];
-	}
-	return nullptr;
+	if(_emitter!=nullptr)return _emitter;
+
+	return SP_ParticleEmitter();
 }
 
-ParticleUpdater* ParticleSystem::getUpdater(Updaters::type type)
+SP_ParticleUpdater ParticleSystem::getUpdater(Updaters::type type)
 {
 	for(unsigned int i = 0; i < _updaters.size(); ++i)
 	{
 		if(_updaters[i]->getType() == type) return _updaters[i];
 	}
-	return nullptr;
+	return SP_ParticleUpdater();
 }
 
 void ParticleSystem::reset()

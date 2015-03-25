@@ -190,7 +190,107 @@ void CompData::setAttribsToComponents()
 	case ComponentType::PARTICLE_REND:
 		{
 			SPtr_ParticleRend particleRender = std::static_pointer_cast<ParticleRenderer>(_comp);
-			//ATTRIBUTES TO ADD SO I CAN MAKE CUSTOM PARTICLE STUFF
+			addAttribi(particleRender->getPoolSize());   						//poolSize				| attrib:  0
+//X//		//===BOX POSITION GENERATOR===//																	   
+			addAttribi(particleRender->_boxPosGen.isActive());					//boxPosGenActive		| attrib:  1
+			addAttribf(particleRender->_boxPosGen.getStartOffset().x);			//boxPosOffX			| attrib:  2
+			addAttribf(particleRender->_boxPosGen.getStartOffset().y);			//boxPosOffY			| attrib:  3
+			addAttribf(particleRender->_boxPosGen.getStartOffset().z);			//boxPosOffZ			| attrib:  4
+			addAttribf(particleRender->_boxPosGen.getStartOffset().w);			//boxPosOffW			| attrib:  5	
+//X//		//===ROUND POSITION GENERATOR===//																	   
+			addAttribi(particleRender->_roundPosGen.isActive());				//roundPosGenActive	| attrib:  6
+			addAttribf(particleRender->_roundPosGen.getRadius().x);				//radiusX				| attrib:  7
+			addAttribf(particleRender->_roundPosGen.getRadius().y);				//radiusY				| attrib:  8
+//X//		//===BASIC COLOUR GENERATOR===//
+			addAttribi(particleRender->_basicColourGen.isActive());				//bColourGenActive		| attrib:  9
+			addAttribf(particleRender->_basicColourGen.getMinStartColour().x);	//bMinStColX			| attrib: 10
+			addAttribf(particleRender->_basicColourGen.getMinStartColour().y);	//bMinStColY			| attrib: 11
+			addAttribf(particleRender->_basicColourGen.getMinStartColour().z);	//bMinStColZ			| attrib: 12
+			addAttribf(particleRender->_basicColourGen.getMinStartColour().w);	//bMinStColW			| attrib: 13
+			addAttribf(particleRender->_basicColourGen.getMaxStartColour().x);	//bMaxStColX			| attrib: 14
+			addAttribf(particleRender->_basicColourGen.getMaxStartColour().y);	//bMaxStColY			| attrib: 15
+			addAttribf(particleRender->_basicColourGen.getMaxStartColour().z);	//bMaxStColZ			| attrib: 16
+			addAttribf(particleRender->_basicColourGen.getMaxStartColour().w);	//bMaxStColW			| attrib: 17
+			addAttribf(particleRender->_basicColourGen.getMinEndColour().x);	//bMinEndColX			| attrib: 18
+			addAttribf(particleRender->_basicColourGen.getMinEndColour().y);	//bMinEndColY			| attrib: 19
+			addAttribf(particleRender->_basicColourGen.getMinEndColour().z);	//bMinEndColZ			| attrib: 20
+			addAttribf(particleRender->_basicColourGen.getMinEndColour().w);	//bMinEndColW			| attrib: 21
+			addAttribf(particleRender->_basicColourGen.getMaxEndColour().x);	//bMaxEndColX			| attrib: 22
+			addAttribf(particleRender->_basicColourGen.getMaxEndColour().y);	//bMaxEndColY			| attrib: 23
+			addAttribf(particleRender->_basicColourGen.getMaxEndColour().z);	//bMaxEndColZ			| attrib: 24
+			addAttribf(particleRender->_basicColourGen.getMaxEndColour().w);	//bMaxEndColW			| attrib: 25
+//X//		//===BASIC VELOCITY GENERATOR===//
+			addAttribi(particleRender->_basicVelGen.isActive());				//basicVelGenActive		| attrib: 26
+			addAttribf(particleRender->_basicVelGen.getMinStartVel().x);		//bMinVelX				| attrib: 27
+			addAttribf(particleRender->_basicVelGen.getMinStartVel().w);		//bMinVelY				| attrib: 38
+			addAttribf(particleRender->_basicVelGen.getMinStartVel().z);		//bMinVelZ				| attrib: 29
+			addAttribf(particleRender->_basicVelGen.getMinStartVel().w);		//bMinVelW				| attrib: 30
+			addAttribf(particleRender->_basicVelGen.getMaxStartVel().x);		//bMaxVelX				| attrib: 31
+			addAttribf(particleRender->_basicVelGen.getMaxStartVel().w);		//bMaxVelY				| attrib: 32
+			addAttribf(particleRender->_basicVelGen.getMaxStartVel().z);		//bMaxVelZ				| attrib: 33
+			addAttribf(particleRender->_basicVelGen.getMaxStartVel().w);		//bMaxVelW				| attrib: 34
+//X//		//===SPHERE VELOCITY GENERATOR===//
+			addAttribi(particleRender->_sphereVelGen.isActive());				//bSphereGenActive		| attrib: 35
+			addAttribf(particleRender->_sphereVelGen.getMinVelocity());			//bSMinVel				| attrib: 36
+			addAttribf(particleRender->_sphereVelGen.getMaxVelocity());			//bSMaxVel				| attrib: 37
+//X//		//===BASIC TIME GENERATOR===//
+			addAttribi(particleRender->_basicTimeGen.isActive());				//bTimeGenActive		| attrib: 38
+			addAttribf(particleRender->_basicTimeGen.getMinTime());				//minTime				| attrib: 39
+			addAttribf(particleRender->_basicTimeGen.getMaxTime());				//maxTime				| attrib: 40
+			//===EULER UPDATER===//
+			addAttribi(particleRender->_eulerUpdater.isActive());				//eulUpdActive			| attrib: 41
+			addAttribf(particleRender->_eulerUpdater.getGlobalAcc().x);			//globalAccX			| attrib: 42
+			addAttribf(particleRender->_eulerUpdater.getGlobalAcc().y);			//globalAccY			| attrib: 43
+			addAttribf(particleRender->_eulerUpdater.getGlobalAcc().z);			//globalAccZ			| attrib: 44
+			addAttribf(particleRender->_eulerUpdater.getGlobalAcc().w);			//globalAccW			| attrib: 45
+//X//		//==ATTRACTOR UPDATER==//
+			addAttribi(particleRender->_attractorUpdater.isActive());			//attUpdActive			| attrib: 46
+			addAttribi(particleRender->_attractorUpdater.getAttractorState(0)); //att1Act				| attrib: 47
+			addAttribf(particleRender->_attractorUpdater.getAttractor(0).x);	//att1X					| attrib: 48
+			addAttribf(particleRender->_attractorUpdater.getAttractor(0).y);	//att1Y					| attrib: 49
+			addAttribf(particleRender->_attractorUpdater.getAttractor(0).z);	//att1Z					| attrib: 50
+			addAttribf(particleRender->_attractorUpdater.getAttractor(0).w);	//att1W					| attrib: 51
+			addAttribi(particleRender->_attractorUpdater.getAttractorState(1)); //att2Act				| attrib: 52
+			addAttribf(particleRender->_attractorUpdater.getAttractor(1).x);	//att2X					| attrib: 53
+			addAttribf(particleRender->_attractorUpdater.getAttractor(1).y);	//att2Y					| attrib: 54
+			addAttribf(particleRender->_attractorUpdater.getAttractor(1).z);	//att2Z					| attrib: 55
+			addAttribf(particleRender->_attractorUpdater.getAttractor(1).w);	//att2W					| attrib: 56
+			addAttribi(particleRender->_attractorUpdater.getAttractorState(2)); //att3Act				| attrib: 57
+			addAttribf(particleRender->_attractorUpdater.getAttractor(2).x);	//att3X					| attrib: 58
+			addAttribf(particleRender->_attractorUpdater.getAttractor(2).y);	//att3Y					| attrib: 59
+			addAttribf(particleRender->_attractorUpdater.getAttractor(2).z);	//att3Z					| attrib: 60
+			addAttribf(particleRender->_attractorUpdater.getAttractor(2).w);	//att3W					| attrib: 61
+			addAttribi(particleRender->_attractorUpdater.getAttractorState(3)); //att4Act				| attrib: 62
+			addAttribf(particleRender->_attractorUpdater.getAttractor(3).x);	//att4X					| attrib: 63
+			addAttribf(particleRender->_attractorUpdater.getAttractor(3).y);	//att4Y					| attrib: 64
+			addAttribf(particleRender->_attractorUpdater.getAttractor(3).z);	//att4Z					| attrib: 65
+			addAttribf(particleRender->_attractorUpdater.getAttractor(3).w);	//att4W					| attrib: 66
+//X//		//===BASIC COLOUR UPDATER===//
+			addAttribi(particleRender->_basicColourUpdater.isActive());			//bColUpdActive			| attrib: 67
+//X//		//===POSITION COLOUR UPDATER===//
+			addAttribi(particleRender->_positionColourUpdater.isActive());		//pColUpdActive			| attrib: 68
+			addAttribf(particleRender->_positionColourUpdater.getMinPos().x);	//minPosColX			| attrib: 69
+			addAttribf(particleRender->_positionColourUpdater.getMinPos().y);	//minPosColY			| attrib: 70
+			addAttribf(particleRender->_positionColourUpdater.getMinPos().z);	//minPosColZ			| attrib: 71
+			addAttribf(particleRender->_positionColourUpdater.getMinPos().w);	//minPosColW			| attrib: 72
+			addAttribf(particleRender->_positionColourUpdater.getMaxPos().x);	//maxPosColX			| attrib: 73
+			addAttribf(particleRender->_positionColourUpdater.getMaxPos().y);	//maxPosColY			| attrib: 74
+			addAttribf(particleRender->_positionColourUpdater.getMaxPos().z);	//maxPosColZ			| attrib: 75
+			addAttribf(particleRender->_positionColourUpdater.getMaxPos().w);	//maxPosColW			| attrib: 76
+//X//		//===VELOCITY COLOUR UPDATER===//
+			addAttribi(particleRender->_velocityColourUpdater.isActive());		//velColUpdActive		| attrib: 77
+			addAttribf(particleRender->_velocityColourUpdater.getMinVel().x);	//minVelColX			| attrib: 78
+			addAttribf(particleRender->_velocityColourUpdater.getMinVel().y);	//minVelColY			| attrib: 79
+			addAttribf(particleRender->_velocityColourUpdater.getMinVel().z);	//minVelColZ			| attrib: 80
+			addAttribf(particleRender->_velocityColourUpdater.getMinVel().w);	//minVelColW			| attrib: 81
+			addAttribf(particleRender->_velocityColourUpdater.getMaxVel().x);	//maxVelColX			| attrib: 82
+			addAttribf(particleRender->_velocityColourUpdater.getMaxVel().y);	//maxVelColY			| attrib: 83
+			addAttribf(particleRender->_velocityColourUpdater.getMaxVel().z);	//maxVelColZ			| attrib: 84
+			addAttribf(particleRender->_velocityColourUpdater.getMaxVel().w);	//maxVelColW			| attrib: 85
+//X//		//===TIME UPDATER===///
+			addAttribi(particleRender->_basicTimeUpdate.isActive());			//tUpdActive			| attrib: 86
+//X//		//==EMITTER===//
+			addAttribf(particleRender->getEmitter().getEmitScalar());			//emitScalar			| attrib: 87
 			break;
 		}
 	case ComponentType::PHY_BODY:
@@ -312,6 +412,108 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::PARTICLE_REND:
+			addAttribi(to_int(compElmnt,"poolSize"));   	 //poolSize				| attrib:  0
+			//===BOX POSITION GENERATOR===//												   
+			addAttribi(to_int(compElmnt,"boxPosGenActive")); //boxPosGenActive		| attrib:  1
+			addAttribf(to_float(compElmnt,"boxPosOffX"));    //boxPosOffX			| attrib:  2
+			addAttribf(to_float(compElmnt,"boxPosOffY"));    //boxPosOffY			| attrib:  3
+			addAttribf(to_float(compElmnt,"boxPosOffZ"));    //boxPosOffZ			| attrib:  4
+			addAttribf(to_float(compElmnt,"boxPosOffW"));    //boxPosOffW			| attrib:  5																					   
+			//===ROUND POSITION GENERATOR===//												   
+			addAttribi(to_int(compElmnt,"boxPosGenActive")); //roundPosGenActive	| attrib:  6
+			addAttribf(to_float(compElmnt,"radiusX"));		 //radiusX				| attrib:  7
+			addAttribf(to_float(compElmnt,"radiusY"));		 //radiusY				| attrib:  8
+			//===BASIC COLOUR GENERATOR===//
+			addAttribi(to_int(compElmnt,"bColourGenActive"));//bColourGenActive		| attrib:  9
+			addAttribf(to_float(compElmnt,"bMinStColX"));    //bMinStColX			| attrib: 10
+			addAttribf(to_float(compElmnt,"bMinStColY"));    //bMinStColY			| attrib: 11
+			addAttribf(to_float(compElmnt,"bMinStColZ"));    //bMinStColZ			| attrib: 12
+			addAttribf(to_float(compElmnt,"bMinStColW"));    //bMinStColW			| attrib: 13
+			addAttribf(to_float(compElmnt,"bMaxStColX"));    //bMaxStColX			| attrib: 14
+			addAttribf(to_float(compElmnt,"bMaxStColY"));    //bMaxStColY			| attrib: 15
+			addAttribf(to_float(compElmnt,"bMaxStColZ"));    //bMaxStColZ			| attrib: 16
+			addAttribf(to_float(compElmnt,"bMaxStColW"));    //bMaxStColW			| attrib: 17
+			addAttribf(to_float(compElmnt,"bMinEndColX"));   //bMinEndColX			| attrib: 18
+			addAttribf(to_float(compElmnt,"bMinEndColY"));   //bMinEndColY			| attrib: 19
+			addAttribf(to_float(compElmnt,"bMinEndColZ"));   //bMinEndColZ			| attrib: 20
+			addAttribf(to_float(compElmnt,"bMinEndColW"));   //bMinEndColW			| attrib: 21
+			addAttribf(to_float(compElmnt,"bMaxEndColX"));   //bMaxEndColX			| attrib: 22
+			addAttribf(to_float(compElmnt,"bMaxEndColY"));   //bMaxEndColY			| attrib: 23
+			addAttribf(to_float(compElmnt,"bMaxEndColZ"));   //bMaxEndColZ			| attrib: 24
+			addAttribf(to_float(compElmnt,"bMaxEndColW"));   //bMaxEndColW			| attrib: 25
+			//===BASIC VELOCITY GENERATOR===//
+			addAttribi(to_int(compElmnt,"basicVelGenActive"));//basicVelGenActive	| attrib: 26
+			addAttribf(to_float(compElmnt,"bMinVelX"));      //bMinVelX				| attrib: 27
+			addAttribf(to_float(compElmnt,"bMinVelY"));      //bMinVelY				| attrib: 38
+			addAttribf(to_float(compElmnt,"bMinVelZ"));      //bMinVelZ				| attrib: 29
+			addAttribf(to_float(compElmnt,"bMinVelW"));      //bMinVelW				| attrib: 30
+			addAttribf(to_float(compElmnt,"bMaxVelX"));      //bMaxVelX				| attrib: 31
+			addAttribf(to_float(compElmnt,"bMaxVelY"));      //bMaxVelY				| attrib: 32
+			addAttribf(to_float(compElmnt,"bMaxVelZ"));      //bMaxVelZ				| attrib: 33
+			addAttribf(to_float(compElmnt,"bMaxVelW"));      //bMaxVelW				| attrib: 34
+			//===SPHERE VELOCITY GENERATOR===//
+			addAttribi(to_int(compElmnt,"bSphereGenActive"));//bSphereGenActive		| attrib: 35
+			addAttribf(to_float(compElmnt,"bSMinVel"));      //bSMinVel				| attrib: 36
+			addAttribf(to_float(compElmnt,"bSMaxVel"));      //bSMaxVel				| attrib: 37
+			//===BASIC TIME GENERATOR===//
+			addAttribi(to_int(compElmnt,"bTimeGenActive"));  //bTimeGenActive		| attrib: 38
+			addAttribf(to_float(compElmnt,"minTime"));       //minTime				| attrib: 39
+			addAttribf(to_float(compElmnt,"maxTime"));       //maxTime				| attrib: 40
+			//===EULER UPDATER===//
+			addAttribi(to_int(compElmnt,"eulUpdActive"));    //eulUpdActive			| attrib: 41
+			addAttribf(to_float(compElmnt,"globalAccX"));    //globalAccX			| attrib: 42
+			addAttribf(to_float(compElmnt,"globalAccY"));    //globalAccY			| attrib: 43
+			addAttribf(to_float(compElmnt,"globalAccZ"));    //globalAccZ			| attrib: 44
+			addAttribf(to_float(compElmnt,"globalAccW"));    //globalAccW			| attrib: 45
+			//==ATTRACTOR UPDATER==//
+			addAttribi(to_int(compElmnt,"attUpdActive"));    //attUpdActive			| attrib: 46
+			addAttribi(to_int(compElmnt,"att1Act"));		 //att1Act				| attrib: 47
+			addAttribf(to_float(compElmnt,"att1X"));		 //att1X				| attrib: 48
+			addAttribf(to_float(compElmnt,"att1Y"));		 //att1Y				| attrib: 49
+			addAttribf(to_float(compElmnt,"att1Z"));		 //att1Z				| attrib: 50
+			addAttribf(to_float(compElmnt,"att1W"));		 //att1W				| attrib: 51
+			addAttribi(to_int(compElmnt,"att2Act"));		 //att2Act				| attrib: 52
+			addAttribf(to_float(compElmnt,"att2X"));		 //att2X				| attrib: 53
+			addAttribf(to_float(compElmnt,"att2Y"));		 //att2Y				| attrib: 54
+			addAttribf(to_float(compElmnt,"att2Z"));		 //att2Z				| attrib: 55
+			addAttribf(to_float(compElmnt,"att2W"));		 //att2W				| attrib: 56
+			addAttribi(to_int(compElmnt,"att3Act"));		 //att3Act				| attrib: 57
+			addAttribf(to_float(compElmnt,"att3X"));		 //att3X				| attrib: 58
+			addAttribf(to_float(compElmnt,"att3Y"));		 //att3Y				| attrib: 59
+			addAttribf(to_float(compElmnt,"att3Z"));		 //att3Z				| attrib: 60
+			addAttribf(to_float(compElmnt,"att3W"));		 //att3W				| attrib: 61
+			addAttribi(to_int(compElmnt,"att4Act"));		 //att4Act				| attrib: 62
+			addAttribf(to_float(compElmnt,"att4X"));		 //att4X				| attrib: 63
+			addAttribf(to_float(compElmnt,"att4Y"));		 //att4Y				| attrib: 64
+			addAttribf(to_float(compElmnt,"att4Z"));		 //att4Z				| attrib: 65
+			addAttribf(to_float(compElmnt,"att4W"));		 //att4W				| attrib: 66
+			//===BASIC COLOUR UPDATER===//
+			addAttribi(to_int(compElmnt,"bColUpdActive"));	 //bColUpdActive		| attrib: 67
+			//===POSITION COLOUR UPDATER===//
+			addAttribi(to_int(compElmnt,"pColUpdActive"));	 //pColUpdActive		| attrib: 68
+			addAttribf(to_float(compElmnt,"minPosColX"));	 //minPosColX			| attrib: 69
+			addAttribf(to_float(compElmnt,"minPosColY"));	 //minPosColY			| attrib: 70
+			addAttribf(to_float(compElmnt,"minPosColZ"));	 //minPosColZ			| attrib: 71
+			addAttribf(to_float(compElmnt,"minPosColW"));	 //minPosColW			| attrib: 72
+			addAttribf(to_float(compElmnt,"minPosColX"));	 //maxPosColX			| attrib: 73
+			addAttribf(to_float(compElmnt,"minPosColY"));	 //maxPosColY			| attrib: 74
+			addAttribf(to_float(compElmnt,"minPosColZ"));	 //maxPosColZ			| attrib: 75
+			addAttribf(to_float(compElmnt,"minPosColW"));	 //maxPosColW			| attrib: 76
+			//===VELOCITY COLOUR UPDATER===//
+			addAttribi(to_int(compElmnt,"velColUpdActive")); //velColUpdActive		| attrib: 77
+			addAttribf(to_float(compElmnt,"minVelColX"));	 //minVelColX			| attrib: 78
+			addAttribf(to_float(compElmnt,"minVelColY"));	 //minVelColY			| attrib: 79
+			addAttribf(to_float(compElmnt,"minVelColZ"));	 //minVelColZ			| attrib: 80
+			addAttribf(to_float(compElmnt,"minVelColW"));	 //minVelColW			| attrib: 81
+			addAttribf(to_float(compElmnt,"maxVelColX"));	 //maxVelColX			| attrib: 82
+			addAttribf(to_float(compElmnt,"maxVelColY"));	 //maxVelColY			| attrib: 83
+			addAttribf(to_float(compElmnt,"maxVelColZ"));	 //maxVelColZ			| attrib: 84
+			addAttribf(to_float(compElmnt,"maxVelColW"));	 //maxVelColW			| attrib: 85
+			//===TIME UPDATER===///
+			addAttribi(to_int(compElmnt,"tUpdActive"));		 //tUpdActive			| attrib: 86
+			//==EMITTER===//
+			addAttribf(to_float(compElmnt,"emitScalar"));	 //emitScalar			| attrib: 87
+
 		break;
 
 	case ComponentType::PHY_BODY:
@@ -446,141 +648,169 @@ void CompData::initializeComponent()
 			//----------------END  OF KEY----------------//
 
 			//____________START OF ATTRIBUTES____________//
+			int poolSize			 =   getIntAttrib(0);							//poolSize			 | attrib:  0
+			
+/*X*/		bool boxPosGenActive     =   getIntAttrib(1);							//boxPosGenActive	 | attrib:  1	//===BOX POSITION GENERATOR===//		
+			float boxPosOffX		 = getFloatAttrib(2);							//boxPosOffX		 | attrib:  2
+			float boxPosOffY		 = getFloatAttrib(3);							//boxPosOffY		 | attrib:  3
+			float boxPosOffZ		 = getFloatAttrib(4);							//boxPosOffZ		 | attrib:  4
+			float boxPosOffW		 = getFloatAttrib(5);							//boxPosOffW		 | attrib:  5
+			glm::vec4 boxPosOffset(boxPosOffX,boxPosOffY,boxPosOffZ,boxPosOffW);
+			particleRend->_boxPosGen.setActiveFlag(boxPosGenActive);
+			particleRend->_boxPosGen.setStartOffset(boxPosOffset);
+			
+/*X*/		bool  roundPosGenActive =    getIntAttrib(6);							//roundPosGenActive	 | attrib:  6	//===ROUND POSITION GENERATOR===//
+			float radiusX			=  getFloatAttrib(7);							//roundPosOffX		 | attrib:  7
+			float radiusY			=  getFloatAttrib(8);							//roundPosOffY		 | attrib:  8
+			particleRend->_roundPosGen.setActiveFlag(roundPosGenActive);
+			particleRend->_roundPosGen.setXRadius(radiusX);
+			particleRend->_roundPosGen.setYRadius(radiusY);
 
+/*X*/		bool  bColourGenActive  =   getIntAttrib(9);							//bColourGenActive	 | attrib: 9	//===BASIC COLOUR GENERATOR===//
+			float bMinStColX        = getFloatAttrib(10);							//bMinStColX		 | attrib: 10
+			float bMinStColY		= getFloatAttrib(11);							//bMinStColY		 | attrib: 11
+			float bMinStColZ		= getFloatAttrib(12);							//bMinStColZ		 | attrib: 12
+			float bMinStColW		= getFloatAttrib(13);							//bMinStColW		 | attrib: 13
+			glm::vec4 bMinStCol(bMinStColX,bMinStColY,bMinStColZ,bMinStColW);
+			particleRend->_basicColourGen.setActiveFlag(bColourGenActive);
+			particleRend->_basicColourGen.setMinStartColour(bMinStCol);
 
-			//poolSize			| attrib: 0
-			//===BOX POSITION GENERATOR===//
-			//boxPosGenActive	| attrib: 1
-			//boxPosOffX		| attrib: 2
-			//boxPosOffY		| attrib: 3
-			//boxPosOffZ		| attrib: 4
-			//boxPosOffW		| attrib: 5
+			float bMaxStColX        = getFloatAttrib(14);							//bMaxStColX		 | attrib: 14
+			float bMaxStColY		= getFloatAttrib(15);							//bMaxStColY		 | attrib: 15
+			float bMaxStColZ		= getFloatAttrib(16);							//bMaxStColZ		 | attrib: 16
+			float bMaxStColW		= getFloatAttrib(17);							//bMaxStColW		 | attrib: 17
+			glm::vec4 bMaxStCol(bMaxStColX,bMaxStColY,bMaxStColZ,bMaxStColW);
+			particleRend->_basicColourGen.setMaxStartColour(bMaxStCol);
 
-			//===ROUND POSITION GENERATOR===//
-			//roundPosGenActive | attrib: 6
-			//roundPosOffX		| attrib: 7
-			//roundPosOffY		| attrib: 8
-			//roundPosOff		| attrib: 9
-			//roundPosOffW		| attrib: 10
+			float bMinEndColX       = getFloatAttrib(18);							//bMinEndColX		 | attrib: 18
+			float bMinEndColY		= getFloatAttrib(19);							//bMinEndColY		 | attrib: 19
+			float bMinEndColZ		= getFloatAttrib(20);							//bMinEndColZ		 | attrib: 20
+			float bMinEndColW		= getFloatAttrib(21);							//bMinEndColW		 | attrib: 21
+			glm::vec4 bMinEndCol(bMinEndColX,bMinEndColY,bMinEndColZ,bMinEndColW);
+			particleRend->_basicColourGen.setMinEndColour(bMinEndCol);
 
-			//===BASIC COLOUR GENERATOR===//
-			//bColourGenActive	| attrib: 11
+			float bMaxEndColX       = getFloatAttrib(22);							//bMaxEndColX		 | attrib: 22
+			float bMaxEndColY		= getFloatAttrib(23);							//bMaxEndColY		 | attrib: 23
+			float bMaxEndColZ		= getFloatAttrib(24);							//bMaxEndColZ		 | attrib: 24
+			float bMaxEndColW		= getFloatAttrib(25);							//bMaxEndColW		 | attrib: 25
+			glm::vec4 bMaxEndCol(bMaxEndColX,bMaxEndColY,bMaxEndColZ,bMaxEndColW);
+			particleRend->_basicColourGen.setMaxEndColour(bMaxEndCol);
 
-			//bMinStColX		| attrib: 12
-			//bMinStColY		| attrib: 13
-			//bMinStColZ		| attrib: 14
-			//bMinStColW		| attrib: 15
+/*X*/		bool  basicVelGenActive =   getIntAttrib(26);							 //basicVelGenActive| attrib: 26	//===BASIC VELOCITY GENERATOR===//
+			float bMinVelX			= getFloatAttrib(27);							 //bMinVelX			| attrib: 27
+			float bMinVelY			= getFloatAttrib(28);							 //bMinVelY			| attrib: 28
+			float bMinVelZ			= getFloatAttrib(29);							 //bMinVelZ			| attrib: 29
+			float bMinVelW			= getFloatAttrib(30);							 //bMinVelW			| attrib: 30
+			glm::vec4 bMinVel(bMinVelX,bMinVelY,bMinVelZ,bMinVelW);
+			particleRend->_basicVelGen.setActiveFlag(basicVelGenActive);
+			particleRend->_basicVelGen.setMinStartVel(bMinVel);
 
-			//bMaxStColX		| attrib: 16
-			//bMaxStColY		| attrib: 17
-			//bMaxStColZ		| attrib: 18
-			//bMaxStColW		| attrib: 19
+			float bMaxVelX			= getFloatAttrib(31);							//bMaxVelX			| attrib: 31
+			float bMaxVelY			= getFloatAttrib(32);							//bMaxVelY			| attrib: 32 
+			float bMaxVelZ			= getFloatAttrib(33);							//bMaxVelZ			| attrib: 33
+			float bMaxVelW			= getFloatAttrib(34);							//bMaxVelW			| attrib: 34
+			glm::vec4 bMaxVel(bMaxVelX,bMaxVelY,bMaxVelZ,bMaxVelW);
+			particleRend->_basicVelGen.setMaxStartVel(bMaxVel);
 
-			//bMinEndColX		| attrib: 20
-			//bMinEndColY		| attrib: 21
-			//bMinEndColZ		| attrib: 22
-			//bMinEndColW		| attrib: 23
+/*X*/		bool  bSphereGenActive  =   getIntAttrib(35);							//bSphereGenActive	| attrib: 35	//===SPHERE VELOCITY GENERATOR===//
+			float bSMinVel			= getFloatAttrib(36);							//bSMinVel			| attrib: 36
+			float bSMaxVel			= getFloatAttrib(37);							//bSMaxVel			| attrib: 37
+			particleRend->_sphereVelGen.setActiveFlag(bSphereGenActive);
+			particleRend->_sphereVelGen.setMinVelocity(bSMinVel);
+			particleRend->_sphereVelGen.setMinVelocity(bSMaxVel);
 
-			//bMaxEndColX		| attrib: 24
-			//bMaxEndColY		| attrib: 25
-			//bMaxEndColZ		| attrib: 26
-			//bMaxEndColW		| attrib: 27
+/*X*/		bool  bTimeGenActive    =   getIntAttrib(38);							//bTimeGenActive	| attrib: 38	//===BASIC TIME GENERATOR===//
+			float minTime			= getFloatAttrib(39);							//minTime			| attrib: 39
+			float maxTime			= getFloatAttrib(40);							//maxTime			| attrib: 40
+			particleRend->_basicTimeGen.setActiveFlag(bTimeGenActive);
+			particleRend->_basicTimeGen.setMinTime(minTime);
+			particleRend->_basicTimeGen.setMaxTime(maxTime);
 
-			//===BASIC VELOCITY GENERATOR===//
-			//basicVelGenActive | attrib: 28
+/*X*/		bool  eulUpdActive    =   getIntAttrib(41);								//eulUpdActive		| attrib: 41	//===EULER UPDATER===//
+			float globalAccX		= getFloatAttrib(42);							//globalAccX		| attrib: 42
+			float globalAccY		= getFloatAttrib(43);							//globalAccY		| attrib: 43
+			float globalAccZ		= getFloatAttrib(44);							//globalAccZ		| attrib: 44
+			float globalAccW		= getFloatAttrib(45);							//globalAccW		| attrib: 45
+			glm::vec4 globalAcc(globalAccX,globalAccY,globalAccZ,globalAccW);
+			particleRend->_eulerUpdater.setActiveFlag(eulUpdActive);
+			particleRend->_eulerUpdater.setGlobalAcc(globalAcc);
 
-			//bMinVelX			| attrib: 29
-			//bMinVelY			| attrib: 30
-			//bMinVelZ			| attrib: 31
-			//bMinVelW			| attrib: 32
+/*X*/		bool  attUpdActive		=   getIntAttrib(46);							//attUpdActive		| attrib: 46	//==ATTRACTOR UPDATER==//
+			bool  att1Act			=   getIntAttrib(47);							//att1Act			| attrib: 47
+			float att1X				= getFloatAttrib(48);							//att1X				| attrib: 48
+			float att1Y				= getFloatAttrib(49);							//att1Y				| attrib: 49
+			float att1Z				= getFloatAttrib(50);							//att1Z				| attrib: 50
+			float att1W				= getFloatAttrib(51);							//att1W				| attrib: 51
+			glm::vec4 att1(att1X,att1Y,att1Z,att1W);
+			particleRend->_attractorUpdater.setActiveFlag(attUpdActive);
+			particleRend->_attractorUpdater.addAttractor(0,att1Act,att1);
 
-			//bMaxVelX			| attrib: 33
-			//bMaxVelY			| attrib: 34
-			//bMaxVelZ			| attrib: 35
-			//bMaxVelW			| attrib: 36
+			bool  att2Act			=   getIntAttrib(52);							//att2Act			| attrib: 52
+			float att2X				= getFloatAttrib(53);							//att2X				| attrib: 53
+			float att2Y				= getFloatAttrib(54);							//att2Y				| attrib: 54
+			float att2Z				= getFloatAttrib(55);							//att2Z				| attrib: 55
+			float att2W				= getFloatAttrib(56);							//att2W				| attrib: 56
+			glm::vec4 att2(att2X,att2Y,att2Z,att2W);
+			particleRend->_attractorUpdater.addAttractor(1,att2Act,att2);
 
-			//===SPHERE VELOCITY GENERATOR===//
-			//bSphereGenActive	| attrib: 37
+			bool  att3Act			=   getIntAttrib(57);							//att3Act			| attrib: 57
+			float att3X				= getFloatAttrib(58);							//att3X				| attrib: 58
+			float att3Y				= getFloatAttrib(59);							//att3Y				| attrib: 59
+			float att3Z				= getFloatAttrib(60);							//att3Z				| attrib: 60
+			float att3W				= getFloatAttrib(61);							//att3W				| attrib: 61
+			glm::vec4 att3(att3X,att3Y,att3Z,att3W);
+			particleRend->_attractorUpdater.addAttractor(2,att3Act,att3);
 
-			//bSMinVelX			| attrib: 38
-			//bSMinVelY			| attrib: 39
-			//bSMinVelZ			| attrib: 40
-			//bSMinVelW			| attrib: 41
+			bool  att4Act			=   getIntAttrib(62);							//att4Act			| attrib: 62
+			float att4X				= getFloatAttrib(63);							//att4X				| attrib: 63
+			float att4Y				= getFloatAttrib(64);							//att4Y				| attrib: 64
+			float att4Z				= getFloatAttrib(65);							//att4Z				| attrib: 65
+			float att4W				= getFloatAttrib(66);							//att4W				| attrib: 66
+			glm::vec4 att4(att4X,att4Y,att4Z,att4W);
+			particleRend->_attractorUpdater.addAttractor(3,att4Act,att4);
 
-			//bSMaxVelX			| attrib: 42
-			//bSMaxVelY			| attrib: 43
-			//bSMaxVelZ			| attrib: 44
-			//bSMaxVelW			| attrib: 45
+/*X*/		bool  bColUpdActive		=   getIntAttrib(67);							//bColUpdActive		| attrib: 67    //===BASIC COLOUR UPDATER===//
+			particleRend->_basicColourUpdater.setActiveFlag(bColUpdActive);
 
-			//===BASIC TIME GENERATOR===//
-			//bTimeGenActive	| attrib: 46
-			//minTime			| attrib: 47
-			//maxTime			| attrib: 48
+/*X*/		bool  pColUpdActive		=   getIntAttrib(68);							//pColUpdActive		| attrib: 68	//===POSITION COLOUR UPDATER===//
+			float minPosColX		= getFloatAttrib(69);							//minPosColX		| attrib: 69	
+			float minPosColY		= getFloatAttrib(70);							//minPosColY		| attrib: 70	
+			float minPosColZ		= getFloatAttrib(71);							//minPosColZ		| attrib: 71	
+			float minPosColW		= getFloatAttrib(72);							//minPosColW		| attrib: 72	
+			glm::vec4 minPosCol(minPosColX,minPosColY,minPosColZ,minPosColW);
+			particleRend->_positionColourUpdater.setActiveFlag(pColUpdActive);
+			particleRend->_positionColourUpdater.setMinPos(minPosCol);
 
-			//===EULER UPDATER===//
-			//eulUpdActive		| attrib: 49
-			//globalAccX		| attrib: 50
-			//globalAccY		| attrib: 51
-			//globalAccZ		| attrib: 52
-			//globalAccW		| attrib: 53
+			float maxPosColX		= getFloatAttrib(73);							//maxPosColX		| attrib: 73	
+			float maxPosColY		= getFloatAttrib(74);							//maxPosColY		| attrib: 74	
+			float maxPosColZ		= getFloatAttrib(75);							//maxPosColZ		| attrib: 75
+			float maxPosColW		= getFloatAttrib(76);							//maxPosColW		| attrib: 76	
+			glm::vec4 maxPosCol(maxPosColX,maxPosColY,maxPosColZ,maxPosColW);
+			particleRend->_positionColourUpdater.setMaxPos(maxPosCol);
 
-			//==ATTRACTOR UPDATER==//
-			//attUpdActive		| attrib: 54
-			//att1Act			| attrib: 55
-			//att1X				| attrib: 56
-			//att1Y				| attrib: 57
-			//att1Z				| attrib: 58
-			//att1W				| attrib: 59
+/*X*/		bool  velColUpdActive	=   getIntAttrib(77);							//velColUpdActive	| attrib: 77	//===VELOCITY COLOUR UPDATER===//
+			float minVelColX		= getFloatAttrib(78);							//minVelColX		| attrib: 78	
+			float minVelColY		= getFloatAttrib(79);							//minVelColY		| attrib: 79	
+			float minVelColZ		= getFloatAttrib(80);							//minVelColZ		| attrib: 80	
+			float minVelColW		= getFloatAttrib(81);							//minVelColW		| attrib: 81	
+			glm::vec4 minVelCol(minVelColX,minVelColY,minVelColZ,minVelColW);
+			particleRend->_velocityColourUpdater.setActiveFlag(velColUpdActive);
+			particleRend->_velocityColourUpdater.setMinVel(minVelCol);
 
-			//att2Act			| attrib: 60
-			//att2X				| attrib: 61
-			//att2Y				| attrib: 62
-			//att2Z				| attrib: 63
-			//att2W				| attrib: 64
+			float maxVelColX		= getFloatAttrib(82);							//maxVelColX		| attrib: 82	
+			float maxVelColY		= getFloatAttrib(83);							//maxVelColY		| attrib: 83	
+			float maxVelColZ		= getFloatAttrib(84);							//maxVelColZ		| attrib: 84	
+			float maxVelColW		= getFloatAttrib(85);							//maxVelColW		| attrib: 85	
+			glm::vec4 maxVelCol(maxVelColX,maxVelColY,maxVelColZ,maxVelColW);
+			particleRend->_velocityColourUpdater.setMaxVel(maxVelCol);
 
-			//att3Act			| attrib: 65
-			//att3X				| attrib: 66
-			//att3Y				| attrib: 67
-			//att3Z				| attrib: 68
-			//att3W				| attrib: 69
+/*X*/		bool  tUpdActive		=   getIntAttrib(86);							//tUpdActive		| attrib: 86	//===TIME UPDATER===///
+			particleRend->_basicTimeUpdate.setActiveFlag(tUpdActive);	
 
-			//att4Act			| attrib: 70
-			//att4X				| attrib: 71
-			//att4Y				| attrib: 72
-			//att4Z				| attrib: 73
-			//att4W				| attrib: 74
-
-			//===BASIC COLOUR UPDATER===//
-			//bColUpdActive		| attrib: 75
-
-			//===POSITION COLOUR UPDATER===//
-			//pColUpdActive		| attrib: 76
-			//minPosColX		| attrib: 77
-			//minPosColY		| attrib: 78
-			//minPosColZ		| attrib: 79
-			//minPosColW		| attrib: 80
-
-			//maxPosColX		| attrib: 81
-			//maxPosColY		| attrib: 82
-			//maxPosColZ		| attrib: 83
-			//maxPosColW		| attrib: 84
-
-			//===VELOCITY COLOUR UPDATER===//
-			//velColUpdActive	| attrib: 85
-			//minVelColX		| attrib: 86
-			//minVelColY		| attrib: 87
-			//minVelColZ		| attrib: 88
-			//minVelColW		| attrib: 89
-
-			//maxVelColX		| attrib: 90
-			//maxVelColY		| attrib: 91
-			//maxVelColZ		| attrib: 92
-			//maxVelColW		| attrib: 93
-
-			//===TIME UPDATER===///
-			//tUpdActive | attrib: 94
-
-			particleRend->generate(10000);
+			float emitScalar = getFloatAttrib(87);									//emitScalar		| attrib: 87	//==EMITTER===//
+			particleRend->getEmitter().setEmitScalar(emitScalar);
+			particleRend->getEmitter().init(poolSize);
+			particleRend->generate(poolSize);
 		}
 		break;
 

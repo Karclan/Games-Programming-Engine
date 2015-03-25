@@ -7,6 +7,7 @@ ParticleRenderer::ParticleRenderer()
 	_particleSystem=nullptr;
 	_generatedFlag=false;
 	_shader = Assets::getShader("particle");
+	_particlePool=0;
 }
 
 ComponentType::Type ParticleRenderer::getType()
@@ -39,34 +40,47 @@ void ParticleRenderer::generate(size_t particlePool)
 		glDeleteBuffers(1,&_particlePositionBuffer);
 		glDeleteBuffers(1,&_particleColourBuffer);
 		glDeleteVertexArrays(1,&_vao);
-		
-		//_particleSystem = nullptr;
+		delete _particleSystem;
+		_particleSystem = nullptr;
 	}
 
 	_particleSystem = new ParticleSystem(particlePool);
 	_generatedFlag=true;
 
-	ab=new TestCircleEmitter();
-	ab->init(particlePool);
+	_boxPosGen.setPosition(glm::vec4(_transform->getPosition(),1.0));
+	_emitter.addGenerator(SP_ParticleGenerator(&_boxPosGen));
+	_roundPosGen.setCenter(glm::vec4(_transform->getPosition(),1.0));
+	_emitter.addGenerator(SP_ParticleGenerator(&_roundPosGen));
+	_emitter.addGenerator(SP_ParticleGenerator(&_basicColourGen));
+	_emitter.addGenerator(SP_ParticleGenerator(&_basicVelGen));
+	_emitter.addGenerator(SP_ParticleGenerator(&_sphereVelGen));
+	_emitter.addGenerator(SP_ParticleGenerator(&_basicTimeGen));
+	_particleSystem->addEmitter(SP_ParticleEmitter(&_emitter));
 
-	_particleSystem->addEmitter(ab);
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_eulerUpdater));
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_attractorUpdater));
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_basicColourUpdater));
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_positionColourUpdater));
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_velocityColourUpdater));
+	_particleSystem->addUpdater(SP_ParticleUpdater(&_basicTimeUpdate));
 
-	auto timeUpdater = new BasicTimeUpdater();
-	_particleSystem->addUpdater(timeUpdater);
-
-	auto colourUpdater = new BasicColourUpdater();
-	_particleSystem->addUpdater(colourUpdater);
-
-	//_eulerUpdater = new EulerUpdater();
+	//ab=new TestCircleEmitter();
+	//ab->init(particlePool);
+	//_particleSystem->addEmitter(ab);
+	//auto timeUpdater = new BasicTimeUpdater();
+	//_particleSystem->addUpdater(timeUpdater);
+	//auto colourUpdater = new BasicColourUpdater();
+	//_particleSystem->addUpdater(colourUpdater);
+	////_eulerUpdater = new EulerUpdater();
+	////{
+	////	_eulerUpdater->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
+	////}
+	//_particleSystem->addUpdater(Updaters::EULERUPDATER);
+	//EulerUpdater* e = (EulerUpdater*)_particleSystem->getUpdater(Updaters::EULERUPDATER);
+	//if(e!=nullptr)
 	//{
-	//	_eulerUpdater->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
+	//e->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
 	//}
-	_particleSystem->addUpdater(Updaters::EULERUPDATER);
-	EulerUpdater* e = (EulerUpdater*)_particleSystem->getUpdater(Updaters::EULERUPDATER);
-	if(e!=nullptr)
-	{
-	e->_globalAcceleration=glm::vec4(0.0,15.0,0.0,0.0);
-	}
 
 	size_t count = _particleSystem->getParticleCount();
 
@@ -93,11 +107,7 @@ void ParticleRenderer::generate(size_t particlePool)
 
 void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
-	_shader->useProgram();
-	//if(ab!=nullptr)
-	//{
-	//	ab->posGenerator->_center=glm::vec4(_transform->getPosition(),1.0);
-	//}
+	/*_shader->useProgram();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
 	_shader->setUniform("u_ModelMatrix",_transform->getMatrix());
@@ -114,12 +124,12 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 
 	glBindVertexArray(0);
 
-	glDisable(GL_PROGRAM_POINT_SIZE);
+	glDisable(GL_PROGRAM_POINT_SIZE);*/
 }
  
 void ParticleRenderer::animate(float t)
 {
-	if(_playFlag)
+	/*if(_playFlag)
 	{
 		_particleSystem->update(t);
 
@@ -136,7 +146,7 @@ void ParticleRenderer::animate(float t)
 
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
-	}
+	}*/
 }
 
 void ParticleRenderer::play()
