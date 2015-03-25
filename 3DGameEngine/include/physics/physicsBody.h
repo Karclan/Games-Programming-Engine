@@ -35,12 +35,14 @@ public:
 	void addImpulse(glm::vec3 impulse); //!< Add impulse (instant velocity);
 
 	glm::vec3 getVelocity() { return _velocity; }
-	void setVelocity(glm::vec3 v) { _velocity = v; }
+	void setVelocity(glm::vec3 v);
 	SPtr_Transform getTransform() { return _transform; }
 	float getMass() { return _mass; } // when make set mass, ensure to check for <= 0 so not negative or zero
+	bool isAwake() { return _awake; }
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform
+	bool _awake;
 
 	float _mass;
 	float _drag;

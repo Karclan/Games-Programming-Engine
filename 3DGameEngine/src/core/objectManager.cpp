@@ -312,6 +312,45 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 
 
 
+// Remove object from subsystem
+void ObjectManager::removeComponentFromSubsystems(SPtr_Component component)
+{
+	/*
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Ensure your component can be removed from subsystems you added it to!
+	// Add to subsystems based on type
+	switch(component->getType())
+	{
+	case ComponentType::CAMERA: // camera - add to cameras in render system
+		_rendSys->removeCamera(component);
+		break;
+
+	case ComponentType::MODL_REND: // model renderer - add to render system
+		_rendSys->removeRenderObject(component);
+		break;
+
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->removeCollider(component);
+		break;
+
+	case ComponentType::LIGHT:
+		_rendSys->removeLight(component);
+		break;
+
+	case ComponentType::CUSTOM:
+		_behvrSys->removeCustom(component);
+		break;
+
+	case ComponentType::TERRAIN_COL:
+		_physicsSys->removeTerrainCollider(component);
+		break;
+	}
+	*/
+
+}
+
+
+
 
 
 

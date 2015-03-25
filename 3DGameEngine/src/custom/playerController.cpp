@@ -49,6 +49,7 @@ void PlayerController::update(float t)
 	}
 
 	// If press S, shoot (I'm such a troll...)
+	
 	if(Input::getKeyPressed(sf::Keyboard::S)) 
 	{
 		SPtr_GameObject bullet(new GameObject(0, "Bullet"));
@@ -64,6 +65,7 @@ void PlayerController::update(float t)
 		bullet->addComponent(bulletRenderer);
 
 		SPtr_SphereCol bulletCollider(new SphereCollider());
+		bulletCollider->setRadius(0.25f);
 		bullet->addComponent(bulletCollider);
 
 		SPtr_PhysBody bulletPhysBody(new PhysicsBody());
@@ -75,6 +77,7 @@ void PlayerController::update(float t)
 		// Now send to main system
 		addNewGameObject(bullet);
 	}
+	
 
 	// Animation
 	//if(axisV == 0) _robotAnim->stop();
