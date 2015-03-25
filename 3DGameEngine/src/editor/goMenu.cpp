@@ -304,10 +304,7 @@ void GoMenu::refreshTweakBar()
 
 				break;
 			case ComponentType::PARTICLE_REND:
-
-				TwAddVarRW(_myBar, &(id+"Particle Pool Size")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Particle_Renderer label=Particle_Pool_Size");
-				TwAddVarRW(_myBar, &(id+"Emit Scalar")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(87), "group=Particle_Renderer label=Emit_Scalar");
-		
+				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Particle_Renderer label=placeholder");
 				break; 
 			case ComponentType::SPHERE_COL:
 				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
