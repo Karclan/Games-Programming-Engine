@@ -4,6 +4,7 @@ Animator::Animator()
 {
 	_animation = nullptr;
 	animTime = 0;
+
 }
 
 ComponentType::Type Animator::getType()
@@ -19,21 +20,13 @@ bool Animator::isOnePerObject()
 
 void Animator::bind(Shader* shader)
 {
-
-	for(int i = 0; i < 7; ++i)
+	
+	for(int i = 0; i < Transforms.size(); ++i)
 	{
-		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , dummy);
+		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , Transforms[i]);
 	}
 
-	for(int i = 7; i < 15; ++i)
-	{
-		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , glm::mat4());
-	}
-
-	for(int i = 15; i < 100; ++i)
-	{
-		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , -dummy);
-	}
+	
 
 }
 
@@ -100,10 +93,10 @@ void Animator::UpdateAnim( float fDeltaTime )
 {
 	float deg = 120 * fDeltaTime;
 	dummy = glm::rotate(dummy, glm::radians(deg), glm::vec3(0, 1, 0));
+	
+
+	BoneTransform(fDeltaTime, Transforms);
 	return;
-
-
-
 	
     if ( _animation->getNumFrames() < 1 ) return;
 
@@ -122,7 +115,7 @@ void Animator::UpdateAnim( float fDeltaTime )
 
 	float fInterpolate = fmodf( animTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
 
-    InterpolateSkeletons( _AnimatedSkeleton, _Skeletons[iFrame0], _Skeletons[iFrame1], fInterpolate );
+	 InterpolateSkeletons( _AnimatedSkeleton, _Skeletons[iFrame0], _Skeletons[iFrame1], fInterpolate );
 }
 
 void Animator::UpdateMesh(float fDeltaTime)
@@ -132,7 +125,7 @@ void Animator::UpdateMesh(float fDeltaTime)
 
 	for(int i=0; i < _animation->GetNumJoints(); ++i)
 	{
-		//_animatedBones[i] = animatedSkeleton[i] * InverseBindPose[i];
+		//dummy[i] = animatedSkeleton[i]; // * InverseBindPose[i];
 	}
 }
 
@@ -141,7 +134,7 @@ void Animator::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSk
     for ( int i = 0; i < _animation->GetNumJoints(); ++i )
     {
         SkeletonJoint& finalJoint = finalSkeleton.m_Joints[i];
-        glm::mat4x4& finalMatrix = finalSkeleton.m_BoneMatrices[i];
+        glm::mat4x4&  finalMatrix = finalSkeleton.m_BoneMatrices[i];
 
         const SkeletonJoint& joint0 = skeleton0.m_Joints[i];
         const SkeletonJoint& joint1 = skeleton1.m_Joints[i];
@@ -152,7 +145,7 @@ void Animator::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSk
         finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
 
         // Build the bone matrix for GPU skinning.
-        finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
+       finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
     }
 }
 
@@ -173,13 +166,17 @@ float ElapsedTime::GetElapsedTime() const
     return fDeltaTime;
 }
 
-/*
-glm::mat4 Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms)
+
+void Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transforms)
 {
-	glm::mat4 Identity; Identity= glm::mat4	(0.0f, 0.0f, 0.0f, 0.0f,
-											0.0f, 0.0f, 0.0f, 0.0f,
-											0.0f, 0.0f, 0.0f, 0.0f,
-											0.0f, 0.0f, 0.0f, 0.0f);
+	aiMatrix4x4 Identity; 
+	Identity= aiMatrix4x4	(1.0f, 0.0f, 0.0f, 0.0f,
+							0.0f, 1.0f, 0.0f, 0.0f,
+							0.0f, 0.0f, 1.0f, 0.0f,
+							0.0f, 0.0f, 0.0f, 1.0f);
+
+	float deg = 120 * TimeInSeconds;
+	dummy = glm::rotate(dummy, glm::radians(deg), glm::vec3(0, 1, 0));
     //Identity.InitIdentity();
 
     float TicksPerSecond = _animation->_iFramRate != 0 ? 
@@ -187,20 +184,21 @@ glm::mat4 Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& T
     float TimeInTicks = TimeInSeconds * TicksPerSecond;
     float AnimationTime = fmod(TimeInTicks, _animation->getAnimDuration());
 
-    ReadNodeHeirarchy(AnimationTime, m_pScene->mRootNode, Identity);
+   // ReadNodeHeirarchy(AnimationTime, _animation->animScene->mRootNode, Identity);
 
-    Transforms.resize(m_NumBones);
+	Transforms.resize(_animation->GetNumJoints());
 
-    for (GLint i = 0 ; i < m_NumBones ; i++) {
-        Transforms[i] = m_BoneInfo[i].FinalTransformation;
+    for (GLint i = 0 ; i < _animation->GetNumJoints() ; i++) {
+       // Transforms[i] = m_BoneInfo[i].FinalTransformation;
+		Transforms[i] = dummy;
     }
 }
 
-void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const glm::mat4& ParentTransform)
+void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 { 
     std::string NodeName(pNode->mName.data);
 
-    const aiAnimation* pAnimation = _animation;
+	const aiAnimation* pAnimation = _animation->animScene->mAnimations[0];
 
     aiMatrix4x4  NodeTransformation(pNode->mTransformation);
 
@@ -230,13 +228,14 @@ void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const
     }
 
     aiMatrix4x4 GlobalTransformation = ParentTransform * NodeTransformation;
-	
+	std::map<std::string, int> m_boneMapping;
+	/*
     if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
-        uint BoneIndex = m_BoneMapping[NodeName];
+        GLint BoneIndex = m_BoneMapping[NodeName];
         m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * 
                                                     m_BoneInfo[BoneIndex].BoneOffset;
     }
-
+	*/
     for (GLint i = 0 ; i < pNode->mNumChildren ; i++) {
         ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
     }
@@ -300,5 +299,62 @@ void Animator::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, con
     const aiVector3D& End   = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
     aiVector3D Delta = End - Start;
     Out = Start + Factor * Delta;
+} 
+
+const aiNodeAnim* Animator::FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName)
+{
+    for (GLint i = 0 ; i < pAnimation->mNumChannels ; i++) {
+        const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+        
+        if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
+            return pNodeAnim;
+        }
+    }
+    
+    return NULL;
 }
-*/
+
+
+GLint Animator::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+    assert(pNodeAnim->mNumScalingKeys > 0);
+    
+    for (GLint i = 0 ; i < pNodeAnim->mNumScalingKeys - 1 ; i++) {
+        if (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
+            return i;
+        }
+    }
+    
+    assert(0);
+
+    return 0;
+}
+
+GLint Animator::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+{    
+    for (GLint i = 0 ; i < pNodeAnim->mNumPositionKeys - 1 ; i++) {
+        if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
+            return i;
+        }
+    }
+    
+    assert(0);
+
+    return 0;
+}
+
+
+GLint Animator::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+{
+    assert(pNodeAnim->mNumRotationKeys > 0);
+
+    for (GLint i = 0 ; i < pNodeAnim->mNumRotationKeys - 1 ; i++) {
+        if (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
+            return i;
+        }
+    }
+    
+    assert(0);
+
+    return 0;
+}

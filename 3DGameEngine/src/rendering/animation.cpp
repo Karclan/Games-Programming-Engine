@@ -163,6 +163,25 @@ bool Animation::LoadAnimation( const std::string& filename )
     return true;
 }
 
+bool Animation::loadAssimpAnim( const std::string& filename )
+{
+
+	Assimp::Importer importer;
+
+	animScene = importer.ReadFile( filename, aiProcess_CalcTangentSpace  | 
+        aiProcess_Triangulate            |
+        aiProcess_JoinIdenticalVertices  |
+        aiProcess_SortByPType);
+  
+	
+	// If the import failed, report it
+	if( !animScene)
+	{
+		std::cout << "Error Loading : " << importer.GetErrorString() << "\n";
+		return nullptr;
+	}
+	
+}
 int Animation::getNumFrames()
 {
 	return _iNumFrames;

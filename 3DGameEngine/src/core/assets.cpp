@@ -347,6 +347,13 @@ Animation* Assets::getAnim(std::string fileName)
 			delete newAnim;
 			return nullptr;
 		}
+
+		if(!newAnim->loadAssimpAnim(filePath))
+		{
+			std::cout << "Failed to load " << fileName << " anim\n";
+			delete newAnim;
+			return nullptr;
+		}
 		
 		// Add texture to map and return
 		ins->_anims.emplace(fileName, newAnim);

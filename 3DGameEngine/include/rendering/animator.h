@@ -79,18 +79,22 @@ public:
 	void UpdateMesh( float fDeltaTime );
 	void bind(Shader* shader);
 
-	glm::mat4 BoneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
+	void BoneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
 	void InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate );
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode,const glm::mat4& ParentTransform);
+	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode,const aiMatrix4x4& ParentTransform);
 	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
+
 
 	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
     void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
     void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);    
-   // GLint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-   // GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-   // GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
+	GLint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
+    GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+	std::vector<glm::mat4> Transforms;
+
 
 	void setAnimation(Animation* anim) 
 	{ 

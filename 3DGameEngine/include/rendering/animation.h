@@ -6,6 +6,10 @@
 #include "rendering\renderer.h"
 #include "core\transform.h"
 
+#include <assimp\Importer.hpp>
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
+
 #include <iostream>
 #include <fstream>
 #include <ctime>
@@ -65,6 +69,7 @@ public:
 
 
 	bool LoadAnimation( const std::string& filename ); //!< Loads an animation from an MD5 file
+	bool loadAssimpAnim(const std::string& filename );
 	int getNumFrames();
 	float getAnimTime();
 	float getAnimDuration();
@@ -81,7 +86,7 @@ public:
     float _fFrameDuration;
     float _fAnimTime;
 
-
+	const aiScene* animScene;
 protected:
     JointInfoList       _JointInfos;
     BoundsList          _Bounds;
