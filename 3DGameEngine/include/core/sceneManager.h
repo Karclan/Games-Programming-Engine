@@ -52,6 +52,7 @@ private:
 	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
 	void xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten);
 	void xmlAddCustom(TiXmlElement* go, std::string behvr);
+	void xmlAddAnimator(TiXmlElement* go, std::string animationPath);
 	void xmlAddTerrainCol(TiXmlElement* go);
 
 	// saving scene params funcs

@@ -240,6 +240,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::BOX_COL:		newComponent.reset(new BoxCollider());		break;
 	case ComponentType::CUSTOM:			newComponent.reset(new Custom(objectID));	break;
 	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
+	case ComponentType::ANIMATION:		newComponent.reset(new Animator());			break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -287,7 +288,6 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 
 	case ComponentType::ROB_REND:
 		_rendSys->addRenderObject(std::static_pointer_cast<RobotRenderer>(newComponent));
-		_rendSys->addAnimatedObject(std::static_pointer_cast<RobotRenderer>(newComponent));
 		break;
 
 	case ComponentType::SPHERE_COL:
@@ -305,6 +305,10 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 
 	case ComponentType::TERRAIN_COL:
 		_physicsSys->addTerrainCollider(std::static_pointer_cast<TerrainCollider>(newComponent));
+		break;
+
+	case ComponentType::ANIMATION:
+		_rendSys->addAnimator(std::static_pointer_cast<Animator>(newComponent));
 		break;
 	}
 

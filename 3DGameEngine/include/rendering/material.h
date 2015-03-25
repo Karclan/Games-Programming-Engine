@@ -37,6 +37,7 @@ public:
 	GLfloat getSpecularExp();
 
 	Texture2D* getTexture() { return _texture; }
+	Shader* getShader() { return _shader; }
 
 private:
 	Shader* _shader;

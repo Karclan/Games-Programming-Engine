@@ -48,9 +48,9 @@ void RenderSystem::render(Camera* camera)
 
 void RenderSystem::animate(float t)
 {
-	for(unsigned int i = 0; i < _animations.size(); ++i)
+	for(unsigned int i = 0; i < _animators.size(); ++i)
 	{
-		_animations[i]->animate(t);
+		_animators[i]->UpdateAnim(t);
 	}
 }
 
@@ -68,13 +68,11 @@ void RenderSystem::addRenderObject(SPtr_Renderer renderer)
 	_models.push_back(renderer);
 }
 
-void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
+void RenderSystem::addAnimator(SPtr_Animator anim)
 {
-	if(!renderer)return;
-	_models.push_back(renderer);
-	_animations.push_back(renderer);
+	if(!anim) return;
+	_animators.push_back(anim);
 }
-
 
 // Default lighting values
 void RenderSystem::setLightDefaults()
@@ -106,7 +104,7 @@ void RenderSystem::clear()
 {
 	_cameras.clear();
 	_models.clear(); 
-	_animations.clear();
+	_animators.clear();
 	_pointLights.clear();
 	_spotLights.clear();
 }

@@ -190,6 +190,8 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+
+
 	case ComponentType::SPHERE_COL:
 		{
 			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
@@ -212,6 +214,16 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+	case ComponentType::ANIMATION:
+		{
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(_comp);
+			Animation* anim = animator->getAnimation();
+			if(anim != nullptr) addAttribs(anim->getFilePath());
+			else addAttribs("");
+			
+			break;
+		}
+
 
 	case ComponentType::LIGHT:
 		{
@@ -228,10 +240,7 @@ void CompData::setAttribsToComponents()
 			addAttribf(light->getAtteunation().z); // Quadratic
 			break;
 		}
-	case ComponentType::MATERIAL:
-		{
-			break;
-		}
+	
 
 	case ComponentType::CUSTOM:
 		{
@@ -321,7 +330,8 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
 		break;
 
-	case ComponentType::MATERIAL:
+	case ComponentType::ANIMATION:
+		addAttribs(compElmnt->Attribute("animation")); // attrib 0 is model filepath
 		break;
 
 	case ComponentType::SPHERE_COL:
@@ -467,6 +477,13 @@ void CompData::initializeComponent()
 			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_comp);
 			boxCol->setExtents(glm::vec3(getFloatAttrib(0), getFloatAttrib(1), getFloatAttrib(2)));
 			boxCol->setOffset(glm::vec3(getFloatAttrib(3), getFloatAttrib(4), getFloatAttrib(5)));
+		}
+		break;
+
+	case ComponentType::ANIMATION:
+		{
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(getComp());
+			animator->setAnimation(Assets::getAnim(getStringAttrib(0)));
 		}
 		break;
 

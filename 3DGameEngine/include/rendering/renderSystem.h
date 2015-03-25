@@ -8,6 +8,7 @@
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
 #include "rendering\light.h"
+#include "rendering\animator.h"
 
 #include "rendering\FTInterface.h"
 
@@ -29,7 +30,7 @@ public:
 	void animate(float t); //!< Call animate on any animation components
 	void addCamera(SPtr_Camera camera); //!< Add a new camera to the system
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
-	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
+	void addAnimator(SPtr_Animator anim); 
 	
 	void setLightDefaults(); //!< Set default values for the global light params
 
@@ -60,7 +61,7 @@ private:
 
 	std::vector<SPtr_Camera>   _cameras; //!< All cameras in scene. Currently set to simply render through camera at index 0.
 	std::vector<SPtr_Renderer> _models; //!< All the models to be rendered each frame
-	std::vector<SPtr_Renderer> _animations; //!< All the models to be animated each frame
+	std::vector<SPtr_Animator> _animators; //!< All the anims
 	std::vector<SPtr_Light>    _pointLights; //!< All the lights in the scene
 	std::vector<SPtr_Light>    _spotLights;
 	std::vector<SPtr_Light>    _unsortedLights;

@@ -5,13 +5,17 @@ ModelRenderer::ModelRenderer()
 	// Set dependency flags so linkDependency is called with requested component
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
+	setOptionalDepFlag(ComponentType::ANIMATION);
+
 	_mesh = nullptr;
+	_anim = nullptr;
 }
 
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {
 	if(_mesh == nullptr) return; // Can't render without mesh
 	_material.bind(_transform->getMatrix(), viewMatrix, projMatrix);
+	if(_anim) _anim->bind(_material.getShader());
 	glBindVertexArray(_mesh->getVao());
 	glDrawElements(GL_TRIANGLES, _mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 }
@@ -33,6 +37,10 @@ void ModelRenderer::linkDependency(SPtr_Component component)
 	{
 	case ComponentType::TRANSFORM:
 		_transform = std::static_pointer_cast<Transform>(component);
+		break;
+
+	case ComponentType::ANIMATION:
+		_anim = std::static_pointer_cast<Animator>(component);
 		break;
 	}
 }
