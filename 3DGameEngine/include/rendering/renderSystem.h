@@ -28,9 +28,16 @@ public:
 	void render(); //!< Render the camera through the currently selected camera
 	void render(Camera* camera); //!< Render the scene through a camera passed as an arg
 	void animate(float t); //!< Call animate on any animation components
+	
 	void addCamera(SPtr_Camera camera); //!< Add a new camera to the system
+	void addLight(SPtr_Light light);
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 	void addAnimator(SPtr_Animator anim); 
+	
+	void removeCamera(SPtr_Camera camera); //!< Remove Camera from system
+	void removeLight(SPtr_Light light);
+	void removeRenderObject(SPtr_Renderer renderer); //!< Remove Renderer
+	void removeAnimator(SPtr_Animator anim);  //!< Remove a given animator
 	
 	void setLightDefaults(); //!< Set default values for the global light params
 
@@ -50,7 +57,7 @@ public:
 	// Note we would want a system that will set current global uniforms to any new shaders loaded in as well. perhaps we need a "shader manager" class?
 	void setShadersMap(const std::map<std::string, Shader*>* shadersMap) { _loadedShaders = shadersMap; }
 	void activateLights();
-	void addLight(SPtr_Light light);
+	
 
 private:
 

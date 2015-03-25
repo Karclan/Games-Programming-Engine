@@ -179,3 +179,43 @@ void RenderSystem::addLight(SPtr_Light light)
 {
 	_unsortedLights.push_back(light);
 }
+
+
+
+
+// Remove Objects
+void RenderSystem::removeCamera(SPtr_Camera camera)
+{
+	std::vector<SPtr_Camera>::iterator it = _cameras.begin();
+	for(it; it != _cameras.end(); ++it)
+	{
+		if(*it == camera)
+		{
+			_cameras.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeLight(SPtr_Light light)
+{
+	// TO DO
+}
+
+void RenderSystem::removeRenderObject(SPtr_Renderer renderer)
+{
+	std::vector<SPtr_Renderer>::iterator it = _models.begin();
+	for(it; it != _models.end(); ++it)
+	{
+		if(*it == renderer)
+		{
+			_models.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeAnimator(SPtr_Animator anim)
+{
+	// TO DO
+}

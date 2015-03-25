@@ -312,3 +312,46 @@ void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 }
 
 
+
+
+// Remove objects
+void PhysicsSystem::removeCollider(SPtr_Collider collider)
+{
+	// If in unsorted list
+	if(_unsortedColliders.size() != 0)
+	{
+		std::vector<SPtr_Collider>::iterator it = _unsortedColliders.begin();
+		for(it; it != _unsortedColliders.end(); ++it)
+		{
+			if(*it == collider)
+			{
+				_unsortedColliders.erase(it);
+				return;
+			}
+		}
+	}
+
+	// Else have to determine if dynamic or not, if static must also delete from static tree
+	if(collider->hasPhysicsBody())
+	{
+		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
+		for(it; it != _dynamicColliders.end(); ++it)
+		{
+			if(*it == collider)
+			{
+				_dynamicColliders.erase(it);
+				return;
+			}
+		}
+
+	}
+
+	// Must be static
+
+	
+}
+
+void PhysicsSystem::removeTerrainCollider(SPtr_TerrainCol collider)
+{
+	_terrainCollider = SPtr_TerrainCol(nullptr);
+}

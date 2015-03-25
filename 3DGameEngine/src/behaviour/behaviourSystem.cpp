@@ -173,3 +173,10 @@ void BehaviourSystem::lateUpdate(float t)
 	}
 
 }
+
+
+// Remove
+void BehaviourSystem::removeCustom(SPtr_Custom custom)
+{
+	// TO DO
+}
