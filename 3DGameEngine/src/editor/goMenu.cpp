@@ -298,14 +298,13 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::ROB_REND:
-				// None for now
-
 				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Robot_Render label=placeholder");
 
 				break;
 			case ComponentType::PARTICLE_REND:
-				TwAddVarRW(_myBar, &(id+"placeholder")[0], TW_TYPE_FLOAT, "nothing", "group=Particle_Renderer label=placeholder");
+				TwAddVarRW(_myBar, &(id+"Behaviour")[0], TW_TYPE_FLOAT, "nothing", "group=Particle_Renderer label=Behaviour");
 				break; 
+
 			case ComponentType::SPHERE_COL:
 				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
 				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col label=X_offset");
