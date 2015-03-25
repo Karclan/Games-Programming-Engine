@@ -6,7 +6,9 @@ PhysicsSystem::PhysicsSystem()
 	_maxIterations = 5;
 	_terrainCollider = nullptr;
 
-	_staticOctTree.setMaxDepth(2); // i think the oct tree makes static stuff worse! Uniform grid would be better (probs because only a handful of static colliders atm so oct tree has adverse affect)
+
+	//_staticOctTree.setMaxDepth(0); // i think the oct tree makes static stuff worse! Uniform grid would be better (probs because only a handful of static colliders atm so oct tree has adverse affect)
+
 }
 
 void PhysicsSystem::init()
