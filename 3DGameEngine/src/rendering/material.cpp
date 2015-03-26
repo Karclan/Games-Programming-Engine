@@ -77,7 +77,8 @@ void Material::bind(glm::mat4 m, GLfloat* v, GLfloat* p)
 	}
 	
 	_shader->setMVP(glm::value_ptr(m), v, p);
-	_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(m*glm::make_mat4(v)))));
+	glm::mat4 modelViewMat = m*glm::make_mat4(v);
+	_shader->setUniform("NormalMatrix",glm::mat3(glm::inverse(glm::transpose(modelViewMat))));
 	_shader->setTexTile(_uvTile);
 	return;
 }

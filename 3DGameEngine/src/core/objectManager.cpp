@@ -300,8 +300,8 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 		_rendSys->addRenderObject(std::static_pointer_cast<RobotRenderer>(newComponent));
 		break;
 	case ComponentType::PARTICLE_REND:
-		_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
-		_rendSys->addAnimatedObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		//_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		_rendSys->addParticleSystem(std::static_pointer_cast<ParticleRenderer>(newComponent));
 		break;
 	case ComponentType::SPHERE_COL:
 	case ComponentType::BOX_COL:
