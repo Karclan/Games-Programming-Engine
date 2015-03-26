@@ -83,5 +83,5 @@
 </GO>
 <GO name="TestParticleSystem">
     <COMP type="10" />
-    <COMP type="0" tx="0" ty="5" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="0" ty="2" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
 </GO>

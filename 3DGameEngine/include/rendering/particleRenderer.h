@@ -42,7 +42,9 @@ public:
 	SP_ParticleGenerator getGenerator(Generators::type type);
 	SP_ParticleUpdater	 getUpdater(Updaters::type type);
 	SP_CircleEmitter circleEmitter;
+
 	SP_EulerUpdater _eulerUpdater;
+	SP_FloorUpdater _floorUpdater;
 
 private:
 

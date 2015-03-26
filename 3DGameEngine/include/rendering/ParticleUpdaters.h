@@ -8,7 +8,7 @@
 
 namespace Updaters
 {
-	enum type{EULERUPDATER, ATTRACTORUPDATER, BASICCOLOURUPDATER, POSITIONCOLOURUPDATER, VELOCITYCOLOURUPDATER, BASICTIMEUPDATER, UPDATERS};
+	enum type{EULERUPDATER, FLOORUPDATER, ATTRACTORUPDATER, BASICCOLOURUPDATER, POSITIONCOLOURUPDATER, VELOCITYCOLOURUPDATER, BASICTIMEUPDATER, UPDATERS};
 }
 
 class ParticleUpdater
@@ -49,6 +49,18 @@ public:
 
 typedef std::shared_ptr<EulerUpdater> SP_EulerUpdater;
 
+class FloorUpdater : public ParticleUpdater
+{
+private:
+	glm::vec3 _wall;
+	float _bounceFactor;
+public:
+	FloorUpdater(){_wall=glm::vec3(0.f);_bounceFactor=0.5f;}
+	Updaters::type getType(){return Updaters::FLOORUPDATER;}
+	virtual void update(float dt, ParticleData *p);
+};
+
+typedef std::shared_ptr<FloorUpdater> SP_FloorUpdater;
 
 class AttractorUpdater : public ParticleUpdater
 {

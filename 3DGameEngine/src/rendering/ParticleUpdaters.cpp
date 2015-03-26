@@ -17,6 +17,28 @@ void EulerUpdater::update(float dt, ParticleData *p)
 		p->_particlePositions[i] += localDT * p->_particleVelocities[i];
 }
 
+void FloorUpdater::update(float dt, ParticleData *p)
+{
+	const float localDT = (float)dt;
+ 
+	const size_t endId = p->_aliveParticleCount;
+		for (size_t i = 0; i < endId; ++i)
+		{
+			if (p->_particlePositions[i].y < _wall.y)
+			{
+				glm::vec4 force = p->_particleAccelerations[i];
+				float normalFactor = glm::dot(force, glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+				if (normalFactor < 0.0f)
+					force -= glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * normalFactor;
+				float velFactor = glm::dot(p->_particleVelocities[i], glm::vec4(0.0f, 1.0f, 0.0f, 0.0f));
+				
+				p->_particleVelocities[i] -= glm::vec4(0.0f, 1.0f, 0.0f, 0.0f) * (1.0f + _bounceFactor) * velFactor;
+ 
+				p->_particleVelocities[i] = force;
+			}
+		}
+}
+
 void AttractorUpdater::update(float dt, ParticleData *p)
 {
 	const float localDT = (float)dt;

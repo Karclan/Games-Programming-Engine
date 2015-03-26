@@ -53,9 +53,12 @@ void ParticleRenderer::generate(size_t particlePool)
 	_particleSystem->addUpdater(colourUpdater);
 	_eulerUpdater.reset(new EulerUpdater());
 	{
-		_eulerUpdater->setGlobalAcc(glm::vec4(0.0,15.0,0.0,0.0));
+		_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-15.0,0.0,0.0));
 	}
 	_particleSystem->addUpdater(_eulerUpdater);
+	
+	_floorUpdater.reset(new FloorUpdater());
+	_particleSystem->addUpdater(_floorUpdater);
 
 	size_t count = _particleSystem->getParticleCount();
 
