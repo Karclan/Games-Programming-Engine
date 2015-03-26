@@ -43,7 +43,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		std::cout << "Error Loading : " << importer.GetErrorString() << "\n";
 		return nullptr;
 	}
-	
+	 aiMatrix4x4 globalInverseTransform = scene->mRootNode->mTransformation;
+     globalInverseTransform.Inverse();
 
 	// Have to manually convert arrays of assimp's own Vector3 class to vectors of glm::vec3 to make it work for now 
 	// Later we can implement faster method that uses the array to directly set vao (I hope...)
@@ -77,8 +78,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	};
 
 	std::vector<BoneVertexInfo> boneInfos;
-	
-	
+		
+
 	for(int i = 0; i < loadedMesh->mNumVertices; ++i)
 	{
 		verts.push_back(glm::vec3(loadedMesh->mVertices[i].x, loadedMesh->mVertices[i].y, loadedMesh->mVertices[i].z));
@@ -122,11 +123,18 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		boneMapping.emplace(boneName, i);
 	}
 
+		aiMatrix4x4 BoneOffset;
+		std::vector<aiMatrix4x4> boneDataOffset;
+
 	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
 	{
 		std::string boneName(loadedMesh->mBones[i]->mName.data);
 		std::map<std::string, int>::iterator it = boneMapping.find(boneName);
 		int boneID = it->second;
+		
+			boneDataOffset.push_back(BoneOffset);
+
+			boneDataOffset[i] = loadedMesh->mBones[i]->mOffsetMatrix;
 
 		// Populate BoneID and BoneWeight vectors 
 		for(int j = 0; j < loadedMesh->mBones[i]->mNumWeights; ++j) // for each weight
@@ -206,6 +214,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 
 	mesh->setBoneMap(boneMapping);
 	mesh->setBones(boneIDs, boneWeights);
+	mesh->setBoneOffset(boneDataOffset);
+	mesh->setInverseTransform(globalInverseTransform);
 
 	return mesh;
 }
@@ -347,14 +357,7 @@ Animation* Assets::getAnim(std::string fileName)
 			delete newAnim;
 			return nullptr;
 		}
-
-		if(!newAnim->loadAssimpAnim(filePath))
-		{
-			std::cout << "Failed to load " << fileName << " anim\n";
-			delete newAnim;
-			return nullptr;
-		}
-		
+	
 		// Add texture to map and return
 		ins->_anims.emplace(fileName, newAnim);
 		newAnim->setFilePath(fileName);

@@ -18,7 +18,7 @@ bool Animation::LoadAnimation( const std::string& filename )
         std::cerr << "MD5Model::LoadModel: Failed to find file: " << filename << std::endl;
         return false;
     }
-
+	loadAssimpAnim(filename );
 
 
     std::string param;
@@ -173,7 +173,7 @@ bool Animation::loadAssimpAnim( const std::string& filename )
         aiProcess_JoinIdenticalVertices  |
         aiProcess_SortByPType);
   
-	
+	animScene = importer.GetOrphanedScene();
 	// If the import failed, report it
 	if( !animScene)
 	{

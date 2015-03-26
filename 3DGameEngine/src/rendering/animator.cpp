@@ -3,6 +3,7 @@
 Animator::Animator()
 {
 	_animation = nullptr;
+	//_mesh = nullptr;
 	animTime = 0;
 
 }
@@ -25,75 +26,16 @@ void Animator::bind(Shader* shader)
 	{
 		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , Transforms[i]);
 	}
-
-	
-
 }
 
 
-void Animator::BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame )
+void Animator::setMesh(Mesh* m)
 {
-    FrameSkeleton skeleton;
-
-    for ( unsigned int i = 0; i < jointInfos.size(); ++i )
-    {
-        unsigned int j = 0;
-
-        const Animation::JointInfo& jointInfo = jointInfos[i];
-        // Start with the base frame position and orientation.
-        SkeletonJoint animatedJoint = baseFrames[i];
-
-        animatedJoint.m_Parent = jointInfo._parentID;
-
-        if ( jointInfo._flags & 1 ) // Pos.x
-        {
-            animatedJoint.m_Pos.x = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-        if ( jointInfo._flags & 2 ) // Pos.y
-        {
-            animatedJoint.m_Pos.y = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-        if ( jointInfo._flags & 4 ) // Pos.x
-        {
-            animatedJoint.m_Pos.z  = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-        if ( jointInfo._flags & 8 ) // Orient.x
-        {
-            animatedJoint.m_Orient.x = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-        if ( jointInfo._flags & 16 ) // Orient.y
-        {
-            animatedJoint.m_Orient.y = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-        if ( jointInfo._flags & 32 ) // Orient.z
-        {
-            animatedJoint.m_Orient.z = frame._frameData[ jointInfo._startIndex + j++ ];
-        }
-
-        ComputeQuatW( animatedJoint.m_Orient );
-
-        if ( animatedJoint.m_Parent >= 0 ) // Has a parent joint
-        {
-            SkeletonJoint& parentJoint = skeleton.m_Joints[animatedJoint.m_Parent];
-            glm::vec3 rotPos = parentJoint.m_Orient * animatedJoint.m_Pos;
-
-            animatedJoint.m_Pos = parentJoint.m_Pos + rotPos;
-            animatedJoint.m_Orient = parentJoint.m_Orient * animatedJoint.m_Orient;
-
-            animatedJoint.m_Orient = glm::normalize( animatedJoint.m_Orient );
-        }
-
-        skeleton.m_Joints.push_back(animatedJoint);
-    }
-
-    skeletons.push_back(skeleton);
+	_mesh = m;
 }
 
 void Animator::UpdateAnim( float fDeltaTime )
-{
-	float deg = 120 * fDeltaTime;
-	dummy = glm::rotate(dummy, glm::radians(deg), glm::vec3(0, 1, 0));
-	
+{	
 
 	BoneTransform(fDeltaTime, Transforms);
 	return;
@@ -115,7 +57,7 @@ void Animator::UpdateAnim( float fDeltaTime )
 
 	float fInterpolate = fmodf( animTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
 
-	 InterpolateSkeletons( _AnimatedSkeleton, _Skeletons[iFrame0], _Skeletons[iFrame1], fInterpolate );
+
 }
 
 void Animator::UpdateMesh(float fDeltaTime)
@@ -129,25 +71,7 @@ void Animator::UpdateMesh(float fDeltaTime)
 	}
 }
 
-void Animator::InterpolateSkeletons( FrameSkeleton& finalSkeleton, const FrameSkeleton& skeleton0, const FrameSkeleton& skeleton1, float fInterpolate )
-{
-    for ( int i = 0; i < _animation->GetNumJoints(); ++i )
-    {
-        SkeletonJoint& finalJoint = finalSkeleton.m_Joints[i];
-        glm::mat4x4&  finalMatrix = finalSkeleton.m_BoneMatrices[i];
 
-        const SkeletonJoint& joint0 = skeleton0.m_Joints[i];
-        const SkeletonJoint& joint1 = skeleton1.m_Joints[i];
-
-        finalJoint.m_Parent = joint0.m_Parent;
-
-        finalJoint.m_Pos = glm::lerp( joint0.m_Pos, joint1.m_Pos, fInterpolate );
-        finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
-
-        // Build the bone matrix for GPU skinning.
-       finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
-    }
-}
 
 ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
 : m_fMaxTimeStep( maxTimeStep )
@@ -183,21 +107,21 @@ void Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transf
                             _animation->_iFramRate : 25.0f;
     float TimeInTicks = TimeInSeconds * TicksPerSecond;
     float AnimationTime = fmod(TimeInTicks, _animation->getAnimDuration());
-
-   // ReadNodeHeirarchy(AnimationTime, _animation->animScene->mRootNode, Identity);
-
+	
+	ReadNodeHeirarchy(AnimationTime, _animation->animScene->mRootNode, Identity);
+	
 	Transforms.resize(_animation->GetNumJoints());
-
+	
     for (GLint i = 0 ; i < _animation->GetNumJoints() ; i++) {
-       // Transforms[i] = m_BoneInfo[i].FinalTransformation;
-		Transforms[i] = dummy;
+        Transforms[i] = finalTransform[i];
+		//Transforms[i] = dummy;
     }
 }
 
 void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const aiMatrix4x4& ParentTransform)
 { 
-    std::string NodeName(pNode->mName.data);
-
+	std::string NodeName(pNode->mChildren[0]->mName.data);
+	
 	const aiAnimation* pAnimation = _animation->animScene->mAnimations[0];
 
     aiMatrix4x4  NodeTransformation(pNode->mTransformation);
@@ -229,13 +153,31 @@ void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const
 
     aiMatrix4x4 GlobalTransformation = ParentTransform * NodeTransformation;
 	std::map<std::string, int> m_boneMapping;
-	/*
-    if (m_BoneMapping.find(NodeName) != m_BoneMapping.end()) {
-        GLint BoneIndex = m_BoneMapping[NodeName];
-        m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * 
-                                                    m_BoneInfo[BoneIndex].BoneOffset;
+	
+	if(_mesh->getBoneMap().find(NodeName) != _mesh->getBoneMap().end())
+     {
+        GLint BoneIndex =_mesh->getBoneMap()[NodeName];
+		aiMatrix4x4 tempFinalTransform;
+		tempFinalTransform = _mesh->getInverseTransform() * GlobalTransformation * 
+                                                   _mesh->getBoneOffset()[BoneIndex];
+		finalTransform[BoneIndex][0][0] = tempFinalTransform.a1;
+		finalTransform[BoneIndex][0][1] = tempFinalTransform.a2;
+		finalTransform[BoneIndex][0][2] = tempFinalTransform.a3;
+		finalTransform[BoneIndex][0][3] = tempFinalTransform.a4;
+		finalTransform[BoneIndex][1][0] = tempFinalTransform.b1;
+		finalTransform[BoneIndex][1][1] = tempFinalTransform.b2;
+		finalTransform[BoneIndex][1][2] = tempFinalTransform.b3;
+		finalTransform[BoneIndex][1][3] = tempFinalTransform.b4;
+		finalTransform[BoneIndex][2][0] = tempFinalTransform.c1;
+		finalTransform[BoneIndex][2][1] = tempFinalTransform.c2;
+		finalTransform[BoneIndex][2][2] = tempFinalTransform.c3;
+		finalTransform[BoneIndex][2][3] = tempFinalTransform.c4;
+		finalTransform[BoneIndex][3][0] = tempFinalTransform.d1;
+		finalTransform[BoneIndex][3][1] = tempFinalTransform.d2;
+		finalTransform[BoneIndex][3][2] = tempFinalTransform.d3;
+		finalTransform[BoneIndex][3][3] = tempFinalTransform.d3;
     }
-	*/
+	
     for (GLint i = 0 ; i < pNode->mNumChildren ; i++) {
         ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
     }
@@ -305,8 +247,8 @@ const aiNodeAnim* Animator::FindNodeAnim(const aiAnimation* pAnimation, const st
 {
     for (GLint i = 0 ; i < pAnimation->mNumChannels ; i++) {
         const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
-        
-        if (std::string(pNodeAnim->mNodeName.data) == NodeName) {
+        const std::string tempName = pAnimation->mChannels[i]->mNodeName.data;
+		if (tempName == NodeName) {
             return pNodeAnim;
         }
     }

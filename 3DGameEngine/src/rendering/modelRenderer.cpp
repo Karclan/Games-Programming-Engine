@@ -9,6 +9,8 @@ ModelRenderer::ModelRenderer()
 
 	_mesh = nullptr;
 	_anim = nullptr;
+
+	if(_anim)_anim->setMesh(_mesh);
 }
 
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)

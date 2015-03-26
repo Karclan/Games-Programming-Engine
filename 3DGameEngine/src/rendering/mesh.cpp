@@ -148,3 +148,13 @@ void Mesh::setBoneMap(std::map<std::string, int> m)
 {
 	boneMap = m;
 }
+
+void Mesh::setBoneOffset(std::vector<aiMatrix4x4> offSet)
+{
+	m_BoneOffset = offSet;
+}
+
+void Mesh::setInverseTransform(aiMatrix4x4 inv)
+{
+	m_GlobalInverseTransform = inv;
+}

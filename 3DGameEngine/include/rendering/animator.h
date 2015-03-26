@@ -94,7 +94,8 @@ public:
 	GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
     GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	std::vector<glm::mat4> Transforms;
-
+	void setMesh(Mesh* m);
+	
 
 	void setAnimation(Animation* anim) 
 	{ 
@@ -111,8 +112,10 @@ protected:
 
 private:
 	Animation* _animation;
+	Mesh* _mesh;
 	float animTime;
 	typedef std::vector<glm::mat4x4> MatrixList;
+	std::vector<glm::mat4> finalTransform;
 
 	MatrixList _AnimatedBones;
 };

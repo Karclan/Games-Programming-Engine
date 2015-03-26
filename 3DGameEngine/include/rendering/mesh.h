@@ -17,7 +17,8 @@
 #include <glm/gtx/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/norm.hpp>
-
+#include <assimp/scene.h>           // Output data structure
+#include <assimp/postprocess.h>     // Post processing flags
 #include "core\asset.h"
 
 //! The constant values in this namespace match the location of attibs in both shaders and the VBO array in the mesh class
@@ -42,6 +43,7 @@ struct VertexBoneData
 
 };
 
+
 //! \brief Mesh
 
 class Mesh : public Asset
@@ -49,6 +51,8 @@ class Mesh : public Asset
 public:
 	Mesh();
 	~Mesh();
+
+	
 
 	void generateBuffers(); //!< Create VAO and buffer for data
 
@@ -58,10 +62,12 @@ public:
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
 	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector
-
+	void setBoneOffset(std::vector<aiMatrix4x4> offSet);
+	void setInverseTransform(aiMatrix4x4 inv);
 	void setBoneMap(std::map<std::string, int> m);
 	std::map<std::string, int> getBoneMap() { return boneMap; }
-
+	std::vector<aiMatrix4x4> getBoneOffset() {return m_BoneOffset; }
+	aiMatrix4x4 getInverseTransform() {return m_GlobalInverseTransform; }
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
 
@@ -69,12 +75,15 @@ public:
 	bool getPrimID() { return _primID; }
 
 private:
+
 	GLuint _vao; //!< The vao holding everything together!
 	GLuint _buffers[MeshAttribs::NUM_ATTRIBS]; //!< To store handles for vbos / element buffer
 	int _dataSize[MeshAttribs::NUM_ATTRIBS]; //!< Holds the number of elements in each buffer (useful for if you want to read from buffers later and also for drawing as we need to know how many elements)
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
-
+	std::vector<aiMatrix4x4> m_BoneOffset;
+	std::vector<aiMatrix4x4> m_BoneFinalTransform;
 	std::map<std::string, int> boneMap;
+	aiMatrix4x4 m_GlobalInverseTransform;
 };
 
 #endif
