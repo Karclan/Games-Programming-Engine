@@ -8,6 +8,7 @@
 #include "rendering\renderer.h"
 #include "rendering\shader.h"
 #include "rendering\light.h"
+#include "rendering\animator.h"
 
 #include "rendering\FTInterface.h"
 
@@ -27,9 +28,18 @@ public:
 	void render(); //!< Render the camera through the currently selected camera
 	void render(Camera* camera); //!< Render the scene through a camera passed as an arg
 	void animate(float t); //!< Call animate on any animation components
+	
 	void addCamera(SPtr_Camera camera); //!< Add a new camera to the system
+	void addLight(SPtr_Light light);
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
-	void addAnimatedObject(SPtr_Renderer renderer); //!< Add an animated model
+
+	void addAnimator(SPtr_Animator anim); 
+	
+	void removeCamera(SPtr_Camera camera); //!< Remove Camera from system
+	void removeLight(SPtr_Light light);
+	void removeRenderObject(SPtr_Renderer renderer); //!< Remove Renderer
+	void removeAnimator(SPtr_Animator anim);  //!< Remove a given animator
+	
 
 	void setLightDefaults(); //!< Set default values for the global light params
 
@@ -49,7 +59,7 @@ public:
 	// Note we would want a system that will set current global uniforms to any new shaders loaded in as well. perhaps we need a "shader manager" class?
 	void setShadersMap(const std::map<std::string, Shader*>* shadersMap) { _loadedShaders = shadersMap; }
 	void activateLights();
-	void addLight(SPtr_Light light);
+	
 
 private:
 
@@ -60,8 +70,11 @@ private:
 
 	std::vector<SPtr_Camera>   _cameras; //!< All cameras in scene. Currently set to simply render through camera at index 0.
 	std::vector<SPtr_Renderer> _models; //!< All the models to be rendered each frame
+
 	std::vector<SPtr_Renderer> _particles; //!< All the particle systems to be renderered each frame, these are done after all other renderering to allow for correct transparency
-	std::vector<SPtr_Renderer> _animations; //!< All the models to be animated each frame
+
+	std::vector<SPtr_Animator> _animators; //!< All the anims
+
 	std::vector<SPtr_Light>    _pointLights; //!< All the lights in the scene
 	std::vector<SPtr_Light>    _spotLights;
 	std::vector<SPtr_Light>    _unsortedLights;

@@ -14,7 +14,7 @@ namespace ComponentType
 {
 	// IMPORTANT! - Bitmask is defined in globals as an uint, minimum bits for an uint in C++ standard is 16 (usually 32 on 
 	// a modern computer though). If we make more than 16 types of component consider changing to an unsigned long.
-	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT, SPHERE_COL, BOX_COL, MATERIAL, CUSTOM, PARTICLE_REND };
+	enum Type { TRANSFORM, MODL_REND, CAMERA, ROB_REND, PHY_BODY, LIGHT, SPHERE_COL, BOX_COL, ANIMATION, CUSTOM, TERRAIN_COL, PARTICLE_REND  };
 
 }
 
@@ -40,8 +40,11 @@ public:
 	virtual ComponentType::Type getType() = 0; //!< Pure virtual forces children to implement function returning whatever type the component is
 	virtual bool isOnePerObject() = 0; //!< Pure virtual forces children to implement function specifying if more than one of these can be added to a game object
 	
+	ComponentState::State getState() { return _lifeCycleState; }
+
 	virtual void linkDependency(SPtr_Component component){}; //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
-	
+	virtual void init(){}; // override if any specific init logic is required (other than setting dynamic init variables)
+
 	BITMASK getDepFlags();
 	BITMASK getOptionalDepFlags();
 	void destroy(); //!< Calling this will set a flag telling all subsystems to remove component

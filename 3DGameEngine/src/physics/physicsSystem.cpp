@@ -3,55 +3,197 @@
 
 PhysicsSystem::PhysicsSystem()
 {
-	tested = false;
+	_maxIterations = 5;
+	_terrainCollider = nullptr;
+
+
+	//_staticOctTree.setMaxDepth(0); // i think the oct tree makes static stuff worse! Uniform grid would be better (probs because only a handful of static colliders atm so oct tree has adverse affect)
+
+}
+
+void PhysicsSystem::init()
+{
+	// Ensure all colliders are in unsorted colliders
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+		_unsortedColliders.push_back(_dynamicColliders[i]);
+
+	for(int i = 0; i < _staticColliders.size(); ++i) 
+		_unsortedColliders.push_back(_staticColliders[i]);
+
+	// Clear dynamic and static colliders
+	_dynamicColliders.clear();
+	_staticColliders.clear();
+
+	// Sort and init colliders
+	for(int i = 0; i < _unsortedColliders.size(); ++i)
+	{
+		// init
+		_unsortedColliders[i]->calculateBounds();
+
+
+		// Sort
+		if(_unsortedColliders[i]->hasPhysicsBody())
+			_dynamicColliders.push_back(_unsortedColliders[i]);
+		else
+			_staticColliders.push_back(_unsortedColliders[i]);
+	}
+
+	// Clear init list
+	_unsortedColliders.clear();
+
+	// Now construct oct tree with static colliders
+	_staticOctTree.createTree(_staticColliders);
 }
 
 void PhysicsSystem::clear()
 {
-	_colliders.clear();
+	_terrainCollider = nullptr;
+	_unsortedColliders.clear();
+	_dynamicColliders.clear();
+	_staticColliders.clear();
 }
 
 void PhysicsSystem::addCollider(SPtr_Collider collider)
 {
-	_colliders.push_back(collider);
+	_unsortedColliders.push_back(collider);
+}
+
+void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
+{
+	_terrainCollider = collider;
 }
 
 void PhysicsSystem::fixedUpdate(float t)
 {
-	// For each collider
 
 
-	// Put in tree, separate ones with physics bodies
+	// If dynamically created object
+	if(_unsortedColliders.size() != 0)
+	{
+		for(int i = 0; i < _unsortedColliders.size(); ++i)
+		{
+			// Sort
+			if(_unsortedColliders[i]->hasPhysicsBody())
+				_dynamicColliders.push_back(_unsortedColliders[i]);
+			else
+			{
+				_staticColliders.push_back(_unsortedColliders[i]);
+				_staticOctTree.createTree(_staticColliders);
+			}
+		}
 
-	// Need to consider tree limit - how many physics bodies colliders, how many without?
-	// E.g. Must have between 1 and 3 physics bodies in leaf (0 bodies can be ignored)
-	// What is max number of regular colliders? Division is surely effectively AABB collision anyway, right?
+		// Clear init list
+		_unsortedColliders.clear();
+	}
+
+
+	// Do the integration
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+	{
+		if(!_dynamicColliders[i]->getPhysicsBody()->isAwake()) continue;
+		_dynamicColliders[i]->getPhysicsBody()->fixedUpdate(t);
+		_dynamicColliders[i]->calculateBounds();
+	}
+
+	// Do the oct tree
+	_dynamicOctTree.createTree(_dynamicColliders);
+	std::map<SPtr_Collider, std::set<SPtr_Collider>> collisionMatrix;
+	_dynamicOctTree.getCollisionMatrix(collisionMatrix);
+
+	// Use collsion matrix to determine possible collisions
+	std::map<SPtr_Collider, std::set<SPtr_Collider>>::iterator mapIt;
+	std::set<SPtr_Collider>::iterator setIt;
+	bool checkAgain = false; // should collisions be checked again after iteration? (provided not reached max iters)
+	bool invResolution = false; // if true, pushes B out of collision rather than A.
+	for(int i = 0; i < _maxIterations; ++i)
+	{
+		bool collided;
+		// STATIC COLLISIONS! ##
+		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
+		{
+			if(!_dynamicColliders[dc]->getPhysicsBody()->isAwake()) continue;
+			collided = false;
+			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
+			std::set<SPtr_Collider> staticCols;
+			_staticOctTree.getCollidersFromAABB(_dynamicColliders[dc]->getBounds(), staticCols);
+
+			for(setIt = staticCols.begin(); setIt != staticCols.end(); ++setIt)
+			{
+				if(_dynamicColliders[dc]->collides(setIt->get(), colInfoS))
+				{
+					collided = true;
+				}
+			}
+
+			if(collided)
+			{
+				colInfoS.resolve();
+				_dynamicColliders[dc]->calculateBounds();
+				checkAgain = true;
+			}
+		}
+
+
+		// DYNAMIC COLLISIONS!
+		for(mapIt = collisionMatrix.begin(); mapIt != collisionMatrix.end(); ++mapIt) // for each collidable...
+		{
+			Collision colInfoD = Collision();
+			collided = false;
+			SPtr_Collider resolvedCollider; // the collider pushed out of the collision and will need bounds recalculating
+
+			// Check dynamic collisions
+			for(setIt = mapIt->second.begin(); setIt != mapIt->second.end(); ++setIt)
+			{
+				// Because will only set col info if pen depth larger than current, we will end up with most significant collision
+				if(!invResolution && mapIt->first->collides(setIt->get(), colInfoD))
+				{
+					collided = true;
+					resolvedCollider = mapIt->first;
+				}
+				else if(invResolution && setIt->get()->collides(mapIt->first.get(), colInfoD))
+				{
+					collided = true;
+					resolvedCollider = *setIt;
+				}
+
+			}
+
+			// Resolve collision
+			if(collided)
+			{
+				colInfoD.resolve();
+				resolvedCollider->calculateBounds(); // this would hsve to be done to both this and "other" if used better resolution.
+				checkAgain = true;
+			}
+		}
+
+		
+		
+
+		if(!checkAgain) break;
+		invResolution = !invResolution;
+	}
 
 	
 
-	// FOR TESTING - Adds colliders to single test node - this would be a leaf node in finished version
-	_testNode.clear();
-
-	for(int i = 0; i < _colliders.size(); ++i)
+	// Temp Static collision stuff
+	/*
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
 	{
-		if(_colliders[i]->hasPhysicsBody())
+		Collision colInfo; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
+		for(int rc = 0; rc < _staticColliders.size(); ++rc)
 		{
-			_testNode.physColliders.push_back(_colliders[i]);
-			continue;
+			if(_dynamicColliders[i]->collides(_staticColliders[rc].get(), colInfo))
+			{
+				colInfo.resolve();
+			}
 		}
-		_testNode.regColliders.push_back(_colliders[i]);
-	}
 
-	// Now, in each leaf node check collisions
-	// If multiple "resolve" type collisions on same object, prioritize
-	// Resolve and then remove physic colliders that moved and re-add them to tree
-	Collision colInfo;
-
-	for(int i = 0; i < _testNode.physColliders.size(); ++i)
-	{
-		for(int pc = i+1; pc < _testNode.physColliders.size(); ++pc) // start at i+1 so don't duplicate collision tests
+		// And the floor...
+		
+		if(_terrainCollider != nullptr)
 		{
-			if(_testNode.physColliders[i]->collides(_testNode.physColliders[pc], colInfo))
+			if(_terrainCollider->collides(_testNode.physColliders[i], colInfo))
 			{
 				//std::cout << "I collider! " << colInfo.penDepth << "\n";
 				_testNode.physColliders[i]->getPhysicsBody()->resolve(colInfo);
@@ -61,15 +203,12 @@ void PhysicsSystem::fixedUpdate(float t)
 
 
 			}
-		}
 
-		for(int rc = 0; rc < _testNode.regColliders.size(); ++rc)
-		{
-			if(_testNode.physColliders[i]->collides(_testNode.regColliders[rc], colInfo))
-				std::cout << "I collider! " << colInfo.penDepth << "\n";
 		}
+		
+		
 	}
-
+	*/
 
 
 	// Repeat x times or until no more collisions
@@ -79,26 +218,39 @@ void PhysicsSystem::fixedUpdate(float t)
 
 void PhysicsSystem::renderColliders(Camera* camera)
 {
-	for(int i = 0; i < _colliders.size(); ++i)
-	{
-		switch(_colliders[i]->getType())
-		{
-		case ComponentType::SPHERE_COL:
-			{
-				SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_colliders[i]);
-				renderSphere(camera, sphereCol->getRadius(), sphereCol->getCentre());
-			}
-			break;
+	for(int i = 0; i < _unsortedColliders.size(); ++i)
+		renderCollider(_unsortedColliders[i], camera);
 
-		case ComponentType::BOX_COL:
-			{
-				SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(_colliders[i]);
-				renderBox(camera, boxCol->getTransformMatrix());
-			}
-			break;
-		}
-	}
+	for(int i = 0; i < _dynamicColliders.size(); ++i)
+		renderCollider(_dynamicColliders[i], camera);
 	
+	for(int i = 0; i < _staticColliders.size(); ++i)
+		renderCollider(_staticColliders[i], camera);
+}
+
+
+
+
+
+// Render me a loively collider
+void PhysicsSystem::renderCollider(SPtr_Collider collider, Camera* camera)
+{
+	switch(collider->getType())
+	{
+	case ComponentType::SPHERE_COL:
+		{
+			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(collider);
+			renderSphere(camera, sphereCol->getRadius(), sphereCol->getCentre());
+		}
+		break;
+
+	case ComponentType::BOX_COL:
+		{
+			SPtr_BoxCol boxCol = std::static_pointer_cast<BoxCollider>(collider);
+			renderBox(camera, boxCol->getTransformMatrix());
+		}
+		break;
+	}
 }
 
 
@@ -157,4 +309,49 @@ void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 	glDrawElements(GL_TRIANGLES, mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(NULL);
 
+}
+
+
+
+
+// Remove objects
+void PhysicsSystem::removeCollider(SPtr_Collider collider)
+{
+	// If in unsorted list
+	if(_unsortedColliders.size() != 0)
+	{
+		std::vector<SPtr_Collider>::iterator it = _unsortedColliders.begin();
+		for(it; it != _unsortedColliders.end(); ++it)
+		{
+			if(*it == collider)
+			{
+				_unsortedColliders.erase(it);
+				return;
+			}
+		}
+	}
+
+	// Else have to determine if dynamic or not, if static must also delete from static tree
+	if(collider->hasPhysicsBody())
+	{
+		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
+		for(it; it != _dynamicColliders.end(); ++it)
+		{
+			if(*it == collider)
+			{
+				_dynamicColliders.erase(it);
+				return;
+			}
+		}
+
+	}
+
+	// Must be static
+
+	
+}
+
+void PhysicsSystem::removeTerrainCollider(SPtr_TerrainCol collider)
+{
+	_terrainCollider = SPtr_TerrainCol(nullptr);
 }

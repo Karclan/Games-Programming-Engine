@@ -13,10 +13,14 @@
 class Collision
 {
 public:
+	Collision();
+
 	glm::vec3 normal;
 	float penDepth;
+	SPtr_PhysBody bodyA;
+	SPtr_PhysBody bodyB;
 
-
+	void resolve();
 
 };
 

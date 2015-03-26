@@ -9,7 +9,8 @@
 
 //const std::string ASSETS_PATH = "assets/";                     // path to assets. Change this if release seems to require weird folder structure
 #define ASSETS_PATH std::string("assets/")
-
+#define DEMO_SCENE_PATH "demo.xml"
+#define AUTO_SCENE_PATH "level.xml"							// auto load this scene if defined
 
 
 

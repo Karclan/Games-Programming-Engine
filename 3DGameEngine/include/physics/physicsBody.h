@@ -29,10 +29,26 @@ public:
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 
-	void resolve(Collision &collision); //!< Given a collision info, resolve based on it
+	void fixedUpdate(float t); //!< Fixed update to handle integration etc
+	
+	void addForce(glm::vec3 force);  //!< Add force (accel)
+	void addImpulse(glm::vec3 impulse); //!< Add impulse (instant velocity);
+
+	glm::vec3 getVelocity() { return _velocity; }
+	void setVelocity(glm::vec3 v);
+	SPtr_Transform getTransform() { return _transform; }
+	float getMass() { return _mass; } // when make set mass, ensure to check for <= 0 so not negative or zero
+	bool isAwake() { return _awake; }
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform
+	bool _awake;
+
+	float _mass;
+	float _drag;
+	float _gravity;
+	glm::vec3 _accel;
+	glm::vec3 _velocity;
 
 };
 

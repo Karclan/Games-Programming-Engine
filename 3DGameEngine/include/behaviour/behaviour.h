@@ -2,12 +2,12 @@
 #define BEHAVIOUR_H
 
 #include "core\gameObject.h"
-#include "core\objectFinder.h"
+#include "behaviour\objectMngrInterface.h"
 
 //! Event types
 enum EventType
 {
-	UPDATE, FIXED_UPDATE
+	UPDATE, FIXED_UPDATE, LATE_UPDATE
 };
 
 
@@ -37,7 +37,7 @@ public:
 	
 
 	void linkToObject(SPtr_GameObject gameObject);
-	void linkToObjectFinder(ObjectFinder &finder);
+	void linkToObjectMngrInt(ObjectMngrInterface &objMngrInt);
 	void reset(); //!< Recalls initialize without having to go through the inital process of adding to init list etc
 	
 protected:
@@ -45,17 +45,19 @@ protected:
 	virtual void initialize() = 0; //!< Children override. Called at start of first update
 	virtual void update(float t){}; //!< Children overide with unique logic.
 	virtual void fixedUpdate(float t){} //!< Children overide with unique logic.
+	virtual void lateUpdate(float t){} //!< Children overide with unique logic.
 	SPtr_Component getComponent(ComponentType::Type type);
 	int getGameObjectId();
 
 	// Interface functions allow access to object finder
 	SPtr_GameObject findGameObject(unsigned int objectID); //!< Returns an object by unique ID number
 	SPtr_GameObject findGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found
+	void addNewGameObject(SPtr_GameObject newObject); //!< Add a dynamically created Game Object to the system.
 
 
 private:
 	SPtr_GameObject _gameObject;
-	ObjectFinder* _objFinder;
+	ObjectMngrInterface* _objMngrInt;
 	bool _initialized;
 	std::vector<EventType> _requestedEvents;
 

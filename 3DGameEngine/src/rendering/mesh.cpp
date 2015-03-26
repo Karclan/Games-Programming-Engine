@@ -113,35 +113,36 @@ void Mesh::setColours(std::vector<glm::vec3> &colours)
 	glBindVertexArray(0); // Unbind VAO
 }
 
-void Mesh::setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights)
+void Mesh::setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights)
 {
-	if(boneIds.size() == 0 || boneWeights.size()) return;
+	if(boneIds.size() == 0 || boneWeights.size() == 0) return;
+
 
 	glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
 
 	// Enable and link bone ids buffer to vao
 	glEnableVertexAttribArray(MeshAttribs::BONE_IDS);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BONE_IDS]);
-	glVertexAttribPointer(MeshAttribs::BONE_IDS, 4, GL_INT, GL_FALSE, 0, (GLubyte*)NULL);
+	glVertexAttribIPointer(MeshAttribs::BONE_IDS, 4, GL_INT, 0, (GLubyte*)NULL);
 
 	// Enable and link bone weights buffer to vao
 	glEnableVertexAttribArray(MeshAttribs::BONE_WEIGHTS);
 	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BONE_WEIGHTS]);
 	glVertexAttribPointer(MeshAttribs::BONE_WEIGHTS, 4, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
 
-
 	// Set boneID data
 	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BONE_IDS]); // bind the colour buffer so we can...
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_INT) * boneIds.size(), &boneIds[0], GL_STATIC_DRAW); // ..populate it with the data
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_INT) * 4 * boneIds.size(), &boneIds[0], GL_STATIC_DRAW); // ..populate it with the data
 	_dataSize[MeshAttribs::BONE_IDS] = boneIds.size();
 
 	// Set bone weight data
 	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BONE_WEIGHTS]); // bind the colour buffer so we can...
-	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_INT) * boneWeights.size(), &boneWeights[0], GL_STATIC_DRAW); // ..populate it with the data
-	_dataSize[MeshAttribs::BONE_IDS] = boneWeights.size();
+	glBufferData(GL_ARRAY_BUFFER, sizeof(GL_FLOAT) * 4 * boneWeights.size(), &boneWeights[0], GL_STATIC_DRAW); // ..populate it with the data
+	_dataSize[MeshAttribs::BONE_WEIGHTS] = boneWeights.size();
 	
 	glBindVertexArray(0); // Unbind VAO
 }
+
 void Mesh::setTangents(std::vector<glm::vec3> &tangents)
 {
 	if(tangents.size()==0) return;
@@ -190,3 +191,11 @@ void Mesh::setBiTangents(std::vector<glm::vec3> &biTangents)
 	//_dataSize[MeshAttribs::VERT] = verts.size();
 	//
 	//glBindVertexArray(0); // Unbind VAO
+
+
+
+void Mesh::setBoneMap(std::map<std::string, int> m)
+{
+	boneMap = m;
+}
+

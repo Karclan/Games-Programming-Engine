@@ -3,6 +3,7 @@
 ObjectManager::ObjectManager()
 {
 	_nextId = 0;
+	_nextDynamicId = 0;
 }
 
 
@@ -11,8 +12,69 @@ void ObjectManager::startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys, Be
 	_rendSys = &rendSys;
 	_physicsSys = &physicsSys;
 	_behvrSys = &behvrSys;
-	_objectFinder.setReferences(_gameObjects); // TO DO - may as well cut out middle-man and pass reference to behaviour system itself...
-	_behvrSys->setObjectFinder(_objectFinder);
+	_objMngrInt.setReferences(_gameObjects, _dynInitObjs);
+	_behvrSys->setObjMngrInt(_objMngrInt);
+}
+
+void ObjectManager::initGame()
+{
+	_nextDynamicId = _nextId; // reset dynamic id indices
+	
+	std::unordered_map<unsigned int, SPtr_GameObject>::iterator it;
+	std::vector<int> dynObjs;
+	for(it = _gameObjects.begin(); it != _gameObjects.end(); ++it)
+	{
+		if(it->second.get()->getCreatedDyn())
+		{
+			it->second.get()->removeFromSystem();
+			dynObjs.push_back(it->first); // get ID of every dynamically created object
+		}
+	}
+
+	for(int i = 0; i < dynObjs.size(); ++i)
+	{
+		it = _gameObjects.find(dynObjs[i]); // find each dynamically created object	
+
+		// Remove all components from subsystems
+		const std::vector<SPtr_Component>* comps = it->second->getComponents();
+		for(int j = 0; j < comps->size(); ++j)
+		{
+			removeComponentFromSubsystems(comps->at(j));
+		}
+
+		// Remove Game Object from system
+		_gameObjects.erase(it);
+	}
+}
+
+
+void ObjectManager::initDynamicObjects()
+{
+	if(_dynInitObjs.size() == 0) return;
+	std::set<SPtr_GameObject>::iterator it;
+	for(it = _dynInitObjs.begin(); it != _dynInitObjs.end(); ++it)
+	{
+		// Set ID to correct ID and put in map
+		it->get()->setId(_nextDynamicId);
+		_gameObjects.emplace(_nextDynamicId, *it);
+		
+		
+		// Add components to subsystems
+		const std::vector<SPtr_Component>* components = it->get()->getComponents();
+		for(int i = 0; i < components->size(); ++i)
+		{
+			addComponentToSubsystems(components->at(i));
+		}
+
+		// Link components
+		linkComponents(_nextDynamicId);
+
+		// Inc dynamic id
+		_nextDynamicId++;
+	}
+
+	// Clear init objects
+	_dynInitObjs.clear();
 }
 
 unsigned int ObjectManager::createGameObject(std::string name)
@@ -105,15 +167,16 @@ void ObjectManager::destroyAll()
 void ObjectManager::linkComponents(unsigned int goID)
 {
 	// For now using init table as easier to access list of components. This function could be done using _gameObjects or even actually in the GameObject class itself
-	GOData* goData = &_initTable.find(goID)->second;
 	SPtr_GameObject gameObject = getGameObject(goID);
+	const std::vector<SPtr_Component>* components = gameObject->getComponents();
+	std::vector<SPtr_Component>::const_iterator compIt = components->begin();
 
 	// Iterate through every component check if it requires any dependencies
-	for(std::list<CompData>::iterator comp = goData->components.begin(); comp != goData->components.end(); ++comp)
+	for(compIt; compIt != components->end(); ++compIt)
 	{
 		// New dependency what not
-		BITMASK dependencies = comp->getComp()->getDepFlags();
-		BITMASK optDependencies = comp->getComp()->getOptionalDepFlags();
+		BITMASK dependencies = compIt->get()->getDepFlags();
+		BITMASK optDependencies = compIt->get()->getOptionalDepFlags();
 		
 		// If has dependencies
 		if(dependencies != 0)
@@ -131,7 +194,7 @@ void ObjectManager::linkComponents(unsigned int goID)
 					}
 					else
 					{
-						comp->getComp()->linkDependency(desiredComponent);
+						compIt->get()->linkDependency(desiredComponent);
 					}
 				}
 			}
@@ -147,7 +210,7 @@ void ObjectManager::linkComponents(unsigned int goID)
 				if((optDependencies & 1<<i) != 0) // if bit 'i' is set
 				{
 					SPtr_Component desiredComponent = gameObject->getComponent((ComponentType::Type)i);
-					if(desiredComponent) comp->getComp()->linkDependency(desiredComponent);
+					if(desiredComponent) compIt->get()->linkDependency(desiredComponent);
 				}
 			}
 		}
@@ -176,16 +239,18 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	// Here is where you set creation of component based on enum
 	switch(type)
 	{
-	case ComponentType::TRANSFORM:	newComponent.reset(new Transform());		break;
-	case ComponentType::MODL_REND:	newComponent.reset(new ModelRenderer());	break;
+	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
+	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
 	case ComponentType::PARTICLE_REND: newComponent.reset(new ParticleRenderer()); break;
-	case ComponentType::CAMERA:		newComponent.reset(new Camera());			break;
-	case ComponentType::ROB_REND:	newComponent.reset(new RobotRenderer());	break;
-	case ComponentType::PHY_BODY:	newComponent.reset(new PhysicsBody());		break;
-	case ComponentType::LIGHT:		newComponent.reset(new Light());			break;
-	case ComponentType::SPHERE_COL:	newComponent.reset(new SphereCollider());	break;
-	case ComponentType::BOX_COL:	newComponent.reset(new BoxCollider());		break;
-	case ComponentType::CUSTOM:		newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
+	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
+	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
+	case ComponentType::LIGHT:			newComponent.reset(new Light());			break;
+	case ComponentType::SPHERE_COL:		newComponent.reset(new SphereCollider());	break;
+	case ComponentType::BOX_COL:		newComponent.reset(new BoxCollider());		break;
+	case ComponentType::CUSTOM:			newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
+	case ComponentType::ANIMATION:		newComponent.reset(new Animator());			break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -194,39 +259,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	if(!gameObject->addComponent(newComponent)) return false; // this will happen if, for example, can only have one of them and object already has one
 
 
-	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add sending your component to subsystems in this switch statement-!
-	// Add to subsystems based on type
-	switch(newComponent->getType())
-	{
-	case ComponentType::CAMERA: // camera - add to cameras in render system
-		_rendSys->addCamera(std::static_pointer_cast<Camera>(newComponent));
-		break;
-
-	case ComponentType::MODL_REND: // model renderer - add to render system
-		_rendSys->addRenderObject(std::static_pointer_cast<ModelRenderer>(newComponent));
-		break;
-
-	case ComponentType::ROB_REND:
-		_rendSys->addRenderObject(std::static_pointer_cast<ModelRenderer>(newComponent));
-		_rendSys->addAnimatedObject(std::static_pointer_cast<ModelRenderer>(newComponent));
-		break;
-	case ComponentType::PARTICLE_REND:
-		_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
-		_rendSys->addAnimatedObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
-		break;
-	case ComponentType::SPHERE_COL:
-	case ComponentType::BOX_COL:
-		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));
-		break;
-
-	case ComponentType::LIGHT:
-		_rendSys->addLight(std::static_pointer_cast<Light>(newComponent));
-		break;
-
-	case ComponentType::CUSTOM:
-		_behvrSys->addCustom(std::static_pointer_cast<Custom>(newComponent));
-		break;
-	}
+	addComponentToSubsystems(newComponent);
 
 	// Add to init table
 	CompData newData(newComponent);
@@ -247,6 +280,95 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	return true;
 }
 
+
+// Note - split this up from addComponent function so can be used for dynamic objetcs as well
+void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
+{
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add sending your component to subsystems in this switch statement-!
+	// Add to subsystems based on type
+	switch(newComponent->getType())
+	{
+	case ComponentType::CAMERA: // camera - add to cameras in render system
+		_rendSys->addCamera(std::static_pointer_cast<Camera>(newComponent));
+		break;
+
+	case ComponentType::MODL_REND: // model renderer - add to render system
+		_rendSys->addRenderObject(std::static_pointer_cast<ModelRenderer>(newComponent));
+		break;
+
+	case ComponentType::ROB_REND:
+		_rendSys->addRenderObject(std::static_pointer_cast<RobotRenderer>(newComponent));
+		break;
+	case ComponentType::PARTICLE_REND:
+		_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		_rendSys->addAnimatedObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		break;
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));
+		break;
+
+	case ComponentType::LIGHT:
+		_rendSys->addLight(std::static_pointer_cast<Light>(newComponent));
+		break;
+
+	case ComponentType::CUSTOM:
+		_behvrSys->addCustom(std::static_pointer_cast<Custom>(newComponent));
+		break;
+
+	case ComponentType::TERRAIN_COL:
+		_physicsSys->addTerrainCollider(std::static_pointer_cast<TerrainCollider>(newComponent));
+		break;
+
+	case ComponentType::ANIMATION:
+		_rendSys->addAnimator(std::static_pointer_cast<Animator>(newComponent));
+		break;
+	}
+
+}
+
+
+
+// Remove object from subsystem
+void ObjectManager::removeComponentFromSubsystems(SPtr_Component component)
+{
+	
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Ensure your component can be removed from subsystems you added it to!
+	// Add to subsystems based on type
+	switch(component->getType())
+	{
+	case ComponentType::CAMERA: // camera - add to cameras in render system
+		_rendSys->removeCamera(std::static_pointer_cast<Camera>(component));
+		break;
+
+	case ComponentType::MODL_REND: // model renderer - add to render system
+		_rendSys->removeRenderObject(std::static_pointer_cast<Renderer>(component));
+		break;
+
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->removeCollider(std::static_pointer_cast<Collider>(component));
+		break;
+
+	case ComponentType::LIGHT:
+		_rendSys->removeLight(std::static_pointer_cast<Light>(component));
+		break;
+
+	case ComponentType::CUSTOM:
+		_behvrSys->removeCustom(std::static_pointer_cast<Custom>(component));
+		break;
+
+	case ComponentType::TERRAIN_COL:
+		_physicsSys->removeTerrainCollider(std::static_pointer_cast<TerrainCollider>(component));
+		break;
+
+	case ComponentType::ANIMATION:
+		_rendSys->removeAnimator(std::static_pointer_cast<Animator>(component));
+		break;
+	}
+	
+
+}
 
 
 

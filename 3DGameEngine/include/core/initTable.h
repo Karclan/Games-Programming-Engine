@@ -19,8 +19,10 @@
 #include "rendering\light.h"
 #include "physics\physicsBody.h"
 #include "physics\collider.h"
+#include "physics\terrainCollider.h"
 #include "rendering\robotRenderer.h"
 #include "behaviour\custom.h"
+#include "rendering\animator.h"
 
 /*! \brief Data object for attributes
 */

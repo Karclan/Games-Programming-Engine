@@ -57,9 +57,9 @@ void RenderSystem::render(Camera* camera)
 
 void RenderSystem::animate(float t)
 {
-	for(unsigned int i = 0; i < _animations.size(); ++i)
+	for(unsigned int i = 0; i < _animators.size(); ++i)
 	{
-		_animations[i]->animate(t);
+		_animators[i]->UpdateAnim(t);
 	}
 }
 
@@ -85,12 +85,13 @@ void RenderSystem::addRenderObject(SPtr_Renderer renderer)
 	}
 }
 
-void RenderSystem::addAnimatedObject(SPtr_Renderer renderer)
+void RenderSystem::addAnimator(SPtr_Animator anim)
 {
-	if(!renderer)return;
-	_animations.push_back(renderer);
-}
 
+	if(!anim) return;
+	_animators.push_back(anim);
+
+}
 
 // Default lighting values
 void RenderSystem::setLightDefaults()
@@ -120,11 +121,13 @@ void RenderSystem::setGlobalDirection(glm::vec3 direction)
 
 void RenderSystem::clear()
 {
-	_cameras.clear		();
-	_models.clear		(); 
-	_animations.clear	();
-	_pointLights.clear	();
-	_spotLights.clear	();
+
+	_cameras.clear();
+	_models.clear(); 
+	_animators.clear();
+	_pointLights.clear();
+	_spotLights.clear();
+
 }
 
 void RenderSystem::activateLights()
@@ -200,4 +203,44 @@ void RenderSystem::activateLights()
 void RenderSystem::addLight(SPtr_Light light)
 {
 	_unsortedLights.push_back(light);
+}
+
+
+
+
+// Remove Objects
+void RenderSystem::removeCamera(SPtr_Camera camera)
+{
+	std::vector<SPtr_Camera>::iterator it = _cameras.begin();
+	for(it; it != _cameras.end(); ++it)
+	{
+		if(*it == camera)
+		{
+			_cameras.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeLight(SPtr_Light light)
+{
+	// TO DO
+}
+
+void RenderSystem::removeRenderObject(SPtr_Renderer renderer)
+{
+	std::vector<SPtr_Renderer>::iterator it = _models.begin();
+	for(it; it != _models.end(); ++it)
+	{
+		if(*it == renderer)
+		{
+			_models.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeAnimator(SPtr_Animator anim)
+{
+	// TO DO
 }

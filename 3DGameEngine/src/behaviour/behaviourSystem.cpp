@@ -3,7 +3,7 @@
 
 BehaviourSystem::BehaviourSystem()
 {
-	_objFinder = nullptr;
+	_objMngrInt = nullptr;
 }
 
 BehaviourSystem::~BehaviourSystem()
@@ -64,6 +64,7 @@ void BehaviourSystem::update(float t)
 			{
 			case EventType::UPDATE: _updateList.push_back(behaviour);				 break;
 			case EventType::FIXED_UPDATE: _fixedUpdateList.push_back(behaviour);	 break;
+			case EventType::LATE_UPDATE: _lateUpdateList.push_back(behaviour);		 break;
 			}
 		};
 
@@ -80,7 +81,7 @@ void BehaviourSystem::update(float t)
 
 void BehaviourSystem::loadBehaviour(SPtr_Custom custom)
 {
-	if(_objFinder == nullptr) return;
+	if(_objMngrInt == nullptr) return;
 	custom->behvrRequestMet(); // to say we have met request and set behaviour if possible
 	if(!custom) return;
 
@@ -100,15 +101,15 @@ void BehaviourSystem::loadBehaviour(SPtr_Custom custom)
 	// Find object by ID
 	SPtr_GameObject obj;
 	std::unordered_map<unsigned int, SPtr_GameObject>::const_iterator it; // iterator for searching map
-	it = _objFinder->_gameObjects->find(custom->getObjectID());
-	if(it == _objFinder->_gameObjects->end()) 
+	it = _objMngrInt->_gameObjects->find(custom->getObjectID());
+	if(it == _objMngrInt->_gameObjects->end()) 
 		return; // Failed! Iterator == end indicates key not found
 	else
 		obj = it->second;
 	
 	// Link object to behaviour system and custom object
 	newBehaviour->linkToObject(obj);
-	newBehaviour->linkToObjectFinder(*_objFinder);
+	newBehaviour->linkToObjectMngrInt(*_objMngrInt);
 	addBehaviour(newBehaviour);
 	custom->setBehaviour(newBehaviour);
 }
@@ -140,6 +141,14 @@ void BehaviourSystem::removeBehaviour(SPtr_Behaviour behaviour)
 			continue;
 		}
 	}
+	for(int i = 0; i < _lateUpdateList.size(); ++i)
+	{
+		if(behaviour == _lateUpdateList[i])
+		{
+			_lateUpdateList.erase(_lateUpdateList.begin()+i);
+			continue;
+		}
+	}
 
 }
 
@@ -152,4 +161,22 @@ void BehaviourSystem::fixedUpdate(float t)
 		_fixedUpdateList[i]->fixedUpdate(t);
 	}
 
+}
+
+
+void BehaviourSystem::lateUpdate(float t)
+{
+	// Call late update on any behaviours in the update list
+	for(unsigned int i = 0; i < _lateUpdateList.size(); ++i)
+	{
+		_lateUpdateList[i]->lateUpdate(t);
+	}
+
+}
+
+
+// Remove
+void BehaviourSystem::removeCustom(SPtr_Custom custom)
+{
+	// TO DO
 }

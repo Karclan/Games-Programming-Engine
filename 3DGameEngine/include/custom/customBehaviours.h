@@ -3,8 +3,8 @@
 
 #include <memory>
 
-#include "behaviour\playerController.h"
-#include "behaviour\rotatingObject.h"
+#include "custom\playerController.h"
+#include "custom\cameraController.h"
 
 
 class CustomBehaviours
@@ -14,8 +14,7 @@ public:
 	{
 		// Define custom behaviour names and returns here
 		if(name == "Player") return SPtr_Behaviour(new PlayerController());
-		if(name == "Rot") return SPtr_Behaviour(new RotatingObject());
-		if(name == "RotMan") return SPtr_Behaviour(new ManualRotater());
+		if(name == "Camera") return SPtr_Behaviour(new CameraController());
 		return SPtr_Behaviour(nullptr);
 	}
 

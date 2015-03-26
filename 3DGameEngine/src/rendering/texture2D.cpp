@@ -4,9 +4,8 @@
 bool Texture2D::loadFromFile(std::string filePath)
 {
 	// Use SFML to load image data
-	sf::Image image;
-	bool ok = image.loadFromFile(filePath);
-	image.flipVertically(); // they always come in upside down!
+	bool ok = _imageData.loadFromFile(filePath);
+	_imageData.flipVertically(); // they always come in upside down!
 
 	// Generate openGL texture2D using image data
 	glActiveTexture(GL_TEXTURE0);
@@ -16,7 +15,7 @@ bool Texture2D::loadFromFile(std::string filePath)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, image.getSize().x, image.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, image.getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _imageData.getSize().x, _imageData.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, _imageData.getPixelsPtr());
 	glBindTexture(GL_TEXTURE_2D, 0);	
 
 	return ok; 
@@ -44,5 +43,12 @@ void Texture2D::bind(Shader* shader, int textureNumber)
 	default:	
 		break;
 	}
-	//glUniform1i(shader->getTexLocation(), textureNumber);
+}
+
+sf::Color Texture2D::getPixel(unsigned int x, unsigned int y)
+{
+	if(x < 0 || y < 0) return sf::Color();
+	if(x >= _imageData.getSize().x || y >= _imageData.getSize().y) return sf::Color();
+
+	return _imageData.getPixel(x, y);
 }

@@ -1,20 +1,25 @@
 #include "core\gameObject.h"
 #include <iostream>
 
-GameObject::GameObject(int id, std::string name)
+GameObject::GameObject(unsigned int id, std::string name)
 {
 	_id = id;
 	_name = name;
-	std::cout << "Object Created!\n";
+	_createdDyn = false;
 }
 
 GameObject::~GameObject()
+{
+	removeFromSystem();
+}
+
+void GameObject::removeFromSystem()
 {
 	for(unsigned int i = 0; i < _components.size(); ++i)
 	{
 		_components[i]->destroy(); // sets component state to destroy. Other systems should pick this up and stop referencing it, ultimately deleting it via shared pointer
 	}
-	std::cout << "Object Destroyed!\n";
+	_components.clear();
 }
 
 // The reason we return component ptr (null if fail) rather than bool for fail is slightly greater flexibility
@@ -66,7 +71,7 @@ bool GameObject::checkForComponent(ComponentType::Type type)
 	return false;
 }
 
-int GameObject::getId()
+unsigned int GameObject::getId()
 {
 	return _id;
 }

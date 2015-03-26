@@ -12,6 +12,7 @@
 #include <windows.h>
 
 #include "..\resource.h"
+#include "core\engine.h"
 #include "editor\menuBar.h"
 #include "editor\goMenu.h"
 
@@ -23,7 +24,7 @@
 class Editor
 {
 public:
-	void startup(HINSTANCE hInstance, ObjectManager* objectMngr, SceneManager* sceneMngr, EditorCamera* editorCam);
+	void startup(HINSTANCE hInstance, Engine* engine, EditorCamera* editorCam);
 	void update();
 	bool gamePlaying(); //!< Get if the game is currently in play mode rather than edit mode
 

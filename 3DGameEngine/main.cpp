@@ -57,7 +57,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	sf::RenderWindow* mainWindow = engine.startEditorMode(windowHandle); // Link window with SFML RenderWindow in engine
 
 	// Startup editor and engine
-	editor.startup(hInstance, engine.getObjectManager(), engine.getSceneManager(), &editorCamera);
+	editor.startup(hInstance, &engine, &editorCamera);
 	engine.startup();
 	TwInit(TW_OPENGL, NULL); // startup ant tweak bar
 	TwWindowSize(engine.getWidth(), engine.getHeight());
@@ -73,6 +73,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 #endif
 
 
+	// Init the actual game!
+	engine.initGame();
 
 	// START MAIN LOOP
 	bool quit = false; // Will be set to true if either winAPI or SFML quit event / msg

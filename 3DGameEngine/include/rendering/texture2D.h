@@ -19,9 +19,13 @@ class Texture2D : public Asset
 public:
 	bool loadFromFile(std::string filePath); //!< load from file
 	void bind(Shader* shader, int textureNumber);
+	sf::Color getPixel(unsigned int x, unsigned int y);
+	sf::Vector2u getSize(){ return _imageData.getSize(); }
 
 private:
 	GLuint _texHandle; //!< Handle to texture on graphics card
+	sf::Image _imageData;
+	
 
 };
 

@@ -17,9 +17,9 @@ void Behaviour::linkToObject(SPtr_GameObject gameObject)
 	_gameObject = gameObject;
 }
 
-void Behaviour::linkToObjectFinder(ObjectFinder &finder)
+void Behaviour::linkToObjectMngrInt(ObjectMngrInterface &objMngrInt)
 {
-	_objFinder = &finder;
+	_objMngrInt = &objMngrInt;
 }
 
 
@@ -64,8 +64,8 @@ SPtr_GameObject Behaviour::findGameObject(unsigned int objectID)
 {
 	// Find object by ID
 	std::unordered_map<unsigned int, SPtr_GameObject>::const_iterator it; // iterator for searching map
-	it = _objFinder->_gameObjects->find(objectID);
-	if(it == _objFinder->_gameObjects->end()) 
+	it = _objMngrInt->_gameObjects->find(objectID);
+	if(it == _objMngrInt->_gameObjects->end()) 
 		return SPtr_GameObject(nullptr); // Failed! Iterator == end indicates key not found
 	else
 		return it->second;
@@ -78,11 +78,17 @@ SPtr_GameObject Behaviour::findGameObject(std::string objectName)
 	// Find object by ID
 	std::unordered_map<unsigned int, SPtr_GameObject>::const_iterator it; // iterator for searching map
 
-	if(_objFinder == nullptr) std::cout << "Oh poo\n";
-	for(it = _objFinder->_gameObjects->begin(); it != _objFinder->_gameObjects->end(); ++it)
+	if(_objMngrInt == nullptr) std::cout << "Object Finder is null\n";
+	for(it = _objMngrInt->_gameObjects->begin(); it != _objMngrInt->_gameObjects->end(); ++it)
 	{
 		if(it->second->getName() == objectName) return it->second;
 	}
 
 	return SPtr_GameObject(nullptr); // Failed!
+}
+
+
+void Behaviour::addNewGameObject(SPtr_GameObject newObject)
+{
+	_objMngrInt->_dynInitdObjs->insert(newObject);
 }

@@ -2,27 +2,72 @@
 #define OCT_TREE_H
 
 #include <vector>
+#include <map>
+#include <set>
 
 #include "physics\collider.h"
 #include "physics\physicsBody.h"
 
+
+
 class OctTreeNode
 {
+	friend class OctTree; // to allow oct tree interface to manage the nodes
+
 public:
-	OctTreeNode(){}
-
-	//void addRegCollider(SPtr_Collider collider) { _regColliders.push_back(collider); }
-	//void addPhysCollider(SPtr_Collider collider) { _physColliders.push_back(collider); }
-	//void clear() { _regColliders.clear(); _physColliders.clear; }
-
-	std::vector<SPtr_Collider> regColliders; //!< Regular colliders, non-static but also non-reactionary
-	std::vector<SPtr_Collider> physColliders; //!< Physics body colliders, will move, react and require info about collisions
-	void clear() { regColliders.clear(); physColliders.clear(); }
-
+	OctTreeNode(AABB bounds, unsigned int depth, unsigned int maxCols, unsigned int maxDepth);
 
 private:
-	//std::vector<SPtr_Collider> _regColliders; //!< Regular colliders, non-static but also non-reactionary
-	//std::vector<SPtr_Collider> _physColliders; //!< Physics body colliders, will move, react and require info about collisions
+	enum ChildID { TLF, TRF, BLF, BRF, TLB, TRB, BLB, BRB };
+
+	void insert(SPtr_Collider collider); //!< Add to tree, recursively dividing if needed until reached max depth or nodes have fewer than MAX colliders in
+	void addToColMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>> &matrix); //!< Given a map, will poulate with key = collider, value = vector of everything it may collide with (ensuring no duplicates)
+	void addToColliders(const AABB &aabb, std::set<SPtr_Collider> &colliders); //!< If AABB falls into this node, add colliders to list
+
+	void destroy(); //!< Calls destroy in all children, then deletes them, effectively deleting all nodes except root. Root is then cleared of colliders
+
+
+	void createChildNodes(); //!< Creates children. Assumes leaf check has already been done so will cause memory leaks if called when not a leaf!
+	
+	// debug
+	void insertDebug(SPtr_Collider collider, SPtr_Collider debugCollider); //!< Add to tree, recursively dividing if needed until reached max depth or nodes have fewer than MAX colliders in
+	
+
+
+	OctTreeNode* _children[8];
+	
+	unsigned int _depth;
+	AABB _bounds;
+	unsigned int _maxCols;
+	unsigned int _maxDepth;
+	glm::vec3 _centre;
+	std::vector<SPtr_Collider> _colliders;
+};
+
+
+
+
+class OctTree
+{
+public:
+	OctTree();
+	~OctTree();
+
+	void createTree(const std::vector<SPtr_Collider> &colliders); //!< Creates the tree based on given vector of colliders. Will auto clear beforehand
+	void clear(); //!< Clears oct tree by calling destroy on root, thus recursively calling it on all children
+	void getCollisionMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>> &matrix); //!< Given a map, will poulate with key = collider, value = vector of everything it may collide with (ensuring no duplicates)
+	void getCollidersFromAABB(const AABB &aabb, std::set<SPtr_Collider> &colliders); //!< Given an AABB, will return all colliders that fall into same nodes as it
+
+	void setMaxDepth(unsigned int maxDepth) { _maxDepth = maxDepth; }
+	void setMaxCols(unsigned int maxCols) { _maxCols = maxCols; }
+
+	// Debug functions
+	//void createTree(const std::vector<SPtr_Collider> &colliders, SPtr_Collider debugOut);
+
+private:
+	OctTreeNode* _root;
+	unsigned int _maxCols;
+	unsigned int _maxDepth;
 	
 };
 

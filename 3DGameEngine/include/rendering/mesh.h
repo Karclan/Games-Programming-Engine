@@ -2,10 +2,21 @@
 #define MESH_H
 
 #include <vector>
+#include <map>
 
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
 #include <glm\gtc\type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <glm/gtc/quaternion.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtx/compatibility.hpp>
+#include <glm/gtx/matrix_operation.hpp>
+#include <glm/gtx/transform.hpp>
+#include <glm/gtx/quaternion.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtx/norm.hpp>
 
 #include "core\asset.h"
 
@@ -48,7 +59,12 @@ public:
 	void setNormals(std::vector<glm::vec3> &normals); //!< Fill normal data via vector
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
-	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
+
+	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector
+
+	void setBoneMap(std::map<std::string, int> m);
+	std::map<std::string, int> getBoneMap() { return boneMap; }
+
 
 	void setTangents(std::vector<glm::vec3> &tangents);
 	void setBiTangents(std::vector<glm::vec3> &biTangents);
@@ -65,7 +81,7 @@ private:
 	int _dataSize[MeshAttribs::NUM_ATTRIBS]; //!< Holds the number of elements in each buffer (useful for if you want to read from buffers later and also for drawing as we need to know how many elements)
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
 
-
+	std::map<std::string, int> boneMap;
 };
 
 #endif

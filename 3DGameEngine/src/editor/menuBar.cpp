@@ -1,10 +1,10 @@
 #include "editor\menuBar.h"
 #include <iostream> // just for debugging, cam remove later
 
-void MenuBar::initialize(HINSTANCE hInstance, GoMenu &goMenu, SceneManager* sceneMngr)
+void MenuBar::initialize(HINSTANCE hInstance, GoMenu &goMenu, Engine* engine)
 {
 	_hInstance = hInstance;
-	_sceneMngr = sceneMngr;
+	_engine = engine;
 	_goMenu = &goMenu;
 	_gamePlaying = false;
 	_goMenu->setGamePlaying(_gamePlaying);
@@ -80,11 +80,8 @@ INT_PTR CALLBACK MenuBar::About(HWND hDlg, UINT message, WPARAM wParam, LPARAM l
 // Control menu
 void MenuBar::playStop()
 {
-	// If game is playing then we called stop, so set everthing back to its initial state
-	if(_gamePlaying)
-	{
-		_sceneMngr->initFromInitTable();
-	}
+	// Reset game to init state
+	_engine->initGame();
 
 	// Toggle Game Playing
 	_gamePlaying = !_gamePlaying;

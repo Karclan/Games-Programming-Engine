@@ -199,6 +199,8 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+
+
 	case ComponentType::SPHERE_COL:
 		{
 			SPtr_SphereCol sphereCol = std::static_pointer_cast<SphereCollider>(_comp);
@@ -221,6 +223,16 @@ void CompData::setAttribsToComponents()
 			break;
 		}
 
+	case ComponentType::ANIMATION:
+		{
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(_comp);
+			Animation* anim = animator->getAnimation();
+			if(anim != nullptr) addAttribs(anim->getFilePath());
+			else addAttribs("");
+			
+			break;
+		}
+
 
 	case ComponentType::LIGHT:
 		{
@@ -237,15 +249,18 @@ void CompData::setAttribsToComponents()
 			addAttribf(light->getAtteunation().z); // Quadratic
 			break;
 		}
-	case ComponentType::MATERIAL:
-		{
-			break;
-		}
+	
 
-		case ComponentType::CUSTOM:
+	case ComponentType::CUSTOM:
 		{
 			SPtr_Custom custom = std::static_pointer_cast<Custom>(_comp);
 			addAttribs(custom->getBehvrName()); // attrib 0 is custom class name
+			break;
+		}
+
+	case ComponentType::TERRAIN_COL:
+		{
+			SPtr_TerrainCol terrain = std::static_pointer_cast<TerrainCollider>(_comp);
 			break;
 		}
 	}
@@ -331,7 +346,8 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
 		break;
 
-	case ComponentType::MATERIAL:
+	case ComponentType::ANIMATION:
+		addAttribs(compElmnt->Attribute("animation")); // attrib 0 is model filepath
 		break;
 
 	case ComponentType::SPHERE_COL:
@@ -352,6 +368,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 
 	case ComponentType::CUSTOM:
 		addAttribs(compElmnt->Attribute("behvr")); // attrib 0 is model filepath
+		break;
+
+	case ComponentType::TERRAIN_COL:
 		break;
 
 	}
@@ -492,11 +511,27 @@ void CompData::initializeComponent()
 		}
 		break;
 
+	case ComponentType::ANIMATION:
+		{
+			SPtr_Animator animator = std::static_pointer_cast<Animator>(getComp());
+			animator->setAnimation(Assets::getAnim(getStringAttrib(0)));
+		}
+		break;
+
 	case ComponentType::CUSTOM:
 		{
 			SPtr_Custom custom = std::static_pointer_cast<Custom>(_comp);
 			custom->setBehaviour(getStringAttrib(0));
 		}
 		break;
+
+	case ComponentType::TERRAIN_COL:
+		{
+			SPtr_TerrainCol custom = std::static_pointer_cast<TerrainCollider>(_comp);
+		}
+		break;
 	}
+
+	// Call init on component in case it needs a hug
+	_comp->init();
 }

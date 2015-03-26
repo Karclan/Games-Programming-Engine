@@ -14,7 +14,7 @@
 #include "rendering\robotRenderer.h"
 #include "physics\physicsBody.h"
 
-#define DEMO_SCENE_PATH "demo.xml"
+
 
 
 /*! \brief Responsible for loading scenes
@@ -53,6 +53,8 @@ private:
 	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
 	void xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten);
 	void xmlAddCustom(TiXmlElement* go, std::string behvr);
+	void xmlAddAnimator(TiXmlElement* go, std::string animationPath);
+	void xmlAddTerrainCol(TiXmlElement* go);
 
 	// saving scene params funcs
 	void xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, glm::vec3 dir);

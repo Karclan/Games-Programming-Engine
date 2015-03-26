@@ -59,10 +59,31 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	aiMesh* loadedMesh = scene->mMeshes[0];
 
 	
+	std::map<std::string, int> boneMapping;
+
+	// Lovely bone info
+	struct BoneVertexInfo
+	{
+		int numWeights;
+		glm::ivec4 boneID; 
+		glm::vec4 boneWeight;
+
+		void addWeight(int boneIDZ, float weight)
+		{
+			if(numWeights >= 4) return;
+
+			boneID[numWeights] = boneIDZ;
+			boneWeight[numWeights] = weight;
+			numWeights +=1;
+		}
+	};
+
+	std::vector<BoneVertexInfo> boneInfos;
+	
+	
 	for(int i = 0; i < loadedMesh->mNumVertices; ++i)
 	{
 		verts.push_back(glm::vec3(loadedMesh->mVertices[i].x, loadedMesh->mVertices[i].y, loadedMesh->mVertices[i].z));
-
 		
 		if(loadedMesh->HasNormals())
 			normals.push_back(glm::vec3(loadedMesh->mNormals[i].x, loadedMesh->mNormals[i].y, loadedMesh->mNormals[i].z));
@@ -76,6 +97,18 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		    biTangents.push_back(glm::vec3(loadedMesh->mBitangents[i].x,loadedMesh->mBitangents[i].y,loadedMesh->mBitangents[i].z));
 		}
 		colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
+
+
+		// Push empty values into boneID and boneWeight vectors
+		BoneVertexInfo boneInfo;
+		boneInfo.numWeights = 0;
+		for(int j = 0; j < 4; ++j)
+		{
+			boneInfo.boneID[j] = 0;
+			boneInfo.boneWeight[j] = 0;
+		}
+		boneInfos.push_back(boneInfo);
+		
 	}
 	for(int i = 0; i < loadedMesh->mNumFaces; ++i)
 	{
@@ -86,7 +119,90 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	}
 
 
+
+
+
+
+	// This is where the fun starts
+	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
+	{
+		std::string boneName(loadedMesh->mBones[i]->mName.data);
+		boneMapping.emplace(boneName, i);
+	}
+
+	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
+	{
+		std::string boneName(loadedMesh->mBones[i]->mName.data);
+		std::map<std::string, int>::iterator it = boneMapping.find(boneName);
+		int boneID = it->second;
+
+		// Populate BoneID and BoneWeight vectors 
+		for(int j = 0; j < loadedMesh->mBones[i]->mNumWeights; ++j) // for each weight
+		{
+			float weight = loadedMesh->mBones[i]->mWeights[j].mWeight;
+
+
+			int vertexID = loadedMesh->mBones[i]->mWeights[j].mVertexId;
+			boneInfos[vertexID].addWeight(boneID, weight);
+
+			if(weight != 0)
+			{
+				//std::cout << "HELLO!";
+			}
+		}
+	}
+
+
+	/*
+	int bonesCount = 0;
+	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
+	{
+		std::string boneName(loadedMesh->mBones[i]->mName.data);
+
+		// Puts in map if not there
+		std::map<std::string, int>::iterator it;
+		it = boneMapping.find(boneName);
+
+		if(it == boneMapping.end()) // then it can't find it
+		{
+			boneMapping.emplace(boneName, bonesCount);
+			bonesCount ++;
+		}
+		
+		// Get bone index
+		GLint boneIndex = boneMapping.find(boneName)->second;
+
+		// Store mOffset matrix from Assimp aiBone class? If we need it...
+		// TO DO
+
+
+		// Populate BoneID and BoneWeight vectors 
+		for(int j = 0; j < loadedMesh->mBones[i]->mNumWeights; ++j) // for each
+		{
+			int vertexID = loadedMesh->mBones[i]->mWeights[j].mVertexId;
+			int weigthNum = boneInfos[vertexID].numWeights; // the number of the weight, up to 3 (coz 4 possible)
+			if(weigthNum >= 4) continue; //too many bones!!!
+			boneInfos[vertexID].numWeights += 1; // add one to num of weights
+
+			boneInfos[vertexID].boneID[weigthNum] = boneIndex;
+			boneInfos[vertexID].boneWeight[weigthNum] = loadedMesh->mBones[i]->mWeights[j].mWeight;
+		}
+	}
+	*/
+
 	
+	// This is a horrible stupid way of doing it but can change once you know it works
+	std::vector<glm::ivec4> boneIDs;
+	std::vector<glm::vec4> boneWeights;
+	for(int i = 0; i < boneInfos.size(); ++i)
+	{
+		boneIDs.push_back(boneInfos[i].boneID);
+		boneWeights.push_back(boneInfos[i].boneWeight);
+	}
+	// end horrible way of doing things
+
+
+
 	// Now set mesh properties via vector
 	Mesh* mesh = new Mesh();
 	mesh->generateBuffers();
@@ -97,6 +213,9 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->setColours(colours);
 	mesh->setTangents(tangents);
 	mesh->setBiTangents(biTangents);
+
+	mesh->setBoneMap(boneMapping);
+	mesh->setBones(boneIDs, boneWeights);
 
 	return mesh;
 }
@@ -214,7 +333,37 @@ Mesh* Assets::getMesh(std::string fileName)
 	}
 }
 
+Animation* Assets::getAnim(std::string fileName)
+{
+	if(fileName == "") return nullptr;
 
+	Assets* ins = Assets::get(); // get instance
+
+
+	std::map<std::string, Animation*>::iterator it;
+	it = ins->_anims.find(fileName);
+	
+	if(it != ins->_anims.end()) // then it found it!
+	{
+		return it->second;
+	}
+	else // try to load it!
+	{
+		Animation* newAnim = new Animation();
+		std::string filePath = ASSETS_PATH + "models/" + fileName;
+		if(!newAnim->LoadAnimation(filePath))
+		{
+			std::cout << "Failed to load " << fileName << " anim\n";
+			delete newAnim;
+			return nullptr;
+		}
+		
+		// Add texture to map and return
+		ins->_anims.emplace(fileName, newAnim);
+		newAnim->setFilePath(fileName);
+		return newAnim;
+	}
+}
 
 
 
@@ -230,6 +379,7 @@ void Assets::unloadAllAssets()
 	unloadShaders();
 	unloadTextures();
 	unloadMeshes();
+	unloadAnims();
 }
 
 void Assets::unloadShaders()
@@ -275,7 +425,19 @@ void Assets::unloadMeshes()
 	ins->_meshes.clear();
 }
 
+void Assets::unloadAnims()
+{
+	Assets* ins = Assets::get(); // get instance
 
+	std::map<std::string, Animation*>::iterator it;
+	for(it = ins->_anims.begin(); it != ins->_anims.end(); ++it)
+	{
+		Animation* anim = it->second;
+		delete anim;
+	}
+
+	ins->_anims.clear();
+}
 
 const std::map<std::string, Shader*>* Assets::getShadersMap()
 { 

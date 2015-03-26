@@ -9,7 +9,7 @@
 
 #include "core\initTable.h"
 #include "core\gameObject.h"
-#include "core\objectFinder.h"
+#include "behaviour\objectMngrInterface.h"
 #include "behaviour\behaviour.h"
 #include "behaviour\behaviourSystem.h"
 #include "rendering\renderSystem.h"
@@ -32,7 +32,8 @@ class ObjectManager
 public:
 	ObjectManager();
 	void startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys, BehaviourSystem &behvrSys);
-	
+	void initGame(); //!< Causes dynamic objetcs to be cleared away
+
 	unsigned int createGameObject(std::string name); //!< Create object and return its unique ID
 	bool addComponent(unsigned int objectID, ComponentType::Type type); //!< Find object by id and add component to it if exists. Return true on success, false on fail
 	SPtr_GameObject getGameObject(unsigned int objectID); //!< Returns an object by unique ID number
@@ -45,11 +46,13 @@ public:
 	void clearInitTable() { _initTable.clear(); }
 	InitTable* getInitTable() { return &_initTable; }
 
+	// Dynamic objects
+	void initDynamicObjects(); //!< Call every frame, if has objects then create
 
 private:
 	unsigned int _nextId; //!< Starts at 0 and assigned as unique ID when object created, then incremented by one, allowing 'uint's max limit' objects per scene. Reset to zero when all objects cleared from map
 	std::unordered_map<unsigned int, SPtr_GameObject> _gameObjects; //!< All gameObjects, stored next to its unique ID
-	ObjectFinder _objectFinder;
+	ObjectMngrInterface _objMngrInt;
 	InitTable _initTable;
 
 	// Sub systems Obj Manager should add any components they need on creation
@@ -62,7 +65,12 @@ private:
 	// This is the funtion you'll want to edit when you make new types of component
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type); //!< Add a component to an object, but don't link its dependencies. Only use when adding lots of compnents and linking immediately after.
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type, TiXmlElement* compElmnt); //!< Overload allows you to pass XML object to read init values from XML
-	
+	void addComponentToSubsystems(SPtr_Component newComponent);
+	void removeComponentFromSubsystems(SPtr_Component component);
+
+	// Dynamically created objects. These are made at runtime and deleted at runtime end.
+	unsigned int _nextDynamicId;
+	std::set<SPtr_GameObject> _dynInitObjs; //!< Objects added here as they are created
 };
 
 #endif

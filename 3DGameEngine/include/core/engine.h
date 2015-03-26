@@ -40,6 +40,7 @@ public:
 	sf::RenderWindow* startGameMode();
 	
 	void startup(); //!< Initalize everything needed to run the engine
+	void initGame(); //!< Returns the game to it's initial state
 	void processEvent(sf::Event e); //!< Handle SFML event
 	void updateInput(float t); //!< Calls update in the Input singleton class. Call straight after event poll
 	void update(float t); //!< Update all sub systems here!
