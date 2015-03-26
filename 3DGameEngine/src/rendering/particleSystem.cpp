@@ -15,15 +15,26 @@ void ParticleSystem::clear()
 {
 	for(auto it: _updaters)
 	{
-		it=nullptr;
+		if(it.unique())
+		{
+			it.reset();
+		}
 	}
-	_emitter=nullptr;
+	for(auto it: _emitters)
+	{
+		if(it.unique())
+		{
+			it.reset();
+		}
+	}
 }
 
 void ParticleSystem::update(float dt)
 {
-	_emitter->emit(dt,&_particles);
-	
+	for(auto &_emitter : _emitters)
+	{
+		_emitter->emit(dt,&_particles);
+	}
 	for(size_t i = 0; i < _particleCount; ++i)
 	{
 		_particles._particleAccelerations[i]=glm::vec4(0.0f);
@@ -41,14 +52,18 @@ void ParticleSystem::addUpdater(SP_ParticleUpdater updater)
 
 void ParticleSystem::addEmitter(SP_ParticleEmitter emitter)
 {
-	_emitter = emitter;
+	_emitters.push_back(emitter);
 }
 
-SP_ParticleEmitter ParticleSystem::getEmitter()
+SP_ParticleEmitter ParticleSystem::getEmitter(int id)
 {
-	if(_emitter!=nullptr)return _emitter;
-
-	return SP_ParticleEmitter();
+	if(id<_emitters.size()){
+		return SP_ParticleEmitter();
+	}
+	else
+	{
+		return _emitters[id];
+	}
 }
 
 SP_ParticleUpdater ParticleSystem::getUpdater(Updaters::type type)

@@ -206,7 +206,9 @@
     <None Include="assets\shaders\specular.vert" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="assets\scenes\demo.XML" />
+    <Xml Include="assets\scenes\demo.XML">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

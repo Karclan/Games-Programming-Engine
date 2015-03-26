@@ -30,6 +30,9 @@ public:
 	void kill(size_t id);
 	void wake(size_t id);
 	void swapData(size_t a, size_t b);
+
+	size_t getParticleCount     (){return _particleCount;}
+	size_t getAliveParticleCount(){return _aliveParticleCount;}
 };
 
 

@@ -1,6 +1,8 @@
 #ifndef PARTICLESYSTEM_H
 #define PARTICLESYSTEM_H
 
+#include <memory>
+
 #include "rendering\particleData.h"
 #include "rendering\particleEmitters.h"
 #include "rendering\particleGenerators.h"
@@ -13,7 +15,7 @@ public:
 
 	size_t _particleCount;
 
-	SP_ParticleEmitter _emitter; 
+	std::vector<SP_ParticleEmitter> _emitters; 
 	std::vector<SP_ParticleUpdater> _updaters;
 
 public:
@@ -30,10 +32,12 @@ public:
 
 	void addEmitter(SP_ParticleEmitter emitter);
 	void addUpdater(SP_ParticleUpdater updater);
-	SP_ParticleEmitter getEmitter();
+	SP_ParticleEmitter getEmitter(int id);
 	SP_ParticleUpdater getUpdater(Updaters::type type);
 
 	ParticleData *getFinalData(){return &_particles;}
 };
+
+typedef std::shared_ptr<ParticleSystem> SP_ParticleSystem;
 
 #endif

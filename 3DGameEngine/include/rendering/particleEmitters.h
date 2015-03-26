@@ -26,6 +26,7 @@ public:
 	virtual void emit(float t, ParticleData *p);
 	virtual void init(size_t particlePool);
 	virtual void init(size_t particlePool,float emitScalar);
+	virtual void clear();
 
 	void addGenerator(SP_ParticleGenerator gen);
 	SP_ParticleGenerator getGenerator(Generators::type type);
@@ -37,21 +38,21 @@ public:
 
 typedef std::shared_ptr<ParticleEmitter> SP_ParticleEmitter;
 
-//class CircleEmitter : public ParticleEmitter
-//{
-//public:
-//	CircleEmitter(){};
-//
-//	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
-//
-//	void init(size_t particlePool);
-//	size_t _poolSize;
-//	RoundPosGen*		posGenerator;
-//	BasicColourGen*	    colGenerator;
-//	BasicVelGen*		velGenerator;
-//	BasicTimeGen*		timeGenerator;
-//};
-//
-//typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
+class CircleEmitter : public ParticleEmitter
+{
+public:
+	CircleEmitter(){};
+
+	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
+
+	void init(size_t particlePool);
+	size_t _poolSize;
+	SP_RoundPosGen		posGenerator;
+	SP_BasicColourGen	colGenerator;
+	SP_BasicVelGen		velGenerator;
+	SP_BasicTimeGen		timeGenerator;
+};
+
+typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
 
 #endif
