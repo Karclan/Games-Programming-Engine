@@ -8,6 +8,7 @@ ParticleRenderer::ParticleRenderer()
 	_particleSystem=nullptr;
 	_shader = Assets::getShader("particle");
 	_particlePool=0;
+	generate(_particlePool);
 }
 
 ComponentType::Type ParticleRenderer::getType()
@@ -32,6 +33,7 @@ void ParticleRenderer::linkDependency(SPtr_Component c)
 
 void ParticleRenderer::generate(size_t particlePool)
 {
+	_particlePool = particlePool;
 	if(_generatedFlag)
 	{
 		glDisableVertexAttribArray(0);

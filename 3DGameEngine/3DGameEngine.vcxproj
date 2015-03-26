@@ -99,6 +99,7 @@
     <ClInclude Include="include\custom\cameraController.h" />
     <ClInclude Include="include\custom\customBehaviours.h" />
     <ClInclude Include="include\custom\playerController.h" />
+    <ClInclude Include="include\custom\testEmitter.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
     <ClInclude Include="include\physics\octTree.h" />
@@ -164,6 +165,7 @@
     <ClCompile Include="src\core\transform.cpp" />
     <ClCompile Include="src\custom\cameraController.cpp" />
     <ClCompile Include="src\custom\playerController.cpp" />
+    <ClCompile Include="src\custom\testEmitter.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
