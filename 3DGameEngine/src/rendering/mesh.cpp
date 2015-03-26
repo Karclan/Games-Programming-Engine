@@ -143,8 +143,59 @@ void Mesh::setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &bo
 	glBindVertexArray(0); // Unbind VAO
 }
 
+void Mesh::setTangents(std::vector<glm::vec3> &tangents)
+{
+	if(tangents.size()==0) return;
+
+	glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
+
+	glEnableVertexAttribArray(MeshAttribs::TANGENT);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::TANGENT]);
+	glVertexAttribPointer(MeshAttribs::TANGENT, 3, GL_FLOAT, GL_FALSE,0, (GLubyte*)NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::TANGENT]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * tangents.size(),  glm::value_ptr(tangents[0]), GL_STATIC_DRAW);
+	_dataSize[MeshAttribs::TANGENT] = tangents.size();
+
+	glBindVertexArray(0); // Unbind VAO
+}
+void Mesh::setBiTangents(std::vector<glm::vec3> &biTangents)
+{
+	if(biTangents.size()==0) return;
+
+	glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
+
+	glEnableVertexAttribArray(MeshAttribs::BITANGENT);
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BITANGENT]);
+	glVertexAttribPointer(MeshAttribs::BITANGENT, 3, GL_FLOAT, GL_FALSE,0, (GLubyte*)NULL);
+
+	glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::BITANGENT]);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * biTangents.size(),  glm::value_ptr(biTangents[0]), GL_STATIC_DRAW);
+	_dataSize[MeshAttribs::BITANGENT] = biTangents.size();
+
+	glBindVertexArray(0); // Unbind VAO
+}
+
+	//if(verts.size() == 0) return;
+
+	//glBindVertexArray(_vao); // Bind VAO so we can link it to buffers
+
+	//// Enable and link position buffer to vao
+	//glEnableVertexAttribArray(MeshAttribs::VERT);
+	//glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::VERT]);
+	//glVertexAttribPointer(MeshAttribs::VERT, 3, GL_FLOAT, GL_FALSE, 0, (GLubyte*)NULL);
+
+	//// Set vertex position data
+	//glBindBuffer(GL_ARRAY_BUFFER, _buffers[MeshAttribs::VERT]); // bind the vertex (position) buffer so we can...
+	//glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec3) * verts.size(), glm::value_ptr(verts[0]), GL_STATIC_DRAW); // ..populate it with the data
+	//_dataSize[MeshAttribs::VERT] = verts.size();
+	//
+	//glBindVertexArray(0); // Unbind VAO
+
+
 
 void Mesh::setBoneMap(std::map<std::string, int> m)
 {
 	boneMap = m;
 }
+

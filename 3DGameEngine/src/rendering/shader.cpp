@@ -18,9 +18,11 @@ bool Shader::loadFromFile(std::string shaderName)
 		_viewMatrixID = glGetUniformLocation(_shaderHandle, "mView");
 		_projectionMatrixID = glGetUniformLocation(_shaderHandle, "mProjection");
 
+
 		// set texture uniforms - I think I can just set main tex to 0 and leave as is, then always use 0 for main tex
 		// Then have a system for others later on as well, e.g. 1 is always bump map etc
 		_texHandle = glGetUniformLocation(_shaderHandle, "tex"); // main texture
+
 		_texTileHandle = glGetUniformLocation(_shaderHandle, "uvTile"); // texture fraction multiplier
 
 		// For subroutines. Currently relies on fact that only 1 subroutine as setting multiple is confusing as hell!
@@ -120,7 +122,6 @@ void Shader::setUniform(const char *name, bool val )
 	int loc = getUniformLocation(name);
 	glUniform1i(loc, val);
 }
-
 GLint Shader::getUniformLocation(const char *name)
 {
 	std::map<std::string, int>::iterator pos;

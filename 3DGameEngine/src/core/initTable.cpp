@@ -167,9 +167,12 @@ void CompData::setAttribsToComponents()
 			// Material
 			Material* mat = modelRend->getMaterial();
 			addAttribs(mat->getShaderFilePath()); // attrib 1 is shader
-			addAttribs(mat->getTextureFilePath()); // attrib 2 is texture file path as string
-			addAttribf(mat->getUvTile().x); // attrib 3 is tile u
-			addAttribf(mat->getUvTile().y); // attrib 4 is tile v		
+			addAttribs(mat->getTextureFilePath(Material::DIFFUSE)); // attrib 2 is texture file path as string
+			addAttribs(mat->getTextureFilePath(Material::SPECULAR)); // attrib 3 is texture file path as string
+			addAttribs(mat->getTextureFilePath(Material::NORMAL)); // attrib 4 is texture file path as string
+			addAttribs(mat->getTextureFilePath(Material::HEIGHT)); // attrib 5 is texture file path as string
+			addAttribf(mat->getUvTile().x); // attrib 6 is tile u
+			addAttribf(mat->getUvTile().y); // attrib 7 is tile v		
 			
 			addAttribf(mat->getDiffuse().x);	//diffuse r
 			addAttribf(mat->getDiffuse().y);	//diffuse g
@@ -184,6 +187,12 @@ void CompData::setAttribsToComponents()
 	case ComponentType::ROB_REND:
 		break;
 
+	case ComponentType::PARTICLE_REND:
+		{
+			SPtr_ParticleRend particleRender = std::static_pointer_cast<ParticleRenderer>(_comp);
+	
+			break;
+		}
 	case ComponentType::PHY_BODY:
 		{
 			SPtr_PhysBody physBody = std::static_pointer_cast<PhysicsBody>(_comp);
@@ -298,7 +307,10 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		{
 		addAttribs(compElmnt->Attribute("mesh")); // attrib 0 is model filepath
 		addAttribs(compElmnt->Attribute("shader")); // attrib 1 is shader
-		addAttribs(compElmnt->Attribute("texture")); // attrib 2 is texture file path as string
+		addAttribs(compElmnt->Attribute("textureD")); // attrib 2 is texture file path as string
+		addAttribs(compElmnt->Attribute("textureS")); // attrib 2 is texture file path as string
+		addAttribs(compElmnt->Attribute("textureN")); // attrib 2 is texture file path as string
+		addAttribs(compElmnt->Attribute("textureH")); // attrib 2 is texture file path as string
 		addAttribf(to_float(compElmnt, "tileU")); // attrib 3 is tile u
 		addAttribf(to_float(compElmnt,"tileV")); // attrib 4 is tile v
 		addAttribf(to_float(compElmnt,"dR")); // Diffuse x
@@ -312,6 +324,10 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		}
 
 	case ComponentType::ROB_REND:
+		break;
+
+	case ComponentType::PARTICLE_REND:
+	
 		break;
 
 	case ComponentType::PHY_BODY:
@@ -394,27 +410,35 @@ void CompData::initializeComponent()
 
 			Mesh* mesh = Assets::getMesh(getStringAttrib(0)); // attrib 0 = mesh filepath
 			Shader* shader = Assets::getShader(getStringAttrib(1)); // attrib 1 = shader file path
-			Texture2D* texture = Assets::getTexture(getStringAttrib(2)); // attrib 2 = texture file path
+			Texture2D* textureD = Assets::getTexture(getStringAttrib(2)); // attrib 2 = diffuse texture file path
+			Texture2D* textureS = Assets::getTexture(getStringAttrib(3)); // attrib 3 = specular texture file path
+			Texture2D* textureN = Assets::getTexture(getStringAttrib(4)); // attrib 4 = normal texture file path
+			Texture2D* textureH = Assets::getTexture(getStringAttrib(5)); // attrib 5 = height texture file path
 
 			if(mesh == nullptr) setStringAttrib(0, "");
 			if(shader == nullptr) setStringAttrib(1, "");
-			if(texture == nullptr) setStringAttrib(2, "");
-
+			if(textureD == nullptr) setStringAttrib(2, "");
+			if(textureS == nullptr) setStringAttrib(3, "");
+			if(textureN == nullptr) setStringAttrib(4, "");
+			if(textureH == nullptr) setStringAttrib(5, "");
 			// attrib 0 = model file path
 			// attrib 1 = shader file path
-			// attrib 2 = texture file path
-			// attrib 3 = uv tile U
-			// attrib 4 = uv tile V
+			// attrib 2 = diffuse texture file path
+			// attrib 3 = specular texture file path
+			// attrib 4 = normal texture file path
+			// attrib 5 = height texture file path
+			// attrib 6 = uv tile U
+			// attrib 7 = uv tile V
 
-			// attrib 5 = diffuse r
-			// attrib 6 = diffuse g
-			// attrib 7 = diffuse b
-			// attrib 8 = specular r
-			// attrib 9 = specular g 
-			// attrib 10 = specular b
-			// attrib 11 = specular exponent
+			// attrib 8 = diffuse r
+			// attrib 9 = diffuse g
+			// attrib 10 = diffuse b
+			// attrib 11 = specular r
+			// attrib 12 = specular g 
+			// attrib 13 = specular b
+			// attrib 14 = specular exponent
 			model->setMesh(mesh); // set model
-			model->setMaterial(shader, texture, glm::vec2(getFloatAttrib(3), getFloatAttrib(4)), glm::vec3(getFloatAttrib(5),getFloatAttrib(6),getFloatAttrib(7)),glm::vec3(getFloatAttrib(8),getFloatAttrib(9),getFloatAttrib(10)),getFloatAttrib(11)); // set material with shader and texture
+			model->setMaterial(shader, textureD,textureS,textureN, textureH, glm::vec2(getFloatAttrib(6), getFloatAttrib(7)), glm::vec3(getFloatAttrib(8),getFloatAttrib(9),getFloatAttrib(10)),glm::vec3(getFloatAttrib(11),getFloatAttrib(12),getFloatAttrib(13)),getFloatAttrib(14)); // set material with shader and texture
 		}
 		break;
 
@@ -428,6 +452,13 @@ void CompData::initializeComponent()
 		{
 			std::shared_ptr<RobotRenderer> robot = std::static_pointer_cast<RobotRenderer>(getComp());
 			robot->reset();
+		}
+		break;
+
+	case ComponentType::PARTICLE_REND:
+		{
+			SPtr_ParticleRend particleRend = std::static_pointer_cast<ParticleRenderer>(getComp());
+			particleRend->generate(1000);
 		}
 		break;
 

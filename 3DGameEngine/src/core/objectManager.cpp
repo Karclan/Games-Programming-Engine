@@ -242,6 +242,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	{
 	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
 	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
+	case ComponentType::PARTICLE_REND: newComponent.reset(new ParticleRenderer()); break;
 	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
 	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
@@ -299,7 +300,10 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 	case ComponentType::ROB_REND:
 		_rendSys->addRenderObject(std::static_pointer_cast<RobotRenderer>(newComponent));
 		break;
-
+	case ComponentType::PARTICLE_REND:
+		_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		_rendSys->addAnimatedObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		break;
 	case ComponentType::SPHERE_COL:
 	case ComponentType::BOX_COL:
 		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));

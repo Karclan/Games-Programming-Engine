@@ -58,6 +58,12 @@
     <Filter Include="Source Files\custom">
       <UniqueIdentifier>{14768d7d-b2b7-4851-9840-812a395e6495}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\rendering\particles">
+      <UniqueIdentifier>{1f18fbb8-5be9-4029-ad12-7ef4489d3ecf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\rendering\particles">
+      <UniqueIdentifier>{9607bd87-760b-4be0-9e00-b0884b8d2f55}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
@@ -80,6 +86,9 @@
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
     <ClInclude Include="include\behaviour\behaviourSystem.h">
+      <Filter>Header Files\behaviour</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour\rotatingObject.h">
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
     <ClInclude Include="include\core\component.h">
@@ -108,6 +117,9 @@
     </ClInclude>
     <ClInclude Include="include\core\assets.h">
       <Filter>Header Files\core</Filter>
+    </ClInclude>
+    <ClInclude Include="include\behaviour\playerController.h">
+      <Filter>Header Files\behaviour</Filter>
     </ClInclude>
     <ClInclude Include="include\editor\editor.h">
       <Filter>Header Files\editor</Filter>
@@ -172,6 +184,9 @@
     <ClInclude Include="include\core\globals.h">
       <Filter>Header Files\core</Filter>
     </ClInclude>
+    <ClInclude Include="include\core\objectFinder.h">
+      <Filter>Header Files\core</Filter>
+    </ClInclude>
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -190,29 +205,26 @@
     <ClInclude Include="include\rendering\shaders.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
-    <ClInclude Include="include\custom\customBehaviours.h">
-      <Filter>Header Files\custom</Filter>
-    </ClInclude>
-    <ClInclude Include="include\physics\terrainCollider.h">
-      <Filter>Header Files\physics</Filter>
-    </ClInclude>
     <ClInclude Include="include\behaviour\custom.h">
       <Filter>Header Files\behaviour</Filter>
     </ClInclude>
-    <ClInclude Include="include\behaviour\objectMngrInterface.h">
-      <Filter>Header Files\behaviour</Filter>
+    <ClInclude Include="include\rendering\particleGenerators.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\custom\cameraController.h">
-      <Filter>Header Files\custom</Filter>
+    <ClInclude Include="include\rendering\particleRenderer.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\custom\playerController.h">
-      <Filter>Header Files\custom</Filter>
+    <ClInclude Include="include\rendering\particleEmitters.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering\animation.h">
-      <Filter>Header Files\rendering</Filter>
+    <ClInclude Include="include\rendering\particleUpdaters.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
-    <ClInclude Include="include\rendering\animator.h">
-      <Filter>Header Files\rendering</Filter>
+    <ClInclude Include="include\rendering\particleSystem.h">
+      <Filter>Header Files\rendering\particles</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\particleData.h">
+      <Filter>Header Files\rendering\particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +232,9 @@
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
     <ClCompile Include="src\behaviour\behaviourSystem.cpp">
+      <Filter>Source Files\behaviour</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour\rotatingObject.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
     <ClCompile Include="src\core\component.cpp">
@@ -248,6 +263,9 @@
     </ClCompile>
     <ClCompile Include="src\core\assets.cpp">
       <Filter>Source Files\core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\behaviour\playerController.cpp">
+      <Filter>Source Files\behaviour</Filter>
     </ClCompile>
     <ClCompile Include="src\editor\editor.cpp">
       <Filter>Source Files\editor</Filter>
@@ -315,6 +333,9 @@
     <ClCompile Include="src\rendering\FTInterface.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
+    <ClCompile Include="src\core\objectFinder.cpp">
+      <Filter>Source Files\core</Filter>
+    </ClCompile>
     <ClCompile Include="src\physics\collider.cpp">
       <Filter>Source Files\physics</Filter>
     </ClCompile>
@@ -330,26 +351,23 @@
     <ClCompile Include="src\behaviour\custom.cpp">
       <Filter>Source Files\behaviour</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\terrainCollider.cpp">
-      <Filter>Source Files\physics</Filter>
+    <ClCompile Include="src\rendering\particleGenerators.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\behaviour\objectMngrInterface.cpp">
-      <Filter>Source Files\behaviour</Filter>
+    <ClCompile Include="src\rendering\particleRenderer.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\custom\cameraController.cpp">
-      <Filter>Source Files\custom</Filter>
+    <ClCompile Include="src\rendering\particleUpdaters.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\custom\playerController.cpp">
-      <Filter>Source Files\custom</Filter>
+    <ClCompile Include="src\rendering\particleEmitters.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\physics\octTree.cpp">
-      <Filter>Source Files\physics</Filter>
+    <ClCompile Include="src\rendering\particleData.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
-    <ClCompile Include="src\rendering\animation.cpp">
-      <Filter>Source Files\rendering</Filter>
-    </ClCompile>
-    <ClCompile Include="src\rendering\animator.cpp">
-      <Filter>Source Files\rendering</Filter>
+    <ClCompile Include="src\rendering\particleSystem.cpp">
+      <Filter>Source Files\rendering\particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -378,5 +396,16 @@
     <None Include="assets\shaders\advanced.vert">
       <Filter>Resource Files\ShaderFiles</Filter>
     </None>
+    <None Include="assets\shaders\particle.frag">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+    <None Include="assets\shaders\particle.vert">
+      <Filter>Resource Files\ShaderFiles</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="assets\scenes\demo.XML">
+      <Filter>Resource Files</Filter>
+    </Xml>
   </ItemGroup>
 </Project>

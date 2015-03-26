@@ -52,7 +52,9 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	std::vector<glm::vec3> normals;
 	std::vector<glm::vec2> uvs;
 	std::vector<glm::vec3> colours;
-	
+	std::vector<glm::vec3> tangents;
+	std::vector<glm::vec3> biTangents;
+
 	// Assimp conversion here!
 	aiMesh* loadedMesh = scene->mMeshes[0];
 
@@ -88,7 +90,12 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		
 		if(loadedMesh->HasTextureCoords(0))
 			uvs.push_back(glm::vec2(loadedMesh->mTextureCoords[0][i].x, loadedMesh->mTextureCoords[0][i].y));
-		
+
+		if(loadedMesh->HasTangentsAndBitangents())
+		{
+			tangents.push_back  (glm::vec3(loadedMesh->mTangents[i].x,  loadedMesh->mTangents[i].y,  loadedMesh->mTangents[i].z));
+		    biTangents.push_back(glm::vec3(loadedMesh->mBitangents[i].x,loadedMesh->mBitangents[i].y,loadedMesh->mBitangents[i].z));
+		}
 		colours.push_back(glm::vec3(1.0f, 1.0f, 1.0f));
 
 
@@ -110,6 +117,7 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
 		}
 	}
+
 
 
 
@@ -203,6 +211,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->setNormals(normals);
 	mesh->setUvs(uvs);
 	mesh->setColours(colours);
+	mesh->setTangents(tangents);
+	mesh->setBiTangents(biTangents);
 
 	mesh->setBoneMap(boneMapping);
 	mesh->setBones(boneIDs, boneWeights);
