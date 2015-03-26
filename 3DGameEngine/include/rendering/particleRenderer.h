@@ -41,11 +41,11 @@ public:
 
 	SP_ParticleGenerator getGenerator(Generators::type type);
 	SP_ParticleUpdater	 getUpdater(Updaters::type type);
-	SP_CircleEmitter circleEmitter;
+	SP_CircleEmitter	circleEmitter;
 
-	SP_EulerUpdater _eulerUpdater;
-	SP_FloorUpdater _floorUpdater;
-
+	SP_EulerUpdater		_eulerUpdater;
+	SP_FloorUpdater		_floorUpdater;
+		
 private:
 
 	bool _playFlag;
@@ -56,8 +56,8 @@ private:
 	GLuint _particleColourBuffer;
 	Shader* _shader;
 
-	int				_particlePool;
-	SP_ParticleSystem _particleSystem;
+	int					_particlePool;
+	SP_ParticleSystem	_particleSystem;
 
 	std::vector<SP_ParticleUpdater>	  _updaters;
 

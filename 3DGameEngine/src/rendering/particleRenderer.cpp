@@ -57,8 +57,8 @@ void ParticleRenderer::generate(size_t particlePool)
 	}
 	_particleSystem->addUpdater(_eulerUpdater);
 	
-	_floorUpdater.reset(new FloorUpdater());
-	_particleSystem->addUpdater(_floorUpdater);
+	//_floorUpdater.reset(new FloorUpdater());
+	//_particleSystem->addUpdater(_floorUpdater);
 
 	size_t count = _particleSystem->getParticleCount();
 
