@@ -13,6 +13,9 @@ PhysicsSystem::PhysicsSystem()
 
 void PhysicsSystem::init()
 {
+	// Clear Dynamic OctTree (ststic will be done automatically when it is created
+	_dynamicOctTree.clear();
+
 	// Ensure all colliders are in unsorted colliders
 	for(int i = 0; i < _dynamicColliders.size(); ++i)
 		_unsortedColliders.push_back(_dynamicColliders[i]);
@@ -51,6 +54,9 @@ void PhysicsSystem::clear()
 	_unsortedColliders.clear();
 	_dynamicColliders.clear();
 	_staticColliders.clear();
+
+	_dynamicOctTree.clear();
+	_staticOctTree.clear();
 }
 
 void PhysicsSystem::addCollider(SPtr_Collider collider)
@@ -335,14 +341,39 @@ void PhysicsSystem::removeCollider(SPtr_Collider collider)
 	if(collider->hasPhysicsBody())
 	{
 		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
-		for(it; it != _dynamicColliders.end(); ++it)
+		/*
+		while(it != _dynamicColliders.end())
 		{
 			if(*it == collider)
 			{
-				_dynamicColliders.erase(it);
-				return;
+				it = _dynamicColliders.erase(it);
+			}
+			else
+			{
+				++it;
 			}
 		}
+		*/
+
+		int counter = 0;
+		for(it; it != _dynamicColliders.end(); ++it)
+		{
+			if(*it == collider)	
+			{
+				counter++;
+				_dynamicColliders.erase(it);
+				break;
+			}
+			
+		}
+		std::cout << "Found that shit " << counter << " times lol!\n";
+
+		counter = 0;
+		for(it = _dynamicColliders.begin(); it != _dynamicColliders.end(); ++it)
+		{
+			if(*it == collider) counter++;
+		}
+		std::cout << "Looked again. Found that shit " << counter << " times lol!\n";
 
 	}
 

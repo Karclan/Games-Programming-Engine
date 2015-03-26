@@ -52,6 +52,11 @@ SphereCollider::SphereCollider()
 	_offset = glm::vec3(0, 0, 0);
 }
 
+SphereCollider::~SphereCollider()
+{
+	std::cout << "SPHERE_COL DESTORYED!\n";
+}
+
 ComponentType::Type SphereCollider::getType()
 {
 	return ComponentType::SPHERE_COL;
@@ -239,6 +244,11 @@ BoxCollider::BoxCollider()
 {
 	_extents = glm::vec3(1, 1, 1);
 	_offset = glm::vec3(0, 0, 0);
+}
+
+BoxCollider::~BoxCollider()
+{
+	std::cout << "BoxCollider DESTORYED!\n";
 }
 
 ComponentType::Type BoxCollider::getType()

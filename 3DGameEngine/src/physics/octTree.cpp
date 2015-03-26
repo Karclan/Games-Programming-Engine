@@ -351,6 +351,7 @@ void OctTree::clear()
 	if(_root != nullptr)
 	{
 		_root->destroy();
+		delete _root;
 		_root = nullptr;
 	}
 }

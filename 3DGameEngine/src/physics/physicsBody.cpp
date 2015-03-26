@@ -15,6 +15,11 @@ PhysicsBody::PhysicsBody()
 	_velocity = glm::vec3();
 }
 
+PhysicsBody::~PhysicsBody()
+{
+	std::cout << "PhysicsBody DESTORYED!\n";
+}
+
 ComponentType::Type PhysicsBody::getType()
 {
 	return ComponentType::PHY_BODY;		

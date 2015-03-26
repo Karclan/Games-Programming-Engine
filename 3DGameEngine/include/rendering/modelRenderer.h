@@ -17,6 +17,7 @@ class ModelRenderer : public Renderer
 {
 public:
 	ModelRenderer();
+	~ModelRenderer();
 	ComponentType::Type getType();
 	bool isOnePerObject();
 

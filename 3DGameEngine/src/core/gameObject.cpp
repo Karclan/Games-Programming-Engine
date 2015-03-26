@@ -13,6 +13,7 @@ GameObject::~GameObject()
 	removeFromSystem();
 }
 
+
 void GameObject::removeFromSystem()
 {
 	for(unsigned int i = 0; i < _components.size(); ++i)
@@ -21,6 +22,7 @@ void GameObject::removeFromSystem()
 	}
 	_components.clear();
 }
+
 
 // The reason we return component ptr (null if fail) rather than bool for fail is slightly greater flexibility
 // For example, if we ensure all systems do a null check when passed a component ptr then it doesn't matter

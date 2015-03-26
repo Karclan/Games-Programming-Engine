@@ -26,7 +26,6 @@ void ObjectManager::initGame()
 	{
 		if(it->second.get()->getCreatedDyn())
 		{
-			it->second.get()->removeFromSystem();
 			dynObjs.push_back(it->first); // get ID of every dynamically created object
 		}
 	}
@@ -48,6 +47,8 @@ void ObjectManager::initGame()
 }
 
 
+
+// Called every frame from Engine. If there are dynamically created objects, they are added to the system
 void ObjectManager::initDynamicObjects()
 {
 	if(_dynInitObjs.size() == 0) return;

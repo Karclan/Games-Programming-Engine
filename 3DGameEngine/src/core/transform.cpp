@@ -8,6 +8,11 @@ Transform::Transform()
 	_scale = glm::vec3(1, 1, 1);
 }
 
+Transform::~Transform()
+{
+	std::cout << "TRANSFORM DESTORYED!\n";
+}
+
 
 // Overridden pure virtuals in component
 ComponentType::Type Transform::getType()

@@ -32,7 +32,7 @@ public:
 
 	void setId(unsigned int id) { _id = id; _createdDyn = true;} //!< Because each ID should be unique, this should only be set by object manager
 	bool getCreatedDyn() { return _createdDyn; }
-	void removeFromSystem();
+	void removeFromSystem(); //!< Removes all components and sets their state to destroyed
 
 	const std::vector<SPtr_Component>* getComponents() { return &_components; }
 

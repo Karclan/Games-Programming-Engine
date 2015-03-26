@@ -11,6 +11,11 @@ ModelRenderer::ModelRenderer()
 	_anim = nullptr;
 }
 
+ModelRenderer::~ModelRenderer()
+{
+	std::cout << "MODL_REND DESTORYED!\n";
+}
+
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {
 	if(_mesh == nullptr) return; // Can't render without mesh

@@ -8,8 +8,7 @@ Component::Component()
 }
 
 Component::~Component()
-{
-	//std::cout << "Component Destroyed!\n";
+{	
 }
 
 BITMASK Component::getDepFlags()
