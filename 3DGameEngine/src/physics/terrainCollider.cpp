@@ -31,7 +31,7 @@ void TerrainCollider::linkDependency(SPtr_Component component)
 void TerrainCollider::init()
 {
 	if(_renderer != nullptr)
-		_tex = _renderer->getMaterial()->getTexture();
+		_tex = _renderer->getMaterial()->getTexture(Material::DIFFUSE);
 	else
 		_tex = nullptr;
 }
