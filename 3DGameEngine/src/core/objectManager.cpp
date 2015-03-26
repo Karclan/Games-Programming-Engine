@@ -18,7 +18,7 @@ void ObjectManager::startUp(RenderSystem &rendSys, PhysicsSystem &physicsSys, Be
 
 void ObjectManager::initGame()
 {
-	_nextDynamicId = _nextId;
+	_nextDynamicId = _nextId; // reset dynamic id indices
 	
 	std::unordered_map<unsigned int, SPtr_GameObject>::iterator it;
 	std::vector<int> dynObjs;
@@ -26,19 +26,29 @@ void ObjectManager::initGame()
 	{
 		if(it->second.get()->getCreatedDyn())
 		{
-			it->second.get()->removeFromSystem();
-			dynObjs.push_back(it->first);
+			dynObjs.push_back(it->first); // get ID of every dynamically created object
 		}
 	}
 
 	for(int i = 0; i < dynObjs.size(); ++i)
 	{
-		it = _gameObjects.find(dynObjs[i]);
+		it = _gameObjects.find(dynObjs[i]); // find each dynamically created object	
+
+		// Remove all components from subsystems
+		const std::vector<SPtr_Component>* comps = it->second->getComponents();
+		for(int j = 0; j < comps->size(); ++j)
+		{
+			removeComponentFromSubsystems(comps->at(j));
+		}
+
+		// Remove Game Object from system
 		_gameObjects.erase(it);
 	}
 }
 
 
+
+// Called every frame from Engine. If there are dynamically created objects, they are added to the system
 void ObjectManager::initDynamicObjects()
 {
 	if(_dynInitObjs.size() == 0) return;
@@ -232,6 +242,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	{
 	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
 	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
+	case ComponentType::PARTICLE_REND: newComponent.reset(new ParticleRenderer()); break;
 	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
 	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
@@ -289,7 +300,10 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 	case ComponentType::ROB_REND:
 		_rendSys->addRenderObject(std::static_pointer_cast<RobotRenderer>(newComponent));
 		break;
-
+	case ComponentType::PARTICLE_REND:
+		_rendSys->addRenderObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		_rendSys->addAnimatedObject(std::static_pointer_cast<ParticleRenderer>(newComponent));
+		break;
 	case ComponentType::SPHERE_COL:
 	case ComponentType::BOX_COL:
 		_physicsSys->addCollider(std::static_pointer_cast<Collider>(newComponent));
@@ -311,6 +325,49 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
 		_rendSys->addAnimator(std::static_pointer_cast<Animator>(newComponent));
 		break;
 	}
+
+}
+
+
+
+// Remove object from subsystem
+void ObjectManager::removeComponentFromSubsystems(SPtr_Component component)
+{
+	
+	// !-WHEN MAKING NEW COMPONENTS : TO DO - Ensure your component can be removed from subsystems you added it to!
+	// Add to subsystems based on type
+	switch(component->getType())
+	{
+	case ComponentType::CAMERA: // camera - add to cameras in render system
+		_rendSys->removeCamera(std::static_pointer_cast<Camera>(component));
+		break;
+
+	case ComponentType::MODL_REND: // model renderer - add to render system
+		_rendSys->removeRenderObject(std::static_pointer_cast<Renderer>(component));
+		break;
+
+	case ComponentType::SPHERE_COL:
+	case ComponentType::BOX_COL:
+		_physicsSys->removeCollider(std::static_pointer_cast<Collider>(component));
+		break;
+
+	case ComponentType::LIGHT:
+		_rendSys->removeLight(std::static_pointer_cast<Light>(component));
+		break;
+
+	case ComponentType::CUSTOM:
+		_behvrSys->removeCustom(std::static_pointer_cast<Custom>(component));
+		break;
+
+	case ComponentType::TERRAIN_COL:
+		_physicsSys->removeTerrainCollider(std::static_pointer_cast<TerrainCollider>(component));
+		break;
+
+	case ComponentType::ANIMATION:
+		_rendSys->removeAnimator(std::static_pointer_cast<Animator>(component));
+		break;
+	}
+	
 
 }
 

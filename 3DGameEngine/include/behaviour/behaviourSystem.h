@@ -24,6 +24,7 @@ public:
 
 	void setObjMngrInt(ObjectMngrInterface &objMngrInt) { _objMngrInt = &objMngrInt; }
 	bool addCustom(SPtr_Custom custom);
+	void removeCustom(SPtr_Custom custom);
 	void clear();
 	void update(float t); //!< Call update on all in update list and intialize on new behaviours. t = deltat time
 	void fixedUpdate(float t); // t = fixed delta time

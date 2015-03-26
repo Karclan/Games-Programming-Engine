@@ -31,8 +31,10 @@ namespace MeshAttribs
 	const unsigned int COLOUR = 4;
 	const unsigned int BONE_IDS = 5;
 	const unsigned int BONE_WEIGHTS = 6;
+	const unsigned int TANGENT = 8;
+	const unsigned int BITANGENT =9;
 
-	const unsigned int NUM_ATTRIBS = 7; // Number may change with time if I add more attribs, but never used in shader so doesn't matter
+	const unsigned int NUM_ATTRIBS = 10; // Number may change with time if I add more attribs, but never used in shader so doesn't matter
 }
 
 struct VertexBoneData
@@ -57,12 +59,17 @@ public:
 	void setNormals(std::vector<glm::vec3> &normals); //!< Fill normal data via vector
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
+
 	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector
 
 	void setBoneMap(std::map<std::string, int> m);
 	std::map<std::string, int> getBoneMap() { return boneMap; }
 
-	GLuint getVao() { return _vao; }
+
+	void setTangents(std::vector<glm::vec3> &tangents);
+	void setBiTangents(std::vector<glm::vec3> &biTangents);
+
+	GLuint getVao()  { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
 
 	void setPrimID(int id) { _primID = id; }

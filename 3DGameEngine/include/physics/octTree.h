@@ -29,6 +29,11 @@ private:
 
 	void createChildNodes(); //!< Creates children. Assumes leaf check has already been done so will cause memory leaks if called when not a leaf!
 	
+	// debug
+	void insertDebug(SPtr_Collider collider, SPtr_Collider debugCollider); //!< Add to tree, recursively dividing if needed until reached max depth or nodes have fewer than MAX colliders in
+	
+
+
 	OctTreeNode* _children[8];
 	
 	unsigned int _depth;
@@ -55,6 +60,9 @@ public:
 
 	void setMaxDepth(unsigned int maxDepth) { _maxDepth = maxDepth; }
 	void setMaxCols(unsigned int maxCols) { _maxCols = maxCols; }
+
+	// Debug functions
+	//void createTree(const std::vector<SPtr_Collider> &colliders, SPtr_Collider debugOut);
 
 private:
 	OctTreeNode* _root;

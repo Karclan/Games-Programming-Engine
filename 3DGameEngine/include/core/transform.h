@@ -44,6 +44,7 @@ class Transform : public Component
 {
 public:
 	Transform();
+	~Transform();
 
 	// Overridden pure virtuals in component
 	ComponentType::Type getType();

@@ -6,7 +6,10 @@ RobotRenderer::RobotRenderer()
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
 	_material.setShader(Assets::getShader("advanced"));
-	_material.setTexture(nullptr);
+	_material.setTexture(nullptr,Material::DIFFUSE);
+	_material.setTexture(nullptr,Material::SPECULAR);
+	_material.setTexture(nullptr,Material::NORMAL);
+	_material.setTexture(nullptr,Material::HEIGHT);
 	generateMesh();
 
 	_animSpeed = 5;

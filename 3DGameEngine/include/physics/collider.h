@@ -86,6 +86,7 @@ class SphereCollider : public Collider
 
 public:
 	SphereCollider();
+	~SphereCollider();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 
@@ -117,6 +118,7 @@ class BoxCollider : public Collider
 
 public:
 	BoxCollider();
+	~BoxCollider();
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	void calculateBounds();

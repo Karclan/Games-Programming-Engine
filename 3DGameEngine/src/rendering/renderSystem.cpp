@@ -30,18 +30,27 @@ void RenderSystem::render(Camera* camera)
 
 	//if(_unsortedLights.size() != 0) activateLights(); // activate lights if any added
 
+
+	//pass 1
+	
+	//pass 2
 	camera->preRender();
 	activateLights();
+
+
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
 		camera->render(*_models[i]);
 	}
+
+	for(unsigned int i = 0; i < _particles.size(); ++i)
+	{
+		camera->render(*_particles[i]);
+	}
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);
 	
-
-	FTInterface::renderText("Editor Mode",0,0,1,glm::vec3(0.5f,0.1f,0.8f));
 
 }
 
@@ -65,22 +74,32 @@ void RenderSystem::addCamera(std::shared_ptr<Camera> camera )
 void RenderSystem::addRenderObject(SPtr_Renderer renderer)
 {
 	if(!renderer)return;
-	_models.push_back(renderer);
+
+	if(renderer->getType()==ComponentType::PARTICLE_REND)
+	{
+		_particles.push_back(renderer);
+	}
+	else
+	{
+	    _models.push_back(renderer);
+	}
 }
 
 void RenderSystem::addAnimator(SPtr_Animator anim)
 {
+
 	if(!anim) return;
 	_animators.push_back(anim);
+
 }
 
 // Default lighting values
 void RenderSystem::setLightDefaults()
 {
-	setGlobalAmbient(glm::vec3(0.2f, 0.2f, 0.2f));
-	setGlobalDiffuse(glm::vec3(0.4f, 0.4f, 0.4f));
-	setGlobalSpecular(glm::vec3(1.0f, 1.0f, 1.0f));
-	setGlobalDirection(glm::vec3(1.0f, -1.0f, -1.0f)); // will normalize coz setting through function
+	setGlobalAmbient	(glm::vec3(0.2f, 0.2f, 0.2f));
+	setGlobalDiffuse	(glm::vec3(0.4f, 0.4f, 0.4f));
+	setGlobalSpecular	(glm::vec3(1.0f, 1.0f, 1.0f));
+	setGlobalDirection	(glm::vec3(0.0f, 0.0f,-1.0f)); // will normalize coz setting through function
 }
 
 void RenderSystem::setGlobalAmbient(glm::vec3 ambient)
@@ -102,11 +121,13 @@ void RenderSystem::setGlobalDirection(glm::vec3 direction)
 
 void RenderSystem::clear()
 {
+
 	_cameras.clear();
 	_models.clear(); 
 	_animators.clear();
 	_pointLights.clear();
 	_spotLights.clear();
+
 }
 
 void RenderSystem::activateLights()
@@ -140,6 +161,12 @@ void RenderSystem::activateLights()
 	for(it; it != _loadedShaders->end(); ++it)
 	{
 		it->second->useProgram();
+
+		it->second->setUniform("glDirLight.amb",	  _globalAmbient); // Global Ambient
+		it->second->setUniform("glDirLight.diff",   _globalDiffuse); // Global Ambient
+		it->second->setUniform("glDirLight.spec",  _globalSpecular); // Global Ambient
+		it->second->setUniform("glDirLight.direction", _globalDirection); // Global Ambient
+
 		int pointLights = _pointLights.size();
 		int spotLights = _spotLights.size();
 		it->second->setUniform("numOfPointLights",pointLights);
@@ -150,7 +177,6 @@ void RenderSystem::activateLights()
 			index = std::to_string(i);
 		
 			it->second->setUniform( std::string("pointLight["+index+"].position") .c_str(),	 _pointLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("pointLight["+index+"].amb")	  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("pointLight["+index+"].diff")	  .c_str(),	 _pointLights[i]->getDiffuse());
 			it->second->setUniform( std::string("pointLight["+index+"].spec")	  .c_str(),	 _pointLights[i]->getSpecular());
 			it->second->setUniform( std::string("pointLight["+index+"].constant") .c_str(),	 _pointLights[i]->getAtteunation().x);
@@ -165,7 +191,6 @@ void RenderSystem::activateLights()
 			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getForward());
 			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
 			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	 glm::cos(glm::radians(14.f)));
-			it->second->setUniform( std::string("spotLight["+index+"].amb")		  .c_str(),	 _globalAmbient); // TO DO -> This should be a single value in shader, not 1 per light
 			it->second->setUniform( std::string("spotLight["+index+"].diff")	  .c_str(),	 _spotLights[i]->getDiffuse());
 			it->second->setUniform( std::string("spotLight["+index+"].spec")	  .c_str(),	 _spotLights[i]->getSpecular());
 			it->second->setUniform( std::string("spotLight["+index+"].constant")  .c_str(),	 _spotLights[i]->getAtteunation().x);
@@ -178,4 +203,44 @@ void RenderSystem::activateLights()
 void RenderSystem::addLight(SPtr_Light light)
 {
 	_unsortedLights.push_back(light);
+}
+
+
+
+
+// Remove Objects
+void RenderSystem::removeCamera(SPtr_Camera camera)
+{
+	std::vector<SPtr_Camera>::iterator it = _cameras.begin();
+	for(it; it != _cameras.end(); ++it)
+	{
+		if(*it == camera)
+		{
+			_cameras.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeLight(SPtr_Light light)
+{
+	// TO DO
+}
+
+void RenderSystem::removeRenderObject(SPtr_Renderer renderer)
+{
+	std::vector<SPtr_Renderer>::iterator it = _models.begin();
+	for(it; it != _models.end(); ++it)
+	{
+		if(*it == renderer)
+		{
+			_models.erase(it);
+			return;
+		}
+	}
+}
+
+void RenderSystem::removeAnimator(SPtr_Animator anim)
+{
+	// TO DO
 }

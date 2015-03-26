@@ -29,6 +29,8 @@ public:
 	void clear();
 	void addCollider(SPtr_Collider collider);
 	void addTerrainCollider(SPtr_TerrainCol collider);
+	void removeCollider(SPtr_Collider collider);
+	void removeTerrainCollider(SPtr_TerrainCol collider);
 
 	void renderColliders(Camera* camera);
 	

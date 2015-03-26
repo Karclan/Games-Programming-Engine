@@ -16,7 +16,7 @@ class Renderer : public Component
 {
 public:
 	Renderer();
-	ComponentType::Type getType() = 0;
+	virtual ComponentType::Type getType() = 0;
 	bool isOnePerObject() = 0;
 
 	virtual void render(GLfloat* viewMatrix, GLfloat* projMatrix) = 0; //!< Note the args are pointers to the start of the float arrays where the matrix information is stored

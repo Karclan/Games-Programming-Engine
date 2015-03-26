@@ -8,6 +8,11 @@ Transform::Transform()
 	_scale = glm::vec3(1, 1, 1);
 }
 
+Transform::~Transform()
+{
+	std::cout << "TRANSFORM DESTORYED!\n";
+}
+
 
 // Overridden pure virtuals in component
 ComponentType::Type Transform::getType()
@@ -185,8 +190,10 @@ glm::quat Transform::quatFromEuler(glm::vec3 euler)
 void Transform::recalculateMatrix()
 {
 	// Calculate different matrices
-	glm::mat4 t = glm::translate(glm::vec3(_position.x, _position.y, _position.z));
-	glm::mat4 s = glm::scale(glm::vec3(_scale.x, _scale.y, _scale.z));
+	glm::mat4 t =glm::mat4(1.f);
+	t*= glm::translate(glm::vec3(_position.x, _position.y, _position.z));
+	glm::mat4 s =glm::mat4(1.f);
+	s*= glm::scale(glm::vec3(_scale.x, _scale.y, _scale.z));
 
 	// finally, set matrix
 	_matrix = t * getRotationMatrix() * s;
