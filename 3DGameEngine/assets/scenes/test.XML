@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<GO name="New Game Object">
-    <COMP type="1" primitive="0" mesh="cube" shader="advanced" texture="flag.png" tileU="1" tileV="1" />
-    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
-</GO>
-<GO name="Light">
-    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
-</GO>
