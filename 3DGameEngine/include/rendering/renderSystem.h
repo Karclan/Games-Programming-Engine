@@ -9,7 +9,7 @@
 #include "rendering\shader.h"
 #include "rendering\light.h"
 #include "rendering\animator.h"
-
+#include "rendering\particleRenderer.h"
 #include "rendering\FTInterface.h"
 
 
@@ -34,7 +34,8 @@ public:
 	void addRenderObject(SPtr_Renderer renderer); //!< Add a static (unanimated) model
 
 	void addAnimator(SPtr_Animator anim); 
-	
+	void addParticleSystem(SPtr_ParticleRend particle);
+
 	void removeCamera(SPtr_Camera camera); //!< Remove Camera from system
 	void removeLight(SPtr_Light light);
 	void removeRenderObject(SPtr_Renderer renderer); //!< Remove Renderer

@@ -61,6 +61,12 @@ void RenderSystem::animate(float t)
 	{
 		_animators[i]->UpdateAnim(t);
 	}
+
+	for(unsigned int i = 0; i < _particles.size(); ++i)
+	{
+		_particles[i]->animate(t);
+	}
+
 }
 
 
@@ -75,14 +81,12 @@ void RenderSystem::addRenderObject(SPtr_Renderer renderer)
 {
 	if(!renderer)return;
 
-	if(renderer->getType()==ComponentType::PARTICLE_REND)
-	{
-		_particles.push_back(renderer);
-	}
-	else
-	{
-	    _models.push_back(renderer);
-	}
+	 _models.push_back(renderer);
+
+}
+void RenderSystem::addParticleSystem(SPtr_ParticleRend part)
+{
+	_particles.push_back(part);
 }
 
 void RenderSystem::addAnimator(SPtr_Animator anim)

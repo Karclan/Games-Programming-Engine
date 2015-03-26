@@ -95,6 +95,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\behaviour\custom.h" />
+    <ClInclude Include="include\behaviour\objectMngrInterface.h" />
+    <ClInclude Include="include\custom\cameraController.h" />
+    <ClInclude Include="include\custom\customBehaviours.h" />
+    <ClInclude Include="include\custom\playerController.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
     <ClInclude Include="include\physics\octTree.h" />
@@ -103,14 +107,11 @@
     <ClInclude Include="include\core\initTable.h" />
     <ClInclude Include="include\behaviour\behaviour.h" />
     <ClInclude Include="include\behaviour\behaviourSystem.h" />
-    <ClInclude Include="include\behaviour\playerController.h" />
-    <ClInclude Include="include\behaviour\rotatingObject.h" />
     <ClInclude Include="include\core\assets.h" />
     <ClInclude Include="include\core\component.h" />
     <ClInclude Include="include\core\engine.h" />
     <ClInclude Include="include\core\gameObject.h" />
     <ClInclude Include="include\core\input.h" />
-    <ClInclude Include="include\core\objectFinder.h" />
     <ClInclude Include="include\core\objectManager.h" />
     <ClInclude Include="include\core\sceneManager.h" />
     <ClInclude Include="include\core\transform.h" />
@@ -120,6 +121,9 @@
     <ClInclude Include="include\editor\menuBar.h" />
     <ClInclude Include="include\physics\physicsBody.h" />
     <ClInclude Include="include\physics\physicsSystem.h" />
+    <ClInclude Include="include\physics\terrainCollider.h" />
+    <ClInclude Include="include\rendering\animation.h" />
+    <ClInclude Include="include\rendering\animator.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
     <ClInclude Include="include\rendering\particleEmitters.h" />
@@ -146,28 +150,32 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
+    <ClCompile Include="src\behaviour\objectMngrInterface.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
     <ClCompile Include="src\behaviour\behaviourSystem.cpp" />
-    <ClCompile Include="src\behaviour\playerController.cpp" />
-    <ClCompile Include="src\behaviour\rotatingObject.cpp" />
     <ClCompile Include="src\core\assets.cpp" />
     <ClCompile Include="src\core\component.cpp" />
     <ClCompile Include="src\core\engine.cpp" />
     <ClCompile Include="src\core\gameObject.cpp" />
     <ClCompile Include="src\core\input.cpp" />
-    <ClCompile Include="src\core\objectFinder.cpp" />
     <ClCompile Include="src\core\objectManager.cpp" />
     <ClCompile Include="src\core\sceneManager.cpp" />
     <ClCompile Include="src\core\transform.cpp" />
+    <ClCompile Include="src\custom\cameraController.cpp" />
+    <ClCompile Include="src\custom\playerController.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
     <ClCompile Include="src\editor\menuBar.cpp" />
     <ClCompile Include="src\physics\collider.cpp" />
     <ClCompile Include="src\physics\collision.cpp" />
+    <ClCompile Include="src\physics\octTree.cpp" />
     <ClCompile Include="src\physics\physicsBody.cpp" />
     <ClCompile Include="src\physics\physicsSystem.cpp" />
+    <ClCompile Include="src\physics\terrainCollider.cpp" />
+    <ClCompile Include="src\rendering\animation.cpp" />
+    <ClCompile Include="src\rendering\animator.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\FTInterface.cpp" />
     <ClCompile Include="src\rendering\light.cpp" />
@@ -209,6 +217,7 @@
     <Xml Include="assets\scenes\demo.XML">
       <SubType>Designer</SubType>
     </Xml>
+    <Xml Include="assets\scenes\level.XML" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
