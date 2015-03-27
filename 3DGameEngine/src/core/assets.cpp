@@ -36,7 +36,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
         aiProcess_Triangulate            |
         aiProcess_JoinIdenticalVertices  |
         aiProcess_SortByPType);
-  
+
+	
 	// If the import failed, report it
 	if( !scene)
 	{
@@ -56,7 +57,7 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	
 	// Assimp conversion here!
 	aiMesh* loadedMesh = scene->mMeshes[0];
-
+	std::cout<<loadedMesh->mNumBones<<std::endl;
 	
 	std::map<std::string, int> boneMapping;
 

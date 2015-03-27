@@ -150,10 +150,9 @@ void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const
         // Combine the above transformations
         NodeTransformation = TranslationM * RotationM * ScalingM;
     }
-
     aiMatrix4x4 GlobalTransformation = ParentTransform * NodeTransformation;
-	std::map<std::string, int> m_boneMapping;
 	
+
 	if(_mesh->getBoneMap().find(NodeName) != _mesh->getBoneMap().end())
      {
         GLint BoneIndex =_mesh->getBoneMap()[NodeName];
@@ -178,8 +177,8 @@ void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const
 		finalTransform[BoneIndex][3][3] = tempFinalTransform.d3;
     }
 	
-    for (GLint i = 0 ; i < pNode->mNumChildren ; i++) {
-        ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
+    for (GLint i = 0 ; i - 1< pNode->mNumChildren ; i++) {
+        ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i+1], GlobalTransformation);
     }
 }
 
