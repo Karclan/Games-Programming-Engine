@@ -100,7 +100,7 @@ public:
         return _AnimatedSkeleton;
     }
 
-	   const SkeletonMatrixList& GetSkeletonMatrixList() const
+	SkeletonMatrixList& GetSkeletonMatrixList()
     {
 		return _AnimatedSkeleton.m_BoneMatrices;
     }

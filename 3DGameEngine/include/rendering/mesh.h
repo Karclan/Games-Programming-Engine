@@ -67,7 +67,7 @@ public:
 	void setBoneMap(std::map<std::string, int> m);
 	std::map<std::string, int> getBoneMap() { return boneMap; }
 	std::vector<aiMatrix4x4> getBoneOffset() {return m_BoneOffset; }
-	aiMatrix4x4 getInverseTransform() {return m_GlobalInverseTransform; }
+	glm::mat4 getInverseTransform() {return m_GlobalInverseTransform; }
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
 
@@ -83,7 +83,7 @@ private:
 	std::vector<aiMatrix4x4> m_BoneOffset;
 	std::vector<aiMatrix4x4> m_BoneFinalTransform;
 	std::map<std::string, int> boneMap;
-	aiMatrix4x4 m_GlobalInverseTransform;
+	glm::mat4 m_GlobalInverseTransform;
 };
 
 #endif

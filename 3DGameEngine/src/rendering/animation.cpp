@@ -145,10 +145,11 @@ bool Animation::LoadAnimation( const std::string& filename )
         }
 
         file >> param;
-    }  while ( !file.eof )
+    }  //while ( !file.eof )
 
     // Make sure there are enough joints for the animated skeleton.
     _AnimatedSkeleton.m_Joints.assign(_iNumJoints, SkeletonJoint() );
+	_AnimatedSkeleton.m_BoneMatrices.assign( _iNumJoints, glm::mat4x4(1.0) );
 
     _fFrameDuration = 1.0f / (float)_iFramRate;
     _fAnimDuration = ( _fFrameDuration * (float)_iNumFrames );
