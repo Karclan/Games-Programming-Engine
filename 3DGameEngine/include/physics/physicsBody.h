@@ -2,6 +2,7 @@
 #define PHYSICS_BODY_H
 
 #include <vector>
+#include <map>
 
 #include <glew\GL\glew.h>
 #include <glm\glm.hpp>
@@ -11,8 +12,6 @@
 #include "core\component.h"
 #include "core\transform.h"
 
-// FWD Declarations
-class Collision;
 
 /*! \brief Physics Body for handling collisions
 
@@ -35,21 +34,44 @@ public:
 	void addForce(glm::vec3 force);  //!< Add force (accel)
 	void addImpulse(glm::vec3 impulse); //!< Add impulse (instant velocity);
 
+	SPtr_Transform getTransform() { return _transform; }
+	bool isAwake() { return _awake; }
+	void wakeUp();
+
 	glm::vec3 getVelocity() { return _velocity; }
 	void setVelocity(glm::vec3 v);
-	SPtr_Transform getTransform() { return _transform; }
+	
 	float getMass() { return _mass; } // when make set mass, ensure to check for <= 0 so not negative or zero
-	bool isAwake() { return _awake; }
+	void setMass(float mass) { _mass = std::max(mass, 0.01f); }
+
+	void setGravity(float gravity) { _gravity = gravity; }
+	void setDrag(float drag) { _drag = drag; }
+
+	// Collision functions
+	void addCollisionHit(unsigned int objId, glm::vec3 normal);
+	void addTriggerHit(unsigned int objId);
+	bool hasCollided();
+	bool hasTriggered();
+	bool isGrounded() { return _isGrounded; }
+	const std::map<unsigned int, glm::vec3>* getCollisions() { return &_collisions; }
+	const std::vector<int>* getTriggers() { return &_triggers; }
 
 private:
 	SPtr_Transform _transform; //!< Pointer to transform
 	bool _awake;
+	float _sleepTimer;
 
 	float _mass;
 	float _drag;
 	float _gravity;
 	glm::vec3 _accel;
 	glm::vec3 _velocity;
+
+	// Collisions!
+	std::map<unsigned int, glm::vec3> _collisions;
+	std::vector<int> _triggers;
+	bool _isGrounded;
+	unsigned int _ungroundLatency; //!< Stops instant ungrounding to make up for a few frames of no collisions that would falsely register leaving ground
 
 };
 
@@ -58,7 +80,7 @@ typedef std::shared_ptr<PhysicsBody> SPtr_PhysBody;
 
 
 // Include after definition of physicsbody class because circular reference
-#include "physics\collision.h"
+//#include "physics\collision.h"
 
 
 #endif

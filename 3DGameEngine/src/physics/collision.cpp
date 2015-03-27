@@ -1,14 +1,9 @@
 #include "physics\collision.h"
 
 
-Collision::Collision()
-{
-	normal = glm::vec3();
-	penDepth = 0;
-	bodyA = nullptr;
-	bodyB = nullptr;
-}
 
+
+/*
 void Collision::resolve()
 {
 	// Body A should be the body being checked, so if it's null then something's gone wrong!
@@ -27,6 +22,7 @@ void Collision::resolve()
 
 	// RESPOND -- IMPULSE
 	// If body B is null, this is a collision with a static entity
+	float friction = 1.0f;
 	glm::vec3 veloB = glm::vec3();
 	float invMassB = 0;
 	if(bodyB != nullptr)
@@ -43,9 +39,10 @@ void Collision::resolve()
 	float j = -(1+e) * glm::dot(relVel, normal) / sumInvMass;
 	glm::vec3 jn = normal * j;
 
-	bodyA->setVelocity(bodyA->getVelocity() - jn/bodyA->getMass());
+	bodyA->setVelocity((bodyA->getVelocity() - jn/bodyA->getMass()) * friction);
 	if(bodyB != nullptr)
 	{
-		bodyB->setVelocity(bodyB->getVelocity() + jn/bodyB->getMass());
+		bodyB->setVelocity((bodyB->getVelocity() + jn/bodyB->getMass()) * friction);
 	}
 }
+*/

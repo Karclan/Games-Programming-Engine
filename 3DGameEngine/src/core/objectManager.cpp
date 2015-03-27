@@ -2,8 +2,9 @@
 
 ObjectManager::ObjectManager()
 {
-	_nextId = 0;
-	_nextDynamicId = 0;
+	// Note ID 0 is reserved for checks to see if ID has been set or not.
+	_nextId = 1;
+	_nextDynamicId = 1;
 }
 
 
@@ -64,7 +65,7 @@ void ObjectManager::initDynamicObjects()
 		const std::vector<SPtr_Component>* components = it->get()->getComponents();
 		for(int i = 0; i < components->size(); ++i)
 		{
-			addComponentToSubsystems(components->at(i));
+			addComponentToSubsystems(components->at(i), _nextDynamicId);
 		}
 
 		// Link components
@@ -160,7 +161,7 @@ void ObjectManager::destroyAll()
 	_physicsSys->clear();
 	_behvrSys->clear();
 	_gameObjects.clear();
-	_nextId = 0;
+	_nextId = 1;
 }
 
 
@@ -242,7 +243,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	{
 	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
 	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
-	case ComponentType::PARTICLE_REND: newComponent.reset(new ParticleRenderer()); break;
+	case ComponentType::PARTICLE_REND:  newComponent.reset(new ParticleRenderer()); break;
 	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
 	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
@@ -260,7 +261,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	if(!gameObject->addComponent(newComponent)) return false; // this will happen if, for example, can only have one of them and object already has one
 
 
-	addComponentToSubsystems(newComponent);
+	addComponentToSubsystems(newComponent, objectID);
 
 	// Add to init table
 	CompData newData(newComponent);
@@ -283,8 +284,10 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 
 
 // Note - split this up from addComponent function so can be used for dynamic objetcs as well
-void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
+void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent, unsigned int goID)
 {
+	newComponent->setGoID(goID);
+
 	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add sending your component to subsystems in this switch statement-!
 	// Add to subsystems based on type
 	switch(newComponent->getType())

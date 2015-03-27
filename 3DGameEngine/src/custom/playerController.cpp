@@ -20,6 +20,8 @@ void PlayerController::initialize()
 	// Get Physics Body
 	SPtr_Component physComp = getComponent(ComponentType::PHY_BODY);
 	_physBody = std::static_pointer_cast<PhysicsBody>(physComp);
+	_physBody->setMass(5);
+	_physBody->setDrag(1.2f);
 
 	_accelSpeed = 20;
 	_turnSpeed = 120;
@@ -58,10 +60,14 @@ void PlayerController::update(float t)
 	_turretTransform->setRotation(glm::rotate(_transform->getRotation(), glm::radians(_turretRotation), glm::vec3(0, 1, 0)));
 
 	// Jump
-	if(Input::getKeyPressed(sf::Keyboard::K)) 
+	if(_physBody->isGrounded()) _jumpsLeft = 2;
+	if(Input::getKeyPressed(sf::Keyboard::K) && _jumpsLeft > 1) 
 	{
 		_physBody->addImpulse(glm::vec3(0, _jumpStrength, 0));
+		_jumpsLeft --;
 	}
+
+	
 
 	// Shoot
 	if(Input::getKeyPressed(sf::Keyboard::L)) 
@@ -83,13 +89,17 @@ void PlayerController::update(float t)
 		bullet->addComponent(bulletCollider);
 
 		SPtr_PhysBody bulletPhysBody(new PhysicsBody());
-		bulletPhysBody->addImpulse((_turretTransform->getForward() * 20.0f) + glm::vec3(0, 10, 0));
+		bulletPhysBody->addImpulse(_turretTransform->getForward() * 20.0f);
+		bulletPhysBody->setGravity(0);
+		bulletPhysBody->setDrag(0);
+		bulletPhysBody->setMass(0.5f);
 		bullet->addComponent(bulletPhysBody);
 				
 
 		// Now send to main system
 		addNewGameObject(bullet);
 	}
+
 	
 
 	// Animation

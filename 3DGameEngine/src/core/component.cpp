@@ -5,6 +5,7 @@ Component::Component()
 {
 	_dependencyFlags = 0;
 	_lifeCycleState = ComponentState::ACTIVE;
+	_gameObjectID = 0;
 }
 
 Component::~Component()

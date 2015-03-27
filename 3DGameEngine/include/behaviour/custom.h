@@ -24,10 +24,8 @@ public:
 	bool requestBehaviour();
 	void behvrRequestMet();
 	SPtr_Behaviour getBehaviour();
-	unsigned int getObjectID();
 
 private:
-	unsigned int _objectID; 
 	SPtr_Behaviour _behaviour;
 	std::string _behvrName;
 	bool _requestBehaviour; //!< Behvr name changed, request behaviour!

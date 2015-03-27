@@ -65,7 +65,7 @@ private:
 	// This is the funtion you'll want to edit when you make new types of component
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type); //!< Add a component to an object, but don't link its dependencies. Only use when adding lots of compnents and linking immediately after.
 	bool addUnlinkedComponent(unsigned int objectID, ComponentType::Type type, TiXmlElement* compElmnt); //!< Overload allows you to pass XML object to read init values from XML
-	void addComponentToSubsystems(SPtr_Component newComponent);
+	void addComponentToSubsystems(SPtr_Component newComponent, unsigned int goID);
 	void removeComponentFromSubsystems(SPtr_Component component);
 
 	// Dynamically created objects. These are made at runtime and deleted at runtime end.

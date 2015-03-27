@@ -5,6 +5,7 @@
 #include "behaviour\behaviour.h"
 #include "physics\physicsBody.h"
 #include "core\input.h"
+#include "physics\collider.h"
 
 /*! \brief Temporary behaviour class
 
@@ -40,8 +41,7 @@ private:
 	glm::vec3 _move; //!< Amount of force to add next fixed update
 	float _turn; //!< Amount to turn next fixed update
 
-	// Basic jump implemented - in final version this would probably be handled by the physics subsystem to take care of collisions etc. This is just a demo
-	
+	unsigned int _jumpsLeft; //!< Jumps left for double jump
 };
 
 

@@ -5,7 +5,7 @@ Custom::Custom(unsigned int objectID)
 {
 	_behvrName = ""; 
 	_requestBehaviour = true;
-	_objectID = objectID;
+	_gameObjectID = objectID;
 }
 
 ComponentType::Type Custom::getType() 
@@ -49,9 +49,4 @@ void Custom::behvrRequestMet()
 SPtr_Behaviour Custom::getBehaviour() 
 { 
 	return _behaviour;
-}
-
-unsigned int Custom::getObjectID()
-{ 
-	return _objectID; 
 }

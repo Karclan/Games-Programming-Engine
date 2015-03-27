@@ -92,3 +92,13 @@ void Behaviour::addNewGameObject(SPtr_GameObject newObject)
 {
 	_objMngrInt->_dynInitdObjs->insert(newObject);
 }
+
+void Behaviour::getCollisions(SPtr_PhysBody myPhysBody, std::vector<SPtr_GameObject> &collidingObjs)
+{
+	const std::map<unsigned int, glm::vec3>* collisions = myPhysBody->getCollisions();
+	std::map<unsigned int, glm::vec3>::const_iterator it;
+	for(it = collisions->begin(); it != collisions->end(); it++)
+	{
+		collidingObjs.push_back(findGameObject(it->first));
+	}
+}

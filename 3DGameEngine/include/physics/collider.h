@@ -9,7 +9,7 @@
 #include "core\component.h"
 #include "core\transform.h"
 #include "physics\physicsBody.h"
-
+//#include "physics\collision.h"
 
 
 
@@ -24,6 +24,8 @@ typedef std::shared_ptr<Collider> SPtr_Collider;
 typedef std::shared_ptr<SphereCollider> SPtr_SphereCol;
 typedef std::shared_ptr<BoxCollider> SPtr_BoxCol;
 
+
+//*! \brief AABB struct for initial checks before more expensive checks
 struct AABB
 {
 	glm::vec3 min;
@@ -40,9 +42,28 @@ struct AABB
 	bool intersects(AABB &other);
 };
 
+
+
+
+
+/*! \brief Collision Class for storing info about collision events
+*/
+class Collision
+{
+public:
+	Collision();
+
+	glm::vec3 normal;
+	float penDepth;
+	SPtr_Collider colliderA;
+	SPtr_Collider colliderB;
+};
+
+
+
+
+
 /*! \brief Collider
-
-
 */
 class Collider : public Component
 {
@@ -56,6 +77,8 @@ public:
 	ComponentType::Type getType()=0; //!< Required implementation. Return type of component
 	bool isOnePerObject() { return false; } //!< Can have numerous colliders, BUT only first found will work with physics body. So use 1 for dynamic objects, many for static objects
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
+	
+	
 
 	bool hasPhysicsBody() { return _physicsBody; } //!< Returns true if physics body exists
 	SPtr_PhysBody getPhysicsBody() { return _physicsBody; }
@@ -68,12 +91,16 @@ public:
 
 	virtual void calculateBounds() = 0; //!< Should be called on init and every frame if has a physics body
 	AABB getBounds() { return _bounds; }
+	void setFriction(float friction);
+	float getFriction() { return _friction; }
 
 protected:
 	SPtr_Transform _transform; //!< Pointer to transform
 	SPtr_PhysBody _physicsBody; //!< Optional pointer to physics body
 
 	AABB _bounds; //!< Bounding box in world coordinates
+	float _friction;
+	
 };
 
 
@@ -145,7 +172,7 @@ private:
 };
 
 // Include after definition of collider classes because circular reference
-#include "physics\collision.h"
+//#include "physics\collision.h"
 
 
 #endif

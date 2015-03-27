@@ -37,6 +37,7 @@ public:
 	Component();
 	~Component();
 
+	void setGoID(unsigned int id) { if(_gameObjectID == 0) _gameObjectID = id; }
 	virtual ComponentType::Type getType() = 0; //!< Pure virtual forces children to implement function returning whatever type the component is
 	virtual bool isOnePerObject() = 0; //!< Pure virtual forces children to implement function specifying if more than one of these can be added to a game object
 	
@@ -49,11 +50,14 @@ public:
 	BITMASK getOptionalDepFlags();
 	void destroy(); //!< Calling this will set a flag telling all subsystems to remove component
 
+	unsigned int getObjectID() { return _gameObjectID; }
+
 protected:
 	void setDepFlag(ComponentType::Type type); //!< Set a flag in dependency flags
 	bool getIfDepFlagSet(ComponentType::Type type); //!< Get if specified component type flag is set
 	void setOptionalDepFlag(ComponentType::Type type); //!< Set a flag in dependency flags
-
+	
+	unsigned int _gameObjectID; //!< The ID of the GO associated with this component
 
 private:
 	ComponentState::State _lifeCycleState; //!< Current life cycle state, active, inactive or destroyed

@@ -1,6 +1,6 @@
 #include "physics\collider.h"
 
-
+// AABB
 bool AABB::intersects(AABB &other)
 {
 	if(max.x < other.min.x) return false;
@@ -13,10 +13,23 @@ bool AABB::intersects(AABB &other)
 }
 
 
+// COLLISION
+Collision::Collision()
+{
+	normal = glm::vec3();
+	penDepth = 0;
+	colliderA = nullptr;
+	colliderB = nullptr;
+}
+
+
+
+//############### MAIN COLLIDER CLASS ############
 Collider::Collider()
 {
 	_transform = nullptr;
 	_physicsBody = nullptr;
+	_friction = 0.95f;
 
 	setDepFlag(ComponentType::TRANSFORM); // requires a transform
 
@@ -37,6 +50,11 @@ void Collider::linkDependency(SPtr_Component component)
 
 		break;
 	}
+}
+
+void Collider::setFriction(float friction)
+{
+	_friction = std::min(std::max(friction, 0.0f), 1.0f); // clamps to 0 - 1
 }
 
 
@@ -93,8 +111,8 @@ bool SphereCollider::collides(Collider* other, Collision &collInfo)
 
 				if(penDepth > collInfo.penDepth)
 				{
-					collInfo.bodyA = _physicsBody;
-					collInfo.bodyB = other->getPhysicsBody();
+					//collInfo.colliderA = (Collider*)this;
+					//collInfo.colliderB = other;
 					collInfo.penDepth = penDepth;
 					collInfo.normal = aToB / distMag;
 				}
@@ -184,8 +202,8 @@ bool SphereCollider::collides(Collider* other, Collision &collInfo)
 			{
 				if(penDepth > collInfo.penDepth)
 				{
-					collInfo.bodyA = _physicsBody;
-					collInfo.bodyB = other->getPhysicsBody();
+					//collInfo.colliderA = this;
+					//collInfo.colliderB = other;
 					collInfo.penDepth = penDepth;
 					collInfo.normal = normal;
 				}
@@ -204,8 +222,8 @@ bool SphereCollider::collides(Collider* other, Collision &collInfo)
 
 				if(penDepth > collInfo.penDepth)
 				{
-					collInfo.bodyA = _physicsBody;
-					collInfo.bodyB = other->getPhysicsBody();
+					//collInfo.colliderA = (Collider*)this;
+					//collInfo.colliderB = other;
 					collInfo.penDepth = penDepth;
 					collInfo.normal = -vecToEdge / distMag;
 				}
@@ -303,9 +321,9 @@ bool BoxCollider::collides(Collider* other, Collision &collInfo)
 				if(penDepth < collInfo.penDepth)
 				{
 					// The switch-a-roo!
-					SPtr_PhysBody temp = collInfo.bodyA;
-					collInfo.bodyA = collInfo.bodyB;
-					collInfo.bodyB = temp;
+					//Collider* temp = collInfo.colliderB;
+					//collInfo.colliderB = collInfo.colliderA;
+					//collInfo.colliderA = temp;
 					collInfo.normal = -collInfo.normal;
 				}
 
@@ -403,8 +421,8 @@ bool BoxCollider::collides(Collider* other, Collision &collInfo)
 			// Only set col info if pen depth is bigger
 			if(penDepth > collInfo.penDepth)
 			{
-				collInfo.bodyA = _physicsBody;
-				collInfo.bodyB = other->getPhysicsBody();
+				//collInfo.colliderA = (Collider*)this;
+				//collInfo.colliderB = other;
 				collInfo.normal = normal;
 				collInfo.penDepth = penDepth;
 			}

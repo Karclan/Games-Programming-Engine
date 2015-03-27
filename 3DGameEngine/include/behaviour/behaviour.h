@@ -3,6 +3,7 @@
 
 #include "core\gameObject.h"
 #include "behaviour\objectMngrInterface.h"
+#include "physics\physicsBody.h"
 
 //! Event types
 enum EventType
@@ -53,7 +54,7 @@ protected:
 	SPtr_GameObject findGameObject(unsigned int objectID); //!< Returns an object by unique ID number
 	SPtr_GameObject findGameObject(std::string objectName); //!< Searches for a game object by name and returns first one with that name or null if not found
 	void addNewGameObject(SPtr_GameObject newObject); //!< Add a dynamically created Game Object to the system.
-
+	void getCollisions(SPtr_PhysBody myPhysBody, std::vector<SPtr_GameObject> &collidingObjs); //!< Given a physics body and empty vector will populate vector with all collding objects this frame
 
 private:
 	SPtr_GameObject _gameObject;
