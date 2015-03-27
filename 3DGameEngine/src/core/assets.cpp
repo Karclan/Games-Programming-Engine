@@ -36,7 +36,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
         aiProcess_Triangulate            |
         aiProcess_JoinIdenticalVertices  |
         aiProcess_SortByPType);
-  
+
+
 	// If the import failed, report it
 	if( !scene)
 	{
@@ -57,7 +58,6 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	// Assimp conversion here!
 	aiMesh* loadedMesh = scene->mMeshes[0];
 
-	
 	std::map<std::string, int> boneMapping;
 
 	// Lovely bone info
@@ -111,10 +111,6 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			indices.push_back(loadedMesh->mFaces[i].mIndices[j]);
 		}
 	}
-
-
-
-
 
 	// This is where the fun starts
 	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone

@@ -37,8 +37,8 @@ void Animator::setMesh(Mesh* m)
 void Animator::UpdateAnim( float fDeltaTime )
 {	
 
-	BoneTransform(fDeltaTime, Transforms);
-	return;
+	//BoneTransform(fDeltaTime, Transforms);
+	
 	
     if ( _animation->getNumFrames() < 1 ) return;
 
@@ -57,13 +57,22 @@ void Animator::UpdateAnim( float fDeltaTime )
 
 	float fInterpolate = fmodf( animTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
 
-
+	InterpolateSkeletons( _animation->GetSkeleton(), _animation->getSkeletons()[iFrame0], _animation->getSkeletons()[iFrame1], fInterpolate );
 }
 
-void Animator::UpdateMesh(float fDeltaTime)
+void Animator::Update(float fDeltaTime)
 {
+		UpdateAnim(fDeltaTime);
+       
+        const MatrixList& animatedSkeleton = _animation->GetSkeletonMatrixList();
+        // Multiply the animated skeleton joints by the inverse of the bind pose.
+        for ( int i = 0; i < _animation->GetNumJoints(); ++i )
+        {
+			Transforms[i] = animatedSkeleton[i] * _mesh->getInverseTransform();
+        }        
+    
 	UpdateAnim(fDeltaTime);
-	const MatrixList& animatedSkeleton = GetSkeletonMatrixList();
+	const MatrixList& animatedSkeleton = _animation->GetSkeletonMatrixList();
 
 	for(int i=0; i < _animation->GetNumJoints(); ++i)
 	{
@@ -72,6 +81,26 @@ void Animator::UpdateMesh(float fDeltaTime)
 }
 
 
+void Animator::InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, const Animation::FrameSkeleton& skeleton0, const Animation::FrameSkeleton& skeleton1, float fInterpolate )
+{
+	for ( int i = 0; i < _animation->GetNumJoints(); ++i )
+    {
+        Animation::SkeletonJoint& finalJoint = finalSkeleton.m_Joints[i];
+        glm::mat4x4& finalMatrix = finalSkeleton.m_BoneMatrices[i];
+
+        const Animation::SkeletonJoint& joint0 = skeleton0.m_Joints[i];
+        const Animation::SkeletonJoint& joint1 = skeleton1.m_Joints[i];
+
+        finalJoint.m_Parent = joint0.m_Parent;
+
+        finalJoint.m_Pos = glm::lerp( joint0.m_Pos, joint1.m_Pos, fInterpolate );
+        finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
+
+        // Build the bone matrix for GPU skinning.
+        finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
+
+    }
+}
 
 ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
 : m_fMaxTimeStep( maxTimeStep )
@@ -108,13 +137,13 @@ void Animator::BoneTransform(float TimeInSeconds, std::vector<glm::mat4>& Transf
     float TimeInTicks = TimeInSeconds * TicksPerSecond;
     float AnimationTime = fmod(TimeInTicks, _animation->getAnimDuration());
 	
-	ReadNodeHeirarchy(AnimationTime, _animation->animScene->mRootNode, Identity);
+	//ReadNodeHeirarchy(AnimationTime, _animation->animScene->mRootNode, Identity);
 	
 	Transforms.resize(_animation->GetNumJoints());
 	
     for (GLint i = 0 ; i < _animation->GetNumJoints() ; i++) {
-        Transforms[i] = finalTransform[i];
-		//Transforms[i] = dummy;
+        //Transforms[i] = finalTransform[i];
+		Transforms[i] = dummy;
     }
 }
 
@@ -127,6 +156,8 @@ void Animator::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const
     aiMatrix4x4  NodeTransformation(pNode->mTransformation);
 
     const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+
+
 
     if (pNodeAnim) {
         // Interpolate scaling and generate scaling transformation matrix

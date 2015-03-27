@@ -67,7 +67,50 @@ public:
         return _JointInfos[index];
     }
 
+	typedef std::vector<glm::mat4x4> SkeletonMatrixList;
+	 // A Skeleton joint is a joint of the skeleton per frame
+    struct SkeletonJoint
+    {
+        SkeletonJoint()
+            : m_Parent(-1)
+            , m_Pos(0)
+        {}
+ 
+        SkeletonJoint( const Animation::BaseFrame& copy )
+            : m_Pos( copy._position )
+			, m_Orient( copy._orientation )
+        {}
+ 
+        int         m_Parent;
+        glm::vec3   m_Pos;
+        glm::quat   m_Orient;
+    };
+    typedef std::vector<SkeletonJoint> SkeletonJointList;
+ 
+    // A frame skeleton stores the joints of the skeleton for a single frame.
+    struct FrameSkeleton
+    {
+		SkeletonMatrixList  m_BoneMatrices;
+        SkeletonJointList   m_Joints;
+    };
+    typedef std::vector<FrameSkeleton> FrameSkeletonList;
+ 
+    FrameSkeleton GetSkeleton() const
+    {
+        return _AnimatedSkeleton;
+    }
 
+	   const SkeletonMatrixList& GetSkeletonMatrixList() const
+    {
+		return _AnimatedSkeleton.m_BoneMatrices;
+    }
+
+	FrameSkeletonList getSkeletons()
+	{
+		return _Skeletons;
+	}
+
+	void BuildFrameSkeleton(FrameSkeletonList& skeletons, const JointInfoList& jointInfos, const BaseFrameList& baseFrames, const Frame& frame );
 	bool LoadAnimation( const std::string& filename ); //!< Loads an animation from an MD5 file
 	bool loadAssimpAnim(const std::string& filename );
 	int getNumFrames();
@@ -87,12 +130,14 @@ public:
     float _fAnimTime;
 
 	const aiScene* animScene;
+
 protected:
     JointInfoList       _JointInfos;
     BoundsList          _Bounds;
     BaseFrameList       _BaseFrames;
     FrameList			_Frames;
-
+	FrameSkeletonList   _Skeletons;    // All the skeletons for all the frames
+    FrameSkeleton       _AnimatedSkeleton;
 
 private:
 
