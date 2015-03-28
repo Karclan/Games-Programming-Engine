@@ -1,4 +1,5 @@
 #include "rendering\mesh.h"
+#include <iostream>
 
 Mesh::Mesh()
 {
@@ -172,6 +173,5 @@ void Mesh::setInverseTransform(aiMatrix4x4 inv)
 	m_GlobalInverseTransform[3][1] = inv.d2;
 	m_GlobalInverseTransform[3][2] = inv.d3;
 	m_GlobalInverseTransform[3][3] = inv.d4;
-
 
 }
