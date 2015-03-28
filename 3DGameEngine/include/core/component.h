@@ -49,6 +49,8 @@ public:
 	BITMASK getDepFlags();
 	BITMASK getOptionalDepFlags();
 	void destroy(); //!< Calling this will set a flag telling all subsystems to remove component
+	void setActive(bool active);
+	bool isActive() { return _lifeCycleState == ComponentState::ACTIVE; }
 
 	unsigned int getObjectID() { return _gameObjectID; }
 

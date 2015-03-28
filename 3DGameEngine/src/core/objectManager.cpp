@@ -42,6 +42,9 @@ void ObjectManager::initGame()
 			removeComponentFromSubsystems(comps->at(j));
 		}
 
+		// Note calls this because HAS to destroy behaviours or else they'll reference object so object will never be destroyed
+		it->second->removeFromSystem();
+
 		// Remove Game Object from system
 		_gameObjects.erase(it);
 	}
@@ -250,7 +253,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::LIGHT:			newComponent.reset(new Light());			break;
 	case ComponentType::SPHERE_COL:		newComponent.reset(new SphereCollider());	break;
 	case ComponentType::BOX_COL:		newComponent.reset(new BoxCollider());		break;
-	case ComponentType::CUSTOM:			newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::CUSTOM:			newComponent.reset(new Custom());	break;
 	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
 	case ComponentType::ANIMATION:		newComponent.reset(new Animator());			break;
 	}
@@ -276,7 +279,6 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 		inTab_it =_initTable.find(objectID);
 	}
 	GOData* goData = &inTab_it->second;
-	std::cout << goData->components.size();
 	goData->components.push_back(newData);
 
 	return true;

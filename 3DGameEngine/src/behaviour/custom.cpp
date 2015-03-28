@@ -1,11 +1,16 @@
 #include "behaviour\custom.h"
 
 
-Custom::Custom(unsigned int objectID) 
+
+Custom::Custom() 
 {
 	_behvrName = ""; 
 	_requestBehaviour = true;
-	_gameObjectID = objectID;
+}
+
+Custom::~Custom()
+{
+	std::cout << "Custom DestROYed\n";
 }
 
 ComponentType::Type Custom::getType() 
@@ -28,6 +33,12 @@ void Custom::setBehaviour(std::string behvrName)
 { 
 	if(behvrName == _behvrName) return;
 	_behvrName = behvrName;
+	_requestBehaviour = true;
+}
+
+void Custom::reset()
+{
+	_behaviour.reset();
 	_requestBehaviour = true;
 }
 

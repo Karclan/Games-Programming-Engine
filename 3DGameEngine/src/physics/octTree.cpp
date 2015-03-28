@@ -115,7 +115,11 @@ void OctTreeNode::addToColMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>
 
 		for(int i = 0; i < _colliders.size(); ++i)
 		{
-			if(!_colliders[i]->getPhysicsBody()->isAwake())
+			// Skip inactive colliders
+			if(!_colliders[i]->isActive()) continue;
+
+			// Skip sleeping colliders but store in array so other things can potentially collide with them
+			if(!_colliders[i]->getPhysicsBody()->isAwake() && _colliders[i]->isActive())
 			{
 				sleepingColliders[s] = _colliders[i];
 				s++;
@@ -125,6 +129,7 @@ void OctTreeNode::addToColMatrix(std::map<SPtr_Collider, std::set<SPtr_Collider>
 			// Add all colliders after this one
 			for(int j = i+1; j < _colliders.size(); ++j)
 			{
+				if(!_colliders[j]->isActive()) continue;
 				matrix[_colliders[i]].insert(_colliders[j]);
 			}
 

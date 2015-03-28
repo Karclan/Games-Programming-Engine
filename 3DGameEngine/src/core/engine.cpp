@@ -92,6 +92,7 @@ void Engine::initGame()
 	_sceneMngr.initFromInitTable(); // resets all objects as per scene setup
 	_rendSys.activateLights(); // activate lights
 	_physicsSys.init(); // init physics system
+	_behvrSys.initGame();
 	_objMngr.initGame();
 }
 

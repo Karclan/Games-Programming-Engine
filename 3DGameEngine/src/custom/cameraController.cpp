@@ -3,7 +3,6 @@
 void CameraController::initialize()
 {
 	addEventListener(EventType::LATE_UPDATE);
-	std::cout << "HELLO VORLD!";
 
 	
 	// Get Transform

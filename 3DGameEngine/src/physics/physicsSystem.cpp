@@ -94,7 +94,9 @@ void PhysicsSystem::fixedUpdate(float t)
 	// Do the integration
 	for(int i = 0; i < _dynamicColliders.size(); ++i)
 	{
-		if(!_dynamicColliders[i]->getPhysicsBody()->isAwake()) continue;
+		SPtr_PhysBody body = _dynamicColliders[i]->getPhysicsBody();
+		if(!body->isAwake()) continue;
+		if(!body->isActive()) continue;
 		_dynamicColliders[i]->getPhysicsBody()->fixedUpdate(t);
 		_dynamicColliders[i]->calculateBounds();
 	}
@@ -114,7 +116,10 @@ void PhysicsSystem::fixedUpdate(float t)
 		// STATIC COLLISIONS! ##
 		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
 		{
+			// Continue if not awake or collider inactive
 			if(!_dynamicColliders[dc]->getPhysicsBody()->isAwake()) continue;
+			if(!_dynamicColliders[dc]->isActive()) continue;
+
 			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
 			std::set<SPtr_Collider> staticCols;
 			_staticOctTree.getCollidersFromAABB(_dynamicColliders[dc]->getBounds(), staticCols);
@@ -122,6 +127,7 @@ void PhysicsSystem::fixedUpdate(float t)
 			// For every static collider
 			for(setIt = staticCols.begin(); setIt != staticCols.end(); ++setIt)
 			{
+				if(!setIt->get()->isActive()) continue;
 				checkCollision(_dynamicColliders[dc], *setIt, colInfoS);
 			}
 
@@ -289,7 +295,7 @@ void PhysicsSystem::removeCollider(SPtr_Collider collider)
 	if(collider->hasPhysicsBody())
 	{
 		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
-		/*
+		
 		while(it != _dynamicColliders.end())
 		{
 			if(*it == collider)
@@ -301,28 +307,6 @@ void PhysicsSystem::removeCollider(SPtr_Collider collider)
 				++it;
 			}
 		}
-		*/
-
-		int counter = 0;
-		for(it; it != _dynamicColliders.end(); ++it)
-		{
-			if(*it == collider)	
-			{
-				counter++;
-				_dynamicColliders.erase(it);
-				break;
-			}
-			
-		}
-		std::cout << "Found that shit " << counter << " times lol!\n";
-
-		counter = 0;
-		for(it = _dynamicColliders.begin(); it != _dynamicColliders.end(); ++it)
-		{
-			if(*it == collider) counter++;
-		}
-		std::cout << "Looked again. Found that shit " << counter << " times lol!\n";
-
 	}
 
 	// Must be static

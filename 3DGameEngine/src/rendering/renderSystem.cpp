@@ -145,11 +145,11 @@ void RenderSystem::activateLights()
 				break;
 			case LightType::POINT:
 				_pointLights.push_back(_unsortedLights[i]);
-				std::cout<<"Added a point light\n";
+				//std::cout<<"Added a point light\n";
 				break;
 			case LightType::SPOT:
 				_spotLights.push_back(_unsortedLights[i]);
-				std::cout<<"Added a spot light\n";
+				//std::cout<<"Added a spot light\n";
 				break;
 			default:
 				break;

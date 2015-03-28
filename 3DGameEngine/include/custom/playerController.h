@@ -6,11 +6,11 @@
 #include "physics\physicsBody.h"
 #include "core\input.h"
 #include "physics\collider.h"
+#include "behaviour\custom.h"
 
-/*! \brief Temporary behaviour class
+/*! \brief Custom Player Class
 
-	Hard-coded behaviour for controlling the player. In final version
-	this would be a script file.
+	Controls the player robot
 
 */
 
@@ -42,6 +42,11 @@ private:
 	float _turn; //!< Amount to turn next fixed update
 
 	unsigned int _jumpsLeft; //!< Jumps left for double jump
+
+	std::vector<SPtr_GameObject> _bullets; //!< List of bullet objects to shoot
+
+	void createBullets(int maxBullets);
+	void shootBullet();
 };
 
 

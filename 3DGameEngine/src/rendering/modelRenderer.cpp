@@ -18,6 +18,7 @@ ModelRenderer::~ModelRenderer()
 
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 {
+	if(!isActive()) return;
 	if(_mesh == nullptr) return; // Can't render without mesh
 	_material.bind(_transform->getMatrix(), viewMatrix, projMatrix);
 	if(_anim) _anim->bind(_material.getShader());

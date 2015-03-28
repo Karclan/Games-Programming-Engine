@@ -2,6 +2,7 @@
 #define CUSTOM_H
 
 #include <string>
+#include <iostream>
 
 #include "core\component.h"
 
@@ -11,7 +12,8 @@ typedef std::shared_ptr<Behaviour> SPtr_Behaviour;
 class Custom : public Component
 {
 public:
-	Custom(unsigned int objectID);
+	Custom();
+	~Custom();
 
 	ComponentType::Type getType();
 	bool isOnePerObject();
@@ -23,6 +25,7 @@ public:
 
 	bool requestBehaviour();
 	void behvrRequestMet();
+	void reset();
 	SPtr_Behaviour getBehaviour();
 
 private:

@@ -22,6 +22,7 @@ public:
 	BehaviourSystem();
 	~BehaviourSystem();
 
+	void initGame();
 	void setObjMngrInt(ObjectMngrInterface &objMngrInt) { _objMngrInt = &objMngrInt; }
 	bool addCustom(SPtr_Custom custom);
 	void removeCustom(SPtr_Custom custom);
@@ -42,7 +43,10 @@ private:
 	std::vector<SPtr_Behaviour> _updateList; //!< List of behaviours that want update event
 	std::vector<SPtr_Behaviour> _fixedUpdateList; //!< List of behaviours that want fixed update event
 	std::vector<SPtr_Behaviour> _lateUpdateList; //!< List of behaviours that want late update event
+	void removeFromList(SPtr_Behaviour toRemove, std::vector<SPtr_Behaviour> &list);
+	void fromListToInitList(std::vector<SPtr_Behaviour> &list);
 
+	bool _behvrsHaveBeenRequested;
 
 	// Object Manager interface - needs access to these data structures, can't go through obj manager though because circular references
 	const std::unordered_map<unsigned int, SPtr_GameObject>* _gameObjects; //!< Const Pointer to the map of game objects

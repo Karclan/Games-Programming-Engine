@@ -127,6 +127,7 @@ void PhysicsBody::addTriggerHit(unsigned int objId)
 
 bool PhysicsBody::hasCollided()
 {
+	if(!isActive()) return false;
 	return _collisions.size();
 }
 

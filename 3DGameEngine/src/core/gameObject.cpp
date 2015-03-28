@@ -6,10 +6,12 @@ GameObject::GameObject(unsigned int id, std::string name)
 	_id = id;
 	_name = name;
 	_createdDyn = false;
+	_lifeCycleState = ComponentState::ACTIVE;
 }
 
 GameObject::~GameObject()
 {
+	std::cout << "Game Object DeSTORYed lol\n";
 	removeFromSystem();
 }
 
@@ -21,6 +23,21 @@ void GameObject::removeFromSystem()
 		_components[i]->destroy(); // sets component state to destroy. Other systems should pick this up and stop referencing it, ultimately deleting it via shared pointer
 	}
 	_components.clear();
+}
+
+void GameObject::setActive(bool active)
+{
+	switch(active)
+	{
+	case false: _lifeCycleState = ComponentState::INACTIVE; break;
+	case true: _lifeCycleState = ComponentState::ACTIVE; break;
+	}
+
+	// And for all components
+	for(int i = 0; i < _components.size(); ++i)
+	{
+		_components[i]->setActive(active);
+	}
 }
 
 

@@ -5,7 +5,7 @@
 
 #include "custom\playerController.h"
 #include "custom\cameraController.h"
-
+#include "custom\playerBullet.h"
 
 class CustomBehaviours
 {
@@ -15,6 +15,7 @@ public:
 		// Define custom behaviour names and returns here
 		if(name == "Player") return SPtr_Behaviour(new PlayerController());
 		if(name == "Camera") return SPtr_Behaviour(new CameraController());
+		if(name == "PlayerBullet") return SPtr_Behaviour(new PlayerBullet());
 		return SPtr_Behaviour(nullptr);
 	}
 

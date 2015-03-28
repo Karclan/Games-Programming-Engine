@@ -142,7 +142,7 @@ static void TW_CALL  loadFromFile(void *clientData)
 void GoMenu::loadFromFileXML()
 {
 	_sceneMngr->loadFromXML(loadFilePath);
-	setSelectedObject(0); // important to set currently selected object to 0 as might be out of range!!
+	setSelectedObject(1); // important to set currently selected object to 0 as might be out of range!!
 
 	closeCheckBar();
 }
@@ -160,7 +160,7 @@ static void TW_CALL  newLevel(void *clientData)
 void GoMenu::newScene()
 {
 	_sceneMngr->clearScene();
-	setSelectedObject(0); // important to set currently selected object to 0 as might be out of range!!
+	setSelectedObject(1); // important to set currently selected object to 0 as might be out of range!!
 }
 
 /******************************** Create Game Object Function ********************************/
@@ -231,7 +231,7 @@ void GoMenu::createTweakBar()
 	_utilityBar = TwNewBar("Utility Bar");
 	refreshTweakBar();
 	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
-	setSelectedObject(0);
+	setSelectedObject(1);
 
 	// Write file path/save function
 	TwAddVarRW(_utilityBar, "Save_File_Path_Name", TW_TYPE_STDSTRING, &saveFilePath, "group=SaveTo label=File_Path_Name");
@@ -483,6 +483,8 @@ void GoMenu::previousGo()
 
 void GoMenu::setSelectedObject(int objID)
 {
+	if(objID < 1) objID = 1;
+
 	_selectedObjectID = objID;
 	SPtr_GameObject go = _objectMngr->getGameObject(_selectedObjectID);
 	if(go )
@@ -499,7 +501,7 @@ void GoMenu::setSelectedObject(int objID)
 	}
 	else
 	{
-		_selectedObjectID = 0;
+		_selectedObjectID = 1;
 		_editorCam->setTarget(glm::vec3(0, 0, 0));
 	}
 	refreshTweakBar();

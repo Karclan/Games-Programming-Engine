@@ -30,6 +30,15 @@ void Component::destroy()
 }
 
 
+void Component::setActive(bool active)
+{
+	switch(active)
+	{
+	case false: _lifeCycleState = ComponentState::INACTIVE; break;
+	case true: _lifeCycleState = ComponentState::ACTIVE; break;
+	}
+}
+
 
 
 void Component::setDepFlag(ComponentType::Type type)
