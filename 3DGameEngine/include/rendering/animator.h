@@ -79,7 +79,6 @@ private:
 	typedef std::vector<glm::mat4x4> MatrixList;
 	std::vector<glm::mat4> finalTransform;
 	float _fAnimTime;
-
 	MatrixList _AnimatedBones;
 };
 
