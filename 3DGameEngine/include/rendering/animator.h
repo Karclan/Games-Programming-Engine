@@ -59,6 +59,7 @@ public:
     GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	std::vector<glm::mat4> Transforms;
 	void setMesh(Mesh* m);
+	void checkValidity(Mesh m, Animation a);
 	
 
 	void setAnimation(Animation* anim) 

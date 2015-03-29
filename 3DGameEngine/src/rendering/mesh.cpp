@@ -175,3 +175,8 @@ void Mesh::setInverseTransform(aiMatrix4x4 inv)
 	m_GlobalInverseTransform[3][3] = inv.d4;
 
 }
+
+void Mesh::setNumJoints(int j)
+{
+	numJoints = j;
+}

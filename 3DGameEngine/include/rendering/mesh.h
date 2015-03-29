@@ -61,13 +61,17 @@ public:
 	void setNormals(std::vector<glm::vec3> &normals); //!< Fill normal data via vector
 	void setUvs(std::vector<glm::vec2> &uvs); //!< Fill uv coordinate data via vector
 	void setColours(std::vector<glm::vec3> &colours); //!< Fill colour data via vector
-	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector
-	void setBoneOffset(std::vector<aiMatrix4x4> offSet);
-	void setInverseTransform(aiMatrix4x4 inv);
-	void setBoneMap(std::map<std::string, int> m);
-	std::map<std::string, int> getBoneMap() { return boneMap; }
-	std::vector<aiMatrix4x4> getBoneOffset() {return m_BoneOffset; }
-	glm::mat4 getInverseTransform() {return m_GlobalInverseTransform; }
+	void setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &boneWeights); //!< Fill bone data via vector (animation)
+
+	void setBoneOffset(std::vector<aiMatrix4x4> offSet); //!< Sets the offset of the bones (animation)
+	void setNumJoints(int j);//!< Sets the number of joints in the mesh (animation)
+	void setInverseTransform(aiMatrix4x4 inv); //!< Sets inverse transform as aiMatrix4x4 (animation)
+	void setBoneMap(std::map<std::string, int> m); //!< Fill meshes bone map (animation)
+
+	std::map<std::string, int> getBoneMap() { return boneMap; } //!< returns the meshes bonemap (animation)
+	std::vector<aiMatrix4x4> getBoneOffset() {return m_BoneOffset; } //!< returns the meshes bone offset as a aiMatrix4x4 (animation)
+	glm::mat4 getInverseTransform() {return m_GlobalInverseTransform; } //!< returns the global inverse as a mat4 (animation)
+	int getNumJoints() {return numJoints;}
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
 
@@ -80,10 +84,11 @@ private:
 	GLuint _buffers[MeshAttribs::NUM_ATTRIBS]; //!< To store handles for vbos / element buffer
 	int _dataSize[MeshAttribs::NUM_ATTRIBS]; //!< Holds the number of elements in each buffer (useful for if you want to read from buffers later and also for drawing as we need to know how many elements)
 	int _primID; //!< If prim shape, the ID of the primitive. If not, returns -1 (so can be used to determine if primitive)
-	std::vector<aiMatrix4x4> m_BoneOffset;
-	std::vector<aiMatrix4x4> m_BoneFinalTransform;
-	std::map<std::string, int> boneMap;
-	glm::mat4 m_GlobalInverseTransform;
+	std::vector<aiMatrix4x4> m_BoneOffset; //!< vector of bone offsets for vertex position
+	std::vector<aiMatrix4x4> m_BoneFinalTransform; //!< vector of final transforms 
+	std::map<std::string, int> boneMap;	//!< map of bones to their ids
+	glm::mat4 m_GlobalInverseTransform; //!< global inverse transform matrix
+	int numJoints; //!< number of joints in mesh
 };
 
 #endif

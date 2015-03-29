@@ -212,6 +212,7 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 	mesh->setBones(boneIDs, boneWeights);
 	mesh->setBoneOffset(boneDataOffset);
 	mesh->setInverseTransform(globalInverseTransform);
+	mesh->setNumJoints(loadedMesh->mNumBones);
 
 	return mesh;
 }
