@@ -5,6 +5,7 @@
 #include <list>
 #include <SFML\Graphics.hpp>
 
+
 //! Struct used for storing current state of pressed keys
 struct KeyEvent
 {
@@ -20,6 +21,34 @@ struct KeyEvent
 	}
 };
 
+//! namespace containing enum for the purpose of being able to get a button state with understandable names and not just numbers
+namespace JoystickButtons
+{
+	enum Buttons{A,B,X,Y,LB,RB,BACK,START,LSD,RSD,BUTTONS};
+};
+//! Struct used for storing a joystick's 
+struct JoyStickData
+{
+	bool _active;
+	bool _buttons[sf::Joystick::ButtonCount];
+	float _axisValues[sf::Joystick::AxisCount];
+	void reset()
+	{
+		_active=false;
+		resetValues();
+	}
+	void resetValues()
+	{
+		for(int i = 0; i < sf::Joystick::ButtonCount; ++i)
+		{
+			_buttons[i]=false;
+		}
+		for(int i = 0; i < sf::Joystick::AxisCount; ++i)
+		{
+			_axisValues[i]=0.f;
+		}
+	}
+};
 
 /*! \brief Input class (Singleton)
 
@@ -42,7 +71,9 @@ public:
 	static sf::Vector2f getMouseDelta();
 	static float getScrollWheelDelta();
 	
-
+	static bool isJoyStickConnected(int joystickId);
+	static bool  getJoystickButtonPressed(int joystickId, JoystickButtons::Buttons button);
+	static float getJoystickAxisPosition(int joystickId, sf::Joystick::Axis axis);
 	// non-static public functions
 	void processEvent(sf::Event e); //!< Process event to see if input event
 	void update(float t); //!< Called at start of game loop, straight after events polled
@@ -58,6 +89,11 @@ private:
 	void keyUp(int key);
 	void scrollWheelMoved(float amount);
 
+	void joyStickConnected(int joystickId);
+	void joyStickDisconnected(int joystickId);
+	void joyStickbuttonDown(int joystickId, int joystickButton);
+	void joyStickbuttonUp(int joystickId, int joystickButton);	
+	void joyStickAxisMoved(int joystickId, sf::Joystick::Axis, float position);
 	// variables
 	Input* _this;
 	std::list<KeyEvent> _events;
@@ -69,6 +105,7 @@ private:
 	float _scrollWheelDelta; //!< Scroll Wheel Move multiplied by delta time to make frame rate independent
 
 	//joystick stuff
+	JoyStickData _joysticks[4];
 
 	typedef std::list<KeyEvent>::iterator EvntIt;
 };

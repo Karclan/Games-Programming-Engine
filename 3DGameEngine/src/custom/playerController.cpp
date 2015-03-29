@@ -23,16 +23,16 @@ void PlayerController::update(float t)
 {
 	// Translate input to axes (fwd/back and left/right)
 	float axisX = 0;
-	if(Input::getKeyHeld(sf::Keyboard::Left)) axisX = -1;
-	else if(Input::getKeyHeld(sf::Keyboard::Right)) axisX = 1;
+	if(Input::getKeyHeld(sf::Keyboard::Left)||Input::getJoystickAxisPosition(0,sf::Joystick::Axis::X)<-50.f) axisX = -1;
+	else if(Input::getKeyHeld(sf::Keyboard::Right)||Input::getJoystickAxisPosition(0,sf::Joystick::Axis::X)>50.f) axisX = 1;
 
 	float axisY = 0;
 	if(Input::getKeyHeld(sf::Keyboard::U)) axisY = 1;
 	else if(Input::getKeyHeld(sf::Keyboard::D)) axisY = -1;
 
 	float axisZ = 0;
-	if(Input::getKeyHeld(sf::Keyboard::Up)) axisZ = 1;
-	else if(Input::getKeyHeld(sf::Keyboard::Down)) axisZ = -1;
+	if(Input::getKeyHeld(sf::Keyboard::Up)||Input::getJoystickAxisPosition(0,sf::Joystick::Axis::Y)<-50.f) axisZ = 1;
+	else if(Input::getKeyHeld(sf::Keyboard::Down)||Input::getJoystickAxisPosition(0,sf::Joystick::Axis::Y)>50.f) axisZ = -1;
 
 
 	// Calculate move vector based on fwd/back input axis
