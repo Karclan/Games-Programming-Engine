@@ -18,6 +18,10 @@
 	System for managing and rendering all rendable objects
 
 */
+namespace Cubemap
+{
+	enum sides{POSX,POSY,POSZ,NEGX,NEGY,NEGZ,SIDES};
+};
 
 class RenderSystem
 {
@@ -36,6 +40,8 @@ public:
 	void addAnimator(SPtr_Animator anim); 
 	void addParticleSystem(SPtr_ParticleRend particle);
 
+	void createSkybox();
+
 	void removeCamera(SPtr_Camera camera); //!< Remove Camera from system
 	void removeLight(SPtr_Light light);
 	void removeRenderObject(SPtr_Renderer renderer); //!< Remove Renderer
@@ -43,6 +49,8 @@ public:
 	
 
 	void setLightDefaults(); //!< Set default values for the global light params
+	void setSkyboxSide(std::string, Cubemap::sides);//!< Sets the side of the skybox
+	void renderSkybox();//!< Function to render skybox, no reason to have it anywhere else
 
 	void setGlobalAmbient	(glm::vec3 ambient  );
 	void setGlobalDiffuse	(glm::vec3 diffuse  );
@@ -81,6 +89,12 @@ private:
 	std::vector<SPtr_Light>    _unsortedLights;
 	// NOTE: Having a pointer to the map of assets isn't that elegant but it'll do for the moment. It's relatively safe as the map exists for the duration of the program (no null pointers) and quicker than cycling throgh materials (which may have the same shader - why update uniforms in the same shader more than once??)
 	const std::map<std::string, Shader*>* _loadedShaders; //!< Pointer to map of shaders in assets. Rendering system needs to be able to update uniforms in all shaders (e.g. for lighting).
+
+	//USED SKYBOX STUFF
+	GLuint _skyboxTexture;
+	sf::Image _cubemapTexs[Cubemap::SIDES];
+	GLuint _skyboxVAO, _skyboxVBO;
+	Shader* _skyboxShader;
 
 	//UNUSED SHADOWMAP STUFF
 	GLuint _pass1Index, _pass2Index, _shadowFBO;

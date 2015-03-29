@@ -75,7 +75,6 @@ void SceneManager::loadFromXML(std::string filePath)
 			lightParam->Attribute("b", &z);
 			_rendSys->setGlobalAmbient(glm::vec3(x, y, z));
 		}
-
 		lightParam = lightElmnt->FirstChildElement("DIFF");
 		if(lightParam)
 		{
@@ -84,7 +83,6 @@ void SceneManager::loadFromXML(std::string filePath)
 			lightParam->Attribute("b", &z);
 			_rendSys->setGlobalDiffuse(glm::vec3(x, y, z));
 		}
-
 		if(lightParam)
 		{
 			lightParam = lightElmnt->FirstChildElement("SPEC");
@@ -93,7 +91,6 @@ void SceneManager::loadFromXML(std::string filePath)
 			lightParam->Attribute("b", &z);
 			_rendSys->setGlobalSpecular(glm::vec3(x, y, z));
 		}
-
 		if(lightParam)
 		{
 			lightParam = lightElmnt->FirstChildElement("DIR");
@@ -102,6 +99,38 @@ void SceneManager::loadFromXML(std::string filePath)
 			lightParam->Attribute("z", &z);
 			_rendSys->setGlobalDirection(glm::vec3(x, y, z));
 		}
+		TiXmlElement* cubemap = sceneElmnt->FirstChildElement("SKYBOX");
+		TiXmlElement* side = cubemap->FirstChildElement("POSX");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::POSX);
+		}
+		side = cubemap->FirstChildElement("POSY");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::POSY);
+		}
+		side = cubemap->FirstChildElement("POSZ");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::POSZ);
+		}
+		side = cubemap->FirstChildElement("NEGX");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::NEGX);
+		}
+		side = cubemap->FirstChildElement("NEGY");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::NEGY);
+		}
+		side = cubemap->FirstChildElement("NEGZ");
+		if(side)
+		{
+			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::NEGZ);
+		}
+		_rendSys->createSkybox();
 	}
 
 

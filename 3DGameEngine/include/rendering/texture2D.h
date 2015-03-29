@@ -21,7 +21,7 @@ public:
 	void bind(Shader* shader, int textureNumber);
 	sf::Color getPixel(unsigned int x, unsigned int y);
 	sf::Vector2u getSize(){ return _imageData.getSize(); }
-
+	const sf::Uint8* getPixelsPtr(){return _imageData.getPixelsPtr();}
 private:
 	GLuint _texHandle; //!< Handle to texture on graphics card
 	sf::Image _imageData;

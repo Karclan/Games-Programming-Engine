@@ -66,7 +66,7 @@ void Engine::startup()
 	_rendSys.setShadersMap(Assets::getShadersMap()); // link map of shaders to rendering system
 	_objMngr.startUp(_rendSys, _physicsSys, _behvrSys); // this will need all sub systems somehow. Perhaps consider 1 function for each sub system, more code but neater
 	_sceneMngr.initialize(_objMngr, _rendSys); // init and pass reference to object manager
-	
+
 #ifdef AUTO_SCENE_PATH
 	_sceneMngr.loadFromXML(AUTO_SCENE_PATH);
 #else

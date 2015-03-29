@@ -6,8 +6,6 @@ Mesh::Mesh()
 }
 Mesh::~Mesh(){}
 
-
-
 void Mesh::generateBuffers()
 {
 	// Generate Buffers and VAO

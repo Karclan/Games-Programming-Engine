@@ -6,6 +6,14 @@
         <SPEC r="1" g="1" b="1" />
         <DIR x="0.2" y="0.2" z="0.2" />
     </LIGHTS>
+  <SKYBOX>
+    <POSX filename="assets/textures/cubemap/posX.png"/>
+    <POSY filename="assets/textures/cubemap/posY.png"/>
+    <POSZ filename="assets/textures/cubemap/posZ.png"/>
+    <NEGX filename="assets/textures/cubemap/negX.png"/>
+    <NEGY filename="assets/textures/cubemap/negY.png"/>
+    <NEGZ filename="assets/textures/cubemap/negZ.png"/>
+  </SKYBOX>
 </SCENE>
 <GO name="DynamicSphere02">
     <COMP type="1" mesh="sphere" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />

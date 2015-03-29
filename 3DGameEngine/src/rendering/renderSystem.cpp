@@ -37,7 +37,7 @@ void RenderSystem::render(Camera* camera)
 	camera->preRender();
 	activateLights();
 
-
+	renderSkybox();
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
@@ -105,7 +105,102 @@ void RenderSystem::setLightDefaults()
 	setGlobalSpecular	(glm::vec3(1.0f, 1.0f, 1.0f));
 	setGlobalDirection	(glm::vec3(0.0f, 0.0f,-1.0f)); // will normalize coz setting through function
 }
+void RenderSystem::setSkyboxSide(std::string filename, Cubemap::sides side)
+{
+	_cubemapTexs[side].loadFromFile(filename);
+}
+void RenderSystem::createSkybox()
+{
 
+	glActiveTexture(GL_TEXTURE0);
+	
+	glGenTextures(1,&_skyboxTexture);
+	glBindTexture(GL_TEXTURE_CUBE_MAP,_skyboxTexture);
+
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X,0,GL_RGBA,_cubemapTexs[Cubemap::POSX].getSize().x,_cubemapTexs[Cubemap::POSX].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::POSX].getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y,0,GL_RGBA,_cubemapTexs[Cubemap::POSY].getSize().x,_cubemapTexs[Cubemap::POSY].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::POSY].getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z,0,GL_RGBA,_cubemapTexs[Cubemap::POSZ].getSize().x,_cubemapTexs[Cubemap::POSZ].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::POSZ].getPixelsPtr());
+
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X,0,GL_RGBA,_cubemapTexs[Cubemap::NEGX].getSize().x,_cubemapTexs[Cubemap::NEGX].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::NEGX].getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y,0,GL_RGBA,_cubemapTexs[Cubemap::NEGY].getSize().x,_cubemapTexs[Cubemap::NEGY].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::NEGY].getPixelsPtr());
+	glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z,0,GL_RGBA,_cubemapTexs[Cubemap::NEGZ].getSize().x,_cubemapTexs[Cubemap::NEGZ].getSize().y,0,GL_RGBA,GL_UNSIGNED_BYTE,_cubemapTexs[Cubemap::NEGZ].getPixelsPtr());
+
+	glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_S,GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_T,GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_CUBE_MAP,GL_TEXTURE_WRAP_R,GL_CLAMP_TO_EDGE);
+
+	float points[] = {
+			-10.0f,  10.0f, -10.0f,
+			-10.0f, -10.0f, -10.0f,
+			 10.0f, -10.0f, -10.0f,
+			 10.0f, -10.0f, -10.0f,
+			 10.0f,  10.0f, -10.0f,
+			-10.0f,  10.0f, -10.0f,
+
+			-10.0f, -10.0f,  10.0f,
+			-10.0f, -10.0f, -10.0f,
+			-10.0f,  10.0f, -10.0f,
+			-10.0f,  10.0f, -10.0f,
+			-10.0f,  10.0f,  10.0f,
+			-10.0f, -10.0f,  10.0f,
+
+			 10.0f, -10.0f, -10.0f,
+			 10.0f, -10.0f,  10.0f,
+			 10.0f,  10.0f,  10.0f,
+			 10.0f,  10.0f,  10.0f,
+			 10.0f,  10.0f, -10.0f,
+			 10.0f, -10.0f, -10.0f,
+
+			-10.0f, -10.0f,  10.0f,
+			-10.0f,  10.0f,  10.0f,
+			 10.0f,  10.0f,  10.0f,
+			 10.0f,  10.0f,  10.0f,
+			 10.0f, -10.0f,  10.0f,
+			-10.0f, -10.0f,  10.0f,
+
+			-10.0f,  10.0f, -10.0f,
+			 10.0f,  10.0f, -10.0f,
+			 10.0f,  10.0f,  10.0f,
+			 10.0f,  10.0f,  10.0f,
+			-10.0f,  10.0f,  10.0f,
+			-10.0f,  10.0f, -10.0f,
+
+			-10.0f, -10.0f, -10.0f,
+			-10.0f, -10.0f,  10.0f,
+			 10.0f, -10.0f, -10.0f,
+			 10.0f, -10.0f, -10.0f,
+			-10.0f, -10.0f,  10.0f,
+			 10.0f, -10.0f,  10.0f
+		};
+		glGenVertexArrays (1, &_skyboxVAO);
+		glBindVertexArray (_skyboxVAO);
+		glEnableVertexAttribArray (0);
+
+		glGenBuffers (1, &_skyboxVBO);
+		glBindBuffer (GL_ARRAY_BUFFER, _skyboxVBO);
+		glBufferData (GL_ARRAY_BUFFER, 3 * 36 * sizeof (float), &points, GL_STATIC_DRAW);
+	
+		glBindBuffer (GL_ARRAY_BUFFER, _skyboxVAO);
+		glVertexAttribPointer (0, 3, GL_FLOAT, GL_FALSE, 0, NULL);
+
+		glBindVertexArray(0);
+		_skyboxShader=Assets::getShader("cubemap");
+}
+void RenderSystem::renderSkybox()
+{
+	glBindVertexArray(_skyboxVAO);
+	glActiveTexture(GL_TEXTURE0+_skyboxTexture);
+	_skyboxShader->useProgram();
+	//_skyboxShader->setUniform("u_CubeTexture",0);
+	glm::mat4 model(1.f);
+	_skyboxShader->setMVP(glm::value_ptr(model),_cameras[0]->getView(),_cameras[0]->getProjection());
+	glDepthMask(GL_FALSE);
+	glDrawArrays(GL_TRIANGLES,0,3);
+	glDepthMask(GL_TRUE);
+	glBindVertexArray(0);
+}
 void RenderSystem::setGlobalAmbient(glm::vec3 ambient)
 {
 	_globalAmbient = ambient;

@@ -14,9 +14,6 @@
 #include "rendering\robotRenderer.h"
 #include "physics\physicsBody.h"
 
-
-
-
 /*! \brief Responsible for loading scenes
 
 	Scenes are loaded from XML into local memory as data objects in 

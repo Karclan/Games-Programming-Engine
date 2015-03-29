@@ -18,6 +18,7 @@ bool Texture2D::loadFromFile(std::string filePath)
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, _imageData.getSize().x, _imageData.getSize().y, 0, GL_RGBA, GL_UNSIGNED_BYTE, _imageData.getPixelsPtr());
 	glBindTexture(GL_TEXTURE_2D, 0);	
 
+	
 	return ok; 
 }
 
