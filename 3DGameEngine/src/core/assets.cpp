@@ -348,7 +348,7 @@ Animation* Assets::getAnim(std::string fileName)
 	{
 		Animation* newAnim = new Animation();
 		std::string filePath = ASSETS_PATH + "models/" + fileName;
-		if(!newAnim->LoadAnimation(filePath))
+		if(!newAnim->loadAnimation(filePath))
 		{
 			std::cout << "Failed to load " << fileName << " anim\n";
 			delete newAnim;

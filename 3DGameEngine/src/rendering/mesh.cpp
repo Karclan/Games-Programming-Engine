@@ -178,5 +178,5 @@ void Mesh::setInverseTransform(aiMatrix4x4 inv)
 
 void Mesh::setNumJoints(int j)
 {
-	numJoints = j;
+	_numJoints = j;
 }

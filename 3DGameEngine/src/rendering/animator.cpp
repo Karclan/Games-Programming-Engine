@@ -6,6 +6,9 @@ Animator::Animator()
 	_mesh = nullptr;
 	_fAnimTime = 0;
 
+	
+
+	_frame = 0;
 }
 
 ComponentType::Type Animator::getType()
@@ -22,9 +25,9 @@ bool Animator::isOnePerObject()
 void Animator::bind(Shader* shader)
 {
 	
-	for(int i = 0; i < Transforms.size(); ++i)
+	for(int i = 0; i < _animatedBones.size(); ++i)
 	{
-		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , Transforms[i]);
+		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , _animatedBones[i]);
 	}
 }
 
@@ -32,9 +35,18 @@ void Animator::bind(Shader* shader)
 void Animator::setMesh(Mesh* m)
 {
 	_mesh = m;
-	//load dummy values for the transforms vector
-	if(_animation)
+	_animatedBones.clear();
+
+	for(int i = 0; i < _mesh->getNumJoints(); ++i)
 	{
+		_animatedBones.push_back(glm::mat4());
+	}
+
+
+	//load dummy values for the transforms vector
+	//if(_animation)
+	//{
+		/*
 		if(Transforms.size() != _animation->GetNumJoints())
 		{
 			for ( int i = 0; i < _animation->GetNumJoints(); ++i )
@@ -43,13 +55,38 @@ void Animator::setMesh(Mesh* m)
 				_AnimatedBones.push_back(dummy);
 			}
 		}
-	}
+		*/
+	//}
 }
 
-void Animator::UpdateAnim( float fDeltaTime )
+void Animator::updateAnim( float fDeltaTime )
 {	
-	
-	
+	//_fAnimTime += fDeltaTime;
+
+	//if(_fAnimTime >= 0.03)
+	//{
+		//_fAnimTime = 0;
+		_frame += 10;
+	//}
+
+	if(Input::getKeyHeld(sf::Keyboard::R))
+	{
+		_frame = 0;
+	}
+
+
+	int id = 0;
+	for(int i = 0; i < _mesh->getNumJoints(); ++i)
+	{
+		if(i ==3 || i == 7) continue;
+		_animatedBones[i] = _animation->getBoneMatrix(id, _frame);
+		id++;
+	}
+
+
+
+
+	/*
     if ( _animation->getNumFrames() < 1 ) return;
 
 	_fAnimTime += fDeltaTime;
@@ -67,8 +104,11 @@ void Animator::UpdateAnim( float fDeltaTime )
 	float fInterpolate = fmodf( _fAnimTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
 
 	InterpolateSkeletons( _animation->GetSkeleton(), _animation->getSkeletons()[iFrame0], _animation->getSkeletons()[iFrame1], fInterpolate );
+	*/
 }
 
+
+/*
 void Animator::Update(float fDeltaTime)
 {
 		float deg = 120 * fDeltaTime;
@@ -122,8 +162,10 @@ void Animator::InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, co
 		_AnimatedBones[i] = finalMatrix;
     }
 }
+*/
 
-ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
+//ElapsedTime::ElapsedTime( float maxTimeStep /* = 0.03333f */ )
+/*
 : m_fMaxTimeStep( maxTimeStep )
 , m_fPrevious ( std::clock() / (float)CLOCKS_PER_SEC )
 {}
@@ -145,3 +187,4 @@ void checkValidity(Mesh m, Animation a)
 	if(m.getNumJoints() != a.GetNumJoints()) std::cout<<"not the same bnones" << m.getNumJoints() << "         " << a.GetNumJoints()<<std::endl;
 
 }
+*/

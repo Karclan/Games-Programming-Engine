@@ -6,6 +6,7 @@
 #include "core\transform.h"
 #include "rendering\animation.h"
 #include "rendering/mesh.h"
+#include "core\input.h"
 
 #include <iostream>
 #include <fstream>
@@ -39,10 +40,14 @@ public:
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
-	void UpdateAnim( float fDeltaTime );
-	void Update( float fDeltaTime );
+	void updateAnim( float fDeltaTime );
+	//void Update( float fDeltaTime );
 	void bind(Shader* shader);
 
+	//std::vector<glm::mat4> Transforms;
+	void setMesh(Mesh* m);
+
+	/*
 	void BoneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
 	//void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
 	void InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, const Animation::FrameSkeleton& skeleton0, const Animation::FrameSkeleton& skeleton1, float fInterpolate );
@@ -57,10 +62,9 @@ public:
 	GLint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
 	GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
     GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	std::vector<glm::mat4> Transforms;
-	void setMesh(Mesh* m);
-	void checkValidity(Mesh m, Animation a);
 	
+	void checkValidity(Mesh m, Animation a);
+	*/
 
 	void setAnimation(Animation* anim) 
 	{ 
@@ -80,7 +84,10 @@ private:
 	typedef std::vector<glm::mat4x4> MatrixList;
 	std::vector<glm::mat4> finalTransform;
 	float _fAnimTime;
-	MatrixList _AnimatedBones;
+	MatrixList _animatedBones;
+
+	unsigned int _frame;
+
 };
 
 
@@ -88,6 +95,7 @@ private:
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)
 typedef std::shared_ptr<Animator> SPtr_Animator;
 
+/*
 // Remove the quotes from a string
 void RemoveQuotes( std::string& str );
 
@@ -112,5 +120,6 @@ private:
     float m_fMaxTimeStep;
     mutable float m_fPrevious;
 };
+*/
 
 #endif

@@ -50,7 +50,7 @@ void RenderSystem::animate(float t)
 {
 	for(unsigned int i = 0; i < _animators.size(); ++i)
 	{
-		_animators[i]->Update(t);
+		_animators[i]->updateAnim(t);
 	}
 }
 

@@ -8,11 +8,11 @@
     </LIGHTS>
 </SCENE>
 <GO name="Robot">
-    <COMP type="1" mesh="turret/legsMesh.md5mesh" shader="basic" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
-    <COMP type="0" tx="0" ty="1.8" tz="0" rx="-90" ry="0" rz="0" sx="0.05" sy="0.05" sz="0.05" />
-    <COMP type="8" animation="" />
+    <COMP type="1" mesh="animLegs.dae" shader="basic" texture="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="1" />
+    <COMP type="0" tx="0" ty="1.8" tz="0" rx="0" ry="0" rz="0" sx="0.05" sy="0.05" sz="0.05" />
+    <COMP type="8" animation="animLegs.dae" />
 </GO>
 <GO name="Camera">
     <COMP type="2" />
-    <COMP type="0" tx="0" ty="2" tz="9" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="1" ty="2" tz="1" rx="0" ry="50" rz="0" sx="1" sy="1" sz="1" />
 </GO>

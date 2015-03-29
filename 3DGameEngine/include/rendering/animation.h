@@ -19,12 +19,30 @@
 	Contains all information for MD5 animation
 */
 
+struct BoneAnim
+{
+	std::vector<glm::mat4> keys;
+};
+
 class Animation : public Asset
 {
 public:
 	Animation();
 
+	bool loadAnimation(const std::string& filename);
+	glm::mat4 getBoneMatrix(unsigned int bone, unsigned int key);
 
+private:
+	std::vector<BoneAnim> _boneAnims;
+
+
+
+
+
+
+
+
+	/*
 	std::string _filePath;
 	struct JointInfo
 	{
@@ -140,9 +158,11 @@ protected:
     FrameSkeleton       _AnimatedSkeleton;
 
 private:
-
+*/
 };
 
+
+/*
 // Remove the quotes from a string
 void RemoveQuotes( std::string& str );
 
@@ -155,6 +175,6 @@ void IgnoreLine( std::istream& file, int length );
 // Computes the W component of the quaternion based on the X, Y, and Z components.
 // This method assumes the quaternion is of unit length.
 void ComputeQuatW( glm::quat& quat );
-
+*/
 
 #endif

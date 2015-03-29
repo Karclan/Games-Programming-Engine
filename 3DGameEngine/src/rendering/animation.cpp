@@ -7,6 +7,122 @@ Animation::Animation()
 	
 }
 
+bool Animation::loadAnimation(const std::string& filename)
+{
+	Assimp::Importer importer;
+
+	const aiScene* scene = importer.ReadFile( filename, 
+        aiProcess_CalcTangentSpace       | 
+        aiProcess_Triangulate            |
+        aiProcess_JoinIdenticalVertices  |
+        aiProcess_SortByPType);
+
+
+	// If the import failed, report it
+	if( !scene)
+	{
+		std::cout << "Error Loading : " << importer.GetErrorString() << "\n";
+		return false;
+	}
+
+
+	// The offset matrices
+	glm::mat4 offsets[6]; // hard coded value lol
+	int id = 0;
+	for(int i = 0; i < scene->mMeshes[0]->mNumBones; ++i)
+	{
+		if(i ==3 || i == 7) continue;
+		std::cout << "Bone " << i << " = " << scene->mMeshes[0]->mBones[i]->mName.C_Str() << "\n";
+
+
+		aiMatrix4x4 mat = scene->mMeshes[0]->mBones[i]->mOffsetMatrix;
+		/*
+		glm::mat4 gMat4(mat.a1, mat.a2, mat.a3, mat.a4,
+						mat.b1, mat.b2, mat.b3, mat.b4,
+						mat.c1, mat.c2, mat.c3, mat.c4,
+						mat.d1, mat.d2, mat.d3, mat.d4);
+
+
+		*/
+		glm::mat4 gMat4(mat.a1, mat.b1, mat.c1, mat.d1,
+						mat.a2, mat.b2, mat.c2, mat.d2,
+						mat.a3, mat.b3, mat.c3, mat.d3,
+						mat.a4, mat.b4, mat.c4, mat.d4);
+
+
+		offsets[id] = gMat4;
+		id++;
+	}
+
+
+
+	if(scene->HasAnimations())
+	{
+		// We will only the first animation
+		aiAnimation* anim = scene->mAnimations[0];
+
+		// First, create empty bone anims
+		for(int i = 0; i < anim->mNumChannels; ++i)
+		{
+			std::cout << "AnimBone " << i << " = " << anim->mChannels[i]->mNodeName.C_Str() << "\n";
+			_boneAnims.push_back(BoneAnim());
+		}
+
+		// Now fill node anims with data
+		for(int i = 0; i < anim->mNumChannels; ++i)
+		{
+			aiNodeAnim* boneNode = anim->mChannels[i];
+			BoneAnim* boneAnim = &_boneAnims[i];
+
+
+			std::cout << "Translates = " << boneNode->mNumPositionKeys << "\n";
+			std::cout << "Rotates = " << boneNode->mNumRotationKeys << "\n";
+
+			for(int j = 0; j < boneNode->mNumRotationKeys; ++j)
+			{
+				glm::quat rotation;
+				rotation.x = boneNode->mRotationKeys[j].mValue.x;
+				rotation.y = boneNode->mRotationKeys[j].mValue.y;
+				rotation.z = boneNode->mRotationKeys[j].mValue.z;
+				rotation.w = boneNode->mRotationKeys[j].mValue.w;
+
+				glm::mat4 mRot = glm::toMat4(rotation);
+
+
+
+				glm::vec3 translate;
+				translate.x = boneNode->mPositionKeys[j].mValue.x;
+				translate.x = boneNode->mPositionKeys[j].mValue.y;
+				translate.x = boneNode->mPositionKeys[j].mValue.z;
+
+				glm::mat4 mTrans = glm::translate(translate);
+
+				boneAnim->keys.push_back(mRot * mTrans);
+			}
+		}
+
+	}
+
+
+	return true;
+}
+
+
+
+
+
+glm::mat4 Animation::getBoneMatrix(unsigned int bone, unsigned int key)
+{
+	if(bone >= _boneAnims.size()) return glm::mat4();
+	if(key >= _boneAnims[bone].keys.size()) return glm::mat4();
+
+	return _boneAnims[bone].keys[key];
+
+}
+
+
+
+/*
 bool Animation::LoadAnimation( const std::string& filename )
 {
 
@@ -311,3 +427,4 @@ void Animation::BuildFrameSkeleton(FrameSkeletonList& skeletons, const JointInfo
     _Skeletons.push_back(skeleton);
 
 }
+*/
