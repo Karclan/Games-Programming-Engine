@@ -120,8 +120,12 @@ void PlayerController::createBullets(int maxBullets)
 		bulletRenderer->setMaterial(Assets::getShader("advanced"), Assets::getTexture("bullet.png"), nullptr, nullptr, nullptr, glm::vec2(1, 1), glm::vec3(1, 1, 1), glm::vec3(1, 1, 1), 255);
 		bullet->addComponent(bulletRenderer);
 
+		/*
 		SPtr_SphereCol bulletCollider(new SphereCollider());
 		bulletCollider->setRadius(0.25f);
+		bullet->addComponent(bulletCollider);
+		*/
+		SPtr_BoxCol bulletCollider(new BoxCollider());
 		bullet->addComponent(bulletCollider);
 
 		SPtr_PhysBody bulletPhysBody(new PhysicsBody());
