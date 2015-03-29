@@ -113,6 +113,7 @@ public:
 	void BuildFrameSkeleton(FrameSkeletonList& skeletons, const JointInfoList& jointInfos, const BaseFrameList& baseFrames, const Frame& frame );
 	bool LoadAnimation( const std::string& filename ); //!< Loads an animation from an MD5 file
 	bool loadAssimpAnim(const std::string& filename );
+	
 	int getNumFrames();
 	float getAnimTime();
 	float getAnimDuration();

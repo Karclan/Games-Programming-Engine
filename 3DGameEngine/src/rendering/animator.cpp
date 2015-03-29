@@ -26,6 +26,7 @@ void Animator::bind(Shader* shader)
 	{
 		shader->setUniform(std::string("mBones["+std::to_string(i)+"]") .c_str() , Transforms[i]);
 	}
+
 }
 
 
@@ -65,7 +66,7 @@ void Animator::UpdateAnim( float fDeltaTime )
     iFrame1 = iFrame1 % _animation->getNumFrames();
 
 	float fInterpolate = fmodf( _fAnimTime, _animation->getFrameDuration() ) /  _animation->getFrameDuration();
-
+	
 	InterpolateSkeletons( _animation->GetSkeleton(), _animation->getSkeletons()[iFrame0], _animation->getSkeletons()[iFrame1], fInterpolate );
 }
 
@@ -89,7 +90,7 @@ void Animator::Update(float fDeltaTime)
 				{
 					
 					//Transforms[i] = animatedSkeleton[i] * _mesh->getInverseTransform();
-					Transforms[i]= (_AnimatedBones[i]); // * tempInverse);
+					Transforms[i]= (_AnimatedBones[i]);
 				}    
 				}
 		 }else{
@@ -117,7 +118,7 @@ void Animator::InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, co
         finalJoint.m_Orient = glm::mix( joint0.m_Orient, joint1.m_Orient, fInterpolate );
 
         
-        finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
+        finalMatrix = glm::translate( finalJoint.m_Pos );// *  glm::toMat4( finalJoint.m_Orient );
 		//temp check
 		_AnimatedBones[i] = finalMatrix;
     }
