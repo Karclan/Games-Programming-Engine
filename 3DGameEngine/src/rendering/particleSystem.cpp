@@ -31,7 +31,7 @@ void ParticleSystem::clear()
 
 void ParticleSystem::update(float dt)
 {
-	for(auto &_emitter : _emitters)
+	for(auto _emitter : _emitters)
 	{
 		_emitter->emit(dt,&_particles);
 	}

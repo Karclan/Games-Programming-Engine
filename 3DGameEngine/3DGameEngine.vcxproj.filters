@@ -74,11 +74,11 @@
     </ResourceCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="small.ico">
-      <Filter>Resource Files</Filter>
-    </Image>
     <Image Include="3DGameEngine.ico">
       <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="small.ico">
+      <Filter>Source Files</Filter>
     </Image>
   </ItemGroup>
   <ItemGroup>
@@ -241,6 +241,9 @@
     <ClInclude Include="include\custom\testEmitter.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
+    <ClInclude Include="include\custom\fireWork.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -397,6 +400,9 @@
       <Filter>Source Files\custom</Filter>
     </ClCompile>
     <ClCompile Include="src\custom\testEmitter.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\fireWork.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>

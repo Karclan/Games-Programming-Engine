@@ -6,6 +6,7 @@
 #include "custom\playerController.h"
 #include "custom\cameraController.h"
 #include "custom\testEmitter.h"
+#include "custom\firework.h"
 
 class CustomBehaviours
 {
@@ -16,6 +17,7 @@ public:
 		if(name == "Player") return SPtr_Behaviour(new PlayerController());
 		if(name == "Camera") return SPtr_Behaviour(new CameraController());
 		if(name == "TestEmitter") return SPtr_Behaviour(new TestEmitter());
+		if(name == "Firework")	  return SPtr_Behaviour(new Firework());
 		return SPtr_Behaviour(nullptr);
 	}
 

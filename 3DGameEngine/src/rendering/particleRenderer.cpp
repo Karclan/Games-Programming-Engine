@@ -4,11 +4,25 @@ ParticleRenderer::ParticleRenderer()
 {
 	setDepFlag(ComponentType::TRANSFORM);
 	_playFlag=true;
+	_renderFlag=true;
 	_generatedFlag=false;
 	_particleSystem=nullptr;
 	_shader = Assets::getShader("particle");
+
 	_particlePool=0;
+	_updaters.clear();
 	generate(_particlePool);
+}
+ParticleRenderer::~ParticleRenderer()
+{
+	glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
+	glDeleteBuffers(1,&_particlePositionBuffer);
+	glDeleteBuffers(1,&_particleColourBuffer);
+	glDeleteVertexArrays(1,&_vao);
+	_particleSystem.reset();
+	//circleEmitter.reset();
+	//_eulerUpdater.reset();
 }
 
 ComponentType::Type ParticleRenderer::getType()
@@ -43,10 +57,16 @@ void ParticleRenderer::generate(size_t particlePool)
 		glDeleteVertexArrays(1,&_vao);
 	}
 	
-	_particleSystem.reset(new ParticleSystem(particlePool));
+	_particleSystem.reset(new ParticleSystem(_particlePool));
 	_generatedFlag=true;
 
-	circleEmitter.reset(new CircleEmitter());
+	_particleSystem->addEmitter(_emitter);
+	for(auto it : _updaters)
+	{
+		_particleSystem->addUpdater(it);
+	}
+
+	/*circleEmitter.reset(new CircleEmitter());
 	circleEmitter->init(particlePool);
 	_particleSystem->addEmitter(circleEmitter);
 	auto timeUpdater = std::make_shared<BasicTimeUpdater>();
@@ -58,9 +78,8 @@ void ParticleRenderer::generate(size_t particlePool)
 		_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-15.0,0.0,0.0));
 	}
 	_particleSystem->addUpdater(_eulerUpdater);
-	
-	//_floorUpdater.reset(new FloorUpdater());
-	//_particleSystem->addUpdater(_floorUpdater);
+	_floorUpdater.reset(new FloorUpdater());
+	_particleSystem->addUpdater(_floorUpdater);*/
 
 	size_t count = _particleSystem->getParticleCount();
 
@@ -87,6 +106,9 @@ void ParticleRenderer::generate(size_t particlePool)
 
 void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
+	if(!_generatedFlag)return;
+	if(!_renderFlag)return;
+	//if(_particleSystem->getParticleCount()<=0){return;}
 	_shader->useProgram();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
@@ -109,6 +131,9 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
  
 void ParticleRenderer::animate(float t)
 {
+	if(!_generatedFlag)return;
+	//if(_particleSystem->getParticleCount()<=0){return;}
+
 	if(_playFlag)
 	{
 		_particleSystem->update(t);
@@ -128,13 +153,27 @@ void ParticleRenderer::animate(float t)
 		}
 	}
 }
-
-void ParticleRenderer::play()
+void ParticleRenderer::addEmitter(SP_ParticleEmitter em)
 {
-	_playFlag=true;
+	_emitter=em;
+	//_particleSystem->addEmitter(em);
+}
+void ParticleRenderer::addUpdater(SP_ParticleUpdater up)
+{
+	_updaters.push_back(up);
+	//_particleSystem->addUpdater(up);
 }
 
-void ParticleRenderer::stop()
+void ParticleRenderer::clear()
 {
-	_playFlag=false;
+	//_updaters.clear();
 }
+void ParticleRenderer::setAnimFlag(bool f)
+{
+	_playFlag = f;
+}
+void ParticleRenderer::setDispFlag(bool f)
+{
+	_renderFlag = f;
+}
+

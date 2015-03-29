@@ -8,7 +8,7 @@
 
 namespace Emitters
 {
-	enum type{BASEEMITTER, CIRCLEEMITTER, EMITTERS};
+	enum type{BASEEMITTER, EMITTERS};
 }
 
 class ParticleEmitter
@@ -38,21 +38,21 @@ public:
 
 typedef std::shared_ptr<ParticleEmitter> SP_ParticleEmitter;
 
-class CircleEmitter : public ParticleEmitter
-{
-public:
-	CircleEmitter(){};
-
-	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
-
-	void init(size_t particlePool);
-	size_t _poolSize;
-	SP_RoundPosGen		posGenerator;
-	SP_BasicColourGen	colGenerator;
-	SP_BasicVelGen		velGenerator;
-	SP_BasicTimeGen		timeGenerator;
-};
-
-typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
+//class CircleEmitter : public ParticleEmitter
+//{
+//public:
+//	CircleEmitter(){};
+//
+//	Emitters::type getType(){return Emitters::CIRCLEEMITTER;}
+//
+//	void init(size_t particlePool);
+//	size_t _poolSize;
+//	SP_RoundPosGen		posGenerator;
+//	SP_BasicColourGen	colGenerator;
+//	SP_BasicVelGen		velGenerator;
+//	SP_BasicTimeGen		timeGenerator;
+//};
+//
+//typedef std::shared_ptr<CircleEmitter> SP_CircleEmitter;
 
 #endif

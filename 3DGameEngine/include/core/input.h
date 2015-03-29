@@ -68,6 +68,8 @@ private:
 	float _scrollWheelMove; //!< Amount mouse scroll wheel has moved this frame
 	float _scrollWheelDelta; //!< Scroll Wheel Move multiplied by delta time to make frame rate independent
 
+	//joystick stuff
+
 	typedef std::list<KeyEvent>::iterator EvntIt;
 };
 

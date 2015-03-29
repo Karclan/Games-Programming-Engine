@@ -458,7 +458,7 @@ void CompData::initializeComponent()
 	case ComponentType::PARTICLE_REND:
 		{
 			SPtr_ParticleRend particleRend = std::static_pointer_cast<ParticleRenderer>(getComp());
-			particleRend->generate(1000);
+			//particleRend->generate(1000);
 		}
 		break;
 

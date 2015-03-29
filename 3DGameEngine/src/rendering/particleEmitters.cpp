@@ -47,32 +47,30 @@ void ParticleEmitter::clear()
 	}
 }
 
-void CircleEmitter::init(size_t particlePool)
-{
-	_emitRate=(float)particlePool*0.45f;
-
-	posGenerator.reset(new RoundPosGen());
-	posGenerator->setCenter(glm::vec4(0.0,0.0,0.0,1.0));
-	posGenerator->setXRadius(0.15f);
-	posGenerator->setYRadius(0.15f);
-	addGenerator(posGenerator);
-
-	colGenerator.reset(new BasicColourGen());
-	colGenerator->setMinStartColour(glm::vec4( 0.0, 0.5, 0.0, 1.0 ));
-	colGenerator->setMaxStartColour(glm::vec4( 0.0, 1.0, 0.0, 1.0 ));
-	colGenerator->setMinEndColour(glm::vec4( 0.5, 0.0, 0.0, 0.0 ));
-	colGenerator->setMaxEndColour(glm::vec4( 1.0, 0.0, 0.0, 0.0 ));
-	addGenerator(colGenerator);
-
-	velGenerator.reset(new BasicVelGen());
-	velGenerator->setMinStartVel(glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f ));
-	velGenerator->setMaxStartVel(glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f ));
-	addGenerator(velGenerator);
-
-	timeGenerator.reset(new BasicTimeGen());
-	timeGenerator->setMinTime(1.0f);
-	timeGenerator->setMaxTime(3.5f);
-	addGenerator(timeGenerator);
-}
-
-
+//void CircleEmitter::init(size_t particlePool)
+//{
+//	_emitRate=(float)particlePool*0.45f;
+//
+//	posGenerator.reset(new RoundPosGen());
+//	posGenerator->setCenter(glm::vec4(0.0,0.0,0.0,1.0));
+//	posGenerator->setXRadius(0.15f);
+//	posGenerator->setYRadius(0.15f);
+//	addGenerator(posGenerator);
+//
+//	colGenerator.reset(new BasicColourGen());
+//	colGenerator->setMinStartColour(glm::vec4( 0.0, 0.5, 0.0, 1.0 ));
+//	colGenerator->setMaxStartColour(glm::vec4( 0.0, 1.0, 0.0, 1.0 ));
+//	colGenerator->setMinEndColour(glm::vec4( 0.5, 0.0, 0.0, 0.0 ));
+//	colGenerator->setMaxEndColour(glm::vec4( 1.0, 0.0, 0.0, 0.0 ));
+//	addGenerator(colGenerator);
+//
+//	velGenerator.reset(new BasicVelGen());
+//	velGenerator->setMinStartVel(glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f ));
+//	velGenerator->setMaxStartVel(glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f ));
+//	addGenerator(velGenerator);
+//
+//	timeGenerator.reset(new BasicTimeGen());
+//	timeGenerator->setMinTime(1.0f);
+//	timeGenerator->setMaxTime(3.5f);
+//	addGenerator(timeGenerator);
+//}

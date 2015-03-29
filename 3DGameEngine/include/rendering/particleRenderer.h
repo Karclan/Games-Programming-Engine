@@ -23,7 +23,7 @@ class ParticleRenderer: public Renderer
 { 
 public:
 	ParticleRenderer();
-	~ParticleRenderer(){}
+	~ParticleRenderer();
 	ComponentType::Type getType();
 
 	bool isOnePerObject();
@@ -33,21 +33,29 @@ public:
 	void render(GLfloat* viewMatrix, GLfloat* projectionMatrix);
 	void animate(float t);
 
-	void play();
-	void stop();
+	void clear();
 
 	void setPoolSize(size_t poolSize);
 	int getPoolSize(){return _particlePool;}
 
-	SP_ParticleGenerator getGenerator(Generators::type type);
-	SP_ParticleUpdater	 getUpdater(Updaters::type type);
-	SP_CircleEmitter	circleEmitter;
+	void addEmitter(SP_ParticleEmitter em);
+	void addUpdater(SP_ParticleUpdater up);
 
-	SP_EulerUpdater		_eulerUpdater;
-	SP_FloorUpdater		_floorUpdater;
+	void setAnimFlag(bool f);
+	void setDispFlag(bool f);
+
+	//SP_ParticleEmitter     getEmitter();
+	//SP_ParticleGenerator   getGenerator(Generators::type type);
+	//SP_ParticleUpdater	 getUpdater(Updaters::type type);
+
+	//SP_CircleEmitter	circleEmitter;
+
+	//SP_EulerUpdater		_eulerUpdater;
+	//SP_FloorUpdater		_floorUpdater;
 		
 private:
 
+	bool _renderFlag;
 	bool _playFlag;
 	bool _generatedFlag;
 
@@ -60,6 +68,8 @@ private:
 	SP_ParticleSystem	_particleSystem;
 
 	std::vector<SP_ParticleUpdater>	  _updaters;
+	SP_ParticleEmitter _emitter;
+
 
 	SPtr_Transform _transform; //The origin of the particleEmitter
 };
