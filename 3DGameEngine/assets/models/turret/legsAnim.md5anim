@@ -1,7 +1,5 @@
 MD5Version 10
-//Created with md5exp.mel by Chris Edwards, Expanded for Maya 2008 by David Taylor, scripts.zbufferstudios.com
- www.jmonkeyengine.com
- commandline ""
+commandline ""
 
 numFrames 480
 numJoints 9

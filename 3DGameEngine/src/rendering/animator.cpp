@@ -5,7 +5,7 @@ Animator::Animator()
 	_animation = nullptr;
 	_mesh = nullptr;
 	_fAnimTime = 0;
-	
+
 }
 
 ComponentType::Type Animator::getType()
@@ -32,12 +32,18 @@ void Animator::bind(Shader* shader)
 void Animator::setMesh(Mesh* m)
 {
 	_mesh = m;
-
 	//load dummy values for the transforms vector
-	for ( int i = 0; i < _animation->GetNumJoints(); ++i )
-    {
-		Transforms.push_back(dummy);
-    }
+	if(_animation)
+	{
+		if(Transforms.size() != _animation->GetNumJoints())
+		{
+			for ( int i = 0; i < _animation->GetNumJoints(); ++i )
+			{
+				Transforms.push_back(dummy);
+				_AnimatedBones.push_back(dummy);
+			}
+		}
+	}
 }
 
 void Animator::UpdateAnim( float fDeltaTime )
@@ -74,6 +80,7 @@ void Animator::Update(float fDeltaTime)
 		 {
 			 UpdateAnim(fDeltaTime);
 				const MatrixList& animatedSkeleton = _animation->GetSkeletonMatrixList();
+				
 				if(_mesh){
 				glm::mat4 tempInverse = _mesh->getInverseTransform();
 				
@@ -82,12 +89,12 @@ void Animator::Update(float fDeltaTime)
 				{
 					
 					//Transforms[i] = animatedSkeleton[i] * _mesh->getInverseTransform();
-					//Transforms[i]=(animatedSkeleton[i] * tempInverse);
+					Transforms[i]= (_AnimatedBones[i]); // * tempInverse);
 				}    
 				}
 		 }else{
 			 // No animation.. Just use identity matrix for each bone.
-			 Transforms.assign(_animation->GetNumJoints(), glm::mat4x4(1.0) );
+			 Transforms.assign(_mesh->getNumJoints(), glm::mat4x4(1.0) );
 		 }	
 
 }
@@ -112,7 +119,7 @@ void Animator::InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, co
         
         finalMatrix = glm::translate( finalJoint.m_Pos ) * glm::toMat4( finalJoint.m_Orient );
 		//temp check
-		Transforms[i] = finalMatrix;
+		_AnimatedBones[i] = finalMatrix;
     }
 }
 
@@ -133,3 +140,8 @@ float ElapsedTime::GetElapsedTime() const
     return fDeltaTime;
 }
 
+void checkValidity(Mesh m, Animation a)
+{
+	if(m.getNumJoints() != a.GetNumJoints()) std::cout<<"not the same bnones" << m.getNumJoints() << "         " << a.GetNumJoints()<<std::endl;
+
+}
