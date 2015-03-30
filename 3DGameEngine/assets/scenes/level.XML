@@ -78,3 +78,8 @@
     <COMP type="7" ex="3" ey="8.5" ez="3" ox="0" oy="0.5" oz="0" />
     <COMP type="4" />
 </GO>
+<GO name="testParticle">
+  <COMP type="0" tx="7" ty="0.5" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+  <COMP type="11" />
+  <COMP type="9" behvr="Firework" />
+</GO>
