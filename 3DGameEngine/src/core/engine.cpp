@@ -131,6 +131,15 @@ void Engine::update(float t)
 
 	// Animate
 	_rendSys.animate(t);
+
+	// Anything to load?
+	if(_behvrSys.hasLevelToLoad())
+	{
+		if(!_sceneMngr.loadFromXML(_behvrSys.getLevelPath()))
+		{
+			_behvrSys.resetLevelLoad();
+		}
+	}
 }
 
 

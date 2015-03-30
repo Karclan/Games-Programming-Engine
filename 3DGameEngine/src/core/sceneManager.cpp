@@ -23,6 +23,7 @@ void SceneManager::initFromInitTable()
 }
 
 
+
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ void SceneManager::clearScene()
 }
 
 // load from XML
-void SceneManager::loadFromXML(std::string filePath)
+bool SceneManager::loadFromXML(std::string filePath)
 {
 	// Ensure file name is ok
 	filePath = ASSETS_PATH + "scenes/" + filePath;
@@ -51,7 +52,7 @@ void SceneManager::loadFromXML(std::string filePath)
 	if(!doc.LoadFile())
 	{
 		std::cout << "Failed to load XML!\n\n\n";
-		return;
+		return false;
 	}
 
 	// Clear out old scene
@@ -159,6 +160,8 @@ void SceneManager::loadFromXML(std::string filePath)
 
 	// Initialize the scene
 	initFromInitTable();
+
+	return true;
 }
 
 

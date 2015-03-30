@@ -50,6 +50,7 @@ protected:
 	void getCollisions(SPtr_PhysBody myPhysBody, std::vector<SPtr_GameObject> &collidingObjs); //!< Given a physics body and empty vector will populate vector with all collding objects this frame
 	bool isActive();
 	void setActive(bool active);
+	void loadScene(std::string scene);
 
 private:
 	SPtr_GameObject _gameObject;
