@@ -15,6 +15,15 @@
         <NEGZ filename="" />
     </SKYBOX>
 </SCENE>
+<GO name="Light">
+    <COMP type="5" lightType="1" dR="0.5" dG="0.7" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" spotDirX="-1" spotDirY="-1" spotDirZ="-1" spotIn="-1" spotOut="-1" />
+    <COMP type="0" tx="-4" ty="11" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+</GO>
+<GO name="Camera">
+    <COMP type="2" />
+    <COMP type="0" tx="0" ty="2" tz="5" rx="-10" ry="0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="Camera" />
+</GO>
 <GO name="Vork Building">
     <COMP type="1" mesh="vorkBuilding.obj" shader="advanced" textureD="vorkBuildingUV.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="-6" ty="0.3" tz="0" rx="0" ry="45" rz="0" sx="2" sy="2" sz="2" />
@@ -52,19 +61,10 @@
 </GO>
 <GO name="Robot">
     <COMP type="1" mesh="legs.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+    <COMP type="0" tx="-25" ty="0" tz="-2" rx="0" ry="-90" rz="0" sx="0.2" sy="0.2" sz="0.2" />
     <COMP type="9" behvr="Player" />
     <COMP type="7" ex="3" ey="8.5" ez="3" ox="0" oy="0.5" oz="0" />
     <COMP type="4" />
-</GO>
-<GO name="Light">
-    <COMP type="5" lightType="1" dR="0.5" dG="0.7" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" spotDirX="-1.#INF" spotDirY="-1.#INF" spotDirZ="-1.#INF" spotIn="-1.#INF" spotOut="-1.#INF" />
-    <COMP type="0" tx="-4" ty="11" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
-</GO>
-<GO name="Camera">
-    <COMP type="2" />
-    <COMP type="0" tx="0" ty="2" tz="5" rx="-10" ry="0" rz="0" sx="1" sy="1" sz="1" />
-    <COMP type="9" behvr="Camera" />
 </GO>
 <GO name="Floor">
     <COMP type="1" mesh="plane.obj" shader="advanced" textureD="grass.png" textureS="" textureN="" textureH="" tileU="10" tileV="10" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
@@ -72,7 +72,7 @@
     <COMP type="7" ex="10" ey="1" ez="10" ox="0" oy="-0.51" oz="0" />
 </GO>
 <GO name="lamppostlight">
-    <COMP type="5" lightType="1" dR="1" dG="0.5" dB="1" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" spotDirX="-1.#INF" spotDirY="-1.#INF" spotDirZ="-1.#INF" spotIn="-1.#INF" spotOut="-1.#INF" />
+    <COMP type="5" lightType="1" dR="1" dG="0.5" dB="1" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" spotDirX="-1" spotDirY="-1" spotDirZ="-1" spotIn="-1" spotOut="-1" />
     <COMP type="0" tx="0" ty="5.5" tz="16" rx="0" ry="-0" rz="0" sx="2" sy="2" sz="2" />
 </GO>
 <GO name="PlayerTurret">
@@ -97,36 +97,61 @@
 </GO>
 <GO name="Building1">
     <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
-    <COMP type="0" tx="13" ty="0.5" tz="6" rx="0" ry="45" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="0" tx="-14.5" ty="0.5" tz="-15" rx="0" ry="0" rz="0" sx="2" sy="2" sz="3" />
     <COMP type="1" mesh="building.obj" shader="advanced" textureD="building1Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
 </GO>
 <GO name="building2">
     <COMP type="1" mesh="building.obj" shader="advanced" textureD="building2Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="17" ty="3" tz="-13" rx="0" ry="45" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="0" tx="15" ty="3" tz="-21" rx="0" ry="45" rz="0" sx="2" sy="2" sz="2" />
     <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
 </GO>
 <GO name="building3">
     <COMP type="1" mesh="building.obj" shader="advanced" textureD="building3Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="4" ty="0.5" tz="11" rx="0" ry="45" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="17" ty="0.5" tz="13.5" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1.2" />
     <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
 </GO>
-<GO name="football">
-    <COMP type="1" mesh="football.obj" shader="advanced" textureD="footballTexture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="-15" ty="-1" tz="0" rx="0" ry="-0" rz="0" sx="0.3" sy="0.3" sz="0.3" />
-    <COMP type="4" />
-    <COMP type="6" radius="0.32" ox="0" oy="0" oz="0" />
+<GO name="Building1">
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+    <COMP type="0" tx="-14" ty="0.5" tz="6" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building1Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
 </GO>
-<GO name="goal">
-    <COMP type="1" mesh="goal.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="-18" ty="-2" tz="0" rx="0" ry="180" rz="0" sx="0.7" sy="0.7" sz="0.7" />
-    <COMP type="7" ex="0.5" ey="6" ez="0.5" ox="0" oy="2" oz="0" />
-    <COMP type="7" ex="0.5" ey="6" ez="0.5" ox="5.85" oy="2" oz="0" />
-    <COMP type="7" ex="6" ey="0.5" ez="0.5" ox="3" oy="5.1" oz="0" />
+<GO name="building2">
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building2Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="20" ty="3" tz="-8.8" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
 </GO>
-<GO name="NetCol">
-    <COMP type="7" ex="0.1" ey="3" ez="1.4" ox="2" oy="-0.9" oz="-0.5" />
-    <COMP type="0" tx="-20" ty="0" tz="0" rx="28" ry="0" rz="0" sx="1" sy="1" sz="1" />
-    <COMP type="1" mesh="" shader="" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="7" ex="0.1" ey="2.5" ez="1.4" ox="-2.1" oy="-0.9" oz="-0.5" />
-    <COMP type="7" ex="4" ey="4" ez="0.1" ox="0" oy="-0.9" oz="-0.9" />
+<GO name="building3">
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building3Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="14" ty="0.5" tz="20" rx="0" ry="45" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+</GO>
+<GO name="Building1">
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+    <COMP type="0" tx="16" ty="0.5" tz="3" rx="0" ry="45" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building1Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+</GO>
+<GO name="building2">
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building2Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="-4" ty="3" tz="-25" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+</GO>
+<GO name="building3">
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building3Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="4" ty="0.5" tz="-22" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+</GO>
+<GO name="Jane">
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+    <COMP type="0" tx="-25.5" ty="0.5" tz="-15" rx="0" ry="0" rz="0" sx="2" sy="2" sz="3" />
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building1Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+</GO>
+<GO name="Jane02">
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
+    <COMP type="0" tx="-25.5" ty="0.5" tz="8" rx="0" ry="0" rz="0" sx="2" sy="2" sz="3" />
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building1Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+</GO>
+<GO name="Peter">
+    <COMP type="1" mesh="building.obj" shader="advanced" textureD="building2Texture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="-35.8" ty="3" tz="-4" rx="0" ry="0" rz="0" sx="2" sy="2" sz="2" />
+    <COMP type="7" ex="5.1" ey="5.1" ez="5.1" ox="0" oy="0" oz="0" />
 </GO>
