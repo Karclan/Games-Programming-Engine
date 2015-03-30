@@ -1,6 +1,17 @@
 #include "rendering\particleGenerators.h"
 
 
+ParticleGenerator::ParticleGenerator()
+{
+	_active=false;
+	std::cout << "Particle Generator Alive\n";
+}
+
+ParticleGenerator::~ParticleGenerator()
+{
+	std::cout << "Particle Generator Ded\n";
+}
+
 
 void BoxPosGen::generate(float dt, ParticleData *p, size_t startId, size_t endId)
 {

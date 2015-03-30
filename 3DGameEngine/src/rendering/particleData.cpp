@@ -1,5 +1,22 @@
 #include "rendering\particleData.h"
 
+ParticleData::ParticleData()
+{
+	std::cout << "Data start\n";
+}
+
+ParticleData::ParticleData(size_t maxCount)
+{
+	generate(maxCount); 
+	std::cout << "Data start\n";
+}
+
+ParticleData::~ParticleData()
+{
+	std::cout << "Data end\n";
+}
+
+
 void ParticleData::generate(size_t maxSize)
 {
 	_particleCount = maxSize;

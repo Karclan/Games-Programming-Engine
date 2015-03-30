@@ -10,7 +10,7 @@ Custom::Custom()
 
 Custom::~Custom()
 {
-	std::cout << "Custom DestROYed\n";
+	//std::cout << "Custom DestROYed\n";
 }
 
 ComponentType::Type Custom::getType() 

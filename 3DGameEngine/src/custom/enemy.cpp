@@ -16,7 +16,7 @@ void Enemy::initialize()
 
 void Enemy::onActive()
 {
-
+	_health = 3;
 }
 
 
@@ -42,4 +42,27 @@ void Enemy::fixedUpdate(float t)
 
 
 	}
+
+
+	if(_physBody->hasCollided())
+	{
+		std::vector<SPtr_GameObject> collidingObjs;
+		getCollisions(_physBody, collidingObjs);
+		for(int i = 0; i < collidingObjs.size(); ++i)
+		{
+			if(collidingObjs[i]->getName() == "PBullet")
+			{
+				_health--;
+				continue;
+			}
+		}
+		
+		if(_health <= 0) explode();
+	}
+}
+
+
+void Enemy::explode()
+{
+	setActive(false);
 }

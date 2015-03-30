@@ -46,6 +46,7 @@ public:
 	virtual void linkDependency(SPtr_Component component){}; //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
 	virtual void init(){}; // override if any specific init logic is required (other than setting dynamic init variables)
 
+
 	BITMASK getDepFlags();
 	BITMASK getOptionalDepFlags();
 	void destroy(); //!< Calling this will set a flag telling all subsystems to remove component

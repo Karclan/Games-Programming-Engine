@@ -10,7 +10,7 @@ Transform::Transform()
 
 Transform::~Transform()
 {
-	std::cout << "TRANSFORM DESTORYED!\n";
+	//std::cout << "TRANSFORM DESTORYED!\n";
 }
 
 

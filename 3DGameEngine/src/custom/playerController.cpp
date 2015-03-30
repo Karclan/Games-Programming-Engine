@@ -66,7 +66,9 @@ void PlayerController::update(float t)
 	if(_physBody->isGrounded()) _jumpsLeft = 2;
 	if((Input::getKeyPressed(sf::Keyboard::K) || Input::getKeyPressed(sf::Keyboard::Space))  && _jumpsLeft > 1) 
 	{
-		_physBody->addImpulse(glm::vec3(0, _jumpStrength, 0));
+		glm::vec3 v = _physBody->getVelocity();
+		v.y = _jumpStrength;
+		_physBody->setVelocity(v);
 		_jumpsLeft --;
 	}
 
@@ -109,7 +111,7 @@ void PlayerController::createBullets(int maxBullets)
 {
 	for(int i = 0; i < maxBullets; ++i)
 	{
-		SPtr_GameObject bullet(new GameObject(0, "Bullet"));
+		SPtr_GameObject bullet(new GameObject(0, "PBullet"));
 
 		SPtr_Transform bulletTransform(new Transform());
 		bulletTransform->setScale(glm::vec3(0.5f, 0.5f, 0.5f));

@@ -4,6 +4,8 @@
 #include <glm/common.hpp>
 #include <glm/gtc/random.hpp>
 
+#include <iostream>
+
 #include "rendering\particleData.h"
 
 #define _USE_MATH_DEFINES
@@ -19,8 +21,8 @@ class ParticleGenerator
 private:
 	bool _active;
 public:
-	ParticleGenerator(){_active=false;}
-	virtual ~ParticleGenerator(){}
+	ParticleGenerator();
+	virtual ~ParticleGenerator();
 	virtual void generate(float dt, ParticleData *p, size_t startId, size_t endId)=0;
 	virtual Generators::type getType()=0;
 	bool isActive(){return _active;}

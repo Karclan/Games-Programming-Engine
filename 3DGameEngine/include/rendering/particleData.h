@@ -4,6 +4,7 @@
 #include <glm/glm.hpp>
 #include <memory>
 #include <vector>
+#include <iostream>
 
 class ParticleData
 {
@@ -22,9 +23,9 @@ public:
 
 public:
 
-	ParticleData(){};
-	ParticleData(size_t maxCount){generate(maxCount); }
-	~ParticleData(){}
+	ParticleData();
+	ParticleData(size_t maxCount);
+	~ParticleData();
 
 	void generate(size_t maxSize);
 	void kill(size_t id);

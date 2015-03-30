@@ -12,6 +12,9 @@ ParticleRenderer::ParticleRenderer()
 	_particlePool=0;
 	_updaters.clear();
 	generate(_particlePool);
+
+
+	std::cout << "Particle Renderer Start\n";
 }
 ParticleRenderer::~ParticleRenderer()
 {
@@ -23,6 +26,8 @@ ParticleRenderer::~ParticleRenderer()
 	_particleSystem.reset();
 	//circleEmitter.reset();
 	//_eulerUpdater.reset();
+
+	std::cout << "Particle Renderer End\n";
 }
 
 ComponentType::Type ParticleRenderer::getType()
@@ -170,7 +175,7 @@ void ParticleRenderer::addUpdater(SP_ParticleUpdater up)
 
 void ParticleRenderer::clear()
 {
-	//_updaters.clear();
+	_updaters.clear();
 }
 void ParticleRenderer::setParticlePointSize(float size)
 {

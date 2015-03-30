@@ -13,7 +13,7 @@ ModelRenderer::ModelRenderer()
 
 ModelRenderer::~ModelRenderer()
 {
-	std::cout << "MODL_REND DESTORYED!\n";
+	//std::cout << "MODL_REND DESTORYED!\n";
 }
 
 void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
