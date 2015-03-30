@@ -170,7 +170,7 @@ void ParticleRenderer::addUpdater(SP_ParticleUpdater up)
 
 void ParticleRenderer::clear()
 {
-	//_updaters.clear();
+	_updaters.clear();
 }
 void ParticleRenderer::setParticlePointSize(float size)
 {

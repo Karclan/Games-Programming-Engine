@@ -102,6 +102,7 @@
     <ClInclude Include="include\custom\fireWork.h" />
     <ClInclude Include="include\custom\playerBullet.h" />
     <ClInclude Include="include\custom\playerController.h" />
+    <ClInclude Include="include\custom\sparkEmitter.h" />
     <ClInclude Include="include\custom\testEmitter.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
@@ -155,6 +156,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
     <ClCompile Include="src\behaviour\objectMngrInterface.cpp" />
+    <ClCompile Include="src\core\globals.cpp" />
     <ClCompile Include="src\core\initTable.cpp" />
     <ClCompile Include="src\behaviour\behaviour.cpp" />
     <ClCompile Include="src\behaviour\behaviourSystem.cpp" />
@@ -171,6 +173,7 @@
     <ClCompile Include="src\custom\fireWork.cpp" />
     <ClCompile Include="src\custom\playerBullet.cpp" />
     <ClCompile Include="src\custom\playerController.cpp" />
+    <ClCompile Include="src\custom\sparkEmitter.cpp" />
     <ClCompile Include="src\custom\testEmitter.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />

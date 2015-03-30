@@ -31,7 +31,7 @@ void FTInterface::renderText(std::string text, GLfloat x,GLfloat y,GLfloat scale
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
 	ins->textShader->useProgram();
-	glm::mat4 mProj = glm::ortho(0.0f,(float)SCREENWIDTH,0.0f,(float)SCREENHEIGHT);
+	glm::mat4 mProj = glm::ortho(0.0f,(float)GLOBALS::SCREENWIDTH,0.0f,(float)GLOBALS::SCREENHEIGHT);
 
 	ins->textShader->setUniform("mProjection",mProj);
 	ins->textShader->setUniform("textColour",colour);
