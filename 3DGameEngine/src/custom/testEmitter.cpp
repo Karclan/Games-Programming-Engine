@@ -16,16 +16,16 @@ void TestEmitter::initialize()
 	_posGenerator->setXRadius(0.15f);
 	_posGenerator->setYRadius(0.15f);
 	_colGenerator.reset(new BasicColourGen());
-	_colGenerator->setMinStartColour(glm::vec4( 0.0, 0.5, 0.0, 1.0 ));
-	_colGenerator->setMaxStartColour(glm::vec4( 0.0, 1.0, 0.0, 1.0 ));
-	_colGenerator->setMinEndColour(glm::vec4( 0.5, 0.0, 0.0, 0.0 ));
-	_colGenerator->setMaxEndColour(glm::vec4( 1.0, 0.0, 0.0, 0.0 ));
+	_colGenerator->setMinStartColour(glm::vec4( 0.5, 0.5, 0.5, 1.0 ));
+	_colGenerator->setMaxStartColour(glm::vec4( 1.0, 1.0, 1.0, 1.0 ));
+	_colGenerator->setMinEndColour	(glm::vec4( 0.0, 0.0, 0.0, 1.0 ));
+	_colGenerator->setMaxEndColour	(glm::vec4( 0.2, 0.2, 0.2, 1.0 ));
 	_velGenerator.reset(new BasicVelGen());
-	_velGenerator->setMinStartVel(glm::vec4( 0.0f, 0.15f, 0.15f, 0.0f ));
-	_velGenerator->setMaxStartVel(glm::vec4( 1.0f, 0.15f, 0.45f, 0.0f ));
+	_velGenerator->setMinStartVel	(glm::vec4( -5.45f, -5.45f, -5.45f, 0.0f ));
+	_velGenerator->setMaxStartVel	(glm::vec4(  5.45f,  5.45f,  5.45f, 0.0f ));
 	_timeGenerator.reset(new BasicTimeGen());
-	_timeGenerator->setMinTime(1.0f);
-	_timeGenerator->setMaxTime(3.5f);
+	_timeGenerator->setMinTime(0.5f);
+	_timeGenerator->setMaxTime(2.5f);
 
 	_emitter.reset(new ParticleEmitter());
 	_emitter->init(10000,0.45f);
@@ -48,16 +48,21 @@ void TestEmitter::initialize()
 
 	_particleRenderer->generate(10000);
 	_particleRenderer->resetParticles();
+	_pointSize=5.f;
 }
 
 void TestEmitter::update(float t)
 {
+	
 	if(Input::getKeyPressed(sf::Keyboard::A))
 	{
+		_pointSize--;
 		_particleRenderer->setAnimFlag(true);
 	}
 	if(Input::getKeyPressed(sf::Keyboard::B))
 	{
+		_pointSize++;
 		_particleRenderer->setAnimFlag(false);
 	}
+	_particleRenderer->setParticlePointSize(5.f);
 }

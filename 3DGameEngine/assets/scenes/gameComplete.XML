@@ -10,7 +10,8 @@
 <GO name="New Game Object">
     <COMP type="1" mesh="plane.obj" shader="advanced" textureD="startTexture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="0" ty="0" tz="-16" rx="90" ry="-0" rz="0" sx="2" sy="1.1" sz="1" />
-    <COMP type="5" lightType="1" dR="0.5" dG="0.5" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.014" quadratic="0.0007" spotDirX="-1.#INF" spotDirY="-1.#INF" spotDirZ="-1.#INF" spotIn="-1.#INF" spotOut="-1.#INF" />
+    <COMP type="5" lightType="1" dR="0.5" dG="0.5" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.014" quadratic="0.0007" spotDirX="-1" spotDirY="-1" spotDirZ="-1" spotIn="-1" spotOut="-1" />
+    <COMP type="9" behvr="EndScreen" />
 </GO>
 <GO name="New Game Object">
     <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
@@ -19,4 +20,24 @@
 <GO name="New Game Object">
     <COMP type="1" mesh="plane.obj" shader="advanced" textureD="winrarTexture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="0" ty="-1" tz="-15" rx="90" ry="-0" rz="0" sx="0.4" sy="0.2" sz="0.2" />
+</GO>
+<GO name="prettyParticles">
+    <COMP type="11" />
+    <COMP type="0" tx="-5" ty="5" tz="-14" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="TestEmitter" />
+</GO>
+<GO name="prettyParticles2">
+    <COMP type="11" />
+    <COMP type="0" tx="-5" ty="-5" tz="-14" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="TestEmitter" />
+</GO>
+<GO name="prettyParticles3">
+    <COMP type="11" />
+    <COMP type="0" tx="5" ty="-5" tz="-14" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="TestEmitter" />
+</GO>
+<GO name="prettyParticles4">
+    <COMP type="11" />
+    <COMP type="0" tx="5" ty="5" tz="-14" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="9" behvr="TestEmitter" />
 </GO>

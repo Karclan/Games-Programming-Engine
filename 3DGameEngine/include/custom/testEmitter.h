@@ -20,6 +20,8 @@ private:
 	SP_FloorUpdater		  _floorUpdater;
 	SP_BasicTimeUpdater	  _timeUpdater;
 	SP_BasicColourUpdater _colourUpdater;
+
+	float _pointSize;
 public:
 	TestEmitter();
 

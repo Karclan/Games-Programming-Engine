@@ -265,6 +265,9 @@
     <ClInclude Include="include\custom\endScreen.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
+    <ClInclude Include="include\custom\enemyBullet.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -448,6 +451,9 @@
       <Filter>Source Files\custom</Filter>
     </ClCompile>
     <ClCompile Include="src\custom\endScreen.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\enemyBullet.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>

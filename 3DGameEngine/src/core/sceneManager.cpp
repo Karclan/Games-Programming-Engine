@@ -189,7 +189,7 @@ void SceneManager::saveToXML(std::string filePath)
 	TiXmlElement* sceneElmnt = new TiXmlElement("SCENE");
 	doc.LinkEndChild(sceneElmnt);
 	xmlAddSceneLights(sceneElmnt, _rendSys->getGlobalAmbient(), _rendSys->getGlobalDiffuse(), _rendSys->getGlobalSpecular(), _rendSys->getGlobalDirection());
-	xmlAddCubemap(sceneElmnt,_rendSys->getCubemapFiles());
+	//xmlAddCubemap(sceneElmnt,_rendSys->getCubemapFiles());
 	// Init table (Game Objects)
 	InitTable* init = _objMngr->getInitTable();
 	InitTableIterator it = init->begin();

@@ -100,6 +100,7 @@
     <ClInclude Include="include\custom\customBehaviours.h" />
     <ClInclude Include="include\custom\endScreen.h" />
     <ClInclude Include="include\custom\enemy.h" />
+    <ClInclude Include="include\custom\enemyBullet.h" />
     <ClInclude Include="include\custom\fireWork.h" />
     <ClInclude Include="include\custom\levelController.h" />
     <ClInclude Include="include\custom\playerBullet.h" />
@@ -175,6 +176,7 @@
     <ClCompile Include="src\custom\cameraController.cpp" />
     <ClCompile Include="src\custom\endScreen.cpp" />
     <ClCompile Include="src\custom\enemy.cpp" />
+    <ClCompile Include="src\custom\enemyBullet.cpp" />
     <ClCompile Include="src\custom\fireWork.cpp" />
     <ClCompile Include="src\custom\levelController.cpp" />
     <ClCompile Include="src\custom\playerBullet.cpp" />
@@ -238,7 +240,9 @@
     <Xml Include="assets\scenes\demo.XML">
       <SubType>Designer</SubType>
     </Xml>
-    <Xml Include="assets\scenes\level.XML" />
+    <Xml Include="assets\scenes\level.XML">
+      <SubType>Designer</SubType>
+    </Xml>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

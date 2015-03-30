@@ -15,6 +15,7 @@ void LevelController::initialize()
 void LevelController::onActive()
 {
 	//Create message that will be displayed to screen
+	_score=0;
 	_gui->setMessage("Life: ",  5, 750, 0.8, glm::vec3(1,0,0), true);								//0
 	_gui->setMessage("Score: ",  5, 700, 0.8, glm::vec3(1,1,0), true);								//1
 	_gui->setMessage("Game Over - you failed at DMU",  200, 400, 0.6, glm::vec3(1,0,1), false);		//2
@@ -26,10 +27,10 @@ void LevelController::update(float t)
 {
 	//std::cout << _player->test;
 	_gui->updateMessage(0, "Life: " + std::to_string(_player->getLife()));
-	_gui->updateMessage(1, "Score: " + std::to_string(_player->getScore()));
+	_gui->updateMessage(1, "Score: " + std::to_string(_score));
 
-	if(_player->getLife() <= 0) {loadScene("gameFailed.XML");}
-	if(_player->getScore() >= 100) {loadScene("gameComplete.XML");}
+	if(_player->getLife() <= 0) {_score-=100; loadScene("gameFailed.XML");}
+	if(_score >= 60) {loadScene("gameComplete.XML");}
 	
 }
 

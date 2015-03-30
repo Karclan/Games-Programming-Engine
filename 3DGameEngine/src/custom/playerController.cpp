@@ -40,8 +40,6 @@ void PlayerController::initialize()
 	_fireRate=0.3f;
 	_timer=0.f;
 	_life = 100;
-	_score = 0;
-
 }
 
 void PlayerController::update(float t)
@@ -64,7 +62,7 @@ void PlayerController::update(float t)
 
 	if(Input::getJoystickAxisPosition(0,sf::Joystick::U)>=10.f||Input::getJoystickAxisPosition(0,sf::Joystick::U)<=-10.f)
 	{
-	_turretRotation -= t * Input::getJoystickAxisPosition(0,sf::Joystick::U);
+		_turretRotation -= t * Input::getJoystickAxisPosition(0,sf::Joystick::U);
 	}
 	// Set Turret Rotation
 	if(Input::getKeyHeld(sf::Keyboard::E))// && _turretRotation > -60)
@@ -117,6 +115,30 @@ void PlayerController::fixedUpdate(float t)
 
 	// Update rotation
 	_transform->rotate(_turn * t, glm::vec3(0, 1, 0), Transform::WORLD_SPACE);
+
+
+
+	// Kill meh
+	if(_physBody->hasCollided())
+	{
+		std::vector<SPtr_GameObject> collidingObjs;
+		getCollisions(_physBody, collidingObjs);
+		for(int i = 0; i < collidingObjs.size(); ++i)
+		{
+			if(collidingObjs[i]->getName() == "EBullet")
+			{
+				_life-=25;
+				continue;
+			}
+		}
+		/*
+		if(_life <= 0)
+		{
+		_particleRenderer->setParticlePointSize(7.f);
+		_state=state::DEAD;
+		}
+		*/
+	}
 }
 
 

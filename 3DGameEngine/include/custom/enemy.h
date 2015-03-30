@@ -4,6 +4,9 @@
 #include "behaviour\behaviour.h"
 #include "physics\physicsBody.h"
 #include "rendering\particleRenderer.h"
+#include "physics\collider.h"
+#include "behaviour\custom.h"
+#include "custom\levelController.h";
 
 /*! \brief Custom Enemy Class
 
@@ -15,7 +18,7 @@ class Enemy : public Behaviour
 {
 	
 public:
-	enum state{ALIVE,DEAD};
+	enum state{ IDLE, ALERT, MOVE, SHOOT, DEAD};
 	Enemy(){};
 	~Enemy(){};
 
@@ -24,6 +27,10 @@ protected:
 	void onActive();
 	void update(float t); //!< Update function
 	void fixedUpdate(float t);
+
+	void createBullet();
+	void shootBullet(); //!< blam blam!
+
 
 private:
 	SPtr_Transform _transform;
@@ -49,9 +56,15 @@ private:
 	SP_BasicTimeUpdater	  _timeUpdater;
 	SP_BasicColourUpdater _colourUpdater;
 
+
+
 	int _health;
 	state _state;
 	void explode(float t);
+	float _timer;
+
+	SPtr_GameObject _bullet;
+	LevelController* _levelController;
 };
 
 

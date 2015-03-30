@@ -64,6 +64,8 @@ private:
 
 	void createBullets(int maxBullets);
 	void shootBullet();
+
+	
 };
 
 
