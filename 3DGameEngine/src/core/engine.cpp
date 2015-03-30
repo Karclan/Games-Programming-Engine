@@ -138,12 +138,10 @@ void Engine::render()
 	// Render
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
 	_rendSys.render(); // render everything to back buffer
+	
+
 	_window.display(); // switch buffers
-	//_window.pushGLStates();
-	//_window.resetGLStates(); // think you have to reset GL states before drawing any SFML
-	//draw sfml
-	//_window.resetGLStates();
-	//_window.popGLStates();
+
 }
 
 
@@ -153,11 +151,11 @@ void Engine::renderEditorMode(Camera* camera)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear screen
 	
 	_rendSys.render(camera); // render everything to back buffer
-
+	
 	_physicsSys.renderColliders(camera); // render debug colliders in physics
 	TwDraw();  // draw the tweak bar(s)
 	_window.display(); // switch buffers
-
+	
 }
 
 

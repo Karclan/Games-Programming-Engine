@@ -83,15 +83,15 @@ void Animator::Update(float fDeltaTime)
 				const MatrixList& animatedSkeleton = _animation->GetSkeletonMatrixList();
 				
 				if(_mesh){
-				glm::mat4 tempInverse = _mesh->getInverseTransform();
+					glm::mat4 tempInverse = _mesh->getInverseTransform();
 				
-				// Multiply the animated skeleton joints by the inverse of the bind pose.
-				for ( int i = 0; i < _animation->GetNumJoints(); ++i )
-				{
+					// Multiply the animated skeleton joints by the inverse of the bind pose.
+					for ( int i = 0; i < _animation->GetNumJoints(); ++i )
+					{
 					
-					//Transforms[i] = animatedSkeleton[i] * _mesh->getInverseTransform();
-					Transforms[i]= (_AnimatedBones[i]);
-				}    
+						//Transforms[i] = animatedSkeleton[i] * _mesh->getInverseTransform();
+						Transforms[i]= (_AnimatedBones[i] );
+					}    
 				}
 		 }else{
 			 // No animation.. Just use identity matrix for each bone.
@@ -119,6 +119,7 @@ void Animator::InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, co
 
         
         finalMatrix = glm::translate( finalJoint.m_Pos );// *  glm::toMat4( finalJoint.m_Orient );
+
 		//temp check
 		_AnimatedBones[i] = finalMatrix;
     }

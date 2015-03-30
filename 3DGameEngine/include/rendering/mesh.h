@@ -71,7 +71,7 @@ public:
 	std::map<std::string, int> getBoneMap() { return boneMap; } //!< returns the meshes bonemap (animation)
 	std::vector<aiMatrix4x4> getBoneOffset() {return m_BoneOffset; } //!< returns the meshes bone offset as a aiMatrix4x4 (animation)
 	glm::mat4 getInverseTransform() {return m_GlobalInverseTransform; } //!< returns the global inverse as a mat4 (animation)
-	int getNumJoints() {return numJoints;}
+	int getNumJoints() {return numJoints;} //!< returns the number of joints in the mesh
 	GLuint getVao() { return _vao; }
 	int numIndices() { return _dataSize[MeshAttribs::INDEX]; }
 

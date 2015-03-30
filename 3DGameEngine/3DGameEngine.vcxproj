@@ -126,6 +126,7 @@
     <ClInclude Include="include\rendering\animator.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
+    <ClInclude Include="include\rendering\GUI.h" />
     <ClInclude Include="include\rendering\light.h" />
     <ClInclude Include="include\rendering\material.h" />
     <ClInclude Include="include\rendering\mesh.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\rendering\animator.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\FTInterface.cpp" />
+    <ClCompile Include="src\rendering\GUI.cpp" />
     <ClCompile Include="src\rendering\light.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />

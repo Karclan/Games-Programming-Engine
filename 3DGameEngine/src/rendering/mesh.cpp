@@ -147,16 +147,17 @@ void Mesh::setBones(std::vector<glm::ivec4> &boneIds, std::vector<glm::vec4> &bo
 
 void Mesh::setBoneMap(std::map<std::string, int> m)
 {
-	boneMap = m;
+	boneMap = m; //set the bone map
 }
 
 void Mesh::setBoneOffset(std::vector<aiMatrix4x4> offSet)
 {
-	m_BoneOffset = offSet;
+	m_BoneOffset = offSet; //set the bone offset matrix
 }
 
 void Mesh::setInverseTransform(aiMatrix4x4 inv)
 {
+	//convert inverse transform into glm::mat4 and set it
 	m_GlobalInverseTransform[0][0] = inv.a1;
 	m_GlobalInverseTransform[0][1] = inv.a2;
 	m_GlobalInverseTransform[0][2] = inv.a3;
@@ -178,5 +179,5 @@ void Mesh::setInverseTransform(aiMatrix4x4 inv)
 
 void Mesh::setNumJoints(int j)
 {
-	numJoints = j;
+	numJoints = j; //set number of joints in mesh
 }

@@ -214,6 +214,9 @@
     <ClInclude Include="include\rendering\animator.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\rendering\GUI.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -349,6 +352,9 @@
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
     <ClCompile Include="src\rendering\animator.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\GUI.cpp">
       <Filter>Source Files\rendering</Filter>
     </ClCompile>
   </ItemGroup>

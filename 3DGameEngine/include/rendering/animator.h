@@ -29,37 +29,22 @@
 class Animator : public Component
 {
 public:
-
-	glm::mat4 dummy;
-
-
 	Animator();
 
 	
 
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
-	void UpdateAnim( float fDeltaTime );
-	void Update( float fDeltaTime );
-	void bind(Shader* shader);
+	void UpdateAnim( float fDeltaTime ); //!< update function for the animation
+	void Update( float fDeltaTime );	//!< update function for animator
+	void bind(Shader* shader);			//!< binds the transformation matrix to the shader
 
-	void BoneTransform(float timeSeconds, std::vector<glm::mat4>& Transforms);
-	//void BuildFrameSkeleton( FrameSkeletonList& skeletons, const Animation::JointInfoList& jointInfos, const Animation::BaseFrameList& baseFrames, const Animation::Frame& frame );
 	void InterpolateSkeletons( Animation::FrameSkeleton& finalSkeleton, const Animation::FrameSkeleton& skeleton0, const Animation::FrameSkeleton& skeleton1, float fInterpolate );
-	void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode,const aiMatrix4x4& ParentTransform);
 	void setBones(std::vector<GLint [4]> &boneIds, std::vector<GLfloat [4]> &boneWeights); //!< Fill bone data via vector
 
-
-	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-    void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-    void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);    
-	const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const std::string NodeName);
-	GLint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	GLint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-    GLint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
-	std::vector<glm::mat4> Transforms;
-	void setMesh(Mesh* m);
-	void checkValidity(Mesh m, Animation a);
+	
+	void setMesh(Mesh* m); //!< sets the mesh being animated
+	void checkValidity(Mesh m, Animation a); //!<checks the validity between the mesh and animation (if same number of joints)
 	
 
 	void setAnimation(Animation* anim) 
@@ -81,6 +66,8 @@ private:
 	std::vector<glm::mat4> finalTransform;
 	float _fAnimTime;
 	MatrixList _AnimatedBones;
+	std::vector<glm::mat4> Transforms; 
+	glm::mat4 dummy;
 };
 
 
