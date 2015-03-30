@@ -4,7 +4,7 @@ ParticleSystem::ParticleSystem(size_t maxCount)
 {
 	_particleCount = maxCount;
 	_particles.generate(maxCount);
-
+	_emitFlag=true;
 	for(size_t i = 0; i < maxCount; ++i)
 	{
 		_particles._particleAliveFlags[i]=false;
@@ -31,9 +31,12 @@ void ParticleSystem::clear()
 
 void ParticleSystem::update(float dt)
 {
-	for(auto _emitter : _emitters)
+	if(_emitFlag)
 	{
-		_emitter->emit(dt,&_particles);
+		for(auto _emitter : _emitters)
+		{
+			_emitter->emit(dt,&_particles);
+		}
 	}
 	for(size_t i = 0; i < _particleCount; ++i)
 	{
@@ -79,3 +82,4 @@ void ParticleSystem::reset()
 {
 	_particles._aliveParticleCount=0;
 }
+

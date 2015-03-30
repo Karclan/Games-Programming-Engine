@@ -62,6 +62,7 @@ public:
 	glm::vec3 getGlobalSpecular (){ return _globalSpecular; }
 	glm::vec3 getGlobalDirection(){ return _globalDirection;}
 	
+	std::string* getCubemapFiles(){return _cubemapFiles;}
 	void clear();
 
 	// To do with light. SetShaderMap allows access to all loaded shaders. Not sure I like this design too much but ok for now
@@ -92,6 +93,7 @@ private:
 
 	//USED SKYBOX STUFF
 	GLuint _skyboxTexture;
+	std::string _cubemapFiles[Cubemap::SIDES];
 	sf::Image _cubemapTexs[Cubemap::SIDES];
 	GLuint _skyboxVAO, _skyboxVBO;
 	Shader* _skyboxShader;

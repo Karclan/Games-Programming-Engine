@@ -210,6 +210,8 @@
     <None Include="assets\shaders\advanced.vert" />
     <None Include="assets\shaders\basic.frag" />
     <None Include="assets\shaders\basic.vert" />
+    <None Include="assets\shaders\cubemap.frag" />
+    <None Include="assets\shaders\cubemap.vert" />
     <None Include="assets\shaders\diffuse.frag" />
     <None Include="assets\shaders\diffuse.vert" />
     <None Include="assets\shaders\particle.frag" />

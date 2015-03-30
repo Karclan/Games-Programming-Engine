@@ -9,7 +9,7 @@ Firework::Firework()
 void Firework::initialize()
 {
 	_time=0.f;
-	_fireworkTime=3.0f;
+	_fireworkTime=1.5f;
 	_explode=false;
 	_exploding=false;
 
@@ -22,19 +22,19 @@ void Firework::initialize()
 	_posGenerator->setXRadius(0.15f);
 	_posGenerator->setYRadius(0.15f);
 	_colGenerator.reset(new BasicColourGen());
-	_colGenerator->setMinStartColour(glm::vec4( 0.0, 0.5, 0.0, 1.0 ));
-	_colGenerator->setMaxStartColour(glm::vec4( 0.0, 1.0, 0.0, 1.0 ));
-	_colGenerator->setMinEndColour	(glm::vec4( 0.5, 0.0, 0.0, 0.0 ));
-	_colGenerator->setMaxEndColour	(glm::vec4( 1.0, 0.0, 0.0, 0.0 ));
+	_colGenerator->setMinStartColour(glm::vec4( 0.5, 0.5, 0.5, 1.0 ));
+	_colGenerator->setMaxStartColour(glm::vec4( 1.0, 1.0, 1.0, 1.0 ));
+	_colGenerator->setMinEndColour	(glm::vec4( 0.0, 0.0, 0.0, 1.0 ));
+	_colGenerator->setMaxEndColour	(glm::vec4( 0.2, 0.2, 0.2, 1.0 ));
 	_velGenerator.reset(new BasicVelGen());
-	_velGenerator->setMinStartVel	(glm::vec4( 0.0f, 0.0f, 0.15f, 0.0f ));
-	_velGenerator->setMaxStartVel	(glm::vec4( 1.0f, 0.0f, 0.45f, 0.0f ));
+	_velGenerator->setMinStartVel	(glm::vec4( -5.45f, -5.45f, -5.45f, 0.0f ));
+	_velGenerator->setMaxStartVel	(glm::vec4(  5.45f,  5.45f,  5.45f, 0.0f ));
 	_timeGenerator.reset(new BasicTimeGen());
-	_timeGenerator->setMinTime(1.0f);
-	_timeGenerator->setMaxTime(3.5f);
+	_timeGenerator->setMinTime(0.5f);
+	_timeGenerator->setMaxTime(2.5f);
 
 	_emitter.reset(new ParticleEmitter());
-	_emitter->init(10000,0.45f);
+	_emitter->init(100,1.f);
 	_emitter->addGenerator(_posGenerator);
 	_emitter->addGenerator(_colGenerator);
 	_emitter->addGenerator(_velGenerator);
@@ -49,7 +49,7 @@ void Firework::initialize()
 	//current suspicion about floor thing is that the actual "floor" it checks against
 	//is relative to the particle system's own coordiante system and not world positions
 
-	_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-15.0,0.0,0.0));
+	_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-45.0,0.0,0.0));
 
 	_particleRenderer->clear();//clears updaters
 	_particleRenderer->addUpdater(_timeUpdater);
@@ -58,14 +58,16 @@ void Firework::initialize()
 	//_particleRenderer->addUpdater(_floorUpdater);
 
 	_particleRenderer->generate(10000);
-	_particleRenderer->setDispFlag(false);
-	_particleRenderer->setAnimFlag(false);
+	_particleRenderer->setEmitFlag(false);
+	_particleRenderer->resetParticles();
 }
 
 void Firework::update(float t)
 {
+	
 	if(Input::getKeyPressed(sf::Keyboard::Num1))
 	{
+		_particleRenderer->setParticlePointSize(10.f);
 		_explode=true;
 	}
 
@@ -83,13 +85,11 @@ void Firework::update(float t)
 			_time=0.f;
 			_exploding=false;
 			_explode=false;
-			_particleRenderer->setDispFlag(false);
-			_particleRenderer->setAnimFlag(false);
+			_particleRenderer->setEmitFlag(false);
 		}
 		else
 		{
-			_particleRenderer->setDispFlag(true);
-			_particleRenderer->setAnimFlag(true);
+			_particleRenderer->setEmitFlag(true);
 		}
 	}
 	

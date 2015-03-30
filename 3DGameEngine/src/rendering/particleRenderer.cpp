@@ -8,7 +8,7 @@ ParticleRenderer::ParticleRenderer()
 	_generatedFlag=false;
 	_particleSystem=nullptr;
 	_shader = Assets::getShader("particle");
-
+	_shader->setUniform("u_PointSize",2.0f);
 	_particlePool=0;
 	_updaters.clear();
 	generate(_particlePool);
@@ -103,7 +103,6 @@ void ParticleRenderer::generate(size_t particlePool)
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
 }
-
 void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
 	if(!_generatedFlag)return;
@@ -118,10 +117,10 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 
 	glBindVertexArray(_vao);
 
-	const size_t count = _particleSystem->getParticleCount();
+	const size_t count = _particleSystem->getAliveParticleCount();
 	if(count > 0)
 	{
-		glDrawArrays(GL_POINTS , 0 , count);
+		glDrawArrays(GL_POINTS , 0 , count); //Change to draw elements
 	}
 
 	glBindVertexArray(0);
@@ -138,7 +137,7 @@ void ParticleRenderer::animate(float t)
 	{
 		_particleSystem->update(t);
 
-		const size_t count = _particleSystem->getParticleCount();
+		const size_t count = _particleSystem->getAliveParticleCount();
 		if(count > 0)
 		{
 			glBindBuffer(GL_ARRAY_BUFFER, _particlePositionBuffer);
@@ -152,6 +151,11 @@ void ParticleRenderer::animate(float t)
 			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 	}
+}
+void ParticleRenderer::resetParticles()
+{
+	if(_particleSystem!=nullptr)
+		_particleSystem->reset();
 }
 void ParticleRenderer::addEmitter(SP_ParticleEmitter em)
 {
@@ -168,6 +172,10 @@ void ParticleRenderer::clear()
 {
 	//_updaters.clear();
 }
+void ParticleRenderer::setParticlePointSize(float size)
+{
+	_shader->setUniform("u_PointSize",size);
+}
 void ParticleRenderer::setAnimFlag(bool f)
 {
 	_playFlag = f;
@@ -175,5 +183,10 @@ void ParticleRenderer::setAnimFlag(bool f)
 void ParticleRenderer::setDispFlag(bool f)
 {
 	_renderFlag = f;
+}
+void ParticleRenderer::setEmitFlag(bool f)
+{
+	if(_particleSystem!=nullptr)
+		_particleSystem->_emitFlag=f;
 }
 

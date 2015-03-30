@@ -18,7 +18,8 @@ public:
 	std::vector<SP_ParticleEmitter> _emitters; 
 	std::vector<SP_ParticleUpdater> _updaters;
 
-public:
+	bool _emitFlag;
+
 	ParticleSystem(size_t maxCount);
 	virtual ~ParticleSystem()
 	{
@@ -29,7 +30,7 @@ public:
     virtual void update(float t);
 	virtual void reset();
 	virtual size_t getParticleCount(){return _particles._particleCount;}
-
+	virtual size_t getAliveParticleCount(){return _particles._aliveParticleCount;}
 	void addEmitter(SP_ParticleEmitter emitter);
 	void addUpdater(SP_ParticleUpdater updater);
 	SP_ParticleEmitter getEmitter(int id);

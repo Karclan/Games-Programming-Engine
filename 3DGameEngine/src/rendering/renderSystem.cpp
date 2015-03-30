@@ -37,7 +37,7 @@ void RenderSystem::render(Camera* camera)
 	camera->preRender();
 	activateLights();
 
-	renderSkybox();
+	//renderSkybox();
 	for(unsigned int i = 0; i < _models.size(); ++i)
 	{
 		// this is where you should check for if it's state is inactive or destroyed
@@ -107,6 +107,7 @@ void RenderSystem::setLightDefaults()
 }
 void RenderSystem::setSkyboxSide(std::string filename, Cubemap::sides side)
 {
+	_cubemapFiles[side]=filename;
 	_cubemapTexs[side].loadFromFile(filename);
 }
 void RenderSystem::createSkybox()
@@ -197,7 +198,7 @@ void RenderSystem::renderSkybox()
 	glm::mat4 model(1.f);
 	_skyboxShader->setMVP(glm::value_ptr(model),_cameras[0]->getView(),_cameras[0]->getProjection());
 	glDepthMask(GL_FALSE);
-	glDrawArrays(GL_TRIANGLES,0,3);
+	glDrawArrays(GL_TRIANGLES,0,36);
 	glDepthMask(GL_TRUE);
 	glBindVertexArray(0);
 }
@@ -220,13 +221,11 @@ void RenderSystem::setGlobalDirection(glm::vec3 direction)
 
 void RenderSystem::clear()
 {
-
 	_cameras.clear();
 	_models.clear(); 
 	_animators.clear();
 	_pointLights.clear();
 	_spotLights.clear();
-
 }
 
 void RenderSystem::activateLights()
@@ -287,9 +286,9 @@ void RenderSystem::activateLights()
 		{
 			index = std::to_string(i);
 			it->second->setUniform( std::string("spotLight["+index+"].position")  .c_str(),	 _spotLights[i]->getTransform()->getPosition());
-			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getTransform()->getForward());
-			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 glm::cos(glm::radians(28.f)));
-			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	 glm::cos(glm::radians(14.f)));
+			it->second->setUniform( std::string("spotLight["+index+"].spotDir")	  .c_str(),	 _spotLights[i]->getSpotDirection());
+			it->second->setUniform( std::string("spotLight["+index+"].spotOutCut").c_str(),	 _spotLights[i]->getSpotIn());
+			it->second->setUniform( std::string("spotLight["+index+"].spotInCut") .c_str(),	  _spotLights[i]->getSpotOut());
 			it->second->setUniform( std::string("spotLight["+index+"].diff")	  .c_str(),	 _spotLights[i]->getDiffuse());
 			it->second->setUniform( std::string("spotLight["+index+"].spec")	  .c_str(),	 _spotLights[i]->getSpecular());
 			it->second->setUniform( std::string("spotLight["+index+"].constant")  .c_str(),	 _spotLights[i]->getAtteunation().x);

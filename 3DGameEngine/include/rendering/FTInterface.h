@@ -16,8 +16,8 @@
 #include <glm\gtx\matrix_transform_2d.hpp>
 #include <glm\gtc\matrix_transform.hpp>
 
-#include "Shader.h"
-
+#include "rendering\shader.h"
+#include "core\globals.h"
 #include "core\assets.h"
 
 struct Character

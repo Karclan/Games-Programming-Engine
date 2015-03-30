@@ -48,14 +48,14 @@ private:
 	void xmlAddPhysBody(TiXmlElement* go);
 	void xmlAddSphereCol(TiXmlElement* go, float radius, glm::vec3 offset);
 	void xmlAddBoxCol(TiXmlElement* go, glm::vec3 extents, glm::vec3 offset);
-	void xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten);
+	void xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten, glm::vec3 spotDir,float spotIn, float spotOut);
 	void xmlAddCustom(TiXmlElement* go, std::string behvr);
 	void xmlAddAnimator(TiXmlElement* go, std::string animationPath);
 	void xmlAddTerrainCol(TiXmlElement* go);
 
 	// saving scene params funcs
 	void xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, glm::vec3 dir);
-	
+	void xmlAddCubemap(TiXmlElement* scene, std::string* filenames);
 };
 
 #endif

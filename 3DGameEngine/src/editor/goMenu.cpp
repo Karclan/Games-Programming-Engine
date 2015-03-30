@@ -35,7 +35,13 @@ static void TW_CALL addCameraComponent(void *clientData)
 	goMenu->addComponent(ComponentType::CAMERA);
 }
 
-static void TW_CALL addLightComponent(void *clientData)
+static void TW_CALL addPointlightComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::LIGHT);
+}
+static void TW_CALL addSpotlightComponent(void *clientData)
 {
 	GoMenu* goMenu = (GoMenu*)clientData;
 
@@ -222,7 +228,8 @@ void GoMenu::refreshTweakBar()
 		//TwAddVarRW(_addCompBar, "test", TW_TYPE_BOOL8, &testBool, "");
 		TwAddButton(_addCompBar, "addBoxCol", addBoxColComponent, this, "");
 		TwAddButton(_addCompBar, "addCamera", addCameraComponent, this, "");
-		TwAddButton(_addCompBar, "addLight", addLightComponent, this, "");
+		TwAddButton(_addCompBar, "addPointLight", addPointlightComponent, this, "");
+		TwAddButton(_addCompBar, "addSpotLight",  addSpotlightComponent, this, "");
 		TwAddButton(_addCompBar, "addModelRender", addModelRenderComponent, this, "");
 		TwAddButton(_addCompBar, "addPhysicsBody", addPhysicsBodyComponent, this, "");
 		TwAddButton(_addCompBar, "addRobotRender", addRobotRenderComponent, this, "");
@@ -274,18 +281,24 @@ void GoMenu::refreshTweakBar()
 				break;
 
 			case ComponentType::LIGHT:
-				//TwAddVarRW(_myBar, &(id+"Light Type")[0], TW_TYPE_INT16, compData->attribPtrInt(0), "group=Light label=Light_Type");
-				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(1), "group=Light label=Diffuse_R");
-				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(2), "group=Light label=Diffuse_G");
-				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(3), "group=Light label=Diffuse_B");
-				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(4), "group=Light label=Specular_R");
-				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(5), "group=Light label=Specular_G");
-				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(6), "group=Light label=Specular_B");
-
-				TwAddVarRW(_myBar, &(id+"Attenuation C")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(7), "group=Light label=Attenuation_C");
-				TwAddVarRW(_myBar, &(id+"Attenuation L")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(8), "group=Light label=Attenuation_L");
-				TwAddVarRW(_myBar, &(id+"Attenuation Q")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(9), "group=Light label=Attenuation_Q");
-
+		
+				TwAddVarRW(_myBar, &(id+"Light Type")[0], TW_TYPE_INT16, compData->attribPtrInt(0),			"group=Light label=Point_Light");
+				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(1),		"group=Light label=Diffuse_R");
+				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(2),		"group=Light label=Diffuse_G");
+				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(3),		"group=Light label=Diffuse_B");
+				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(4),		"group=Light label=Specular_R");
+				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(5),		"group=Light label=Specular_G");
+				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(6),		"group=Light label=Specular_B");
+				TwAddVarRW(_myBar, &(id+"Attenuation C")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(7),		"group=Light label=Attenuation_C");
+				TwAddVarRW(_myBar, &(id+"Attenuation L")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(8),		"group=Light label=Attenuation_L");
+				TwAddVarRW(_myBar, &(id+"Attenuation Q")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(9),		"group=Light label=Attenuation_Q");
+				TwAddSeparator(_myBar,&(id+"seperator")[0],NULL);
+				TwAddVarRW(_myBar, &(id+"Direction X")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(10),	"group=Light label=Direction_X");
+				TwAddVarRW(_myBar, &(id+"Direction Y")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11),	"group=Light label=Direction_Y");
+				TwAddVarRW(_myBar, &(id+"Direction Z")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12),	"group=Light label=Direction_Z");
+				TwAddVarRW(_myBar, &(id+"SpotIn")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(13),	"group=Light label=Inner_cutoff");
+				TwAddVarRW(_myBar, &(id+"SpotOut")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(14),	"group=Light label=Outer_cutoff");
+				
 				break;
 
 			case ComponentType::MODL_REND:

@@ -7,6 +7,7 @@ uniform mat4 u_ModelMatrix;
 uniform mat4 u_ViewMatrix;
 uniform mat4 u_ProjectionView;
 
+uniform float u_PointSize;
 out vec4 o_colour;
 
 void main()
@@ -17,7 +18,7 @@ void main()
 	
 	o_colour = i_particleColour;
 	
-	float distance = length(eyePosition.xyz);
-	float attenuation = inversesqrt(0.1f*distance);
-	gl_PointSize = 2.0f;
+	//float distance = length(eyePosition.xyz);
+	//float attenuation = inversesqrt(0.1f*distance);
+	gl_PointSize = u_PointSize;
 }

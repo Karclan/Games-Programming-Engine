@@ -61,6 +61,8 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 	engine.startup();
 	TwInit(TW_OPENGL, NULL); // startup ant tweak bar
 	TwWindowSize(engine.getWidth(), engine.getHeight());
+	SCREENWIDTH=engine.getWidth();
+	SCREENHEIGHT=engine.getHeight();
 	editorCamera.init(); // must init before init tweak bars
 	editor.initTweakBars();
 	
@@ -110,13 +112,16 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstanc
 				if(editor.processTweakBarEvents(&e))
 					continue;
 #endif
-
 				// Quit
 				if (e.type == sf::Event::Closed) quit = true;
 
 				// Resize view
-				else if(e.type == sf::Event::Resized) glViewport(0, 0, e.size.width, e.size.height);
-
+				else if(e.type == sf::Event::Resized)
+				{
+					SCREENHEIGHT=e.size.height;
+					SCREENWIDTH=e.size.width;
+					glViewport(0, 0, e.size.width, e.size.height);
+				}
 				// Engine events
 				else engine.processEvent(e);
 			}

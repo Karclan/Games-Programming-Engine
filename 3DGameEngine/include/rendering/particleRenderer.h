@@ -34,6 +34,7 @@ public:
 	void animate(float t);
 
 	void clear();
+	void resetParticles();
 
 	void setPoolSize(size_t poolSize);
 	int getPoolSize(){return _particlePool;}
@@ -41,15 +42,15 @@ public:
 	void addEmitter(SP_ParticleEmitter em);
 	void addUpdater(SP_ParticleUpdater up);
 
+	void setParticlePointSize(float size);
+
 	void setAnimFlag(bool f);
 	void setDispFlag(bool f);
-
+	void setEmitFlag(bool f);
 	//SP_ParticleEmitter     getEmitter();
 	//SP_ParticleGenerator   getGenerator(Generators::type type);
 	//SP_ParticleUpdater	 getUpdater(Updaters::type type);
-
 	//SP_CircleEmitter	circleEmitter;
-
 	//SP_EulerUpdater		_eulerUpdater;
 	//SP_FloorUpdater		_floorUpdater;
 		

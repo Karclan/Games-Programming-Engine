@@ -181,7 +181,7 @@ void SceneManager::saveToXML(std::string filePath)
 	TiXmlElement* sceneElmnt = new TiXmlElement("SCENE");
 	doc.LinkEndChild(sceneElmnt);
 	xmlAddSceneLights(sceneElmnt, _rendSys->getGlobalAmbient(), _rendSys->getGlobalDiffuse(), _rendSys->getGlobalSpecular(), _rendSys->getGlobalDirection());
-
+	xmlAddCubemap(sceneElmnt,_rendSys->getCubemapFiles());
 	// Init table (Game Objects)
 	InitTable* init = _objMngr->getInitTable();
 	InitTableIterator it = init->begin();
@@ -242,7 +242,11 @@ void SceneManager::saveToXML(std::string filePath)
 			case ComponentType::LIGHT:
 				xmlAddLight(go, compData->getIntAttrib(0), glm::vec3(compData->getFloatAttrib(1), compData->getFloatAttrib(2), compData->getFloatAttrib(3)),
 														   glm::vec3(compData->getFloatAttrib(4), compData->getFloatAttrib(5), compData->getFloatAttrib(6)),
-														   glm::vec3(compData->getFloatAttrib(7), compData->getFloatAttrib(8), compData->getFloatAttrib(9)));
+														   glm::vec3(compData->getFloatAttrib(7), compData->getFloatAttrib(8), compData->getFloatAttrib(9)),
+														   glm::vec3(compData->getFloatAttrib(10),compData->getFloatAttrib(11), compData->getFloatAttrib(12)),
+														   compData->getFloatAttrib(13),
+														   compData->getFloatAttrib(14)
+														   );
 				break;
 
 			case ComponentType::SPHERE_COL:
@@ -343,7 +347,7 @@ void SceneManager::xmlAddModelRend(TiXmlElement* go, std::string mesh, std::stri
 	go->LinkEndChild(transElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
-void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten)
+void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::vec3 spec, glm::vec3 atten,glm::vec3 spotDir, float spotIn, float spotOut)
 {
 	TiXmlElement* lightElmnt = new TiXmlElement("COMP"); // Component Element
 	lightElmnt->SetAttribute("type", ComponentType::LIGHT); // Set type attrib
@@ -357,7 +361,11 @@ void SceneManager::xmlAddLight(TiXmlElement* go, int type, glm::vec3 diff, glm::
 	lightElmnt->SetDoubleAttribute("constant", atten.x); // 7 Constant
 	lightElmnt->SetDoubleAttribute("linear", atten.y); // 8 Linear
 	lightElmnt->SetDoubleAttribute("quadratic", atten.z); // 9 Quadratic
-
+	lightElmnt->SetDoubleAttribute("spotDirX",spotDir.x); //10 SpotDirection X
+	lightElmnt->SetDoubleAttribute("spotDirY",spotDir.y); //11 SpotDirection Y
+	lightElmnt->SetDoubleAttribute("spotDirZ",spotDir.z); //12 SpotDirection Z
+	lightElmnt->SetDoubleAttribute("spotIn",spotIn);      //13 Spot inner cuttoff
+	lightElmnt->SetDoubleAttribute("spotOut",spotOut);   //14 Spot outer cutoff
 	go->LinkEndChild(lightElmnt); // Add element to file, this auto cleans up pointer as well
 }
 
@@ -466,6 +474,35 @@ void SceneManager::xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::ve
 	dirElmnt->SetDoubleAttribute("y", amb.y);
 	dirElmnt->SetDoubleAttribute("z", amb.z);
 	lightsElmnt->LinkEndChild(dirElmnt);
+}
+void SceneManager::xmlAddCubemap(TiXmlElement* scene, std::string* filenames)
+{
+	TiXmlElement* cubeElement = new TiXmlElement("SKYBOX");
+	scene->LinkEndChild(cubeElement);
+
+	TiXmlElement* posx = new TiXmlElement("POSX");
+	posx->SetAttribute("filename", filenames[0]);
+	cubeElement->LinkEndChild(posx);
+
+	TiXmlElement* posy = new TiXmlElement("POSZ");
+	posy->SetAttribute("filename", filenames[1]);
+	cubeElement->LinkEndChild(posy);
+
+	TiXmlElement* posz = new TiXmlElement("POSY");
+	posz->SetAttribute("filename", filenames[2]);
+	cubeElement->LinkEndChild(posz);
+
+	TiXmlElement* negx = new TiXmlElement("NEGX");
+	negx->SetAttribute("filename", filenames[3]);
+	cubeElement->LinkEndChild(negx);
+
+	TiXmlElement* negy = new TiXmlElement("NEGY");
+	negy->SetAttribute("filename", filenames[4]);
+	cubeElement->LinkEndChild(negy);
+
+	TiXmlElement* negz = new TiXmlElement("NEGZ");
+	negz->SetAttribute("filename", filenames[5]);
+	cubeElement->LinkEndChild(negz);
 }
 
 // END SAVING FUNCTIONS------------------------------------------------------------------

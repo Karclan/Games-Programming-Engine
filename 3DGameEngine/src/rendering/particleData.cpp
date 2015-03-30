@@ -3,7 +3,7 @@
 void ParticleData::generate(size_t maxSize)
 {
 	_particleCount = maxSize;
-	_aliveParticleCount = 0;
+	_aliveParticleCount = maxSize;
 
 	_particlePositions.reset	(new glm::vec4[maxSize]);
 	_particleVelocities.reset	(new glm::vec4[maxSize]);

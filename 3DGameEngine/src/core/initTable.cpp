@@ -247,6 +247,11 @@ void CompData::setAttribsToComponents()
 			addAttribf(light->getAtteunation().x); // Constant
 			addAttribf(light->getAtteunation().y); // Linear
 			addAttribf(light->getAtteunation().z); // Quadratic
+			addAttribf(light->getSpotDirection().x);
+			addAttribf(light->getSpotDirection().y);
+			addAttribf(light->getSpotDirection().z);
+			addAttribf(light->getSpotIn());
+			addAttribf(light->getSpotOut());
 			break;
 		}
 	
@@ -334,16 +339,21 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::LIGHT:
-		addAttribi(to_int(compElmnt,"lightType"));  // light type (0=dir, 1=point, 2=spot)
-		addAttribf(to_float(compElmnt,"dR")); // Diffuse x
-		addAttribf(to_float(compElmnt,"dG")); // Diffuse y
-		addAttribf(to_float(compElmnt,"dB")); // Diffuse z
-		addAttribf(to_float(compElmnt,"sR")); // Specular x
-		addAttribf(to_float(compElmnt,"sG")); // Specular y
-		addAttribf(to_float(compElmnt,"sB")); // Specular z
-		addAttribf(to_float(compElmnt,"constant")); // Constant
-		addAttribf(to_float(compElmnt,"linear")); // Linear
+		addAttribi(to_int(compElmnt,"lightType"));   // light type (0=dir, 1=point, 2=spot)
+		addAttribf(to_float(compElmnt,"dR"));		 // Diffuse x
+		addAttribf(to_float(compElmnt,"dG"));		 // Diffuse y
+		addAttribf(to_float(compElmnt,"dB"));		 // Diffuse z
+		addAttribf(to_float(compElmnt,"sR"));		 // Specular x
+		addAttribf(to_float(compElmnt,"sG"));		 // Specular y
+		addAttribf(to_float(compElmnt,"sB"));		 // Specular z
+		addAttribf(to_float(compElmnt,"constant"));  // Constant
+		addAttribf(to_float(compElmnt,"linear"));	 // Linear
 		addAttribf(to_float(compElmnt,"quadratic")); // Quadratic
+		addAttribf(to_float(compElmnt,"spotDirX"));  // Spot Dir X
+		addAttribf(to_float(compElmnt,"spotDirY"));  // Spot Dir Y
+		addAttribf(to_float(compElmnt,"spotDirZ"));  // Spot Dir Z
+		addAttribf(to_float(compElmnt,"spotIn"));	 // Inner Cutoff
+		addAttribf(to_float(compElmnt,"spotOut"));	 // Outter Cutoff
 		break;
 
 	case ComponentType::ANIMATION:
@@ -486,11 +496,19 @@ void CompData::initializeComponent()
 			float linear = getFloatAttrib(8);
 			float quadratic = getFloatAttrib(9);
 
-			
+			float dX = getFloatAttrib(10);
+			float dY = getFloatAttrib(11);
+			float dZ = getFloatAttrib(12);
+
+			float spotIn = getFloatAttrib(13);
+			float spotOut = getFloatAttrib(14);
 			light->setLightType(lightType);
 			light->setDiffuse(glm::vec3(dR,dG,dB));
 			light->setSpecular(glm::vec3(sR,sG,sB));
 			light->setAtteunation(glm::vec3(constant,linear,quadratic));
+			light->setSpotDirection(glm::vec3(dX,dY,dZ));
+			light->setSpotIn(spotIn);
+			light->setSpotOut(spotOut);
 		}
 		break;
 

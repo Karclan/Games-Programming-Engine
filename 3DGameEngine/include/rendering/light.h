@@ -27,19 +27,20 @@ public:
 	void linkDependency(SPtr_Component component);
 
 	void setLightType(LightType::Type type);
-
 	void setDiffuse(glm::vec3 diff);
 	void setSpecular(glm::vec3 specular);
-
 	void setAtteunation(glm::vec3 atten);
-	
+	void setSpotDirection(glm::vec3 dir);
+	void setSpotIn(float in);
+	void setSpotOut(float out);
 	LightType::Type getLightType(){return (LightType::Type)_type;}
 
 	glm::vec3 getDiffuse(){return _diffuse;}
 	glm::vec3 getSpecular(){return _specular;}
-	
 	glm::vec3 getAtteunation(){return _atteunation;}
-
+	glm::vec3 getSpotDirection(){return _spotDir;}
+	float getSpotIn() {return _spotIn;}
+	float getSpotOut(){return _spotOut;}
 	SPtr_Transform getTransform(){return _transform;}
 
 private:
@@ -55,6 +56,10 @@ private:
 	GLfloat _constant;
 	GLfloat _linear;
 	GLfloat _quadratic;
+
+	glm::vec3 _spotDir;
+	float _spotIn;
+	float _spotOut;
 };
 
 typedef std::shared_ptr<Light> SPtr_Light;
