@@ -24,9 +24,6 @@ ParticleRenderer::~ParticleRenderer()
 	glDeleteBuffers(1,&_particleColourBuffer);
 	glDeleteVertexArrays(1,&_vao);
 	_particleSystem.reset();
-	//circleEmitter.reset();
-	//_eulerUpdater.reset();
-
 	std::cout << "Particle Renderer End\n";
 }
 
@@ -71,21 +68,6 @@ void ParticleRenderer::generate(size_t particlePool)
 		_particleSystem->addUpdater(it);
 	}
 
-	/*circleEmitter.reset(new CircleEmitter());
-	circleEmitter->init(particlePool);
-	_particleSystem->addEmitter(circleEmitter);
-	auto timeUpdater = std::make_shared<BasicTimeUpdater>();
-	_particleSystem->addUpdater(timeUpdater);
-	auto colourUpdater = std::make_shared<BasicColourUpdater>();
-	_particleSystem->addUpdater(colourUpdater);
-	_eulerUpdater.reset(new EulerUpdater());
-	{
-		_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-15.0,0.0,0.0));
-	}
-	_particleSystem->addUpdater(_eulerUpdater);
-	_floorUpdater.reset(new FloorUpdater());
-	_particleSystem->addUpdater(_floorUpdater);*/
-
 	size_t count = _particleSystem->getParticleCount();
 
 	glGenVertexArrays(1,&_vao);
@@ -112,7 +94,6 @@ void ParticleRenderer::render(GLfloat* viewMatrix, GLfloat *projectionMatrix)
 {
 	if(!_generatedFlag)return;
 	if(!_renderFlag)return;
-	//if(_particleSystem->getParticleCount()<=0){return;}
 	_shader->useProgram();
 	glEnable(GL_PROGRAM_POINT_SIZE);
 
@@ -194,4 +175,12 @@ void ParticleRenderer::setEmitFlag(bool f)
 	if(_particleSystem!=nullptr)
 		_particleSystem->_emitFlag=f;
 }
-
+bool ParticleRenderer::getEmitFlag()
+{
+	if(_particleSystem!=nullptr)
+	return _particleSystem->_emitFlag;
+	else
+	{
+		return false;
+	}
+}

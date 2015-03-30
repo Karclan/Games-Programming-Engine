@@ -44,6 +44,9 @@ private:
 	unsigned int _jumpsLeft; //!< Jumps left for double jump
 	bool _jump;  //!< True when should jump next fixed frame
 
+	float _fireRate;
+	float _timer;
+	bool  _fire;
 	std::vector<SPtr_GameObject> _bullets; //!< List of bullet objects to shoot
 
 	void createBullets(int maxBullets);

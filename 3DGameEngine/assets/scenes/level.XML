@@ -70,6 +70,7 @@
 <GO name="PlayerTurret">
     <COMP type="1" mesh="turretTop.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="0" ty="0.65" tz="0" rx="0" ry="-0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+   <COMP type="11" />
 </GO>
 <GO name="Enemy">
     <COMP type="1" mesh="enemy.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="0.3" dG="0.2" dB="0.15" sR="1" sG="1" sB="1" specEx="64" />
@@ -77,6 +78,7 @@
     <COMP type="9" behvr="Enemy" />
     <COMP type="7" ex="3" ey="8.5" ez="3" ox="0" oy="0.5" oz="0" />
     <COMP type="4" />
+    <COMP type="11" />
 </GO>
 <GO name="testParticle">
   <COMP type="0" tx="7" ty="0.5" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />

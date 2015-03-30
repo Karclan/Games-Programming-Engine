@@ -44,7 +44,7 @@ void ParticleSystem::update(float dt)
 	{
 		for(auto _emitter : _emitters)
 		{
-			_emitter->emit(dt,&_particles);
+			if(_emitter!=nullptr)_emitter->emit(dt,&_particles);
 		}
 	}
 	for(size_t i = 0; i < _particleCount; ++i)

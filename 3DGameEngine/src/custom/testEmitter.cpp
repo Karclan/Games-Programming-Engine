@@ -45,9 +45,9 @@ void TestEmitter::initialize()
 	_particleRenderer->addUpdater(_timeUpdater);
 	_particleRenderer->addUpdater(_colourUpdater);
 	_particleRenderer->addUpdater(_eulerUpdater);
-	//_particleRenderer->addUpdater(_floorUpdater);
 
 	_particleRenderer->generate(10000);
+	_particleRenderer->resetParticles();
 }
 
 void TestEmitter::update(float t)

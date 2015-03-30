@@ -46,7 +46,10 @@ void RenderSystem::render(Camera* camera)
 
 	for(unsigned int i = 0; i < _particles.size(); ++i)
 	{
-		camera->render(*_particles[i]);
+		if(_particles[i]->isActive())
+		{
+			camera->render(*_particles[i]);
+		}
 	}
 	// Unbind vertex array - ensure nothing is left bound to opengl
 	glBindVertexArray(0);

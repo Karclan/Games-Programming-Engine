@@ -34,18 +34,22 @@ void PlayerController::initialize()
 	_turretOffset = glm::vec3(0, 0.65f, 0);
 	_turretRotation = 0;
 	_turretTurnSpeed = 180;
+
+	_fire=false;
+	_fireRate=0.3f;
+	_timer=0.f;
 }
 
 void PlayerController::update(float t)
 {
 	// Translate input to axes (fwd/back and left/right)
 	float axisX = 0;
-	if(Input::getKeyHeld(sf::Keyboard::A)) axisX = -1;
-	else if(Input::getKeyHeld(sf::Keyboard::D)) axisX = 1;
+	if(Input::getKeyHeld(sf::Keyboard::A)	  || Input::getJoystickAxisPosition(0,sf::Joystick::X)<=-50.f) axisX = -1;
+	else if(Input::getKeyHeld(sf::Keyboard::D)|| Input::getJoystickAxisPosition(0,sf::Joystick::X)>=50.f) axisX =  1;
 
 	float axisZ = 0;
-	if(Input::getKeyHeld(sf::Keyboard::W)) axisZ = 1;
-	else if(Input::getKeyHeld(sf::Keyboard::S)) axisZ = -1;
+	if(Input::getKeyHeld(sf::Keyboard::W) || Input::getJoystickAxisPosition(0,sf::Joystick::Y)<=-50.f) axisZ = 1;
+	else if(Input::getKeyHeld(sf::Keyboard::S)|| Input::getJoystickAxisPosition(0,sf::Joystick::Y)>=50.f) axisZ = -1;
 
 
 	// Calculate move vector based on fwd/back input axis
@@ -54,6 +58,10 @@ void PlayerController::update(float t)
 	// Set angular velocity (turn) based on left/right axis
 	_turn = -axisX * _turnSpeed;
 
+	if(Input::getJoystickAxisPosition(0,sf::Joystick::U)>=10.f||Input::getJoystickAxisPosition(0,sf::Joystick::U)<=-10.f)
+	{
+	_turretRotation -= t * Input::getJoystickAxisPosition(0,sf::Joystick::U);
+	}
 	// Set Turret Rotation
 	if(Input::getKeyHeld(sf::Keyboard::E))// && _turretRotation > -60)
 		_turretRotation -= _turretTurnSpeed * t;
@@ -64,7 +72,7 @@ void PlayerController::update(float t)
 
 	// Jump
 	if(_physBody->isGrounded()) _jumpsLeft = 2;
-	if((Input::getKeyPressed(sf::Keyboard::K) || Input::getKeyPressed(sf::Keyboard::Space))  && _jumpsLeft > 1) 
+	if((Input::getKeyPressed(sf::Keyboard::K) || Input::getKeyPressed(sf::Keyboard::Space) || Input::getJoystickButtonPressed(0,JoystickButtons::LB))  && _jumpsLeft > 1) 
 	{
 		glm::vec3 v = _physBody->getVelocity();
 		v.y = _jumpStrength;
@@ -75,13 +83,22 @@ void PlayerController::update(float t)
 	
 
 	// Shoot
-	if(Input::getKeyPressed(sf::Keyboard::L) || Input::getKeyPressed(sf::Keyboard::RShift)) 
+	if(Input::getKeyPressed(sf::Keyboard::L) || Input::getKeyPressed(sf::Keyboard::RShift)||Input::getJoystickButtonPressed(0,JoystickButtons::RB)) 
 	{
-		shootBullet();
+		//shootBullet();
+		_fire=true;
 	}
 
-	
-
+	if(_fire)
+	{
+		if(_timer>=_fireRate)
+		{
+			shootBullet();
+			_timer=0.f;
+			_fire=false;
+		}
+	}
+	_timer+=t;
 	// Animation
 	//if(axisV == 0) _robotAnim->stop();
 	//else _robotAnim->play();

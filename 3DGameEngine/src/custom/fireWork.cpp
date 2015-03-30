@@ -45,19 +45,14 @@ void Firework::initialize()
 	_colourUpdater.reset(new BasicColourUpdater());
 	_eulerUpdater.reset(new EulerUpdater());
 
-	//_floorUpdater.reset(new FloorUpdater());
-	//current suspicion about floor thing is that the actual "floor" it checks against
-	//is relative to the particle system's own coordiante system and not world positions
-
 	_eulerUpdater->setGlobalAcc(glm::vec4(0.0,-45.0,0.0,0.0));
 
 	_particleRenderer->clear();//clears updaters
 	_particleRenderer->addUpdater(_timeUpdater);
 	_particleRenderer->addUpdater(_colourUpdater);
 	_particleRenderer->addUpdater(_eulerUpdater);
-	//_particleRenderer->addUpdater(_floorUpdater);
 
-	_particleRenderer->generate(10000);
+	_particleRenderer->generate(100);
 	_particleRenderer->setEmitFlag(false);
 	_particleRenderer->resetParticles();
 }
