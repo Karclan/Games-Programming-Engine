@@ -17,6 +17,7 @@
     <COMP type="2" />
 </GO>
 <GO name="New Game Object">
-    <COMP type="1" mesh="plane.obj" shader="advanced" textureD="winrarTexture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="1" mesh="plane.obj" shader="advanced" textureD="gameoverTexture.png" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
     <COMP type="0" tx="0" ty="-1" tz="-15" rx="90" ry="-0" rz="0" sx="0.4" sy="0.2" sz="0.2" />
 </GO>
+

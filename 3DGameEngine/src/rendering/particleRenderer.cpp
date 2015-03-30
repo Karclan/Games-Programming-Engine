@@ -137,7 +137,6 @@ void ParticleRenderer::animate(float t)
 {
 	if(!_generatedFlag)return;
 	//if(_particleSystem->getParticleCount()<=0){return;}
-
 	if(_playFlag)
 	{
 		_particleSystem->update(t);
