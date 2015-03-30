@@ -204,7 +204,7 @@ bool MD5Model::LoadModel( const std::string &filename )
                         texturePath.append( ".tga" );
                     }
 
-                    mesh._TexID = SOIL_load_OGL_texture( texturePath.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS );
+                   // mesh._TexID = SOIL_load_OGL_texture( texturePath.c_str(), SOIL_LOAD_AUTO, SOIL_CREATE_NEW_ID, SOIL_FLAG_MIPMAPS );
                     mesh._Material = _DefaultMaterial;
 
                     file.ignore(fileLength, '\n' ); // Ignore everything else on the line
