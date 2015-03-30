@@ -42,6 +42,7 @@ private:
 	float _turn; //!< Amount to turn next fixed update
 
 	unsigned int _jumpsLeft; //!< Jumps left for double jump
+	bool _jump;  //!< True when should jump next fixed frame
 
 	std::vector<SPtr_GameObject> _bullets; //!< List of bullet objects to shoot
 

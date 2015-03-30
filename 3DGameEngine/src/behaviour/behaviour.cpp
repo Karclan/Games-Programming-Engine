@@ -4,12 +4,12 @@
 Behaviour::Behaviour()
 {
 	_initialized = false;
-	std::cout << "Behaviour Created!\n";
+	//std::cout << "Behaviour Created!\n";
 }
 
 Behaviour::~Behaviour()
 {
-	std::cout << "Behaviour Destroyed!\n";
+	//std::cout << "Behaviour Destroyed!\n";
 }
 
 void Behaviour::linkToObject(SPtr_GameObject gameObject)

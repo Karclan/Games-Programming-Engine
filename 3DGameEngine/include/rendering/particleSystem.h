@@ -21,10 +21,7 @@ public:
 	bool _emitFlag;
 
 	ParticleSystem(size_t maxCount);
-	virtual ~ParticleSystem()
-	{
-		_updaters.clear();
-	}
+	virtual ~ParticleSystem();
 	 
 	void clear();
     virtual void update(float t);

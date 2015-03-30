@@ -18,9 +18,9 @@ protected:
 	float _emitRate;
 	float _emitScalar;
 public:
-	ParticleEmitter(){_emitRate=0.0f;_emitScalar=0.0f;}
+	ParticleEmitter();
 
-	virtual ~ParticleEmitter(){}
+	virtual ~ParticleEmitter();
 	virtual Emitters::type getType(){return Emitters::BASEEMITTER;}
 
 	virtual void emit(float t, ParticleData *p);

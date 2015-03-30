@@ -11,7 +11,7 @@ GameObject::GameObject(unsigned int id, std::string name)
 
 GameObject::~GameObject()
 {
-	std::cout << "Game Object DeSTORYed lol\n";
+	//std::cout << "Game Object DeSTORYed lol\n";
 	removeFromSystem();
 }
 

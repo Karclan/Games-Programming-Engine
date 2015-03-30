@@ -6,6 +6,16 @@ PhysicsBody::PhysicsBody()
 
 	setOptionalDepFlag(ComponentType::SPHERE_COL); // cache collider if it exists
 
+	
+}
+
+PhysicsBody::~PhysicsBody()
+{
+	//std::cout << "PhysicsBody DESTORYED!\n";
+}
+
+void PhysicsBody::init()
+{
 	wakeUp();
 
 	_mass = 1.0f; // important - mass of zero would give divide by zero error...
@@ -13,11 +23,6 @@ PhysicsBody::PhysicsBody()
 	_gravity = -34; // probably has to be stupid high coz drag high. Friction?
 	_accel = glm::vec3(0, 0.01f, 0); // to ensure if it's in the air on startup it doesn't go to sleep because velocity is zero
 	_velocity = glm::vec3();
-}
-
-PhysicsBody::~PhysicsBody()
-{
-	std::cout << "PhysicsBody DESTORYED!\n";
 }
 
 ComponentType::Type PhysicsBody::getType()
