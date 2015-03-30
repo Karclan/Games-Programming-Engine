@@ -35,9 +35,13 @@ void PlayerController::initialize()
 	_turretRotation = 0;
 	_turretTurnSpeed = 180;
 
+
 	_fire=false;
 	_fireRate=0.3f;
 	_timer=0.f;
+	_life = 100;
+	_score = 0;
+
 }
 
 void PlayerController::update(float t)

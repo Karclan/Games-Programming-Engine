@@ -29,7 +29,7 @@ public:
 	void initialize(ObjectManager &objMngr, RenderSystem &rendSys);
 	
 	void clearScene(); //!< Clear current scene to start a new, blank scene
-	void loadFromXML(std::string filePath); //!< Load init table from xml file
+	bool loadFromXML(std::string filePath); //!< Load init table from xml file
 	void initFromInitTable(); //!< Initialize all components to their starting values
 	void saveToXML(std::string filePath); //!< Save from init table to XML
 
@@ -52,6 +52,7 @@ private:
 	void xmlAddCustom(TiXmlElement* go, std::string behvr);
 	void xmlAddAnimator(TiXmlElement* go, std::string animationPath);
 	void xmlAddTerrainCol(TiXmlElement* go);
+	void xmlAddGUI(TiXmlElement* go);
 
 	// saving scene params funcs
 	void xmlAddSceneLights(TiXmlElement* scene, glm::vec3 amb, glm::vec3 diff, glm::vec3 spec, glm::vec3 dir);

@@ -119,3 +119,10 @@ bool Behaviour::isActive()
 {
 	return _active;
 }
+
+
+void Behaviour::loadScene(std::string scene)
+{
+	_objMngrInt->_levelPath = scene;
+	_objMngrInt->_loadLevel = true;
+}

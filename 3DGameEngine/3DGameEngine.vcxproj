@@ -100,10 +100,12 @@
     <ClInclude Include="include\custom\customBehaviours.h" />
     <ClInclude Include="include\custom\enemy.h" />
     <ClInclude Include="include\custom\fireWork.h" />
+    <ClInclude Include="include\custom\levelController.h" />
     <ClInclude Include="include\custom\playerBullet.h" />
     <ClInclude Include="include\custom\playerController.h" />
     <ClInclude Include="include\custom\sparkEmitter.h" />
     <ClInclude Include="include\custom\testEmitter.h" />
+    <ClInclude Include="include\custom\titleScreen.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
     <ClInclude Include="include\physics\octTree.h" />
@@ -131,6 +133,7 @@
     <ClInclude Include="include\rendering\animator.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
+    <ClInclude Include="include\rendering\GUI.h" />
     <ClInclude Include="include\rendering\particleEmitters.h" />
     <ClInclude Include="include\rendering\light.h" />
     <ClInclude Include="include\rendering\material.h" />
@@ -171,10 +174,12 @@
     <ClCompile Include="src\custom\cameraController.cpp" />
     <ClCompile Include="src\custom\enemy.cpp" />
     <ClCompile Include="src\custom\fireWork.cpp" />
+    <ClCompile Include="src\custom\levelController.cpp" />
     <ClCompile Include="src\custom\playerBullet.cpp" />
     <ClCompile Include="src\custom\playerController.cpp" />
     <ClCompile Include="src\custom\sparkEmitter.cpp" />
     <ClCompile Include="src\custom\testEmitter.cpp" />
+    <ClCompile Include="src\custom\titleScreen.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />
@@ -189,6 +194,7 @@
     <ClCompile Include="src\rendering\animator.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\FTInterface.cpp" />
+    <ClCompile Include="src\rendering\GUI.cpp" />
     <ClCompile Include="src\rendering\light.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />

@@ -30,7 +30,9 @@ public:
 	void update(float t); //!< Call update on all in update list and intialize on new behaviours. t = deltat time
 	void fixedUpdate(float t); // t = fixed delta time
 	void lateUpdate(float t); // t = delta time
-
+	bool hasLevelToLoad();
+	std::string getLevelPath();
+	void resetLevelLoad();
 	
 private:
 	void loadBehaviour(SPtr_Custom custom); //!< Load behaviour requested by custom components

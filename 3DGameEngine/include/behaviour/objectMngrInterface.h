@@ -24,12 +24,14 @@ public:
 	~ObjectMngrInterface(){};
 
 	void setReferences(std::unordered_map<unsigned int, SPtr_GameObject> &gameObjects, std::set<SPtr_GameObject> &dynInitObjs);
+	
+
 
 //private:
 	const std::unordered_map<unsigned int, SPtr_GameObject>* _gameObjects; //!< Const Pointer to the map of game objects
 	std::set<SPtr_GameObject>* _dynInitdObjs; //!< Pointer to list of dynamically created objects that are waiting to be put into the system
-
-
+	bool _loadLevel;
+	std::string _levelPath;
 
 };
 

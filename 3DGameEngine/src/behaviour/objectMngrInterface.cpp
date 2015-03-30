@@ -5,6 +5,7 @@ ObjectMngrInterface::ObjectMngrInterface()
 {
 	_gameObjects = nullptr;
 	_dynInitdObjs = nullptr;
+	_loadLevel = false;
 }
 
 void ObjectMngrInterface::setReferences(std::unordered_map<unsigned int, SPtr_GameObject> &gameObjects, std::set<SPtr_GameObject> &dynInitObjs)

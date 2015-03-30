@@ -268,6 +268,11 @@ void CompData::setAttribsToComponents()
 			SPtr_TerrainCol terrain = std::static_pointer_cast<TerrainCollider>(_comp);
 			break;
 		}
+	case ComponentType::GUI:
+		{
+			SPtr_GUI gui = std::static_pointer_cast<GUI>(_comp);
+			break;
+		}
 	}
 }
 //----------
@@ -381,6 +386,9 @@ void CompData::setAttribsFromXML(TiXmlElement* compElmnt)
 		break;
 
 	case ComponentType::TERRAIN_COL:
+		break;
+
+	case ComponentType::GUI:
 		break;
 
 	}
@@ -546,6 +554,11 @@ void CompData::initializeComponent()
 	case ComponentType::TERRAIN_COL:
 		{
 			SPtr_TerrainCol custom = std::static_pointer_cast<TerrainCollider>(_comp);
+		}
+		break;
+	case ComponentType::GUI:
+		{
+			SPtr_GUI custom = std::static_pointer_cast<GUI>(_comp);
 		}
 		break;
 	}

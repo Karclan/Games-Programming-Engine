@@ -14,6 +14,7 @@
 #include "behaviour\behaviourSystem.h"
 #include "rendering\renderSystem.h"
 #include "rendering\light.h"
+#include "rendering\GUI.h"
 #include "physics\physicsSystem.h"
 #include "behaviour\custom.h"
 

@@ -23,6 +23,7 @@ void SceneManager::initFromInitTable()
 }
 
 
+
 //------------------------------------------------------------------
 //------------------------------------------------------------------
 
@@ -35,7 +36,7 @@ void SceneManager::clearScene()
 }
 
 // load from XML
-void SceneManager::loadFromXML(std::string filePath)
+bool SceneManager::loadFromXML(std::string filePath)
 {
 	// Ensure file name is ok
 	filePath = ASSETS_PATH + "scenes/" + filePath;
@@ -51,7 +52,7 @@ void SceneManager::loadFromXML(std::string filePath)
 	if(!doc.LoadFile())
 	{
 		std::cout << "Failed to load XML!\n\n\n";
-		return;
+		return false;
 	}
 
 	// Clear out old scene
@@ -159,6 +160,8 @@ void SceneManager::loadFromXML(std::string filePath)
 
 	// Initialize the scene
 	initFromInitTable();
+
+	return true;
 }
 
 
@@ -273,6 +276,10 @@ void SceneManager::saveToXML(std::string filePath)
 
 			case ComponentType::ANIMATION:
 				xmlAddAnimator(go, compData->getStringAttrib(0));
+				break;
+
+			case ComponentType::GUI:
+				xmlAddGUI(go);
 				break;
 			}
 		}
@@ -435,6 +442,14 @@ void SceneManager::xmlAddTerrainCol(TiXmlElement* go)
 	TiXmlElement* terrainColElmnt = new TiXmlElement("COMP"); // Component Element
 	terrainColElmnt->SetAttribute("type", ComponentType::TERRAIN_COL); // Set type attrib
 	go->LinkEndChild(terrainColElmnt); // Add element to file, this auto cleans up pointer as well
+
+}
+
+void SceneManager::xmlAddGUI(TiXmlElement* go)
+{
+	TiXmlElement* guiElmnt = new TiXmlElement("COMP"); // Component Element
+	guiElmnt->SetAttribute("type", ComponentType::GUI); // Set type attrib
+	go->LinkEndChild(guiElmnt); // Add element to file, this auto cleans up pointer as well
 
 }
 

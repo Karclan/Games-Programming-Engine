@@ -23,6 +23,7 @@
 #include "rendering\robotRenderer.h"
 #include "behaviour\custom.h"
 #include "rendering\animator.h"
+#include "rendering\GUI.h"
 
 /*! \brief Data object for attributes
 */

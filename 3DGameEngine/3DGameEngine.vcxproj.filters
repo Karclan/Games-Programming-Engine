@@ -253,6 +253,15 @@
     <ClInclude Include="include\custom\sparkEmitter.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
+    <ClInclude Include="include\custom\levelController.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
+    <ClInclude Include="include\rendering\GUI.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custom\titleScreen.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -424,6 +433,15 @@
       <Filter>Source Files\core</Filter>
     </ClCompile>
     <ClCompile Include="src\custom\sparkEmitter.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\levelController.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\rendering\GUI.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\titleScreen.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>

@@ -20,12 +20,29 @@ bool BehaviourSystem::addBehaviour(SPtr_Behaviour behaviour)
 }
 
 
+bool BehaviourSystem::hasLevelToLoad()
+{
+	return _objMngrInt->_loadLevel;
+}
+
+std::string BehaviourSystem::getLevelPath()
+{
+	return _objMngrInt->_levelPath;
+}
+
+
 bool BehaviourSystem::addCustom(SPtr_Custom custom)
 {
 	if(!custom) return false;
 	_customList.push_back(custom);
 	_behvrsHaveBeenRequested = true;
 	return true;
+}
+
+void BehaviourSystem::resetLevelLoad()
+{
+	_objMngrInt->_levelPath = "";
+	_objMngrInt->_loadLevel = false;
 }
 
 
@@ -41,7 +58,7 @@ void BehaviourSystem::initGame()
 	_fixedUpdateList.clear();
 	_lateUpdateList.clear();
 
-	
+	resetLevelLoad();
 	
 	_behvrsHaveBeenRequested = true;
 }
