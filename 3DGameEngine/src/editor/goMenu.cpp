@@ -325,9 +325,9 @@ void GoMenu::refreshTweakBar()
 				TwAddVarRW(_myBar, &(id+"rx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Transform label=rx");
 				TwAddVarRW(_myBar, &(id+"ry")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Transform label=ry");
 				TwAddVarRW(_myBar, &(id+"rz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Transform label=rz");
-				TwAddVarRW(_myBar, &(id+"sx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform label=sx");
-				TwAddVarRW(_myBar, &(id+"sy")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform label=sy");
-				TwAddVarRW(_myBar, &(id+"sz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform label=sz");
+				TwAddVarRW(_myBar, &(id+"sx")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Transform label=sx step=0.1");
+				TwAddVarRW(_myBar, &(id+"sy")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Transform label=sy step=0.1");
+				TwAddVarRW(_myBar, &(id+"sz")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(8), "group=Transform label=sz step=0.1");
 
 				break;
 			
@@ -338,31 +338,31 @@ void GoMenu::refreshTweakBar()
 
 				
 			case ComponentType::BOX_COL:
-				TwAddVarRW(_myBar, &(id+"X extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col label=X_extent");
-				TwAddVarRW(_myBar, &(id+"Y extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col label=Y_extent");
-				TwAddVarRW(_myBar, &(id+"Z extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col label=Z_extent");
-				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col label=X_offset");
-				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col label=Y_offset");
-				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col label=Z_offset");
+				TwAddVarRW(_myBar, &(id+"X extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Box_Col label=X_extent step=0.1");
+				TwAddVarRW(_myBar, &(id+"Y extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Box_Col label=Y_extent step=0.1");
+				TwAddVarRW(_myBar, &(id+"Z extent")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Box_Col label=Z_extent step=0.1");
+				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Box_Col label=X_offset step=0.1");
+				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(4), "group=Box_Col label=Y_offset step=0.1");
+				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(5), "group=Box_Col label=Z_offset step=0.1");
 				
 				break;
 
 			case ComponentType::LIGHT:
 		
 				TwAddVarRW(_myBar, &(id+"Light Type")[0], TW_TYPE_INT16, compData->attribPtrInt(0),			"group=Light label=Point_Light");
-				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(1),		"group=Light label=Diffuse_R");
-				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(2),		"group=Light label=Diffuse_G");
-				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(3),		"group=Light label=Diffuse_B");
-				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(4),		"group=Light label=Specular_R");
-				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(5),		"group=Light label=Specular_G");
-				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(6),		"group=Light label=Specular_B");
-				TwAddVarRW(_myBar, &(id+"Attenuation C")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(7),		"group=Light label=Attenuation_C");
-				TwAddVarRW(_myBar, &(id+"Attenuation L")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(8),		"group=Light label=Attenuation_L");
-				TwAddVarRW(_myBar, &(id+"Attenuation Q")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(9),		"group=Light label=Attenuation_Q");
+				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(1),		"group=Light label=Diffuse_R step=0.1");
+				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(2),		"group=Light label=Diffuse_G step=0.1");
+				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(3),		"group=Light label=Diffuse_B step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(4),		"group=Light label=Specular_R step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(5),		"group=Light label=Specular_G step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(6),		"group=Light label=Specular_B step=0.1");
+				TwAddVarRO(_myBar, &(id+"Attenuation C")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(7),		"group=Light label=Attenuation_C");
+				TwAddVarRW(_myBar, &(id+"Attenuation L")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(8),		"group=Light label=Attenuation_L step=0.01");
+				TwAddVarRW(_myBar, &(id+"Attenuation Q")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(9),		"group=Light label=Attenuation_Q step=0.001");
 				TwAddSeparator(_myBar,&(id+"seperator")[0],NULL);
-				TwAddVarRW(_myBar, &(id+"Direction X")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(10),	"group=Light label=Direction_X");
-				TwAddVarRW(_myBar, &(id+"Direction Y")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11),	"group=Light label=Direction_Y");
-				TwAddVarRW(_myBar, &(id+"Direction Z")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12),	"group=Light label=Direction_Z");
+				TwAddVarRW(_myBar, &(id+"Direction X")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(10),	"group=Light label=Direction_X step=0.1");
+				TwAddVarRW(_myBar, &(id+"Direction Y")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11),	"group=Light label=Direction_Y step=0.1");
+				TwAddVarRW(_myBar, &(id+"Direction Z")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12),	"group=Light label=Direction_Z step=0.1");
 				TwAddVarRW(_myBar, &(id+"SpotIn")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(13),	"group=Light label=Inner_cutoff");
 				TwAddVarRW(_myBar, &(id+"SpotOut")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(14),	"group=Light label=Outer_cutoff");
 				
@@ -377,12 +377,12 @@ void GoMenu::refreshTweakBar()
 				TwAddVarRW(_myBar, &(id+"Height Texture File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(5), "group=Model_Render label=Height_Texture_File_Path");
 				TwAddVarRW(_myBar, &(id+"UV Tile X")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(6), "group=Model_Render label=UV_Tile_X");
 				TwAddVarRW(_myBar, &(id+"UV Tile Y")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(7), "group=Model_Render label=UV_Tile_Y");
-				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(8), "group=Model_Render label=Diffuse_R");
-				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(9), "group=Model_Render label=Diffuse_G");
-				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(10), "group=Model_Render label=Diffuse_B");
-				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11), "group=Model_Render label=Specular_R");
-				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12), "group=Model_Render label=Specular_G");
-				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(13), "group=Model_Render label=Specular_B");
+				TwAddVarRW(_myBar, &(id+"Diffuse R")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(8), "group=Model_Render label=Diffuse_R step=0.1");
+				TwAddVarRW(_myBar, &(id+"Diffuse G")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(9), "group=Model_Render label=Diffuse_G step=0.1");
+				TwAddVarRW(_myBar, &(id+"Diffuse B")[0], TW_TYPE_FLOAT,	compData->attribPtrFloat(10), "group=Model_Render label=Diffuse_B step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular R")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(11), "group=Model_Render label=Specular_R step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular G")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(12), "group=Model_Render label=Specular_G step=0.1");
+				TwAddVarRW(_myBar, &(id+"Specular B")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(13), "group=Model_Render label=Specular_B step=0.1");
 				TwAddVarRW(_myBar, &(id+"Specular Exponent")[0], TW_TYPE_FLOAT,compData->attribPtrFloat(14), "group=Model_Render label=Specular_Ex");
 				break;
 
@@ -406,7 +406,7 @@ void GoMenu::refreshTweakBar()
 				break; 
 
 			case ComponentType::SPHERE_COL:
-				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius");
+				TwAddVarRW(_myBar, &(id+"Radius")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(0), "group=Sphere_Col label=Radius step=0.1");
 				TwAddVarRW(_myBar, &(id+"X offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(1), "group=Sphere_Col label=X_offset");
 				TwAddVarRW(_myBar, &(id+"Y offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(2), "group=Sphere_Col label=Y_offset");
 				TwAddVarRW(_myBar, &(id+"Z offset")[0], TW_TYPE_FLOAT, compData->attribPtrFloat(3), "group=Sphere_Col label=Z_offset");
