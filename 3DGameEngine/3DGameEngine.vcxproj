@@ -98,6 +98,7 @@
     <ClInclude Include="include\behaviour\objectMngrInterface.h" />
     <ClInclude Include="include\custom\cameraController.h" />
     <ClInclude Include="include\custom\customBehaviours.h" />
+    <ClInclude Include="include\custom\endScreen.h" />
     <ClInclude Include="include\custom\enemy.h" />
     <ClInclude Include="include\custom\fireWork.h" />
     <ClInclude Include="include\custom\levelController.h" />
@@ -172,6 +173,7 @@
     <ClCompile Include="src\core\sceneManager.cpp" />
     <ClCompile Include="src\core\transform.cpp" />
     <ClCompile Include="src\custom\cameraController.cpp" />
+    <ClCompile Include="src\custom\endScreen.cpp" />
     <ClCompile Include="src\custom\enemy.cpp" />
     <ClCompile Include="src\custom\fireWork.cpp" />
     <ClCompile Include="src\custom\levelController.cpp" />

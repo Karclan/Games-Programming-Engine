@@ -11,6 +11,7 @@
 #include "custom\enemy.h"
 #include "custom\levelController.h"
 #include "custom\titleScreen.h"
+#include "custom\endScreen.h"
 
 class CustomBehaviours
 {
@@ -26,6 +27,7 @@ public:
 		if(name == "Enemy") return SPtr_Behaviour(new Enemy());
 		if(name == "LevelController") return SPtr_Behaviour(new LevelController());
 		if(name == "Title") return SPtr_Behaviour(new TitleScreen());
+		if(name == "EndScreen") return SPtr_Behaviour(new EndScreen());
 		return SPtr_Behaviour(nullptr);
 	}
 

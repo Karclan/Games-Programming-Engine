@@ -28,10 +28,9 @@ void LevelController::update(float t)
 	_gui->updateMessage(0, "Life: " + std::to_string(_player->getLife()));
 	_gui->updateMessage(1, "Score: " + std::to_string(_player->getScore()));
 
-	if(_player->getLife() <= 0) {_gui->setRender(2, true);}
-	if(_player->getScore() >= 100) {_gui->setRender(3, true);}
-	if(_player->getScore() <= 100) {_gui->setRender(3, false);}
-
+	if(_player->getLife() <= 0) {loadScene("gameFailed.XML");}
+	if(_player->getScore() >= 100) {loadScene("gameComplete.XML");}
+	
 }
 
 
