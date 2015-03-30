@@ -17,8 +17,18 @@
 class PlayerController : public Behaviour
 {
 public:
-	PlayerController(){};
+	PlayerController()
+	{
+		test = "Hello from player\n";
+	};
 	~PlayerController(){};
+
+	std::string test;
+
+	int getScore() { return _score; }
+	int getLife() { return _life; }
+	void addScore(int s) {_score += s;}
+	void deductLife(int l) {_life -= l;}
 
 protected:
 	void initialize();
@@ -40,6 +50,9 @@ private:
 
 	glm::vec3 _move; //!< Amount of force to add next fixed update
 	float _turn; //!< Amount to turn next fixed update
+
+	int _life;
+	int _score;
 
 	unsigned int _jumpsLeft; //!< Jumps left for double jump
 

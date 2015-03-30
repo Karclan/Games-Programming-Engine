@@ -52,6 +52,11 @@ void RenderSystem::render(Camera* camera)
 	glBindVertexArray(0);
 	
 
+	for(int i = 0; i < _gui.size(); ++i)
+	{
+		_gui[i]->render();
+	}
+
 }
 
 
@@ -96,6 +101,14 @@ void RenderSystem::addAnimator(SPtr_Animator anim)
 	_animators.push_back(anim);
 
 }
+
+void RenderSystem::addGUI(SPtr_GUI gui)
+{
+
+	_gui.push_back(gui);
+
+}
+
 
 // Default lighting values
 void RenderSystem::setLightDefaults()
@@ -315,6 +328,20 @@ void RenderSystem::removeCamera(SPtr_Camera camera)
 		if(*it == camera)
 		{
 			_cameras.erase(it);
+			return;
+		}
+	}
+}
+
+// Remove Objects
+void RenderSystem::removeGUI(SPtr_GUI gui)
+{
+	std::vector<SPtr_GUI>::iterator it = _gui.begin();
+	for(it; it != _gui.end(); ++it)
+	{
+		if(*it == gui)
+		{
+			_gui.erase(it);
 			return;
 		}
 	}

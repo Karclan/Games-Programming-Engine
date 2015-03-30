@@ -34,6 +34,9 @@ void PlayerController::initialize()
 	_turretOffset = glm::vec3(0, 0.65f, 0);
 	_turretRotation = 0;
 	_turretTurnSpeed = 180;
+
+	_life = 100;
+	_score = 0;
 }
 
 void PlayerController::update(float t)

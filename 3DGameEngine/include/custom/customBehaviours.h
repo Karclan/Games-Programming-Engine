@@ -9,6 +9,7 @@
 #include "custom\firework.h"
 #include "custom\playerBullet.h"
 #include "custom\enemy.h"
+#include "custom\levelController.h"
 
 class CustomBehaviours
 {
@@ -22,6 +23,7 @@ public:
 		if(name == "Firework")	  return SPtr_Behaviour(new Firework());
 		if(name == "PlayerBullet") return SPtr_Behaviour(new PlayerBullet());
 		if(name == "Enemy") return SPtr_Behaviour(new Enemy());
+		if(name == "LevelController") return SPtr_Behaviour(new LevelController());
 		return SPtr_Behaviour(nullptr);
 	}
 
