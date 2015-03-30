@@ -256,6 +256,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	case ComponentType::CUSTOM:			newComponent.reset(new Custom());	break;
 	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
 	case ComponentType::ANIMATION:		newComponent.reset(new Animator());			break;
+	case ComponentType::GUI:			newComponent.reset(new GUI());				break;
 	}
 
 	if(!newComponent) return false; // failed to create component, something went wrong!
@@ -329,6 +330,10 @@ void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent, unsign
 	case ComponentType::ANIMATION:
 		_rendSys->addAnimator(std::static_pointer_cast<Animator>(newComponent));
 		break;
+
+	case ComponentType::GUI:
+		_rendSys->addGUI(std::static_pointer_cast<GUI>(newComponent));
+		break;
 	}
 
 }
@@ -370,6 +375,10 @@ void ObjectManager::removeComponentFromSubsystems(SPtr_Component component)
 
 	case ComponentType::ANIMATION:
 		_rendSys->removeAnimator(std::static_pointer_cast<Animator>(component));
+		break;
+
+	case ComponentType::GUI:
+		_rendSys->removeGUI(std::static_pointer_cast<GUI>(component));
 		break;
 	}
 	

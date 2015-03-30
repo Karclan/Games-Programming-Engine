@@ -94,12 +94,13 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.h" />
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.h" />
     <ClInclude Include="include\behaviour\custom.h" />
     <ClInclude Include="include\behaviour\objectMngrInterface.h" />
     <ClInclude Include="include\custom\cameraController.h" />
     <ClInclude Include="include\custom\customBehaviours.h" />
+    <ClInclude Include="include\custom\enemy.h" />
+    <ClInclude Include="include\custom\levelController.h" />
+    <ClInclude Include="include\custom\playerBullet.h" />
     <ClInclude Include="include\custom\playerController.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
@@ -128,6 +129,7 @@
     <ClInclude Include="include\rendering\animator.h" />
     <ClInclude Include="include\rendering\camera.h" />
     <ClInclude Include="include\rendering\FTInterface.h" />
+    <ClInclude Include="include\rendering\GUI.h" />
     <ClInclude Include="include\rendering\particleEmitters.h" />
     <ClInclude Include="include\rendering\light.h" />
     <ClInclude Include="include\rendering\material.h" />
@@ -150,8 +152,6 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.cpp" />
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
     <ClCompile Include="src\behaviour\objectMngrInterface.cpp" />
@@ -167,6 +167,9 @@
     <ClCompile Include="src\core\sceneManager.cpp" />
     <ClCompile Include="src\core\transform.cpp" />
     <ClCompile Include="src\custom\cameraController.cpp" />
+    <ClCompile Include="src\custom\enemy.cpp" />
+    <ClCompile Include="src\custom\levelController.cpp" />
+    <ClCompile Include="src\custom\playerBullet.cpp" />
     <ClCompile Include="src\custom\playerController.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />
@@ -182,6 +185,7 @@
     <ClCompile Include="src\rendering\animator.cpp" />
     <ClCompile Include="src\rendering\camera.cpp" />
     <ClCompile Include="src\rendering\FTInterface.cpp" />
+    <ClCompile Include="src\rendering\GUI.cpp" />
     <ClCompile Include="src\rendering\light.cpp" />
     <ClCompile Include="src\rendering\material.cpp" />
     <ClCompile Include="src\rendering\mesh.cpp" />

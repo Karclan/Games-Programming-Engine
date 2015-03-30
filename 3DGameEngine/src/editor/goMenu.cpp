@@ -103,6 +103,13 @@ static void TW_CALL addTerrainColComponent(void *clientData)
 	goMenu->addComponent(ComponentType::TERRAIN_COL);
 }
 
+static void TW_CALL addGUIComponent(void *clientData)
+{
+	GoMenu* goMenu = (GoMenu*)clientData;
+
+	goMenu->addComponent(ComponentType::GUI);
+}
+
 void GoMenu::addComponent(ComponentType::Type type)
 {
 	_objectMngr->addComponent(_selectedObjectID, type);
@@ -279,6 +286,7 @@ void GoMenu::refreshTweakBar()
 		TwAddButton(_addCompBar, "addCustom", addCustomComponent, this, "");
 		TwAddButton(_addCompBar, "addTerrainCol", addTerrainColComponent, this, "");
 		TwAddButton(_addCompBar, "addAnimation", addAnimationComponent, this, "");
+		TwAddButton(_addCompBar, "addGUI", addGUIComponent, this, "");
 		
 
 		// Now link all component vars
@@ -392,6 +400,10 @@ void GoMenu::refreshTweakBar()
 
 			case ComponentType::ANIMATION:
 				TwAddVarRW(_myBar, &(id+"Animation File Path")[0], TW_TYPE_STDSTRING, compData->attribPtrString(0), "group=Animation label=Animation_File_Path");
+				break;
+
+			case ComponentType::GUI:
+				TwAddVarRO(_myBar, &(id+"placeholder")[0], TW_TYPE_STDSTRING, &_noAttribs, "group=GUI label=GUI");
 				break;
 			}
 

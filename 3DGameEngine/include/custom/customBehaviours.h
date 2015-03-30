@@ -6,6 +6,8 @@
 #include "custom\playerController.h"
 #include "custom\cameraController.h"
 #include "custom\playerBullet.h"
+#include "custom\enemy.h"
+#include "custom\levelController.h"
 
 class CustomBehaviours
 {
@@ -16,6 +18,8 @@ public:
 		if(name == "Player") return SPtr_Behaviour(new PlayerController());
 		if(name == "Camera") return SPtr_Behaviour(new CameraController());
 		if(name == "PlayerBullet") return SPtr_Behaviour(new PlayerBullet());
+		if(name == "Enemy") return SPtr_Behaviour(new Enemy());
+		if(name == "LevelController") return SPtr_Behaviour(new LevelController());
 		return SPtr_Behaviour(nullptr);
 	}
 

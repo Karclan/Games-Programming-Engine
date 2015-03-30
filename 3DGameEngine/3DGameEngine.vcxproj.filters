@@ -238,10 +238,16 @@
     <ClInclude Include="include\custom\playerController.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.h">
+    <ClInclude Include="include\rendering\GUI.h">
+      <Filter>Header Files\rendering</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custom\enemy.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.h">
+    <ClInclude Include="include\custom\playerBullet.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custom\levelController.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
   </ItemGroup>
@@ -399,10 +405,16 @@
     <ClCompile Include="src\custom\playerController.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.cpp">
+    <ClCompile Include="src\rendering\GUI.cpp">
+      <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\enemy.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.cpp">
+    <ClCompile Include="src\custom\playerBullet.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\levelController.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>

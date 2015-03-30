@@ -11,6 +11,7 @@
 #include "rendering\animator.h"
 #include "rendering\particleRenderer.h"
 #include "rendering\FTInterface.h"
+#include "rendering\GUI.h"
 
 
 /*! \brief Render Sub-System
@@ -36,11 +37,13 @@ public:
 	void addAnimator(SPtr_Animator anim); 
 	void addParticleSystem(SPtr_ParticleRend particle);
 
+	void addGUI(SPtr_GUI gui);
+
 	void removeCamera(SPtr_Camera camera); //!< Remove Camera from system
 	void removeLight(SPtr_Light light);
 	void removeRenderObject(SPtr_Renderer renderer); //!< Remove Renderer
 	void removeAnimator(SPtr_Animator anim);  //!< Remove a given animator
-	
+	void removeGUI(SPtr_GUI gui);
 
 	void setLightDefaults(); //!< Set default values for the global light params
 
@@ -75,6 +78,8 @@ private:
 	std::vector<SPtr_Renderer> _particles; //!< All the particle systems to be renderered each frame, these are done after all other renderering to allow for correct transparency
 
 	std::vector<SPtr_Animator> _animators; //!< All the anims
+
+	std::vector<SPtr_GUI> _gui;
 
 	std::vector<SPtr_Light>    _pointLights; //!< All the lights in the scene
 	std::vector<SPtr_Light>    _spotLights;
