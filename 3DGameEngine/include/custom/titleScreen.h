@@ -1,5 +1,5 @@
-#ifndef LEVEL_CONTROLLER_H
-#define LEVEL_CONTROLLER_H
+#ifndef TITLE_SCREEN_H
+#define TITLE_SCREEN_H
 
 #include "behaviour\behaviour.h"
 #include "physics\physicsBody.h"
@@ -14,11 +14,11 @@
 
 */
 
-class LevelController : public Behaviour
+class TitleScreen : public Behaviour
 {
 public:
-	LevelController(){};
-	~LevelController(){};
+	TitleScreen(){};
+	~TitleScreen(){};
 
 protected:
 	void initialize();
@@ -26,8 +26,7 @@ protected:
 	void update(float t); //!< Update function;
 
 private:
-	PlayerController* _player;
-	SPtr_GUI _gui;
+
 
 };
 

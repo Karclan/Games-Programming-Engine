@@ -31,7 +31,7 @@ void LevelController::update(float t)
 	if(_player->getLife() <= 0) {_gui->setRender(2, true);}
 	if(_player->getScore() >= 100) {_gui->setRender(3, true);}
 	if(_player->getScore() <= 100) {_gui->setRender(3, false);}
-	
+
 }
 
 

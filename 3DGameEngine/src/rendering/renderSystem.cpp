@@ -239,6 +239,8 @@ void RenderSystem::clear()
 	_animators.clear();
 	_pointLights.clear();
 	_spotLights.clear();
+	_particles.clear();
+	_gui.clear();
 }
 
 void RenderSystem::activateLights()
