@@ -4,6 +4,7 @@
 BehaviourSystem::BehaviourSystem()
 {
 	_objMngrInt = nullptr;
+	_behvrsHaveBeenRequested = false;
 }
 
 BehaviourSystem::~BehaviourSystem()
@@ -23,9 +24,27 @@ bool BehaviourSystem::addCustom(SPtr_Custom custom)
 {
 	if(!custom) return false;
 	_customList.push_back(custom);
+	_behvrsHaveBeenRequested = true;
 	return true;
 }
 
+
+void BehaviourSystem::initGame()
+{
+	for(int i = 0; i <_customList.size(); ++i)
+	{
+		_customList[i]->reset();
+	}
+
+	_initializeList.clear();
+	_updateList.clear();
+	_fixedUpdateList.clear();
+	_lateUpdateList.clear();
+
+	
+	
+	_behvrsHaveBeenRequested = true;
+}
 
 
 void BehaviourSystem::clear()
@@ -34,18 +53,21 @@ void BehaviourSystem::clear()
 	_initializeList.clear();
 	_updateList.clear();
 	_fixedUpdateList.clear();
+	_lateUpdateList.clear();
 }
 
 
 void BehaviourSystem::update(float t)
 {
 	// LOAD REQUESTED BEHAVIOURS
-	for(int i = 0; i <_customList.size(); ++i)
+	if(_behvrsHaveBeenRequested)
 	{
-		if(_customList[i]->requestBehaviour())
+		for(int i = 0; i <_customList.size(); ++i)
 		{
-			loadBehaviour(_customList[i]);
+			if(_customList[i]->requestBehaviour())
+				loadBehaviour(_customList[i]);
 		}
+		_behvrsHaveBeenRequested = false;
 	}
 
 
@@ -75,7 +97,7 @@ void BehaviourSystem::update(float t)
 	// Call update on any behaviours in the update list
 	for(signed int i = _updateList.size()-1; i >= 0; i--)
 	{
-		if(!_updateList[i]->baseUpdate(t)) _updateList.erase(_updateList.begin()+i);
+		_updateList[i]->baseUpdate(t);
 	}
 }
 
@@ -178,5 +200,47 @@ void BehaviourSystem::lateUpdate(float t)
 // Remove
 void BehaviourSystem::removeCustom(SPtr_Custom custom)
 {
-	// TO DO
+	SPtr_Behaviour behave = custom->getBehaviour();
+
+	// Remove custom
+	std::vector<SPtr_Custom>::iterator it = _customList.begin();
+	for(it; it != _customList.end(); ++it)
+	{
+		if(*it == custom)
+		{
+			_customList.erase(it);
+			break;;
+		}
+	}
+
+	// Remove behaviour
+	removeFromList(behave, _initializeList);
+	removeFromList(behave, _updateList);
+	removeFromList(behave, _fixedUpdateList);
+	removeFromList(behave, _lateUpdateList);
+}
+
+
+void BehaviourSystem::removeFromList(SPtr_Behaviour toRemove, std::vector<SPtr_Behaviour> &list)
+{
+	std::vector<SPtr_Behaviour>::iterator it = list.begin();
+	for(it; it != list.end(); ++it)
+	{
+		if(*it == toRemove)
+		{
+			list.erase(it);
+			return;
+		}
+	}
+}
+
+
+void BehaviourSystem::fromListToInitList(std::vector<SPtr_Behaviour> &list)
+{
+	std::vector<SPtr_Behaviour>::iterator it = list.begin();
+	for(it; it != list.end(); ++it)
+	{
+		_initializeList.push_back(*it);
+	}
+	list.clear();
 }

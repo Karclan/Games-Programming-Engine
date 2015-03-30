@@ -2,8 +2,9 @@
 
 ObjectManager::ObjectManager()
 {
-	_nextId = 0;
-	_nextDynamicId = 0;
+	// Note ID 0 is reserved for checks to see if ID has been set or not.
+	_nextId = 1;
+	_nextDynamicId = 1;
 }
 
 
@@ -26,7 +27,6 @@ void ObjectManager::initGame()
 	{
 		if(it->second.get()->getCreatedDyn())
 		{
-			it->second.get()->removeFromSystem();
 			dynObjs.push_back(it->first); // get ID of every dynamically created object
 		}
 	}
@@ -42,12 +42,17 @@ void ObjectManager::initGame()
 			removeComponentFromSubsystems(comps->at(j));
 		}
 
+		// Note calls this because HAS to destroy behaviours or else they'll reference object so object will never be destroyed
+		it->second->removeFromSystem();
+
 		// Remove Game Object from system
 		_gameObjects.erase(it);
 	}
 }
 
 
+
+// Called every frame from Engine. If there are dynamically created objects, they are added to the system
 void ObjectManager::initDynamicObjects()
 {
 	if(_dynInitObjs.size() == 0) return;
@@ -63,7 +68,7 @@ void ObjectManager::initDynamicObjects()
 		const std::vector<SPtr_Component>* components = it->get()->getComponents();
 		for(int i = 0; i < components->size(); ++i)
 		{
-			addComponentToSubsystems(components->at(i));
+			addComponentToSubsystems(components->at(i), _nextDynamicId);
 		}
 
 		// Link components
@@ -159,7 +164,7 @@ void ObjectManager::destroyAll()
 	_physicsSys->clear();
 	_behvrSys->clear();
 	_gameObjects.clear();
-	_nextId = 0;
+	_nextId = 1;
 }
 
 
@@ -241,14 +246,14 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	{
 	case ComponentType::TRANSFORM:		newComponent.reset(new Transform());		break;
 	case ComponentType::MODL_REND:		newComponent.reset(new ModelRenderer());	break;
-	case ComponentType::PARTICLE_REND: newComponent.reset(new ParticleRenderer()); break;
+	case ComponentType::PARTICLE_REND:  newComponent.reset(new ParticleRenderer()); break;
 	case ComponentType::CAMERA:			newComponent.reset(new Camera());			break;
 	case ComponentType::ROB_REND:		newComponent.reset(new RobotRenderer());	break;
 	case ComponentType::PHY_BODY:		newComponent.reset(new PhysicsBody());		break;
 	case ComponentType::LIGHT:			newComponent.reset(new Light());			break;
 	case ComponentType::SPHERE_COL:		newComponent.reset(new SphereCollider());	break;
 	case ComponentType::BOX_COL:		newComponent.reset(new BoxCollider());		break;
-	case ComponentType::CUSTOM:			newComponent.reset(new Custom(objectID));	break;
+	case ComponentType::CUSTOM:			newComponent.reset(new Custom());	break;
 	case ComponentType::TERRAIN_COL:	newComponent.reset(new TerrainCollider());	break;
 	case ComponentType::ANIMATION:		newComponent.reset(new Animator());			break;
 	}
@@ -259,7 +264,7 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 	if(!gameObject->addComponent(newComponent)) return false; // this will happen if, for example, can only have one of them and object already has one
 
 
-	addComponentToSubsystems(newComponent);
+	addComponentToSubsystems(newComponent, objectID);
 
 	// Add to init table
 	CompData newData(newComponent);
@@ -274,7 +279,6 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 		inTab_it =_initTable.find(objectID);
 	}
 	GOData* goData = &inTab_it->second;
-	std::cout << goData->components.size();
 	goData->components.push_back(newData);
 
 	return true;
@@ -282,8 +286,10 @@ bool ObjectManager::addUnlinkedComponent(unsigned int objectID, ComponentType::T
 
 
 // Note - split this up from addComponent function so can be used for dynamic objetcs as well
-void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent)
+void ObjectManager::addComponentToSubsystems(SPtr_Component newComponent, unsigned int goID)
 {
+	newComponent->setGoID(goID);
+
 	// !-WHEN MAKING NEW COMPONENTS : TO DO - Add sending your component to subsystems in this switch statement-!
 	// Add to subsystems based on type
 	switch(newComponent->getType())

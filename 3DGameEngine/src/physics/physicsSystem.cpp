@@ -13,6 +13,9 @@ PhysicsSystem::PhysicsSystem()
 
 void PhysicsSystem::init()
 {
+	// Clear Dynamic OctTree (ststic will be done automatically when it is created
+	_dynamicOctTree.clear();
+
 	// Ensure all colliders are in unsorted colliders
 	for(int i = 0; i < _dynamicColliders.size(); ++i)
 		_unsortedColliders.push_back(_dynamicColliders[i]);
@@ -51,6 +54,9 @@ void PhysicsSystem::clear()
 	_unsortedColliders.clear();
 	_dynamicColliders.clear();
 	_staticColliders.clear();
+
+	_dynamicOctTree.clear();
+	_staticOctTree.clear();
 }
 
 void PhysicsSystem::addCollider(SPtr_Collider collider)
@@ -65,8 +71,6 @@ void PhysicsSystem::addTerrainCollider(SPtr_TerrainCol collider)
 
 void PhysicsSystem::fixedUpdate(float t)
 {
-
-
 	// If dynamically created object
 	if(_unsortedColliders.size() != 0)
 	{
@@ -90,7 +94,9 @@ void PhysicsSystem::fixedUpdate(float t)
 	// Do the integration
 	for(int i = 0; i < _dynamicColliders.size(); ++i)
 	{
-		if(!_dynamicColliders[i]->getPhysicsBody()->isAwake()) continue;
+		SPtr_PhysBody body = _dynamicColliders[i]->getPhysicsBody();
+		if(!body->isAwake()) continue;
+		if(!body->isActive()) continue;
 		_dynamicColliders[i]->getPhysicsBody()->fixedUpdate(t);
 		_dynamicColliders[i]->calculateBounds();
 	}
@@ -107,28 +113,27 @@ void PhysicsSystem::fixedUpdate(float t)
 	bool invResolution = false; // if true, pushes B out of collision rather than A.
 	for(int i = 0; i < _maxIterations; ++i)
 	{
-		bool collided;
 		// STATIC COLLISIONS! ##
 		for(int dc = 0; dc < _dynamicColliders.size(); ++dc)
 		{
+			// Continue if not awake or collider inactive
 			if(!_dynamicColliders[dc]->getPhysicsBody()->isAwake()) continue;
-			collided = false;
+			if(!_dynamicColliders[dc]->isActive()) continue;
+
 			Collision colInfoS; // ensure col info is unique or initialized to zero (pen depth) for each dynamic object checked
 			std::set<SPtr_Collider> staticCols;
 			_staticOctTree.getCollidersFromAABB(_dynamicColliders[dc]->getBounds(), staticCols);
 
+			// For every static collider
 			for(setIt = staticCols.begin(); setIt != staticCols.end(); ++setIt)
 			{
-				if(_dynamicColliders[dc]->collides(setIt->get(), colInfoS))
-				{
-					collided = true;
-				}
+				if(!setIt->get()->isActive()) continue;
+				checkCollision(_dynamicColliders[dc], *setIt, colInfoS);
 			}
 
-			if(collided)
+			if(colInfoS.penDepth > 0)
 			{
-				colInfoS.resolve();
-				_dynamicColliders[dc]->calculateBounds();
+				resolveCollision(colInfoS);
 				checkAgain = true;
 			}
 		}
@@ -138,31 +143,22 @@ void PhysicsSystem::fixedUpdate(float t)
 		for(mapIt = collisionMatrix.begin(); mapIt != collisionMatrix.end(); ++mapIt) // for each collidable...
 		{
 			Collision colInfoD = Collision();
-			collided = false;
-			SPtr_Collider resolvedCollider; // the collider pushed out of the collision and will need bounds recalculating
 
 			// Check dynamic collisions
 			for(setIt = mapIt->second.begin(); setIt != mapIt->second.end(); ++setIt)
 			{
 				// Because will only set col info if pen depth larger than current, we will end up with most significant collision
-				if(!invResolution && mapIt->first->collides(setIt->get(), colInfoD))
-				{
-					collided = true;
-					resolvedCollider = mapIt->first;
-				}
-				else if(invResolution && setIt->get()->collides(mapIt->first.get(), colInfoD))
-				{
-					collided = true;
-					resolvedCollider = *setIt;
-				}
+				if(!invResolution)
+					checkCollision(mapIt->first, *setIt, colInfoD);
+				else
+					checkCollision(*setIt, mapIt->first, colInfoD);
 
 			}
 
 			// Resolve collision
-			if(collided)
+			if(colInfoD.penDepth > 0)
 			{
-				colInfoD.resolve();
-				resolvedCollider->calculateBounds(); // this would hsve to be done to both this and "other" if used better resolution.
+				resolveCollision(colInfoD);
 				checkAgain = true;
 			}
 		}
@@ -215,7 +211,123 @@ void PhysicsSystem::fixedUpdate(float t)
 	
 }
 
+void PhysicsSystem::checkCollision(SPtr_Collider a, SPtr_Collider b, Collision &colInfo)
+{
+	if(a->collides(b.get(), colInfo))
+	{
+		colInfo.colliderA = a;
+		colInfo.colliderB = b;
+	}
+}
 
+
+void PhysicsSystem::resolveCollision(Collision &collision)
+{
+	SPtr_PhysBody bodyA = collision.colliderA->getPhysicsBody();
+	SPtr_PhysBody bodyB = collision.colliderB->getPhysicsBody();
+
+	// Body A should be the body being checked, so if it's null then something's gone wrong!
+	if(bodyA == nullptr) return;
+
+
+
+
+	// RESOLVE -- BUTTERS SIMPLE FOR NOW
+	SPtr_Transform transA = bodyA->getTransform();
+	transA->translate(collision.normal * -collision.penDepth);
+
+
+
+
+
+	// RESPOND -- IMPULSE
+	// If body B is null, this is a collision with a static entity
+	float friction = std::min(std::max(collision.colliderA->getFriction(), collision.colliderB->getFriction()), 1.0f);
+	glm::vec3 veloB = glm::vec3();
+	float invMassB = 0;
+	if(bodyB != nullptr)
+	{
+		veloB = bodyB->getVelocity();
+		invMassB = 1/bodyB->getMass(); // cos everything has a mass of 1 at the moment
+	}
+
+	float sumInvMass = (1/bodyA->getMass()) + invMassB;
+	glm::vec3 relVel = veloB - bodyA->getVelocity();
+	float e = 0; // coefficient of elasticity. Set to zero for time being to model dullest collision possible (no bounce)
+
+	// Oh boy! Time to work out J!
+	float j = -(1+e) * glm::dot(relVel, collision.normal) / sumInvMass;
+	glm::vec3 jn = collision.normal * j;
+
+	bodyA->setVelocity((bodyA->getVelocity() - jn/bodyA->getMass()) * friction);
+	bodyA->addCollisionHit(collision.colliderB->getObjectID(), -collision.normal);
+	collision.colliderA->calculateBounds();
+	if(bodyB != nullptr)
+	{
+		bodyB->setVelocity((bodyB->getVelocity() + jn/bodyB->getMass()) * friction);
+		bodyB->addCollisionHit(collision.colliderA->getObjectID(), collision.normal);
+		collision.colliderB->calculateBounds();
+	}
+}
+
+
+
+
+
+// Remove objects
+void PhysicsSystem::removeCollider(SPtr_Collider collider)
+{
+	// If in unsorted list
+	if(_unsortedColliders.size() != 0)
+	{
+		std::vector<SPtr_Collider>::iterator it = _unsortedColliders.begin();
+		for(it; it != _unsortedColliders.end(); ++it)
+		{
+			if(*it == collider)
+			{
+				_unsortedColliders.erase(it);
+				return;
+			}
+		}
+	}
+
+	// Else have to determine if dynamic or not, if static must also delete from static tree
+	if(collider->hasPhysicsBody())
+	{
+		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
+		
+		while(it != _dynamicColliders.end())
+		{
+			if(*it == collider)
+			{
+				it = _dynamicColliders.erase(it);
+			}
+			else
+			{
+				++it;
+			}
+		}
+	}
+
+	// Must be static
+
+	
+}
+
+void PhysicsSystem::removeTerrainCollider(SPtr_TerrainCol collider)
+{
+	_terrainCollider = SPtr_TerrainCol(nullptr);
+}
+
+
+
+
+
+
+
+
+
+// Rendering of colliders (for debug, so can position them in real time)
 void PhysicsSystem::renderColliders(Camera* camera)
 {
 	for(int i = 0; i < _unsortedColliders.size(); ++i)
@@ -314,44 +426,3 @@ void PhysicsSystem::renderBox(Camera* camera, const glm::mat4 &transform)
 
 
 
-// Remove objects
-void PhysicsSystem::removeCollider(SPtr_Collider collider)
-{
-	// If in unsorted list
-	if(_unsortedColliders.size() != 0)
-	{
-		std::vector<SPtr_Collider>::iterator it = _unsortedColliders.begin();
-		for(it; it != _unsortedColliders.end(); ++it)
-		{
-			if(*it == collider)
-			{
-				_unsortedColliders.erase(it);
-				return;
-			}
-		}
-	}
-
-	// Else have to determine if dynamic or not, if static must also delete from static tree
-	if(collider->hasPhysicsBody())
-	{
-		std::vector<SPtr_Collider>::iterator it = _dynamicColliders.begin();
-		for(it; it != _dynamicColliders.end(); ++it)
-		{
-			if(*it == collider)
-			{
-				_dynamicColliders.erase(it);
-				return;
-			}
-		}
-
-	}
-
-	// Must be static
-
-	
-}
-
-void PhysicsSystem::removeTerrainCollider(SPtr_TerrainCol collider)
-{
-	_terrainCollider = SPtr_TerrainCol(nullptr);
-}

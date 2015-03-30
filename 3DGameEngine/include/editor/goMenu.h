@@ -38,6 +38,10 @@ public:
 	void saveToFileXML(); //!< Save current scene
 	void loadFromFileXML(); //!< Load a scene from XML
 
+	void checkSave();
+	void checkLoad();
+	void closeCheckBar();	//!< Closes the checking yes/no bar
+
 
 
 private:
@@ -52,6 +56,8 @@ private:
 	TwBar* _myBar; //!< My first ant tweak bar!
 	TwBar* _addCompBar;	//!< Used for adding components to a Game Object
 	TwBar* _utilityBar; //!< Used for saving/loading from a file and adding a new Game Object
+
+	TwBar* _checkBar; //!< Save check bar
 
 	ObjectManager* _objectMngr; //!< Pointer to the object manager
 	SceneManager* _sceneMngr; //!< We need this to save to XML

@@ -5,11 +5,11 @@ Component::Component()
 {
 	_dependencyFlags = 0;
 	_lifeCycleState = ComponentState::ACTIVE;
+	_gameObjectID = 0;
 }
 
 Component::~Component()
-{
-	//std::cout << "Component Destroyed!\n";
+{	
 }
 
 BITMASK Component::getDepFlags()
@@ -29,6 +29,15 @@ void Component::destroy()
 	_lifeCycleState = ComponentState::DESTROYED;
 }
 
+
+void Component::setActive(bool active)
+{
+	switch(active)
+	{
+	case false: _lifeCycleState = ComponentState::INACTIVE; break;
+	case true: _lifeCycleState = ComponentState::ACTIVE; break;
+	}
+}
 
 
 

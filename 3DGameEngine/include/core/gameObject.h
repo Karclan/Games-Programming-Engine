@@ -29,10 +29,13 @@ public:
 	unsigned int getId();
 	std::string getName();
 	void setName(std::string name);
+	ComponentState::State getState() { return _lifeCycleState; }
+	void setActive(bool active);
+	bool isActive() { return _lifeCycleState == ComponentState::ACTIVE; }
 
 	void setId(unsigned int id) { _id = id; _createdDyn = true;} //!< Because each ID should be unique, this should only be set by object manager
 	bool getCreatedDyn() { return _createdDyn; }
-	void removeFromSystem();
+	void removeFromSystem(); //!< Removes all components and sets their state to destroyed
 
 	const std::vector<SPtr_Component>* getComponents() { return &_components; }
 
@@ -41,6 +44,7 @@ private:
 	std::string _name; //!< Not guaranteed to be unique but can be easier to identify object if ID is unknown
 	std::vector<SPtr_Component> _components; //!< Vector storing all the components attached to this object
 	bool _createdDyn;
+	ComponentState::State _lifeCycleState;
 };
 
 //! Define shared pointer to component for easy use by systems (allowing shared responsibility for component as multiple systems may store references to it)

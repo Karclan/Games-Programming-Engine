@@ -15,6 +15,7 @@ Behaviour::~Behaviour()
 void Behaviour::linkToObject(SPtr_GameObject gameObject)
 {
 	_gameObject = gameObject;
+	_active = _gameObject->isActive();
 }
 
 void Behaviour::linkToObjectMngrInt(ObjectMngrInterface &objMngrInt)
@@ -33,6 +34,8 @@ bool Behaviour::baseInitialize()
 {
 	if(!_gameObject) return false;
 	initialize();
+	_active = _gameObject->isActive();
+	if(_active) onActive();
 	return true;
 }
 
@@ -42,10 +45,14 @@ void Behaviour::reset()
 	_requestedEvents.clear();
 }
 
-bool Behaviour::baseUpdate(float t)
+void Behaviour::baseUpdate(float t)
 {
+	if(_active != _gameObject->isActive())
+	{
+		_active = _gameObject->isActive();
+		if(_active) onActive();
+	}
 	update(t);
-	return true;
 }
 
 SPtr_Component Behaviour::getComponent(ComponentType::Type type)
@@ -91,4 +98,24 @@ SPtr_GameObject Behaviour::findGameObject(std::string objectName)
 void Behaviour::addNewGameObject(SPtr_GameObject newObject)
 {
 	_objMngrInt->_dynInitdObjs->insert(newObject);
+}
+
+void Behaviour::getCollisions(SPtr_PhysBody myPhysBody, std::vector<SPtr_GameObject> &collidingObjs)
+{
+	const std::map<unsigned int, glm::vec3>* collisions = myPhysBody->getCollisions();
+	std::map<unsigned int, glm::vec3>::const_iterator it;
+	for(it = collisions->begin(); it != collisions->end(); it++)
+	{
+		collidingObjs.push_back(findGameObject(it->first));
+	}
+}
+
+void Behaviour::setActive(bool active)
+{
+	_gameObject->setActive(active);
+}
+
+bool Behaviour::isActive()
+{
+	return _active;
 }

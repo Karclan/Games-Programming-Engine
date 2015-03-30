@@ -10,7 +10,7 @@
 #include "core\transform.h"
 #include "rendering\modelRenderer.h"
 #include "physics\physicsBody.h"
-
+#include "physics\collider.h"
 
 class TerrainCollider : public Component
 {

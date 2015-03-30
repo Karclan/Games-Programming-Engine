@@ -94,6 +94,8 @@
     <Image Include="small.ico" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.h" />
+    <ClInclude Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.h" />
     <ClInclude Include="include\behaviour\custom.h" />
     <ClInclude Include="include\behaviour\objectMngrInterface.h" />
     <ClInclude Include="include\custom\cameraController.h" />
@@ -150,6 +152,8 @@
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\enemy.cpp" />
+    <ClCompile Include="..\..\..\..\..\Moley%27s Docs\Uni\GroupGameEngine\Games-Programming-Engine\3DGameEngine\include\custom\playerBullet.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\behaviour\custom.cpp" />
     <ClCompile Include="src\behaviour\objectMngrInterface.cpp" />

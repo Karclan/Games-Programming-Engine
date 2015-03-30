@@ -1,11 +1,16 @@
 #include "behaviour\custom.h"
 
 
-Custom::Custom(unsigned int objectID) 
+
+Custom::Custom() 
 {
 	_behvrName = ""; 
 	_requestBehaviour = true;
-	_objectID = objectID;
+}
+
+Custom::~Custom()
+{
+	std::cout << "Custom DestROYed\n";
 }
 
 ComponentType::Type Custom::getType() 
@@ -31,6 +36,12 @@ void Custom::setBehaviour(std::string behvrName)
 	_requestBehaviour = true;
 }
 
+void Custom::reset()
+{
+	_behaviour.reset();
+	_requestBehaviour = true;
+}
+
 void Custom::setBehaviour(SPtr_Behaviour behaviour) 
 { 
 	_behaviour = behaviour;
@@ -49,9 +60,4 @@ void Custom::behvrRequestMet()
 SPtr_Behaviour Custom::getBehaviour() 
 { 
 	return _behaviour;
-}
-
-unsigned int Custom::getObjectID()
-{ 
-	return _objectID; 
 }

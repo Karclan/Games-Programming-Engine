@@ -152,6 +152,9 @@ void SceneManager::loadFromXML(std::string filePath)
 		_objMngr->addComponentsFromXML(goID, goElmnt); // Add all componets via xml
 	}
 
+	// Load doc
+	if(doc.LoadFile()) std::cout << "Loaded from " << filePath << "!\n";
+
 	// Initialize the scene
 	initFromInitTable();
 }
