@@ -48,6 +48,13 @@ void ObjectManager::initGame()
 		// Remove Game Object from system
 		_gameObjects.erase(it);
 	}
+
+	
+	// Set all gos to active
+	for(it = _gameObjects.begin(); it != _gameObjects.end(); ++it)
+	{
+		it->second->setActive(true);
+	}
 }
 
 

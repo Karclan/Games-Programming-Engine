@@ -72,7 +72,7 @@ SphereCollider::SphereCollider()
 
 SphereCollider::~SphereCollider()
 {
-	std::cout << "SPHERE_COL DESTORYED!\n";
+	//std::cout << "SPHERE_COL DESTORYED!\n";
 }
 
 ComponentType::Type SphereCollider::getType()
@@ -266,7 +266,7 @@ BoxCollider::BoxCollider()
 
 BoxCollider::~BoxCollider()
 {
-	std::cout << "BoxCollider DESTORYED!\n";
+	//std::cout << "BoxCollider DESTORYED!\n";
 }
 
 ComponentType::Type BoxCollider::getType()

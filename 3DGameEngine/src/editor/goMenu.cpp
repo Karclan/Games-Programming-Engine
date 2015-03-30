@@ -229,6 +229,7 @@ static void TW_CALL  checkLoadStatic(void *clientData)
 
 void GoMenu::checkLoad()
 {
+	TwDeleteBar(_checkBar);
 	_checkBar = TwNewBar("Load - Are You Sure?");
 	TwAddButton(_checkBar, "Yes", loadFromFile, this, "group=");
 	TwAddButton(_checkBar, "No", closeCheckBarStatic, this, "group=");
@@ -242,6 +243,17 @@ void GoMenu::createTweakBar()
 	_myBar = TwNewBar("Game Object");
 	_addCompBar = TwNewBar("Add Component");
 	_utilityBar = TwNewBar("Utility Bar");
+
+
+	TwDefine(" 'Game Object' position='0 0' size='250 580' "); 
+	TwDefine(" 'Add Component' position='258 0' ");
+	TwDefine(" 'Utility Bar' position='465 0' ");
+
+
+
+
+	TwDefine(" GLOBAL help='Controls \nWASD to move \nK to jump \nSpace to shoot \nQ to rotate turret left \nE to rotate turret right' ");
+
 	refreshTweakBar();
 	TwCopyStdStringToClientFunc(CopyStdStringToClient); // CopyStdStringToClient implementation is given above
 	setSelectedObject(1);

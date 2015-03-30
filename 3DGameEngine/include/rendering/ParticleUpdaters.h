@@ -2,6 +2,7 @@
 #define PARTICLEUPDATERS_H
 
 #include <glm/glm.hpp>
+#include <iostream>
 
 #include "rendering\particleData.h"
 
@@ -16,8 +17,8 @@ class ParticleUpdater
 private: 
 	bool _active;
 public:
-	ParticleUpdater(){_active=false;}
-	virtual ~ParticleUpdater(){}
+	ParticleUpdater();
+	virtual ~ParticleUpdater();
 
 	virtual Updaters::type getType()=0;
 

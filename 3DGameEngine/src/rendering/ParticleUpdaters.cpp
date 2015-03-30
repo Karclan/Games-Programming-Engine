@@ -1,6 +1,16 @@
 #include "rendering\ParticleUpdaters.h"
 
 
+ParticleUpdater::ParticleUpdater()
+{
+	_active=false;
+	std::cout << "Particle Updater Start!\n";
+}
+ParticleUpdater::~ParticleUpdater()
+{
+	std::cout << "Particle Updater dead!\n";
+}
+
 void EulerUpdater::update(float dt, ParticleData *p)
 {
 	const glm::vec4 globalA( dt * _globalAcceleration.x, dt * _globalAcceleration.y, dt * _globalAcceleration.z, 0.0 );

@@ -26,6 +26,11 @@ private:
 	SPtr_Transform _transform;
 	SPtr_Transform _playerTrans;
 	SPtr_PhysBody _physBody; //!< Enemy's physics body component
+
+	int _health;
+
+
+	void explode();
 };
 
 

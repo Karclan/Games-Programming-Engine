@@ -3,11 +3,25 @@
 
 SP_ParticleGenerator ParticleEmitter::getGenerator(Generators::type type)
 {
+	
 	for(unsigned int i = 0; i < _generators.size(); ++i)
 	{
 		if(_generators[i]->getType() == type) return _generators[i];
 	}
 	return SP_ParticleGenerator();
+}
+
+ParticleEmitter::ParticleEmitter()
+{
+	_emitRate=0.0f;
+	_emitScalar=0.0f;
+
+	std::cout << "Particle Emitter Start\n";
+}
+
+ParticleEmitter::~ParticleEmitter()
+{
+	std::cout << "Particle Emitter End\n";
 }
 
 void ParticleEmitter::emit(float dt, ParticleData *p)

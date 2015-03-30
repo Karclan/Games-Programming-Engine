@@ -28,6 +28,7 @@ public:
 	ComponentType::Type getType(); //!< Required implementation. Return type of component
 	bool isOnePerObject(); //!< Required implementation. Return true if you can only have one of these per object
 	void linkDependency(SPtr_Component component); //!< Override to link needed dependencies, e.g. switch desired types and cache in a variable. Make sure the components have been requested in the dependencyFlags variable.
+	void init();
 
 	void fixedUpdate(float t); //!< Fixed update to handle integration etc
 	

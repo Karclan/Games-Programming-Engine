@@ -9,6 +9,15 @@ ParticleSystem::ParticleSystem(size_t maxCount)
 	{
 		_particles._particleAliveFlags[i]=false;
 	}
+
+	std::cout << "Particle System Start\n";
+}
+
+ParticleSystem::~ParticleSystem()
+{
+	_updaters.clear();
+
+	std::cout << "Particle System End\n";
 }
 
 void ParticleSystem::clear()
