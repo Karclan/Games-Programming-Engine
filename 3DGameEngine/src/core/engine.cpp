@@ -139,6 +139,10 @@ void Engine::update(float t)
 		{
 			_behvrSys.resetLevelLoad();
 		}
+		else
+		{
+			initGame();
+		}
 	}
 }
 
