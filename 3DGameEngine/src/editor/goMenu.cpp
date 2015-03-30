@@ -246,7 +246,7 @@ void GoMenu::createTweakBar()
 
 
 	TwDefine(" 'Game Object' position='0 0' size='250 580' "); 
-	TwDefine(" 'Add Component' position='258 0' ");
+	TwDefine(" 'Add Component' position='257 0' ");
 	TwDefine(" 'Utility Bar' position='465 0' ");
 
 
