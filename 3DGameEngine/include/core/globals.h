@@ -12,8 +12,10 @@
 #define DEMO_SCENE_PATH "demo.xml"
 #define AUTO_SCENE_PATH "level.xml"				// auto load this scene if defined
 
-static int SCREENHEIGHT=800;
-static int SCREENWIDTH=800;
-
+namespace GLOBALS
+{
+	extern int SCREENHEIGHT;
+	extern int SCREENWIDTH;
+};
 
 #endif

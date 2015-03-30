@@ -25,7 +25,7 @@ void main()
 {
 	o_texCoord 			= i_uvData;
 	o_worldPosition		= vec3(mModel * vec4(i_vertPosition,1.0)); 
-	o_worldNormal		= normalize(NormalMatrix * i_vertNormal);
+	o_worldNormal		= i_vertNormal;
 	o_worldTangent	 	= normalize(NormalMatrix * i_tangent);
 	o_worldBitangent  	= normalize(NormalMatrix * i_biTangent);   
 	o_worldDirToCam   	= normalize(viewPos - o_worldPosition.xyz);

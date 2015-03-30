@@ -165,7 +165,7 @@ vec3 calculateDirectionLight(GlobalDirectionLight light, vec3 normal, vec3 viewD
 void main()
 {
 	 //--Properties--//
-	vec3 norm = o_worldNormal;
+	vec3 norm = normalize(NormalMatrix*o_worldNormal);
     //vec3 viewDir = o_worldDirToCam;
 
 	vec3 light= vec3(0.0,0.0,0.0);
