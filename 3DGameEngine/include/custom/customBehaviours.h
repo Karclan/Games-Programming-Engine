@@ -7,6 +7,8 @@
 #include "custom\cameraController.h"
 #include "custom\testEmitter.h"
 #include "custom\firework.h"
+#include "custom\playerBullet.h"
+#include "custom\enemy.h"
 
 class CustomBehaviours
 {
@@ -18,6 +20,8 @@ public:
 		if(name == "Camera") return SPtr_Behaviour(new CameraController());
 		if(name == "TestEmitter") return SPtr_Behaviour(new TestEmitter());
 		if(name == "Firework")	  return SPtr_Behaviour(new Firework());
+		if(name == "PlayerBullet") return SPtr_Behaviour(new PlayerBullet());
+		if(name == "Enemy") return SPtr_Behaviour(new Enemy());
 		return SPtr_Behaviour(nullptr);
 	}
 

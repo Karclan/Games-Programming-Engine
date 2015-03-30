@@ -99,6 +99,7 @@ void SceneManager::loadFromXML(std::string filePath)
 			lightParam->Attribute("z", &z);
 			_rendSys->setGlobalDirection(glm::vec3(x, y, z));
 		}
+		/*
 		TiXmlElement* cubemap = sceneElmnt->FirstChildElement("SKYBOX");
 		TiXmlElement* side = cubemap->FirstChildElement("POSX");
 		if(side)
@@ -131,6 +132,7 @@ void SceneManager::loadFromXML(std::string filePath)
 			_rendSys->setSkyboxSide(side->Attribute("filename"),Cubemap::NEGZ);
 		}
 		_rendSys->createSkybox();
+		*/
 	}
 
 

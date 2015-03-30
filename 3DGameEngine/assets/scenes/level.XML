@@ -6,14 +6,6 @@
         <SPEC r="1" g="1" b="1" />
         <DIR x="0.2" y="0.2" z="0.2" />
     </LIGHTS>
-    <SKYBOX>
-        <POSX filename="assets/textures/cubemap/posX.png" />
-        <POSZ filename="assets/textures/cubemap/posZ.png" />
-        <POSY filename="assets/textures/cubemap/posY.png" />
-        <NEGX filename="assets/textures/cubemap/negX.png" />
-        <NEGY filename="assets/textures/cubemap/negY.png" />
-        <NEGZ filename="assets/textures/cubemap/negZ.png" />
-    </SKYBOX>
 </SCENE>
 <GO name="LampPost">
     <COMP type="0" tx="0" ty="-2" tz="16" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
@@ -22,13 +14,13 @@
 </GO>
 <GO name="DynamicBox">
     <COMP type="1" mesh="cube" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="-1" ty="4" tz="-3" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="0" ty="4" tz="-3" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
     <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="4" />
 </GO>
 <GO name="DynamicBox03">
     <COMP type="1" mesh="cube" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="0" tx="5" ty="0" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
     <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="4" />
 </GO>
@@ -39,22 +31,21 @@
     <COMP type="4" />
 </GO>
 <GO name="DynamicBox02">
-    <COMP type="1" mesh="cube" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="0" ty="2" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+    <COMP type="1" mesh="cube" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="66" />
+    <COMP type="0" tx="1" ty="2" tz="0" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
     <COMP type="7" ex="1" ey="1" ez="1" ox="0" oy="0" oz="0" />
     <COMP type="4" />
 </GO>
 <GO name="Robot">
     <COMP type="1" mesh="legs.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
-    <COMP type="0" tx="0" ty="0" tz="7" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+    <COMP type="0" tx="0" ty="0" tz="0" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
     <COMP type="9" behvr="Player" />
-    <COMP type="7" ex="3" ey="7" ez="3" ox="0" oy="-0.25" oz="0" />
+    <COMP type="7" ex="3" ey="8.5" ez="3" ox="0" oy="0.5" oz="0" />
     <COMP type="4" />
 </GO>
-<GO name="testParticle">
-    <COMP type="0" tx="7" ty="0.5" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
-    <COMP type="11" />
-    <COMP type="9" behvr="Firework" />
+<GO name="Light">
+    <COMP type="5" lightType="1" dR="0.5" dG="0.7" dB="0.5" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" />
+    <COMP type="0" tx="-4" ty="11" tz="7" rx="0" ry="0" rz="0" sx="1" sy="1" sz="1" />
 </GO>
 <GO name="Camera">
     <COMP type="2" />
@@ -72,7 +63,18 @@
     <COMP type="0" tx="-14" ty="-2" tz="11" rx="0" ry="0" rz="0" sx="10" sy="1" sz="10" />
     <COMP type="7" ex="10" ey="1" ez="10" ox="0" oy="-0.51" oz="0" />
 </GO>
-<GO name="spotlight">
-    <COMP type="5" lightType="2" dR="1" dG="1" dB="1" sR="1" sG="0" sB="0" constant="1" linear="0" quadratic="0" spotDirX="0.5" spotDirY="-1" spotDirZ="0.5" spotIn="0.15" spotOut="0.45" />
-    <COMP type="0" tx="5" ty="0" tz="5" rx="0" ry="-0" rz="0" sx="1" sy="1" sz="1" />
+<GO name="lamppostlight">
+    <COMP type="5" lightType="1" dR="1" dG="0.5" dB="1" sR="1" sG="1" sB="1" constant="1" linear="0.0140001" quadratic="0.000699997" />
+    <COMP type="0" tx="0" ty="5.5" tz="16" rx="0" ry="-0" rz="0" sx="2" sy="2" sz="2" />
+</GO>
+<GO name="PlayerTurret">
+    <COMP type="1" mesh="turretTop.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="1" dG="1" dB="1" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="0" ty="0.65" tz="0" rx="0" ry="-0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+</GO>
+<GO name="Enemy">
+    <COMP type="1" mesh="enemy.obj" shader="advanced" textureD="" textureS="" textureN="" textureH="" tileU="1" tileV="1" dR="0.3" dG="0.2" dB="0.15" sR="1" sG="1" sB="1" specEx="64" />
+    <COMP type="0" tx="0" ty="0" tz="4" rx="0" ry="0" rz="0" sx="0.2" sy="0.2" sz="0.2" />
+    <COMP type="9" behvr="Enemy" />
+    <COMP type="7" ex="3" ey="8.5" ez="3" ox="0" oy="0.5" oz="0" />
+    <COMP type="4" />
 </GO>

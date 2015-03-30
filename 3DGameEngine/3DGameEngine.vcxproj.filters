@@ -244,6 +244,12 @@
     <ClInclude Include="include\custom\fireWork.h">
       <Filter>Header Files\custom</Filter>
     </ClInclude>
+    <ClInclude Include="include\custom\enemy.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
+    <ClInclude Include="include\custom\playerBullet.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -403,6 +409,12 @@
       <Filter>Source Files\custom</Filter>
     </ClCompile>
     <ClCompile Include="src\custom\fireWork.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\enemy.cpp">
+      <Filter>Source Files\custom</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\playerBullet.cpp">
       <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>
