@@ -105,6 +105,7 @@
     <ClInclude Include="include\custom\playerController.h" />
     <ClInclude Include="include\custom\sparkEmitter.h" />
     <ClInclude Include="include\custom\testEmitter.h" />
+    <ClInclude Include="include\custom\titleScreen.h" />
     <ClInclude Include="include\physics\collider.h" />
     <ClInclude Include="include\physics\collision.h" />
     <ClInclude Include="include\physics\octTree.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="src\custom\playerController.cpp" />
     <ClCompile Include="src\custom\sparkEmitter.cpp" />
     <ClCompile Include="src\custom\testEmitter.cpp" />
+    <ClCompile Include="src\custom\titleScreen.cpp" />
     <ClCompile Include="src\editor\editor.cpp" />
     <ClCompile Include="src\editor\editorCamera.cpp" />
     <ClCompile Include="src\editor\goMenu.cpp" />

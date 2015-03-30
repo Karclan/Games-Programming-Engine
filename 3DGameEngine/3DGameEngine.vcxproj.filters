@@ -259,6 +259,9 @@
     <ClInclude Include="include\rendering\GUI.h">
       <Filter>Header Files\rendering</Filter>
     </ClInclude>
+    <ClInclude Include="include\custom\titleScreen.h">
+      <Filter>Header Files\custom</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\behaviour\behaviour.cpp">
@@ -437,6 +440,9 @@
     </ClCompile>
     <ClCompile Include="src\rendering\GUI.cpp">
       <Filter>Source Files\rendering</Filter>
+    </ClCompile>
+    <ClCompile Include="src\custom\titleScreen.cpp">
+      <Filter>Source Files\custom</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

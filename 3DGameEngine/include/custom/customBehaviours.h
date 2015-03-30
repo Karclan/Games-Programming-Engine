@@ -10,6 +10,7 @@
 #include "custom\playerBullet.h"
 #include "custom\enemy.h"
 #include "custom\levelController.h"
+#include "custom\titleScreen.h"
 
 class CustomBehaviours
 {
@@ -24,6 +25,7 @@ public:
 		if(name == "PlayerBullet") return SPtr_Behaviour(new PlayerBullet());
 		if(name == "Enemy") return SPtr_Behaviour(new Enemy());
 		if(name == "LevelController") return SPtr_Behaviour(new LevelController());
+		if(name == "Title") return SPtr_Behaviour(new TitleScreen());
 		return SPtr_Behaviour(nullptr);
 	}
 
