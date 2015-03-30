@@ -197,3 +197,34 @@ void Mesh::setBoneMap(std::map<std::string, int> m)
 	boneMap = m;
 }
 
+void Mesh::setBoneOffset(std::vector<aiMatrix4x4> offSet)
+{
+	m_BoneOffset = offSet; //set the bone offset matrix
+}
+
+void Mesh::setInverseTransform(aiMatrix4x4 inv)
+{
+	//convert inverse transform into glm::mat4 and set it
+	m_GlobalInverseTransform[0][0] = inv.a1;
+	m_GlobalInverseTransform[0][1] = inv.a2;
+	m_GlobalInverseTransform[0][2] = inv.a3;
+	m_GlobalInverseTransform[0][3] = inv.a4;
+	m_GlobalInverseTransform[1][0] = inv.b1;
+	m_GlobalInverseTransform[1][1] = inv.b2;
+	m_GlobalInverseTransform[1][2] = inv.b3;
+	m_GlobalInverseTransform[1][3] = inv.b4;
+	m_GlobalInverseTransform[2][0] = inv.c1;
+	m_GlobalInverseTransform[2][1] = inv.c2;
+	m_GlobalInverseTransform[2][2] = inv.c3;
+	m_GlobalInverseTransform[2][3] = inv.c4;
+	m_GlobalInverseTransform[3][0] = inv.d1;
+	m_GlobalInverseTransform[3][1] = inv.d2;
+	m_GlobalInverseTransform[3][2] = inv.d3;
+	m_GlobalInverseTransform[3][3] = inv.d4;
+
+}
+
+void Mesh::setNumJoints(int j)
+{
+	numJoints = j; //set number of joints in mesh
+}

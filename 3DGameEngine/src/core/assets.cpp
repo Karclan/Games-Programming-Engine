@@ -44,6 +44,8 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		return nullptr;
 	}
 	
+	aiMatrix4x4 globalInverseTransform = scene->mRootNode->mTransformation;
+     globalInverseTransform.Inverse();
 
 	// Have to manually convert arrays of assimp's own Vector3 class to vectors of glm::vec3 to make it work for now 
 	// Later we can implement faster method that uses the array to directly set vao (I hope...)
@@ -129,7 +131,7 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 		std::string boneName(loadedMesh->mBones[i]->mName.data);
 		boneMapping.emplace(boneName, i);
 	}
-
+	/*
 	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
 	{
 		std::string boneName(loadedMesh->mBones[i]->mName.data);
@@ -151,8 +153,36 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 			}
 		}
 	}
+	*/
+	
+		aiMatrix4x4 BoneOffset;
+		std::vector<aiMatrix4x4> boneDataOffset;
+
+	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
+	{
+		std::string boneName(loadedMesh->mBones[i]->mName.data);
+		std::map<std::string, int>::iterator it = boneMapping.find(boneName);
+		int boneID = it->second;
+		
+			boneDataOffset.push_back(BoneOffset);
+
+			boneDataOffset[i] = loadedMesh->mBones[i]->mOffsetMatrix;
+
+		// Populate BoneID and BoneWeight vectors 
+		for(int j = 0; j < loadedMesh->mBones[i]->mNumWeights; ++j) // for each weight
+		{
+			float weight = loadedMesh->mBones[i]->mWeights[j].mWeight;
 
 
+			int vertexID = loadedMesh->mBones[i]->mWeights[j].mVertexId;
+			boneInfos[vertexID].addWeight(boneID, weight);
+
+			if(weight != 0)
+			{
+				//std::cout << "HELLO!";
+			}
+		}
+	}
 	/*
 	int bonesCount = 0;
 	for(int i = 0; i < loadedMesh->mNumBones; ++i) // for each bone
@@ -216,6 +246,9 @@ Mesh* Assets::loadMeshFromFile(std::string &filePath)
 
 	mesh->setBoneMap(boneMapping);
 	mesh->setBones(boneIDs, boneWeights);
+	mesh->setBoneOffset(boneDataOffset);
+	mesh->setInverseTransform(globalInverseTransform);
+	mesh->setNumJoints(loadedMesh->mNumBones);
 
 	return mesh;
 }

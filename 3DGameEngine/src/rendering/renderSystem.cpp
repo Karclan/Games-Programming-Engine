@@ -67,7 +67,7 @@ void RenderSystem::animate(float t)
 {
 	for(unsigned int i = 0; i < _animators.size(); ++i)
 	{
-		_animators[i]->UpdateAnim(t);
+		_animators[i]->Update(t);
 	}
 
 	for(unsigned int i = 0; i < _particles.size(); ++i)

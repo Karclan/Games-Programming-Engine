@@ -22,6 +22,7 @@ void ModelRenderer::render(GLfloat* viewMatrix, GLfloat* projMatrix)
 	if(_mesh == nullptr) return; // Can't render without mesh
 	_material.bind(_transform->getMatrix(), viewMatrix, projMatrix);
 	if(_anim) _anim->bind(_material.getShader());
+	if(_anim)_anim->setMesh(_mesh);
 	glBindVertexArray(_mesh->getVao());
 	glDrawElements(GL_TRIANGLES, _mesh->numIndices(), GL_UNSIGNED_INT, (void*)0);
 	_material.unbind();
